@@ -1,0 +1,6 @@
+npm init -i
+npm i express
+npm i express-session
+npm i nodemon
+npm i dotenv
+npm i mysql2@2.3.0

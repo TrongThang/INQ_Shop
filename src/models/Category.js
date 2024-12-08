@@ -1,0 +1,1 @@
+//Thông tin về danh mục của thiết bị

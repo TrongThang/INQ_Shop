@@ -1,0 +1,1 @@
+//Thông tin về 1 liên hệ từ phía Client

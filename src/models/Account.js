@@ -1,0 +1,1 @@
+//Thông tin về 1 tài khoản bao gồm username, password của - KHÁCH HÀNG hoặc NHÂN VIÊN

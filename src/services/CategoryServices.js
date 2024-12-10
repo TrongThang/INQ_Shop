@@ -1,12 +1,6 @@
 const { convertToSlug } = require('../helpers/stringHelper');
 const Category = require('../models/Category');
 
-const isCategory = async (idCate) => {
-    let [results, fields] = await connection.query('SELECT COUNT(*) FROM Category WHERE id = ?', [idCate]);
-
-    return results[0][0] >= 1;
-}
-
 // USER
 const getAllCategory_User = async () => {
     const data = await Category.findAll({
@@ -26,51 +20,48 @@ const getCategoryById = async (id) => {
     return await Category.findByPK(id);
 }
 
-const getChildrenCategory = async (id) => {
+const getChildrenCategory = async (parenId) => {
     return await Category.findAll({
-        where: { parenId },
+        where: { parenId: parenId },
     });
 }
 
-const createCategory = async ({nameCategory, parenId, image, description, status}) => {
+const createCategory = async ({nameCategory, parentId, image, description, status}) => {
     const slug = convertToSlug(nameCategory);
 
+    const category = await Category.create({
+        nameCategory: nameCategory, 
+        slug: slug,
+        parentId: parentId,
+        image: image,
+        description: description,
+        status: status,
+    })
 
-    let [results, fields] = await connection.query(
-        sql, [nameCategory, slug, parenId, image, description, status]
-    );
-
-    return results;
+    return category;
 }
 
-const updateCategory = async ({nameCategory, parenId, image, description, status}) => {
-    let sql = `UPDATE Category 
-                SET nameCategory = ?, slug = ?, parenId = ?, image = ?, description = ?, status = ?
-                WHERE id = ?`;
-    
+const updateCategory = async ({ id, ...body }) => {
     const slug = convertToSlug(nameCategory);
     
-    let [results, fields] = await connection.query(
-        sql, [nameCategory, slug, parenId, image, description, status]
-    );
+    const [updatedCount] = await category.update(body, {
+        where: { id }
+    });
 
-    return results;
+    return updatedCount;
 }
 
 const deleteCategory = async ({id, status}) => {
-    let sql = `UPDATE Category 
-                SET status = ?
-                WHERE id = ?`;
-    
-    const slug = convertToSlug(nameCategory);
-    
-    let [results, fields] = await connection.query(
-        sql, [status, id]
+    const [updatedCount] = await category.update(
+        { status: 0 }, 
+        { where: { id } }
     );
 
-    return results;
+    return updatedCount;
 }
 
 module.exports = {
-    getAllCategory_User, getAllCategory_Admin, getCategoryById,
+    getAllCategory_User, getAllCategory_Admin,
+    getCategoryById, getChildrenCategory,
+    createCategory, updateCategory, deleteCategory
 }

@@ -17,7 +17,6 @@ const createUser = async (name, email, city) => {
                 Users (name, email, city) 
                 VALUES(?, ?, ?)`;
     
-    
     let [results, fields] = await connection.query(
         sql, [name, email, city]
     );
@@ -26,5 +25,5 @@ const createUser = async (name, email, city) => {
 }
 
 module.exports = {
-    getAllUsers, getUserById, updateUserById, createUser, deleteUserById
+    getAllUsers, getUserById, createUser
 }

@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('order', {
-    id: {
+  return sequelize.define('review_device', {
+    idReview: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
@@ -14,23 +14,27 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    totalAmount: {
-      type: DataTypes.DECIMAL(19,4),
-      allowNull: true
+    idDevice: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'device',
+        key: 'idDevice'
+      }
     },
-    paymentMethod: {
+    comment: {
       type: DataTypes.STRING(500),
       allowNull: true
     },
-    address: {
+    rating: {
+      type: DataTypes.SMALLINT,
+      allowNull: true
+    },
+    response: {
       type: DataTypes.STRING(500),
       allowNull: true
     },
-    phone: {
-      type: DataTypes.STRING(500),
-      allowNull: true
-    },
-    nameRecipient: {
+    image: {
       type: DataTypes.STRING(500),
       allowNull: true
     },
@@ -38,21 +42,9 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(500),
       allowNull: true
     },
-    platformOrder: {
-      type: DataTypes.STRING(500),
-      allowNull: true
-    },
-    accept_at: {
+    hide_at: {
       type: DataTypes.DATE,
       allowNull: true
-    },
-    idAdmin: {
-      type: DataTypes.STRING(12),
-      allowNull: true,
-      references: {
-        model: 'employee',
-        key: 'id'
-      }
     },
     status: {
       type: DataTypes.TINYINT,
@@ -60,7 +52,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'order',
+    tableName: 'review_device',
     timestamps: true,
     indexes: [
       {
@@ -68,21 +60,21 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id" },
+          { name: "idReview" },
         ]
       },
       {
-        name: "Order_Customer_fk",
+        name: "Review_CustomerHide_fk",
         using: "BTREE",
         fields: [
           { name: "idCustomer" },
         ]
       },
       {
-        name: "Order_Employee_fk",
+        name: "Review_Device_fk",
         using: "BTREE",
         fields: [
-          { name: "idAdmin" },
+          { name: "idDevice" },
         ]
       },
     ]

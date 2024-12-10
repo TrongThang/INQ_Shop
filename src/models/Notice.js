@@ -1,33 +1,21 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('slideshow', {
+  return sequelize.define('notice', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    idEmployee: {
+    idUser: {
       type: DataTypes.STRING(12),
       allowNull: true,
       references: {
-        model: 'employee',
-        key: 'id'
+        model: 'account',
+        key: 'idPerson'
       }
     },
-    textButton: {
+    text: {
       type: DataTypes.STRING(500),
-      allowNull: true
-    },
-    link: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
-    image: {
-      type: DataTypes.STRING(500),
-      allowNull: true
-    },
-    hide_at: {
-      type: DataTypes.DATE,
       allowNull: true
     },
     status: {
@@ -36,7 +24,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'slideshow',
+    tableName: 'notice',
     timestamps: true,
     indexes: [
       {
@@ -48,10 +36,10 @@ module.exports = function(sequelize, DataTypes) {
         ]
       },
       {
-        name: "SlideShow_Employee_fk",
+        name: "Account_Notice_fk",
         using: "BTREE",
         fields: [
-          { name: "idEmployee" },
+          { name: "idUser" },
         ]
       },
     ]

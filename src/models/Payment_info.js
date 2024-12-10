@@ -1,38 +1,29 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('customer', {
-    id: {
-      type: DataTypes.STRING(12),
+  return sequelize.define('payment_info', {
+    accountNumber: {
+      type: DataTypes.STRING(500),
       allowNull: false,
       primaryKey: true
     },
-    surname: {
+    bank: {
       type: DataTypes.STRING(500),
       allowNull: true
     },
-    lastName: {
+    nameAccount: {
       type: DataTypes.STRING(500),
       allowNull: true
     },
-    phone: {
-      type: DataTypes.STRING(500),
-      allowNull: true
-    },
-    identityNumber: {
-      type: DataTypes.STRING(500),
+    idCustomer: {
+      type: DataTypes.STRING(12),
       allowNull: true,
-      unique: "identityNumber"
+      references: {
+        model: 'customer',
+        key: 'id'
+      }
     },
-    birthdate: {
-      type: DataTypes.DATEONLY,
-      allowNull: true
-    },
-    gender: {
+    is_default: {
       type: DataTypes.BOOLEAN,
-      allowNull: true
-    },
-    email: {
-      type: DataTypes.STRING(500),
       allowNull: true
     },
     status: {
@@ -41,23 +32,22 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'customer',
-    timestamps: true,
+    tableName: 'payment_info',
+    timestamps: false,
     indexes: [
       {
         name: "PRIMARY",
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id" },
+          { name: "accountNumber" },
         ]
       },
       {
-        name: "identityNumber",
-        unique: true,
+        name: "Customer_PaymentInfo_fk",
         using: "BTREE",
         fields: [
-          { name: "identityNumber" },
+          { name: "idCustomer" },
         ]
       },
     ]

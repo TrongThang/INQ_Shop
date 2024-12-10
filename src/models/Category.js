@@ -1,1 +1,77 @@
-//Thông tin về danh mục của thiết bị
+const Sequelize = require('sequelize');
+module.exports = function(sequelize, DataTypes) {
+  return sequelize.define('category', {
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
+    nameCategory: {
+      type: DataTypes.STRING(500),
+      allowNull: true,
+      unique: "nameCategory"
+    },
+    slug: {
+      type: DataTypes.STRING(500),
+      allowNull: true,
+      unique: "slug"
+    },
+    parentId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'category',
+        key: 'id'
+      }
+    },
+    image: {
+      type: DataTypes.STRING(500),
+      allowNull: true
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    status: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    }
+  }, {
+    sequelize,
+    tableName: 'category',
+    timestamps: true,
+    indexes: [
+      {
+        name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "id" },
+        ]
+      },
+      {
+        name: "nameCategory",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "nameCategory" },
+        ]
+      },
+      {
+        name: "slug",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "slug" },
+        ]
+      },
+      {
+        name: "Category_ParentCategory_fk",
+        using: "BTREE",
+        fields: [
+          { name: "parentId" },
+        ]
+      },
+    ]
+  });
+};

@@ -1,33 +1,33 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('slideshow', {
+  return sequelize.define('order_detail', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
-    },
-    idEmployee: {
-      type: DataTypes.STRING(12),
-      allowNull: true,
+      primaryKey: true,
       references: {
-        model: 'employee',
-        key: 'id'
+        model: 'device',
+        key: 'idDevice'
       }
     },
-    textButton: {
-      type: DataTypes.STRING(500),
-      allowNull: true
-    },
-    link: {
+    idDevice: {
       type: DataTypes.INTEGER,
       allowNull: true
     },
-    image: {
-      type: DataTypes.STRING(500),
+    price: {
+      type: DataTypes.DECIMAL(19,4),
       allowNull: true
     },
-    hide_at: {
-      type: DataTypes.DATE,
+    stock: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    attr_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    amount: {
+      type: DataTypes.DECIMAL(19,4),
       allowNull: true
     },
     status: {
@@ -36,8 +36,8 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'slideshow',
-    timestamps: true,
+    tableName: 'order_detail',
+    timestamps: false,
     indexes: [
       {
         name: "PRIMARY",
@@ -45,13 +45,6 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "id" },
-        ]
-      },
-      {
-        name: "SlideShow_Employee_fk",
-        using: "BTREE",
-        fields: [
-          { name: "idEmployee" },
         ]
       },
     ]

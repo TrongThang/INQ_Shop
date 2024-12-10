@@ -1,26 +1,30 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('liked', {
-    idCustomer: {
-      type: DataTypes.STRING(12),
+  return sequelize.define('permission_role', {
+    idRole: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       references: {
-        model: 'customer',
+        model: 'role',
         key: 'id'
       }
     },
-    idDevice: {
+    idPermission: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       references: {
-        model: 'device',
-        key: 'idDevice'
+        model: 'permission',
+        key: 'id'
       }
+    },
+    status: {
+      type: DataTypes.TINYINT,
+      allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'liked',
+    tableName: 'permission_role',
     timestamps: false,
     indexes: [
       {
@@ -28,14 +32,14 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "idCustomer" },
+          { name: "idRole" },
         ]
       },
       {
-        name: "Device_Liked_fk",
+        name: "PmsRole_Pms_fk",
         using: "BTREE",
         fields: [
-          { name: "idDevice" },
+          { name: "idPermission" },
         ]
       },
     ]

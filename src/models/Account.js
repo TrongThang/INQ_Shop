@@ -1,31 +1,72 @@
-//Thông tin về 1 tài khoản bao gồm username, password của - KHÁCH HÀNG hoặc NHÂN VIÊN
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
-
-const Account = sequelize.define('Blog', {
+const Sequelize = require('sequelize');
+module.exports = function(sequelize, DataTypes) {
+  return sequelize.define('account', {
     idPerson: {
-        type: DataTypes.STRING(12),
-        primaryKey: true,
-        references: { model: Employee, key: id},
-        references: { model: Customer, key: id},
+      type: DataTypes.STRING(12),
+      allowNull: false,
+      primaryKey: true,
+      references: {
+        model: 'employee',
+        key: 'id'
+      }
     },
     username: {
-        type: DataTypes.STRING(30),
-        allowNull: false, 
-        unique: true,
-        validate: {
-            len: [6, 30]
-        }
+      type: DataTypes.STRING(30),
+      allowNull: false,
+      unique: "username"
     },
     password: {
-        type: DataTypes.STRING(30), 
-        allowNull: false
+      type: DataTypes.STRING(30),
+      allowNull: true
     },
-    report: { type: DataTypes.TINYINT },
-    isNew: { type: DataTypes.BOOLEAN },
-    status: { type: DataTypes.TINYINT },
-});
-
-module.exports = {
-    Account
-}
+    report: {
+      type: DataTypes.TINYINT,
+      allowNull: true
+    },
+    idRole: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'role',
+        key: 'id'
+      }
+    },
+    status: {
+      type: DataTypes.TINYINT,
+      allowNull: true
+    },
+    isNew: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true
+    }
+  }, {
+    sequelize,
+    tableName: 'account',
+    timestamps: false,
+    indexes: [
+      {
+        name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "idPerson" },
+        ]
+      },
+      {
+        name: "username",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "username" },
+        ]
+      },
+      {
+        name: "Account_Role_fk",
+        using: "BTREE",
+        fields: [
+          { name: "idRole" },
+        ]
+      },
+    ]
+  });
+};

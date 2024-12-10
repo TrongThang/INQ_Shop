@@ -1,37 +1,28 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('customer', {
+  return sequelize.define('import_warehouse', {
     id: {
-      type: DataTypes.STRING(12),
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    surname: {
-      type: DataTypes.STRING(500),
-      allowNull: true
-    },
-    lastName: {
-      type: DataTypes.STRING(500),
-      allowNull: true
-    },
-    phone: {
-      type: DataTypes.STRING(500),
-      allowNull: true
-    },
-    identityNumber: {
-      type: DataTypes.STRING(500),
+    idEmployee: {
+      type: DataTypes.STRING(12),
       allowNull: true,
-      unique: "identityNumber"
+      references: {
+        model: 'employee',
+        key: 'id'
+      }
     },
-    birthdate: {
-      type: DataTypes.DATEONLY,
+    fileAuthenticate: {
+      type: DataTypes.STRING(500),
       allowNull: true
     },
-    gender: {
-      type: DataTypes.BOOLEAN,
+    totalAmount: {
+      type: DataTypes.DECIMAL(19,4),
       allowNull: true
     },
-    email: {
+    note: {
       type: DataTypes.STRING(500),
       allowNull: true
     },
@@ -41,7 +32,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'customer',
+    tableName: 'import_warehouse',
     timestamps: true,
     indexes: [
       {
@@ -53,11 +44,10 @@ module.exports = function(sequelize, DataTypes) {
         ]
       },
       {
-        name: "identityNumber",
-        unique: true,
+        name: "ImportWarehouse_Employee_fk",
         using: "BTREE",
         fields: [
-          { name: "identityNumber" },
+          { name: "idEmployee" },
         ]
       },
     ]

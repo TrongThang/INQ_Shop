@@ -1,1 +1,0 @@
-//Chi tiết của một sản phẩm

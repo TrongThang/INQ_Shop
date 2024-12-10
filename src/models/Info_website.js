@@ -1,30 +1,30 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('cart', {
-    idCustomer: {
-      type: DataTypes.STRING(12),
+  return sequelize.define('info_website', {
+    KEY_NAME: {
+      type: DataTypes.STRING(500),
       allowNull: false,
-      primaryKey: true,
+      primaryKey: true
+    },
+    VALUE: {
+      type: DataTypes.STRING(500),
+      allowNull: true
+    },
+    ID_PAGE: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
       references: {
-        model: 'customer',
+        model: 'page',
         key: 'id'
       }
     },
-    idDevice: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: 'device',
-        key: 'idDevice'
-      }
-    },
-    stock: {
-      type: DataTypes.INTEGER,
+    STATUS: {
+      type: DataTypes.TINYINT,
       allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'cart',
+    tableName: 'info_website',
     timestamps: false,
     indexes: [
       {
@@ -32,14 +32,14 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "idCustomer" },
+          { name: "KEY_NAME" },
         ]
       },
       {
-        name: "Device_Cart_fk",
+        name: "PAGE_id_fk",
         using: "BTREE",
         fields: [
-          { name: "idDevice" },
+          { name: "ID_PAGE" },
         ]
       },
     ]

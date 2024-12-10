@@ -1,35 +1,23 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('contact', {
+  return sequelize.define('status', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    fullname: {
+    nameStatus: {
       type: DataTypes.STRING(500),
       allowNull: true
     },
-    title: {
+    description: {
       type: DataTypes.STRING(500),
-      allowNull: true
-    },
-    content: {
-      type: DataTypes.TEXT,
-      allowNull: true
-    },
-    email: {
-      type: DataTypes.STRING(500),
-      allowNull: true
-    },
-    status: {
-      type: DataTypes.INTEGER,
       allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'contact',
-    timestamps: true,
+    tableName: 'status',
+    timestamps: false,
     indexes: [
       {
         name: "PRIMARY",

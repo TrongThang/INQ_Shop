@@ -1,19 +1,70 @@
-//Thông tin về 1 thuộc tính của thiết bị 
-module.exports = (sequelize, DataTypes) => {
-    const Attribute = sequelize.define('Attribute', {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-        },
-        idDevice: DataTypes.INTEGER,
-        name: DataTypes.STRING(500),
-        value: DataTypes.STRING(500),
-    });
-    
-    Attribute.associate = (models) => {
-        Attribute.belongsTo(models.Device, { foreignKey: 'idDevice' });
-    };
-    
-    return Attribute;
-  };
+const Sequelize = require('sequelize');
+module.exports = function(sequelize, DataTypes) {
+  return sequelize.define('attribute', {
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
+    nameAttribute: {
+      type: DataTypes.STRING(500),
+      allowNull: true
+    },
+    datatype: {
+      type: DataTypes.STRING(500),
+      allowNull: true
+    },
+    required: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true
+    },
+    idGroupAttribute: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'attribute_group',
+        key: 'id'
+      }
+    },
+    idCategory: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'category',
+        key: 'id'
+      }
+    },
+    status: {
+      type: DataTypes.TINYINT,
+      allowNull: true
+    }
+  }, {
+    sequelize,
+    tableName: 'attribute',
+    timestamps: true,
+    indexes: [
+      {
+        name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "id" },
+        ]
+      },
+      {
+        name: "Attribute_Category_fk",
+        using: "BTREE",
+        fields: [
+          { name: "idCategory" },
+        ]
+      },
+      {
+        name: "Attribute_GroupCategory_fk",
+        using: "BTREE",
+        fields: [
+          { name: "idGroupAttribute" },
+        ]
+      },
+    ]
+  });
+};

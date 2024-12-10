@@ -1,26 +1,34 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('liked', {
-    idCustomer: {
-      type: DataTypes.STRING(12),
-      allowNull: false,
-      primaryKey: true,
-      references: {
-        model: 'customer',
-        key: 'id'
-      }
-    },
+  return sequelize.define('attribute_device', {
     idDevice: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
+      primaryKey: true,
       references: {
         model: 'device',
         key: 'idDevice'
       }
+    },
+    idAttribute: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'attribute',
+        key: 'id'
+      }
+    },
+    value: {
+      type: DataTypes.STRING(500),
+      allowNull: true
+    },
+    status: {
+      type: DataTypes.INTEGER,
+      allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'liked',
+    tableName: 'attribute_device',
     timestamps: false,
     indexes: [
       {
@@ -28,14 +36,14 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "idCustomer" },
+          { name: "idDevice" },
         ]
       },
       {
-        name: "Device_Liked_fk",
+        name: "AttrDevice_Attribute_fk",
         using: "BTREE",
         fields: [
-          { name: "idDevice" },
+          { name: "idAttribute" },
         ]
       },
     ]

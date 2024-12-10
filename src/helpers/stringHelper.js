@@ -38,3 +38,7 @@ const removeTagHtml = (paragraph) => {
     // HTML tag with a null string.
     return str.replace(/(<([^>]+)>)/ig, '');
 }
+
+module.exports = {
+	convertToSlug, removeTagHtml
+}

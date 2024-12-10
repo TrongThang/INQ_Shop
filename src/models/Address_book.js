@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('order', {
+  return sequelize.define('address_book', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -14,54 +14,30 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    totalAmount: {
-      type: DataTypes.DECIMAL(19,4),
-      allowNull: true
-    },
-    paymentMethod: {
+    district: {
       type: DataTypes.STRING(500),
       allowNull: true
     },
-    address: {
+    city: {
       type: DataTypes.STRING(500),
       allowNull: true
     },
-    phone: {
+    ward: {
       type: DataTypes.STRING(500),
       allowNull: true
     },
-    nameRecipient: {
+    street: {
       type: DataTypes.STRING(500),
       allowNull: true
     },
-    note: {
-      type: DataTypes.STRING(500),
-      allowNull: true
-    },
-    platformOrder: {
-      type: DataTypes.STRING(500),
-      allowNull: true
-    },
-    accept_at: {
-      type: DataTypes.DATE,
-      allowNull: true
-    },
-    idAdmin: {
-      type: DataTypes.STRING(12),
-      allowNull: true,
-      references: {
-        model: 'employee',
-        key: 'id'
-      }
-    },
-    status: {
-      type: DataTypes.TINYINT,
+    isDefault: {
+      type: DataTypes.BOOLEAN,
       allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'order',
-    timestamps: true,
+    tableName: 'address_book',
+    timestamps: false,
     indexes: [
       {
         name: "PRIMARY",
@@ -72,17 +48,10 @@ module.exports = function(sequelize, DataTypes) {
         ]
       },
       {
-        name: "Order_Customer_fk",
+        name: "Customer_Address_fk",
         using: "BTREE",
         fields: [
           { name: "idCustomer" },
-        ]
-      },
-      {
-        name: "Order_Employee_fk",
-        using: "BTREE",
-        fields: [
-          { name: "idAdmin" },
         ]
       },
     ]

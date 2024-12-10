@@ -1,34 +1,30 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('contact', {
-    id: {
+  return sequelize.define('warehouse', {
+    idDevice: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      references: {
+        model: 'device',
+        key: 'idDevice'
+      }
     },
-    fullname: {
-      type: DataTypes.STRING(500),
+    stock: {
+      type: DataTypes.INTEGER,
       allowNull: true
     },
-    title: {
-      type: DataTypes.STRING(500),
-      allowNull: true
-    },
-    content: {
-      type: DataTypes.TEXT,
-      allowNull: true
-    },
-    email: {
+    note: {
       type: DataTypes.STRING(500),
       allowNull: true
     },
     status: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.TINYINT,
       allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'contact',
+    tableName: 'warehouse',
     timestamps: true,
     indexes: [
       {
@@ -36,7 +32,7 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id" },
+          { name: "idDevice" },
         ]
       },
     ]

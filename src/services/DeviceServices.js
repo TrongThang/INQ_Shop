@@ -1,5 +1,6 @@
 const connection = require('../config/database');
 const { convertToSlug } = require('../helpers/stringHelper');
+const device = require('../models/Device');
 
 const isDevice = async (id) => {
     let [results, fields] = await connection.query('SELECT COUNT(*) FROM Device WHERE id = ?');
@@ -27,16 +28,17 @@ const getDeviceById = async (id) => {
 }
 
 const getChildrenDevice = async (id) => {
+    const device = await device.find(o)
+
     let [results, fields] = await connection.query('SELECT * FROM Device WHERE id = ?', id);
     
     return results[0];
 }
 
-const createDevice = async ({nameDevice, parenId, image, description, status}) => {
-    let sql = `INSERT INTO 
-                Device (nameDevice, slug , parenId, image, description, status) 
-                VALUES(?, ?, ?, ?, ?, ?)`;
+const createDevice = async ( objDevice ) => {
+
     const slug = convertToSlug(nameDevice);
+    
 
     let [results, fields] = await connection.query(
         sql, [nameDevice, slug, parenId, image, description, status]

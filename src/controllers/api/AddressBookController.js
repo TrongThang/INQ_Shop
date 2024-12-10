@@ -1,5 +1,5 @@
-const connection = required('../config/database');
-const AddressBook = require('../models/AddressBook.js');
+const connection = require('../../config/database.js');
+const AddressBook = require('../../models/Address_book.js');
 
 const {
     getAllAddressBooks,
@@ -7,13 +7,13 @@ const {
     createAddressBook,
     updateAddressBook,
     deleteAddressBook,
-} = require('../services/AddressBookCRUD_Services');
+} = require('../../services/AddressBookServices');
 
-//Lấy tất cả danh sách địa chỉ
+//Lấy tất cả địa chỉ bằng API
 const getAllAddressBookAPI = async (req, res) => {
     //TO DO SOMETHING
     try{
-        const addressBooks = await AddressBook.findAll();
+        const addressBooks = await getAllAddressBooks();
         res.status(200).json({
             success: true,
             data: addressBooks
@@ -28,7 +28,7 @@ const getAllAddressBookAPI = async (req, res) => {
     }
 }
 
-//Lấy một địa chỉ
+//Lấy một địa chỉ bằng API
 const getAddressBookAPI = async (req, res) => {
     //TO DO SOMETHING
     const {id} = req.params;
@@ -55,12 +55,13 @@ const getAddressBookAPI = async (req, res) => {
 };
 
 
-//Tạo một địa chỉ
+//Tạo một địa chỉ bằng API
 const postCreateAddressBookAPI = async (req, res) => {
     //TO DO SOMETHING
-    const { disrict, city, ward, street, isDefault } = req.body;
+    const { idCustomer, disrict, city, ward, street, isDefault } = req.body;
     try{
         const newAddressBook = await AddressBook.create({
+            idCustomer,
             disrict,
             city,
             ward,
@@ -82,11 +83,11 @@ const postCreateAddressBookAPI = async (req, res) => {
     }
 }
 
-//Sửa một địa chỉ
+//Sửa một địa chỉ bằng API
 const putUpdateAddressBookAPI = async (req, res) => {
     //TO DO SOMETHING
     const {id} = req.params;
-    const { disrict, city, ward, street, isDefault } = req.body;
+    const { idCustomer, disrict, city, ward, street, isDefault } = req.body;
     try{
         const addressBook = await AddressBook.findByPk(id);
         if(!addressBook){
@@ -95,12 +96,18 @@ const putUpdateAddressBookAPI = async (req, res) => {
                 message: `Không tìm thấy địa chỉ có ID ${id}`,
             });
         }
-        await addressBook.update({
+        const updateAddressBook = await addressBook.update({
+            idCustomer,
             disrict,
             city,
             ward,
             street,
             isDefault,
+        });
+        res.status(200).json({
+            success: true,
+            message: 'Cập nhật địa chỉ thành công',
+            data: updateAddressBook,
         });
     }
     catch(error){
@@ -112,7 +119,7 @@ const putUpdateAddressBookAPI = async (req, res) => {
     }
 }
 
-//Xóa một địa chỉ
+//Xóa một địa chỉ bằng API
 const deleteAddressBookAPI = async (req, res) => {
     //TO DO SOMETHING
     const { id } = req.params;

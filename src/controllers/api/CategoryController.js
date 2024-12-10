@@ -1,10 +1,15 @@
-const connection = required('../config/database');
-const Category = require('../models/Category.js');
+const Category = require('../../models/Category.js');
 
-const { } = reqire('../service/CategoryCRUD_Services');
+const { getAllCategory_User, getAllCategory_Admin, getCategoryById } = require('../../services/CategoryServices.js');
 
 const getAllCategoryAPI = async (req, res) => {
     //TO DO SOMETHING
+    const results = await getAllCategory_User();
+
+    return res.status(200).json({
+        errorCode: 0,
+        data: results
+    })
 }
 
 const getCategoryAPI = async (req, res) => {
@@ -24,5 +29,5 @@ const deteleCategoryAPI = async (req, res) => {
 }
     
 module.exports = {
-    
+    getAllCategoryAPI
 }

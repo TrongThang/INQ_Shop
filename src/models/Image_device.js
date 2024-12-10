@@ -1,43 +1,27 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('slideshow', {
+  return sequelize.define('image_device', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    idEmployee: {
-      type: DataTypes.STRING(12),
+    idDevice: {
+      type: DataTypes.INTEGER,
       allowNull: true,
       references: {
-        model: 'employee',
-        key: 'id'
+        model: 'device',
+        key: 'idDevice'
       }
-    },
-    textButton: {
-      type: DataTypes.STRING(500),
-      allowNull: true
-    },
-    link: {
-      type: DataTypes.INTEGER,
-      allowNull: true
     },
     image: {
       type: DataTypes.STRING(500),
       allowNull: true
-    },
-    hide_at: {
-      type: DataTypes.DATE,
-      allowNull: true
-    },
-    status: {
-      type: DataTypes.TINYINT,
-      allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'slideshow',
-    timestamps: true,
+    tableName: 'image_device',
+    timestamps: false,
     indexes: [
       {
         name: "PRIMARY",
@@ -48,10 +32,10 @@ module.exports = function(sequelize, DataTypes) {
         ]
       },
       {
-        name: "SlideShow_Employee_fk",
+        name: "DEVICE_IMAGES_fk",
         using: "BTREE",
         fields: [
-          { name: "idEmployee" },
+          { name: "idDevice" },
         ]
       },
     ]

@@ -1,33 +1,34 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('slideshow', {
-    id: {
+  return sequelize.define('detail_import', {
+    id_import: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
-    },
-    idEmployee: {
-      type: DataTypes.STRING(12),
-      allowNull: true,
+      primaryKey: true,
       references: {
-        model: 'employee',
+        model: 'import_warehouse',
         key: 'id'
       }
     },
-    textButton: {
-      type: DataTypes.STRING(500),
+    idDevice: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      references: {
+        model: 'device',
+        key: 'idDevice'
+      }
+    },
+    factoryPrice: {
+      type: DataTypes.DECIMAL(19,4),
       allowNull: true
     },
-    link: {
+    stock: {
       type: DataTypes.INTEGER,
       allowNull: true
     },
-    image: {
-      type: DataTypes.STRING(500),
-      allowNull: true
-    },
-    hide_at: {
-      type: DataTypes.DATE,
+    note: {
+      type: DataTypes.INTEGER,
       allowNull: true
     },
     status: {
@@ -36,22 +37,23 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'slideshow',
-    timestamps: true,
+    tableName: 'detail_import',
+    timestamps: false,
     indexes: [
       {
         name: "PRIMARY",
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id" },
+          { name: "id_import" },
+          { name: "idDevice" },
         ]
       },
       {
-        name: "SlideShow_Employee_fk",
+        name: "ImportDetail_Device_fk",
         using: "BTREE",
         fields: [
-          { name: "idEmployee" },
+          { name: "idDevice" },
         ]
       },
     ]

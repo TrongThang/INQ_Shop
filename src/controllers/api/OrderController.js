@@ -8,7 +8,7 @@ const getAllOrderAPI = async (req, res) => {
 }
 
 const getOrderAPI = async (req, res) => {
-    //TO DO SOMETHING
+    "DEMO"
 };
 
 const postCreateOrderAPI = async (req, res) => {

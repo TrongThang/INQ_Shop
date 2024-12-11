@@ -1,131 +1,106 @@
-const connection = required('../config/database');
-const Customer = require('../models/Customer.js');
-const {Op} =require ('sequelize');
+const connection = require('../../config/database');
+const Customer = require('../../models/Customer');
+const {
+    getAllCustomers,
+    getCustomerById,
+    createCustomer,
+    updateCustomer,
+    deleteCustomer,
+} = require('../../services/CustomerServices');
 
-
-const { getAllCustomers, getCustomerById, createCustomer, updateCustomer, deleteCustomer } = require('../service/CustomerCRUD_Services');
-
-// Lấy danh sách tất cả khách hàng  --Admin
-const getAllCustomerAPI = async (req, res) => {
+const getAllCustomersAPI = async (req, res) => {
     try {
         const customers = await getAllCustomers();
-        res.status(200).json({
-            success: true,
-            data: customers,
-        });
+
+        res.status(200).json({ success: true, data: customers });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Không thể truy xuất khách hàng.',
-            error: error.message,
-        });
+        res.status(500).json({ success: false, message: error.message });
     }
 };
 
-// Lấy thông tin chi tiết của một khách hàng theo ID  --Admin
-const getCustomerAPI = async (req, res) => {
+const getCustomerByIdAPI = async (req, res) => {
+    const id = req.params.id;
+
     try {
-        const { id } = req.params;
+        console.log('ID: ', id)
         const customer = await getCustomerById(id);
+
         if (!customer) {
             return res.status(404).json({
                 success: false,
-                message: `Không tìm thấy khách hàng có ${id}.`,
+                message: "Customer not found."
             });
         }
-        res.status(200).json({
+
+        return res.status(200).json({
             success: true,
-            data: customer,
+            data: customer
         });
     } catch (error) {
-        res.status(500).json({
+        console.error(error);
+        return res.status(500).json({
             success: false,
-            message: 'Không thể truy xuất khách hàng',
-            error: error.message,
+            message: "Internal Server Error"
         });
     }
 };
 
-// Thêm mới một khách hàng -- User
 const postCreateCustomerAPI = async (req, res) => {
     try {
-        const { surname, lastName, phone, identityNumber, birthdate, gender, email, status } = req.body;
-        const insertId = await createCustomer(surname, lastName, phone, identityNumber, birthdate, gender, email, status);
-        if (insertId) {
-            res.status(201).json({
-                success: true,
-                message: 'Khách hàng đã tạo thành công.',
-                data: { id: insertId },
-            });
-        } else {
-            res.status(500).json({
-                success: false,
-                message: 'Không tạo được khách hàng.',
-            });
-        }
+        const data = req.body;
+        const customer = await createCustomer(data);
+        res.status(201).json({ success: true, data: customer });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Không tạo được khách hàng.',
-            error: error.message,
-        });
+        if (error.name === 'SequelizeValidationError') {
+            // Lấy chi tiết lỗi validation từ Sequelize
+            const errors = error.errors.map(err => ({
+                field: err.path,
+                message: err.message
+            }));
+            res.status(400).json({ success: false, message: "Validation error", errors });
+        } else if (error.name === 'SequelizeUniqueConstraintError') {
+            // Lỗi unique constraint
+            const errors = error.errors.map(err => ({
+                field: err.path,
+                message: err.message
+            }));
+            res.status(400).json({ success: false, message: "Unique constraint error", errors });
+        } else {
+            // Các lỗi khác
+            res.status(500).json({ success: false, message: error.message });
+        }
     }
 };
 
-// Cập nhật thông tin khách hàng  --User
 const putUpdateCustomerAPI = async (req, res) => {
     try {
         const { id } = req.params;
-        const { surname, lastName, phone, identityNumber, birthdate, gender, email, status } = req.body;
-        const affectedRows = await updateCustomer(id, surname, lastName, phone, identityNumber, birthdate, gender, email, status);
-        if (affectedRows) {
-            res.status(200).json({
-                success: true,
-                message: 'Khách hàng cập nhật thành công.',
-            });
-        } else {
-            res.status(404).json({
-                success: false,
-                message: 'Không tìm thấy khách hàng hoặc không có thay đổi nào được áp dụng.',
-            });
+        const data = req.body;
+        const customer = await updateCustomer(id, data);
+        if (!customer) {
+            return res.status(404).json({ success: false, message: 'Customer not found.' });
         }
+        res.status(200).json({ success: true, data: customer });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Không cập nhật được khách hàng.',
-            error: error.message,
-        });
+        res.status(500).json({ success: false, message: error.message });
     }
 };
 
-// Xóa một khách hàng  --Admin
 const deleteCustomerAPI = async (req, res) => {
     try {
         const { id } = req.params;
-        const affectedRows = await deleteCustomer(id);
-        if (affectedRows) {
-            res.status(200).json({
-                success: true,
-                message: 'Khách hàng đã xóa thành công.',
-            });
-        } else {
-            res.status(404).json({
-                success: false,
-                message: 'Không tìm thấy khách hàng.',
-            });
+        const customer = await deleteCustomer(id);
+        if (!customer) {
+            return res.status(404).json({ success: false, message: 'Customer not found.' });
         }
+        res.status(200).json({ success: true, message: 'Customer status updated to 0 (soft deleted).' });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Không xóa được khách hàng.',
-            error:error.message, 
-        });
+        res.status(500).json({ success: false, message: error.message });
     }
 };
-
 module.exports = {
-    getAllCustomerAPI,
-    getCustomerAPI,
+    getAllCustomersAPI,
+    getCustomerByIdAPI,
     postCreateCustomerAPI,
     putUpdateCustomerAPI,
     deleteCustomerAPI,

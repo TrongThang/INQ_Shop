@@ -1,5 +1,5 @@
-const connection = require('../config/database');
 const { convertToSlug } = require('../helpers/stringHelper');
+const Category = require('../models/Category');
 
 const isCategory = async (idCate) => {
     let [results, fields] = await connection.query('SELECT COUNT(*) FROM Category WHERE id = ?', [idCate]);
@@ -9,34 +9,32 @@ const isCategory = async (idCate) => {
 
 // USER
 const getAllCategory_User = async () => {
-    let [results, fields] = await connection.query('SELECT * FROM Category WHERE status = 1');
+    const data = await Category.findAll({
+        where: { status: 1},
+    });
 
-    return results;
+    return await data;
 }
 
 const getAllCategory_Admin = async () => {
-    let [results, fields] = await connection.query('SELECT * FROM Category');
+    const data = await Category.findAll();
 
-    return results;
+    return await data;
 }
 
 const getCategoryById = async (id) => {
-    let [results, fields] = await connection.query('SELECT * FROM Category WHERE id = ?', id);
-
-    return results[0];
+    return await Category.findByPK(id);
 }
 
 const getChildrenCategory = async (id) => {
-    let [results, fields] = await connection.query('SELECT * FROM Category WHERE id = ?', id);
-    
-    return results[0];
+    return await Category.findAll({
+        where: { parenId },
+    });
 }
 
 const createCategory = async ({nameCategory, parenId, image, description, status}) => {
-    let sql = `INSERT INTO 
-                Category (nameCategory, slug , parenId, image, description, status) 
-                VALUES(?, ?, ?, ?, ?, ?)`;
     const slug = convertToSlug(nameCategory);
+
 
     let [results, fields] = await connection.query(
         sql, [nameCategory, slug, parenId, image, description, status]
@@ -74,5 +72,5 @@ const deleteCategory = async ({id, status}) => {
 }
 
 module.exports = {
-    getCategoryById, createCategory
+    getAllCategory_User, getAllCategory_Admin, getCategoryById,
 }

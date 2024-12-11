@@ -1,6 +1,6 @@
-const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('role', {
+const sequelize = require('../config/database');
+const {DataTypes} = require('sequelize');
+const Role = sequelize.define('role',{
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -25,4 +25,6 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
-};
+
+
+module.exports=Role;

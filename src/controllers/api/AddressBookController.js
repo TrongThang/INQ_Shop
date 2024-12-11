@@ -5,8 +5,7 @@ const {
     getAllAddressBooks,
     getAddressBookById,
     createAddressBook,
-    updateAddressBook,
-    deleteAddressBook,
+    updateAddressBook
 } = require('../../services/AddressBookServices');
 
 //Lấy tất cả địa chỉ bằng API
@@ -31,9 +30,9 @@ const getAllAddressBookAPI = async (req, res) => {
 //Lấy một địa chỉ bằng API
 const getAddressBookAPI = async (req, res) => {
     //TO DO SOMETHING
-    const {id} = req.params;
     try{
-        const addressBook = await AddressBook.findByPk(id);
+        const data = req.body;
+        const addressBook = await getAddressBookById(data);
         if(!addressBook){
             return res.status(404).json({
                 success: false,
@@ -54,20 +53,13 @@ const getAddressBookAPI = async (req, res) => {
     }
 };
 
-
 //Tạo một địa chỉ bằng API
 const postCreateAddressBookAPI = async (req, res) => {
     //TO DO SOMETHING
-    const { idCustomer, disrict, city, ward, street, isDefault } = req.body;
     try{
-        const newAddressBook = await AddressBook.create({
-            idCustomer,
-            disrict,
-            city,
-            ward,
-            street,
-            isDefault,
-        });
+        const data = req.body;
+        console.log(">>>check data",data);
+        const newAddressBook = await createAddressBook(data);
         res.status(201).json({
             success: true,
             message: 'Thêm địa chỉ thành công',
@@ -86,60 +78,18 @@ const postCreateAddressBookAPI = async (req, res) => {
 //Sửa một địa chỉ bằng API
 const putUpdateAddressBookAPI = async (req, res) => {
     //TO DO SOMETHING
-    const {id} = req.params;
-    const { idCustomer, disrict, city, ward, street, isDefault } = req.body;
-    try{
-        const addressBook = await AddressBook.findByPk(id);
-        if(!addressBook){
-            return res.status(404).json({
-                success: false,
-                message: `Không tìm thấy địa chỉ có ID ${id}`,
-            });
-        }
-        const updateAddressBook = await addressBook.update({
-            idCustomer,
-            disrict,
-            city,
-            ward,
-            street,
-            isDefault,
-        });
+    try {
+        const data = req.body;
+        const updatedAddressBook = await updateAddressBook(data);
         res.status(200).json({
             success: true,
             message: 'Cập nhật địa chỉ thành công',
-            data: updateAddressBook,
-        });
-    }
-    catch(error){
-        res.status(500).json({
-            success: false,
-            message: 'Lỗi cập nhật địa chỉ',
-            error: error.message,
-        });
-    }
-}
-
-//Xóa một địa chỉ bằng API
-const deleteAddressBookAPI = async (req, res) => {
-    //TO DO SOMETHING
-    const { id } = req.params;
-    try {
-        const addressBook = await AddressBook.findByPk(id);
-        if (!addressBook) {
-            return res.status(404).json({
-                success: false,
-                message: `Không tìm thấy địa chỉ có ID ${id}`,
-            });
-        }
-        await addressBook.destroy(); // Sequelize method
-        res.status(200).json({
-            success: true,
-            message: 'Xóa địa chỉ thành công',
+            data: updatedAddressBook,
         });
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: 'Lỗi xóa địa chỉ',
+            message: 'Lỗi cập nhật địa chỉ',
             error: error.message,
         });
     }
@@ -150,5 +100,4 @@ module.exports = {
     getAddressBookAPI,
     postCreateAddressBookAPI,
     putUpdateAddressBookAPI,
-    deleteAddressBookAPI
 }

@@ -68,13 +68,13 @@ function initModels(sequelize) {
   attribute.hasMany(attribute_device, { as: "attribute_devices", foreignKey: "idAttribute"});
   attribute.belongsTo(attribute_group, { as: "idGroupAttribute_attribute_group", foreignKey: "idGroupAttribute"});
   attribute_group.hasMany(attribute, { as: "attributes", foreignKey: "idGroupAttribute"});
-  attribute.belongsTo(category, { as: "idCategory_category", foreignKey: "idCategory"});
+  attribute.belongsTo(category, { as: "categoryAttribute", foreignKey: "idCategory"});
   category.hasMany(attribute, { as: "attributes", foreignKey: "idCategory"});
   blog.belongsTo(category, { as: "category", foreignKey: "category_id"});
   category.hasMany(blog, { as: "blogs", foreignKey: "category_id"});
   category.belongsTo(category, { as: "parent", foreignKey: "parentId"});
   category.hasMany(category, { as: "categories", foreignKey: "parentId"});
-  device.belongsTo(category, { as: "idCategory_category", foreignKey: "idCategory"});
+  device.belongsTo(category, { as: "categoryDevice", foreignKey: "idCategory"});
   category.hasMany(device, { as: "devices", foreignKey: "idCategory"});
   address_book.belongsTo(customer, { as: "idCustomer_customer", foreignKey: "idCustomer"});
   customer.hasMany(address_book, { as: "address_books", foreignKey: "idCustomer"});

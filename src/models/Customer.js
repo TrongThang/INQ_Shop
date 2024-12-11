@@ -44,6 +44,8 @@ const Customer = sequelize.define('customer', {
   sequelize,
   tableName: 'customer',
   timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
   indexes: [
     {
       name: "PRIMARY",

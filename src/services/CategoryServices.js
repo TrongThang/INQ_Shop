@@ -26,34 +26,29 @@ const getChildrenCategory = async (parenId) => {
     });
 }
 
-const createCategory = async ({nameCategory, parentId, image, description, status}) => {
-    const slug = convertToSlug(nameCategory);
+const createCategory = async ({ body }) => {
+    const slug = convertToSlug(body.nameCategory);
+    body.slug = slug;
 
-    const category = await Category.create({
-        nameCategory: nameCategory, 
-        slug: slug,
-        parentId: parentId,
-        image: image,
-        description: description,
-        status: status,
-    })
+    const category = await Category.create(body);
 
     return category;
 }
 
 const updateCategory = async ({ id, ...body }) => {
-    const slug = convertToSlug(nameCategory);
-    
-    const [updatedCount] = await category.update(body, {
+    const slug = convertToSlug(body.nameCategory);
+    body.slug = slug;
+
+    const [updatedCount] = await Category.update(body, {
         where: { id }
     });
 
     return updatedCount;
 }
 
-const deleteCategory = async ({id, status}) => {
-    const [updatedCount] = await category.update(
-        { status: 0 }, 
+const updateStatusCategory = async ({id, status}) => {
+    const [updatedCount] = await Category.update(
+        { status: status }, 
         { where: { id } }
     );
 
@@ -63,5 +58,5 @@ const deleteCategory = async ({id, status}) => {
 module.exports = {
     getAllCategory_User, getAllCategory_Admin,
     getCategoryById, getChildrenCategory,
-    createCategory, updateCategory, deleteCategory
+    createCategory, updateCategory, updateStatusCategory
 }

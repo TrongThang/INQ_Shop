@@ -1,8 +1,7 @@
 const sequelize = require('../config/database');
 const { DataTypes } = require('sequelize');
 
-const Attribute_group = 
-module.exports = sequelize.define('attribute_group', {
+const Attribute_group = sequelize.define('attribute_group', {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,

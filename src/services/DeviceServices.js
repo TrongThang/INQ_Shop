@@ -1,80 +1,134 @@
 const connection = require('../config/database');
 const { convertToSlug } = require('../helpers/stringHelper');
-const device = require('../models/Device');
+const Category = require('../models/Category');
+const Device = require('../models/Device');
+const ReviewDevice = require('../models/Review_device');
 
-const isDevice = async (id) => {
-    let [results, fields] = await connection.query('SELECT COUNT(*) FROM Device WHERE id = ?');
+const getAllDevice_User = async () => {
+    const data = await Device.findAll({
+        where: {
+            status: {
+                [Op.gte]: 1
+        }},
+    });
 
-    return results[0][0] >= 1;
+    return await data;
+}
+//4: Sản phẩm nổi bật
+const getOutstandingDevice = async () => {
+    const data = await Device.findAll({
+        where: { status:3 },
+        limit: 10
+    });
+
+    return await data;
 }
 
-// USER
-const getAllDevice_User = async () => {
-    let [results, fields] = await connection.query('SELECT * FROM Device WHERE status = 1');
+//3: Sản phẩm khuyến mãi - Giá giảm 5%
+const getDiscountDevice = async () => {
+    const data = await Device.findAll({
+        where: { status: 3 },
+        limit: 5
+    });
 
-    return results;
+    return await data;
+}
+
+const getTOPDeviceLiked = async () => {
+    const data = await Device.findAll({
+        where: {
+            status: {
+            [Op.gte]: 1 //gte:  >= 
+            }
+        },
+        order: [['likePoint', 'DESC']],
+        limit: 5
+    });
+
+    return await data;
 }
 
 const getAllDevice_Admin = async () => {
-    let [results, fields] = await connection.query('SELECT * FROM Device');
+    const data = await Device.findAll();
 
-    return results;
+    return await data;
 }
 
 const getDeviceById = async (id) => {
-    let [results, fields] = await connection.query('SELECT * FROM Device WHERE id = ?', id);
-
-    return results[0];
+    return await Device.findByPK(id, {
+        include: [
+            {
+                model: Category,
+                as: 'categoryDevice'
+            }
+        ],
+    });
 }
 
-const getChildrenDevice = async (id) => {
-    const device = await device.find(o)
+const createDevice = async ( body ) => {
+    const slug = convertToSlug(body.name);
+    body.slug = slug;
 
-    let [results, fields] = await connection.query('SELECT * FROM Device WHERE id = ?', id);
-    
-    return results[0];
+    const deviceCreate = await Device.create(body);
+
+    return deviceCreate;
 }
 
-const createDevice = async ( objDevice ) => {
+const updateDevice = async (body) => {
+    const [updatedCount] = await Device.update(body, {
+        where: { id }
+    });
 
-    const slug = convertToSlug(nameDevice);
-    
+    return updatedCount;
+}
 
-    let [results, fields] = await connection.query(
-        sql, [nameDevice, slug, parenId, image, description, status]
+const updateStatusDevice = async ({id, status}) => {
+    const [updatedCount] = await Device.update(
+        { status: status }, 
+        { where: { id } }
     );
 
-    return results;
+    return updatedCount;
 }
 
-const updateDevice = async ({nameDevice, parenId, image, description, status}) => {
-    let sql = `UPDATE Device 
-                SET nameDevice = ?, slug = ?, parenId = ?, image = ?, description = ?, status = ?
-                WHERE id = ?`;
-    
-    const slug = convertToSlug(nameDevice);
-    
-    let [results, fields] = await connection.query(
-        sql, [nameDevice, slug, parenId, image, description, status]
-    );
+const getAllReviewForDevice = async (id) => {
+    const comments = await ReviewDevice.findAll({
+        where: {
+            idDevice: id,
+        }
+    });
 
-    return results;
+    return comments;
 }
 
-const deleteDevice = async ({id, status}) => {
-    let sql = `UPDATE Device 
-                SET status = ?
-                WHERE id = ?`;
+const createReviewForDevice = async ( body ) => {
+    const reviewForDevice = await ReviewDevice.create({ body });
     
-    const slug = convertToSlug(nameDevice);
-    
-    let [results, fields] = await connection.query(
-        sql, [status, id]
+    return reviewForDevice;
+}
+
+const updateReviewForDevice = async ({ id, ...body }) => {
+    const [updatedCount] = await ReviewDevice.update(body, {
+        where: { id }
+    });
+
+    return updatedCount;
+}
+
+const updateStatusReviewForDevice = async ({id, status}) => {
+    const [updatedCount] = await ReviewDevice.update(
+        { status: status }, 
+        { where: { id } }
     );
 
-    return results;
+    return updatedCount;
 }
 
 module.exports = {
-    getDeviceById, createDevice
+    getAllDevice_User, getAllDevice_Admin, getDeviceById,
+    getOutstandingDevice, getDiscountDevice,
+    createDevice, updateDevice, updateStatusDevice,
+    //Review For Device
+    getAllReviewForDevice, createReviewForDevice,
+    updateReviewForDevice, updateStatusReviewForDevice
 }

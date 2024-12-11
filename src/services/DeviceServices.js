@@ -4,16 +4,45 @@ const Category = require('../models/Category');
 const Device = require('../models/Device');
 const ReviewDevice = require('../models/Review_device');
 
-const getAllDevice_User = async () => {
+const getAllDevice_User = async (page = 0, filter = {}) => {
+    const { priceMin, priceMax, idCategory, keyword } = filters;
+
+    const whereConditions = {
+        status: {
+            [Op.gte]: 1
+        }
+    };
+
+    if (priceMin != undefined || priceMax != undefined) {
+        whereConditions.price = {};
+        if (priceMin != undefined) {
+            whereConditions.sellingPrice[Op.gte] = priceMin;
+        }
+        if (priceMax != undefined) {
+            whereConditions.sellingPrice[Op.lte] = priceMax;
+        }
+    }
+
+    if (idCategory) {
+        whereConditions.idCategory = idCategory;
+    }
+
+    if (keyword) {
+        whereConditions.name = { [Op.like]: `%${keyword}%`}
+    }
+
+    const limit = 10;
+    const offset = page * limit;
+
     const data = await Device.findAll({
-        where: {
-            status: {
-                [Op.gte]: 1
-        }},
+        where: whereConditions,
+        limit: limit,
+        offset: offset
     });
 
     return await data;
 }
+
 //4: Sản phẩm nổi bật
 const getOutstandingDevice = async () => {
     const data = await Device.findAll({

@@ -8,48 +8,47 @@ const {
     updateAddressBook
 } = require('../../services/AddressBookServices');
 
+
 //Lấy tất cả địa chỉ bằng API
 const getAllAddressBookAPI = async (req, res) => {
     //TO DO SOMETHING
-    try{
-        const addressBooks = await getAllAddressBooks();
-        res.status(200).json({
-            success: true,
-            data: addressBooks
-        });
-    }
-    catch(error){
-        res.status(500).json({
-            success: false,
-            message: 'Lỗi truy xuất địa chỉ',
-            error: error.message,
-        });
-    }
+    const addressBooks = await getAllAddressBooks();
+    res.status(200).json({
+        success: true,
+        data: addressBooks
+    });
 }
 
 //Lấy một địa chỉ bằng API
 const getAddressBookAPI = async (req, res) => {
     //TO DO SOMETHING
-    try{
-        const data = req.body;
-        const addressBook = await getAddressBookById(data);
-        if(!addressBook){
-            return res.status(404).json({
-                success: false,
-                message: `Không tìm thấy địa chỉ có ID ${id}`,
-            });
-        }
-        res.status(200).json({
-            success: true,
-            data: addressBook,
+    const { id } = req.query;
+    const addressBook = await getAddressBookById(id);
+    if(!addressBook){
+        return res.status(404).json({
+            success: false,
+            message: `Không tìm thấy địa chỉ có ID ${id}`,
         });
     }
-    catch(error){
-        res.status(500).json({
-            success: false,
-            message: 'Lỗi lấy địa chỉ',
-            error: error.message,
-        });
+    res.status(200).json({
+        success: true,
+        data: addressBook,
+    });
+};
+
+const getAllOrSingleAddressBookAPI = async (req, res) => {
+    try {
+        const { id } = req.query;
+        if (id) {
+            // Lấy một địa chỉ nếu có id
+            getAddressBookAPI(req, res);
+        } else {
+            // Lấy tất cả nếu không có id
+            getAllAddressBookAPI(req, res);
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Đã xảy ra lỗi khi xử lý yêu cầu.' });
     }
 };
 
@@ -96,8 +95,7 @@ const putUpdateAddressBookAPI = async (req, res) => {
 }
     
 module.exports = {
-    getAllAddressBookAPI,
-    getAddressBookAPI,
+    getAllOrSingleAddressBookAPI,
     postCreateAddressBookAPI,
     putUpdateAddressBookAPI,
 }

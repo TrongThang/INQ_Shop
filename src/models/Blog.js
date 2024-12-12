@@ -5,7 +5,8 @@ Blog = sequelize.define('blog', {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    primaryKey: true
+    primaryKey: true,
+    autoIncrement: true,
   },
   category_id: {
     type: DataTypes.INTEGER,
@@ -59,6 +60,8 @@ Blog = sequelize.define('blog', {
   sequelize,
   tableName: 'blog',
   timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
   indexes: [
     {
       name: "PRIMARY",

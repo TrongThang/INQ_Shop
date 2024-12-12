@@ -1,6 +1,7 @@
-const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('category', {
+const sequelize = require('../config/database');
+const { DataTypes } = require('sequelize');
+
+const Category = sequelize.define('category', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -40,6 +41,8 @@ module.exports = function(sequelize, DataTypes) {
     sequelize,
     tableName: 'category',
     timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
     indexes: [
       {
         name: "PRIMARY",
@@ -74,4 +77,5 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
-};
+
+module.exports = Category;

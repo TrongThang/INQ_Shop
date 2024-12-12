@@ -32,8 +32,11 @@ const Contact = sequelize.define('contact', {
   sequelize,
   tableName: 'contact',
   timestamps: true,
+<<<<<<< HEAD
   createdAt: 'created_at',
   updatedAt: 'updated_at',
+=======
+>>>>>>> 1b4ef6aa5496c70885c043fad13159bfbce5cb86
   indexes: [
     {
       name: "PRIMARY",

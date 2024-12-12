@@ -1,7 +1,7 @@
 require('dotenv').config()  // gọi ra để sử dụng.
 const ViewEngine = require('../src/config/ViewEngine')
 const RoutesBlog = require('../src/routes/blog')
-const RoutesContact = require('./routes/contact.js')
+const RoutesContact = require('../src/routes/contact')
 const RoutesCart = require('./routes/cart');
 const express = require('express')
 const app = express()

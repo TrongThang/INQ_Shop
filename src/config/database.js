@@ -1,14 +1,7 @@
-require('dotenv').config();
-const mysql = require('mysql2/promise');
-
-const connection = mysql.createPool({
-    host: 'localhost',
-    port: 3307,
-    user: 'root',
-    password: '123456',
-    database: 'INQ_SHOP',
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+const Sequelize = require("sequelize");
+const sequelize = new Sequelize("INQ_Shop", "root", "", {
+    host: "localhost",
+    dialect: "mysql",
 });
-module.exports = connection;
+
+module.exports = sequelize;

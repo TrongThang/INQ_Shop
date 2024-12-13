@@ -5,7 +5,9 @@ const SlideShow = sequelize.define('slideshow', {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    primaryKey: true
+    primaryKey: true,
+    autoIncrement: true
+
   },
   idEmployee: {
     type: DataTypes.STRING(12),
@@ -20,7 +22,7 @@ const SlideShow = sequelize.define('slideshow', {
     allowNull: true
   },
   link: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING(500),
     allowNull: true
   },
   image: {
@@ -39,6 +41,9 @@ const SlideShow = sequelize.define('slideshow', {
   sequelize,
   tableName: 'slideshow',
   timestamps: true,
+  createdAt: 'created_at',
+
+  updatedAt: 'updated_at',
   indexes: [
     {
       name: "PRIMARY",
@@ -57,5 +62,10 @@ const SlideShow = sequelize.define('slideshow', {
     },
   ]
 });
+
+
+const Employee = require('./Employee');
+SlideShow.belongsTo(Employee, { foreignKey: 'idEmployee', as: 'employee' });
+
 
 module.exports = SlideShow;

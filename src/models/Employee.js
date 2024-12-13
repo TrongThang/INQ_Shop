@@ -1,5 +1,6 @@
 const sequelize = require('../config/database');
 const { DataTypes } = require('sequelize');
+
 const Employee = sequelize.define('employee', {
   id: {
     type: DataTypes.STRING(12),
@@ -45,11 +46,15 @@ const Employee = sequelize.define('employee', {
 }, {
   sequelize,
   tableName: 'employee',
-  timestamps: true,
+  timestamps: true, 
+  createdAt: 'created_at',
+
+  updatedAt: false,
   indexes: [
     {
       name: "PRIMARY",
       unique: true,
+
       using: "BTREE",
       fields: [
         { name: "id" },
@@ -57,5 +62,7 @@ const Employee = sequelize.define('employee', {
     },
   ]
 });
-  
+
+
+
 module.exports = Employee;

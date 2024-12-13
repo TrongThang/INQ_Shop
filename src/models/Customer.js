@@ -66,4 +66,19 @@ const Customer = sequelize.define('customer', {
   ]
 });
 
+Customer.beforeCreate(async (instance, options) => {
+  console.log("Hook beforeCreate được kích hoạt");
+  const lastCustomer = await Customer.findOne({
+    attributes: ['id'],
+    order: [['id', 'DESC']],
+    where: { id: { [Sequelize.Op.like]: 'KH-%' } }
+  });
+
+  const lastId = lastCustomer ? parseInt(lastCustomer.id.replace('KH-', ''), 10) : 0;
+  const newId = `KH-${lastId + 1}`;
+  console.log("Generated ID:", newId);
+  instance.id = newId;
+});
+
+
 module.exports = Customer;

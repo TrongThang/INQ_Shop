@@ -28,7 +28,6 @@ const getAllLikedDeviceAPI = async (req, res) => {
     }
 }
 
-
 const postAddToLikedDeviceAPI = async (req, res) => {
     //TO DO SOMETHING
     try{

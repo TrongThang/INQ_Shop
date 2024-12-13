@@ -22,9 +22,7 @@ const getAllDevicesAPI = async (req, res) => {
 //OR - Gián tiếp
 const postCreateUserAPI = async (req, res) => {
     
-    let name = req.body.name;
-    let email = req.body.email;
-    let city = req.body.city;
+    let {name, email, city} = req.body
 
     //CreateUser coding in ./services/UserCRUD_Services.js 
     let insertId = await createUser(name, email, city);

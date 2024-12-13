@@ -1,18 +1,19 @@
+const { Op } = require('sequelize');
 const Cart = require('../models/Cart');
 
 function convertToArray(input) {
     if (Array.isArray(input)) {
-        return input; // Nếu là mảng, trả về ngay
+        return input;
     }
     try {
-        const parsed = JSON.parse(input); // Thử parse nếu là chuỗi JSON
+        const parsed = JSON.parse(input);
         if (Array.isArray(parsed)) {
-            return parsed; // Nếu parse thành công và là mảng, trả về
+            return parsed;
         }
         throw new Error("Dữ liệu không phải là mảng sau khi parse");
     } catch (error) {
         console.error("Lỗi khi chuyển đổi input thành mảng:", error);
-        return []; // Nếu không thể parse, trả về mảng rỗng
+        return [];
     }
 }
 
@@ -68,8 +69,54 @@ const removeDeviceCartInCookie = (cart, idRemove) => {
     return newCart;
 } 
 
+const getAllInCart = async () => {
+    return await Cart.findAll();
+}
+
+const getCartIdCustomer = async (id) => {
+    return await Cart.findByPk(id)
+}
+
+const postAddDeviceToCart = async (data) => {
+    return await Cart.create(data);
+}
+
+const putUpdateDeviceInCart = async (id, data) => {
+    const result = await Cart.findByPk(id);
+    return await result.update(data);
+}
+
+const removeDeviceInCartAPI = async (idCustomer, idDevice) => {
+    const cartItem = await Cart.findOne({
+        where: { idCustomer, idDevice }
+    });
+
+    if (cartItem) {
+        await cartItem.destroy();
+        return { message: 'Xóa thiết bị khỏi giỏ hàng thành công!' };
+    } else {
+        return { message: 'Thiết bị không có trong giỏ hàng!' };
+    }
+}
+
+const removeAllDeviceInCartAPI = async (idCustomer) => {
+    const result = await Cart.destroy({
+        where: { idCustomer }
+    });
+
+    if (result > 0) {
+        return { message: 'Xóa tất cả thiết bị khỏi giỏ hàng thành công!' };
+    } else {
+        return { message: 'Giỏ hàng trống!' };
+    }
+}
+
 module.exports = {
     getCartInCookie, saveCartInCookie, 
     addToCartInCookie, updateQuantityDeviceInCartCookie,
-    removeDeviceCartInCookie
+    removeDeviceCartInCookie,
+    // DATABASE
+    getAllInCart, getCartIdCustomer,
+    postAddDeviceToCart, putUpdateDeviceInCart,
+    removeDeviceInCartAPI, removeAllDeviceInCartAPI
 }

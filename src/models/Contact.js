@@ -5,7 +5,8 @@ const Contact = sequelize.define('contact', {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    primaryKey: true
+    primaryKey: true,
+    autoIncrement: true,
   },
   fullname: {
     type: DataTypes.STRING(500),
@@ -31,6 +32,8 @@ const Contact = sequelize.define('contact', {
   sequelize,
   tableName: 'contact',
   timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
   indexes: [
     {
       name: "PRIMARY",

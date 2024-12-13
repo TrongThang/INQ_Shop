@@ -5,7 +5,8 @@ const Address_book = sequelize.define('address_book', {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    primaryKey: true
+    primaryKey: true,
+    autoIncrement: true
   },
   idCustomer: {
     type: DataTypes.STRING(12),

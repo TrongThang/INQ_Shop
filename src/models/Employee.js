@@ -63,4 +63,6 @@ const Employee = sequelize.define('employee', {
   ]
 });
 
+
+
 module.exports = Employee;

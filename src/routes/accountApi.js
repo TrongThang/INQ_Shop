@@ -10,10 +10,10 @@ const routerAccount = express.Router();
 
 
 routerAccount.get('/', getAllAccountsAPI);   //
-routerAccount.get('/:id', getAccountByIdAPI);   //
-routerAccount.post('/', createAccountAPI);  ///
-routerAccount.put('/:id', updateAccountAPI);   //
-routerAccount.delete('/', softDeleteAccountAPI);  //
+routerAccount.get('/:id', getAccountByIdAPI);  
+routerAccount.post('/', createAccountAPI);  
+routerAccount.put('/:id', updateAccountAPI);   
+routerAccount.delete('/:id', softDeleteAccountAPI);  
 
 
 module.exports = routerAccount;

@@ -5,8 +5,8 @@ const {getAllBlogAPI, getBlogAPI, postCreateBlogAPI, putUpdateBlogAPI, getAllOrO
 
 router.get('/', getAllOrOneBlogAPI);
 // router.get('/', getBlogAPI);
-router.post('', postCreateBlogAPI)
-router.put('', putUpdateBlogAPI)
+router.post('/', postCreateBlogAPI)
+router.put('/', putUpdateBlogAPI)
 
 
 

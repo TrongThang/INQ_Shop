@@ -8,7 +8,7 @@ Blog = sequelize.define('blog', {
     primaryKey: true,
     autoIncrement: true,
   },
-  category_id: {
+  idCategory: {
     type: DataTypes.INTEGER,
     allowNull: true,
     references: {
@@ -40,15 +40,12 @@ Blog = sequelize.define('blog', {
     type: DataTypes.STRING(500),
     allowNull: true
   },
-  view_point: {
-    type: DataTypes.INTEGER,
-    allowNull: true
-  },
+ 
   score: {
     type: DataTypes.INTEGER,
     allowNull: true
   },
-  hide_at: {
+  isHide: {
     type: DataTypes.DATE,
     allowNull: true
   },

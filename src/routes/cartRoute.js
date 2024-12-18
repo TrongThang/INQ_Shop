@@ -9,8 +9,8 @@ const cartRouter = express.Router();
 
 
 cartRouter.get('/', getCartInCookieAPI);
-cartRouter.post('/', addToCartAPI);
-cartRouter.put('/', updateQuantityDeviceInCartAPI);
+// cartRouter.post('/', addToCartAPI);
+// cartRouter.put('/', updateQuantityDeviceInCartAPI);
 cartRouter.delete('/', removeDeviceInCartAPI);
 cartRouter.delete('/clear', removeAllDeviceInCartAPI);
 

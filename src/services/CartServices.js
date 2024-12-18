@@ -33,7 +33,7 @@ const saveCartInCookie = (res, cart) => {
 const addToCartInCookie = (cart, deviceAdd) => {
     const { idDevice, name, sellingPrice, quantity } = deviceAdd;
 
-    let newCart =  convertToArray(cart);
+    let newCart = convertToArray(cart);
 
     console.log(newCart)
     //Kiểm tra sản phẩm có trong cookie hay không
@@ -47,7 +47,7 @@ const addToCartInCookie = (cart, deviceAdd) => {
     }
 
     return newCart
-} 
+}
 
 const updateQuantityDeviceInCartCookie = (cart, idDevice, quantity) => {
     let newCart = convertToArray(cart);
@@ -65,43 +65,71 @@ const removeDeviceCartInCookie = (cart, idRemove) => {
     const cartArr = convertToArray(cart);
 
     const newCart = cartArr.filter((item) => item.idDevice !== idRemove);
-    
+
     return newCart;
-} 
+}
 
 const getAllInCart = async () => {
     return await Cart.findAll();
 }
 
-const getCartIdCustomer = async (id) => {
-    return await Cart.findByPk(id)
+const getCartIdCustomer = async (data) => {
+    const { idCustomer, idDevice } = data;
+    return await Cart.findOne({
+        where: {
+            idCustomer: idCustomer,
+            idDevice: idDevice,
+        },
+    })
 }
+
 
 const postAddDeviceToCart = async (data) => {
     return await Cart.create(data);
 }
 
-const putUpdateDeviceInCart = async (id, data) => {
-    const result = await Cart.findByPk(id);
+const putUpdateDeviceInCart = async (data) => {
+    const {idCustomer,idDevice} = data
+
+    const result = await Cart.findOne({
+        where: {
+            idCustomer: idCustomer,
+            idDevice: idDevice,
+        },
+    })
     return await result.update(data);
 }
 
-const removeDeviceInCartAPI = async (idCustomer, idDevice) => {
+const removeDeviceInCart = async (data) => {
+    const { idCustomer, idDevice } = data;  // Lấy idCustomer và idDevice từ dữ liệu
+
+    // Tìm một mục giỏ hàng duy nhất thỏa mãn cả điều kiện idCustomer và idDevice
     const cartItem = await Cart.findOne({
-        where: { idCustomer, idDevice }
+        where: { 
+            idCustomer: idCustomer,   // Điều kiện idCustomer
+            idDevice: idDevice,       // Điều kiện idDevice
+        },
     });
 
+    console.log(cartItem);  // In ra mục giỏ hàng tìm thấy
+
+    // Kiểm tra nếu có mục giỏ hàng thỏa mãn
     if (cartItem) {
-        await cartItem.destroy();
+        // Nếu có, thực hiện xóa
+        await cartItem.destroy();  // Xóa mục giỏ hàng tìm được
         return { message: 'Xóa thiết bị khỏi giỏ hàng thành công!' };
     } else {
+        // Nếu không tìm thấy mục giỏ hàng thỏa mãn
         return { message: 'Thiết bị không có trong giỏ hàng!' };
     }
-}
+};
 
-const removeAllDeviceInCartAPI = async (idCustomer) => {
+const removeAllDeviceInCart = async (data) => {
+    const idCustomer = data.idCustomer
     const result = await Cart.destroy({
-        where: { idCustomer }
+        where: { 
+            idCustomer: idCustomer,
+         }
     });
 
     if (result > 0) {
@@ -110,13 +138,13 @@ const removeAllDeviceInCartAPI = async (idCustomer) => {
         return { message: 'Giỏ hàng trống!' };
     }
 }
-
 module.exports = {
-    getCartInCookie, saveCartInCookie, 
+    getCartInCookie, saveCartInCookie,
     addToCartInCookie, updateQuantityDeviceInCartCookie,
     removeDeviceCartInCookie,
     // DATABASE
     getAllInCart, getCartIdCustomer,
     postAddDeviceToCart, putUpdateDeviceInCart,
-    removeDeviceInCartAPI, removeAllDeviceInCartAPI
+    removeDeviceInCart, removeAllDeviceInCart,
+
 }

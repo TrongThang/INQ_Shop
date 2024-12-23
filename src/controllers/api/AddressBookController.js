@@ -4,6 +4,7 @@ const AddressBook = require('../../models/Address_book.js');
 const {
     getAllAddressBooks,
     getAddressBookById,
+    getAllAddressBookByIdCustomer,
     createAddressBook,
     updateAddressBook
 } = require('../../services/AddressBookServices');
@@ -36,6 +37,23 @@ const getAddressBookAPI = async (req, res) => {
     });
 };
 
+//Lấy tất cả địa chỉ của một khách hàng bằng API
+const getAddressBooksByIdCustomerAPI = async (req, res) => {
+    //TO DO SOMETHING
+    const data = req.body;
+    const addressBooks = await getAllAddressBookByIdCustomer(data);
+    if(!addressBooks){
+        return res.status(404).json({
+            success: false,
+            message: `Không tìm thấy địa chỉ có ID ${id}`,
+        });
+    }
+    res.status(200).json({
+        success: true,
+        data: addressBooks,
+    });
+};
+
 const getAllOrSingleAddressBookAPI = async (req, res) => {
     try {
         const { id } = req.query;
@@ -57,7 +75,35 @@ const postCreateAddressBookAPI = async (req, res) => {
     //TO DO SOMETHING
     try{
         const data = req.body;
-        console.log(">>>check data",data);
+        console.log(">>> check:", data);
+        //Kiểm tra district là chuỗi hay không
+        if (!data.district || typeof data.district !== 'string' || data.district.trim() === "") {
+            return res.status(400).json({
+                success: false,
+                message: 'Trường "district" phải là chuỗi.',
+            });
+        }
+        //Kiểm tra city là chuỗi hay không
+        if (!data.city || typeof data.city !== 'string' || data.city.trim() === "") {
+            return res.status(400).json({
+                success: false,
+                message: 'Trường "city" phải là chuỗi.',
+            });
+        }
+        //Kiểm tra ward là chuỗi hay không
+        if (!data.ward || typeof data.ward !== 'string' || data.ward.trim() === "") {
+            return res.status(400).json({
+                success: false,
+                message: 'Trường "ward" phải là chuỗi.',
+            });
+        }
+        //Kiểm tra street là chuỗi hay không
+        if (!data.street || typeof data.street !== 'string' || data.street.trim() === "") {
+            return res.status(400).json({
+                success: false,
+                message: 'Trường "street" phải là chuỗi.',
+            });
+        }
         const newAddressBook = await createAddressBook(data);
         res.status(201).json({
             success: true,
@@ -79,6 +125,35 @@ const putUpdateAddressBookAPI = async (req, res) => {
     //TO DO SOMETHING
     try {
         const data = req.body;
+        console.log(">>> check:", data);
+        //Kiểm tra district là chuỗi hay không
+        if (!data.district || typeof data.district !== 'string' || data.district.trim() === "") {
+            return res.status(400).json({
+                success: false,
+                message: 'Trường "district" phải là chuỗi.',
+            });
+        }
+        //Kiểm tra city là chuỗi hay không
+        if (!data.city || typeof data.city !== 'string' || data.city.trim() === "") {
+            return res.status(400).json({
+                success: false,
+                message: 'Trường "city" phải là chuỗi.',
+            });
+        }
+        //Kiểm tra ward là chuỗi hay không
+        if (!data.ward || typeof data.ward !== 'string' || data.ward.trim() === "") {
+            return res.status(400).json({
+                success: false,
+                message: 'Trường "ward" phải là chuỗi.',
+            });
+        }
+        //Kiểm tra street là chuỗi hay không
+        if (!data.street || typeof data.street !== 'string' || data.street.trim() === "") {
+            return res.status(400).json({
+                success: false,
+                message: 'Trường "street" phải là chuỗi.',
+            });
+        }
         const updatedAddressBook = await updateAddressBook(data);
         res.status(200).json({
             success: true,
@@ -96,6 +171,7 @@ const putUpdateAddressBookAPI = async (req, res) => {
     
 module.exports = {
     getAllOrSingleAddressBookAPI,
+    getAddressBooksByIdCustomerAPI,
     postCreateAddressBookAPI,
     putUpdateAddressBookAPI,
 }

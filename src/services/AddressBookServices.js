@@ -9,12 +9,31 @@ const getAllAddressBooks = async() => {
 
 // Lấy địa chỉ theo ID
 const getAddressBookById = async (id) => {
-    return AddressBooks.findByPk(id);
+    return await AddressBooks.findByPk(id);
+};
+
+
+const getAllAddressBookByIdCustomer = async (data) => {
+    return await AddressBooks.findAll({
+        where: {
+            idCustomer: data.idCustomer,
+        },
+    });
 };
 
 // Tạo mới một địa chỉ
 const createAddressBook = async (data) => {
-    return AddressBooks.create(data);
+    const transaction = await Sequelize.transaction();
+    if(data.isDefault === true){
+        //Đặt tất cả isDefault về false
+        await AddressBooks.update(
+            {isDefault: false},
+            {where: { idCustomer: data.idCustomer }, transaction}
+        );
+    }
+    await AddressBooks.create(data, { transaction });
+    await transaction.commit();
+    return true;
 };
 
 // Cập nhật thông tin địa chỉ
@@ -46,6 +65,7 @@ const updateStatusAddressBook = async (data) => {
 module.exports = {
     getAllAddressBooks,
     getAddressBookById,
+    getAllAddressBookByIdCustomer,
     createAddressBook,
     updateAddressBook,
 };

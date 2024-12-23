@@ -1,4 +1,8 @@
 const express = require('express');
+const app = express();
+const port = 8081;
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 require('dotenv').config()  // gọi ra để sử dụng.
 const configViewEngine = require('./config/viewEngine');
 const connection = require('./config/database');
@@ -12,10 +16,7 @@ const routerCategory = require('./routes/categoryRoute');
 const cartRouter = require('./routes/cartRoute');
 const routerAddressBook = require('./routes/addressBookAPI');
 const routerLikeDevice = require('./routes/likedDeviceAPI');
-
-const RoutesBlog = require('../src/routes/blog')
-const RoutesContact = require('../src/routes/contact')
-const RoutesCart = require('./routes/cart');
+const connection = require('./config/database');
 
 app.use('/v1/api/blog', RoutesBlog)
 app.use('/v1/api/contact', RoutesContact)

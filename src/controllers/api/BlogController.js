@@ -39,7 +39,7 @@ const getBlogAPI = async (req, res) => {
     try {
         // Gọi hàm lấy thông tin blog cụ thể từ cơ sở dữ liệu
         const result = await getBlog(data);
-
+        if(data.id)
         // Kiểm tra nếu không có kết quả hoặc kết quả trống
         if (!result || result.length === 0) {
             // Trả về mã lỗi 404 và thông báo nếu không tìm thấy blog với ID hoặc dữ liệu cung cấp

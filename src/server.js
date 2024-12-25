@@ -15,13 +15,13 @@ const cartRouter = require('./routes/cartRoute');
 const routerAddressBook = require('./routes/addressBookAPI');
 const routerLikeDevice = require('./routes/likedDeviceAPI');
 
-const RoutesBlog = require('../src/routes/blogRoute')
-const RoutesContact = require('../src/routes/contactRouter')
-const RoutesCart = require('./routes/cartDatabaseRouter');
+const routerBlog = require('./routes/blogRoute')
+const routerContact = require('./routes/contactRouter')
+const routerCart = require('./routes/cartDatabaseRoute');
 
-app.use('/v1/api/blog', RoutesBlog)
-app.use('/v1/api/contact', RoutesContact)
-app.use('/v1/api/cartDatabase', RoutesCart)
+app.use('/v1/api/blog', routerBlog)
+app.use('/v1/api/contact', routerContact)
+app.use('/v1/api/cartDatabase', routerCart)
 
 app.use('/v1/api/category', routerCategory);
 app.use('/v1/api/cartCookie', cartRouter);

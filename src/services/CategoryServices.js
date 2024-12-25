@@ -1,7 +1,7 @@
 const { convertToSlug } = require('../helpers/stringHelper');
 const Category = require('../models/Category');
 
-// USER
+
 const getAllCategory_User = async () => {
     const data = await Category.findAll({
         where: { status: 1},

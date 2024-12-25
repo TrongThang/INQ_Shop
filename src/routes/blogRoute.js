@@ -1,13 +1,15 @@
 const express = require('express')
-const router = express.Router();
 
-const {getAllBlogAPI, getBlogAPI, postCreateBlogAPI, putUpdateBlogAPI, getAllOrOneBlogAPI } = require('../controllers/api/BlogController')
+const { postCreateBlogAPI, putUpdateBlogAPI, getAllOrOneBlogAPI } = require('../controllers/api/BlogController')
 
-router.get('/', getAllOrOneBlogAPI);
+const routerBlog = express.Router();
+
+routerBlog.get('/', getAllOrOneBlogAPI);
 // router.get('/', getBlogAPI);
-router.post('/', postCreateBlogAPI)
-router.put('/', putUpdateBlogAPI)
+// router.get('/', getAllBlogAPI);
+routerBlog.post('/', postCreateBlogAPI)
+routerBlog.put('/', putUpdateBlogAPI)
 
 
 
-module.exports = router
+module.exports = routerBlog;

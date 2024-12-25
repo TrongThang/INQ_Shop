@@ -1,13 +1,14 @@
 const express = require('express');
-const router = express.Router();
 const { 
     getAllContactOrgetOneContact,
     postCreateContactAPI, 
     putUpdateContactAPI, 
 } = require('../controllers/api/ContactController')  
 
-router.get('/', getAllContactOrgetOneContact); 
-router.post('/', postCreateContactAPI); 
-router.put('/', putUpdateContactAPI); 
+const routerContact = express.Router();
 
-module.exports = router;
+routerContact.get('/', getAllContactOrgetOneContact); 
+routerContact.post('/', postCreateContactAPI); 
+routerContact.put('/', putUpdateContactAPI); 
+
+module.exports = routerContact;

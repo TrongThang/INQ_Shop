@@ -4,7 +4,7 @@ const Category = require('../models/Category');
 const Device = require('../models/Device');
 const ReviewDevice = require('../models/Review_device');
 
-const getAllDevice_User = async (page = 0, filter = {}) => {
+const getAllDevice_User = async (page = 0, filters = {}) => {
     const { priceMin, priceMax, idCategory, keyword } = filters;
 
     const whereConditions = {
@@ -43,21 +43,17 @@ const getAllDevice_User = async (page = 0, filter = {}) => {
     return await data;
 }
 
-//4: Sản phẩm nổi bật
-const getOutstandingDevice = async () => {
+// 0: Sản phẩm ngừng bán
+// >= 1: Sản phẩm đang bán
+// 1: Sản phẩm bán
+// 2: Sản phẩm khuyến mãi
+// 3: Sản phẩm nổi bật
+// 4: Sản phẩm mới
+// Nếu không nhập limit thì mặc định là lấy hết
+const getDeviceByTypeStatus = async (status = 1, limit = {}) => {
     const data = await Device.findAll({
-        where: { status:3 },
-        limit: 10
-    });
-
-    return await data;
-}
-
-//3: Sản phẩm khuyến mãi - Giá giảm 5%
-const getDiscountDevice = async () => {
-    const data = await Device.findAll({
-        where: { status: 3 },
-        limit: 5
+        where: { status: status },
+        limit: limit
     });
 
     return await data;
@@ -120,10 +116,11 @@ const updateStatusDevice = async ({id, status}) => {
     return updatedCount;
 }
 
-const getAllReviewForDevice = async (id) => {
+const getAllReviewForDevice = async (id, status = {}) => {
     const comments = await ReviewDevice.findAll({
         where: {
             idDevice: id,
+            status: status
         }
     });
 
@@ -154,9 +151,10 @@ const updateStatusReviewForDevice = async ({id, status}) => {
 }
 
 module.exports = {
-    getAllDevice_User, getAllDevice_Admin, getDeviceById,
-    getOutstandingDevice, getDiscountDevice,
+    getAllDevice_User, getAllDevice_Admin,
+    getDeviceById, getDeviceByTypeStatus, getTOPDeviceLiked,
     createDevice, updateDevice, updateStatusDevice,
+
     //Review For Device
     getAllReviewForDevice, createReviewForDevice,
     updateReviewForDevice, updateStatusReviewForDevice

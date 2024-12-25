@@ -69,11 +69,7 @@ const removeDeviceCartInCookie = (cart, idRemove) => {
     return newCart;
 } 
 
-const getAllInCart = async () => {
-    return await Cart.findAll();
-}
-
-const getCartIdCustomer = async (id) => {
+const getCart = async (id) => {
     return await Cart.findByPk(id)
 }
 
@@ -86,7 +82,7 @@ const putUpdateDeviceInCart = async (id, data) => {
     return await result.update(data);
 }
 
-const removeDeviceInCartAPI = async (idCustomer, idDevice) => {
+const removeDeviceInCart = async (idCustomer, idDevice) => {
     const cartItem = await Cart.findOne({
         where: { idCustomer, idDevice }
     });
@@ -99,7 +95,7 @@ const removeDeviceInCartAPI = async (idCustomer, idDevice) => {
     }
 }
 
-const removeAllDeviceInCartAPI = async (idCustomer) => {
+const removeAllDeviceInCart = async (idCustomer) => {
     const result = await Cart.destroy({
         where: { idCustomer }
     });
@@ -116,7 +112,7 @@ module.exports = {
     addToCartInCookie, updateQuantityDeviceInCartCookie,
     removeDeviceCartInCookie,
     // DATABASE
-    getAllInCart, getCartIdCustomer,
+    getCart,
     postAddDeviceToCart, putUpdateDeviceInCart,
     removeDeviceInCartAPI, removeAllDeviceInCartAPI
 }

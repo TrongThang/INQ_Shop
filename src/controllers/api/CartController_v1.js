@@ -7,14 +7,25 @@ const {
     removeDeviceCartInCookie,
 
     //Database
-    getAllInCart, getCartIdCustomer,
+    getCart,
     postAddDeviceToCart, putUpdateDeviceInCart,
     removeDeviceInCartAPI, removeAllDeviceInCartAPI
 } = require('../../services/CartServices');
 
-const getCartInCookieAPI = (req, res) => {
+const getCartAPI = (req, res) => {
     try {
-        const cartData = getCartInCookie(req);
+        const cartData = null;
+        if (req.session.isLogged) {
+
+            cartData = getCart(req.body.idCustomer);
+
+            return res.status(200).json({
+                errorCode: 0,
+                data: (cartData !== null ? cartData : "Vui lòng thêm sản phẩm vào giỏ hàng!"),
+            });
+        }
+
+        cartData = getCartInCookie(req);
 
         return res.status(200).json({
             errorCode: 0,
@@ -29,11 +40,21 @@ const getCartInCookieAPI = (req, res) => {
     }
 }
 
-const postAddToCartCookieAPI = async (req, res) => {
+const postAddToCartAPI = async (req, res) => {
     try {
-        const deviceAdd = req.body;
-        const newCart = addToCartInCookie(req.cookies.cart, deviceAdd);
+        const {idDevice, idCustomer, quantity} = req.body;
+        const newCart = null;
+        if (req.session.isLogged) {
+            newCart = postAddDeviceToCart(req.body)
 
+            return res.status(200).json({
+                errorCode: 0,
+                data: newCart
+            })
+        }
+        
+        const deviceAdd = {idDevice, quantity}
+        newCart = addToCartInCookie(req.cookies.cart, deviceAdd);
         saveCartInCookie(res, newCart);
 
         return res.status(200).json({
@@ -49,10 +70,15 @@ const postAddToCartCookieAPI = async (req, res) => {
     }
 }
 
-const putUpdateQuantityDeviceInCartCookieAPI = async (req, res) => {
+const putUpdateQuantityDeviceInCartAPI = async (req, res) => {
     try {
         const { idDevice, quantity } = req.body;
-        const newCart = updateQuantityDeviceInCartCookie(req.cookies.cart, idDevice, quantity);
+        const newCart = null;
+        if (req.session.isLogged) {
+            newCart = putUpdateDeviceInCart(idDevice, )
+        }
+
+        newCart = updateQuantityDeviceInCartCookie(req.cookies.cart, idDevice, quantity);
 
         saveCartInCookie(res, newCart);
 
@@ -117,7 +143,7 @@ const getAllInCartAPI = async (req, res) => {
     }
 }
     
-const getCartAPI = async (req, res) => {
+const getCart_API = async (req, res) => {
     const {idCustomer} = req.params
     try {
         const result = await getCartIdCustomer(idCustomer); 

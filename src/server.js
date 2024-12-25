@@ -2,7 +2,9 @@ const express = require('express');
 require('dotenv').config()  // gọi ra để sử dụng.
 const configViewEngine = require('./config/viewEngine');
 const connection = require('./config/database');
-
+const app = express();
+const port = 8080
+configViewEngine(app)
 const routerCustomer = require('./routes/customerApi');
 const routerEmployee = require('./routes/employeeApi');
 const routerAccount = require('./routes/accountApi');
@@ -13,9 +15,12 @@ const cartRouter = require('./routes/cartRoute');
 const routerAddressBook = require('./routes/addressBookAPI');
 const routerLikeDevice = require('./routes/likedDeviceAPI');
 
-const RoutesBlog = require('./routes/cartRoute')
-const RoutesContact = require('./routes/con')
-const RoutesCart = require('../src/routes/cart');
+const routerBlog = require('./routes/blogRoute')
+const routerContact = require('./routes/contactRouter')
+const routerCart = require('./routes/cartDatabaseRoute');
+
+app.use('/v1/api/blog', routerBlog)
+app.use('/v1/api/contact', routerContact)
 
 app.use('/v1/api/customer', routerCustomer);
 app.use('/v1/api/employee', routerEmployee);

@@ -128,13 +128,13 @@ const removeAllDeviceInCart = async (data) => {
         return { message: 'Giỏ hàng trống!' };
     }
 }
+
 module.exports = {
     getCartInCookie, saveCartInCookie,
     addToCartInCookie, updateQuantityDeviceInCartCookie,
     removeDeviceCartInCookie,
     // DATABASE
-    getCart,
-    postAddDeviceToCart, putUpdateDeviceInCart,
+    getCart,postAddDeviceToCart, putUpdateDeviceInCart,
     removeDeviceInCart, removeAllDeviceInCart,
 
 }

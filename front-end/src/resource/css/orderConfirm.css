@@ -1,0 +1,21 @@
+.input-box {
+    margin: 10px 0 0 0;
+}
+
+input {
+    border-radius: 3px;
+    border: 1px solid #000;
+    width: 250px;
+    height: 35px;
+    font-size: 20;
+}
+
+.text {
+    color: #ff0000;
+}
+
+button.close:focus {
+    outline: none;
+    box-shadow: none;
+}
+

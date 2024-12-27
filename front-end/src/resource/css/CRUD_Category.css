@@ -1,0 +1,61 @@
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.form-group {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+.form-group label {
+    flex: 0 0 25%;
+    max-width: 25%;
+    padding-right: 10px;
+    box-sizing: border-box;
+    font-weight: bold;
+}
+.form-group input,
+.form-group select {
+    flex: 1;
+    max-width: 75%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.form-actions {
+    text-align: center;
+    margin-top: 20px;
+}
+.btn-save {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    background-color: #00bfff;
+    cursor: pointer;
+    font-size: 16px;
+}
+.btn-save:hover {
+    background-color: #009acd;
+}
+.back-link {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #000000;
+    text-decoration: none;
+    border: 1px solid  #000000;
+    padding: 7px;
+    border-radius: 5px;
+}
+

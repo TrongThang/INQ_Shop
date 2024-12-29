@@ -1,0 +1,20 @@
+
+table {
+    width: 100%; /* Bảng sẽ chiếm toàn bộ chiều rộng */
+    border-collapse: collapse;
+    table-layout: fixed; /* Cố định độ rộng các cột */
+}
+
+th, td {
+    text-align: center; /* Căn giữa nội dung */
+    padding: 8px; /* Khoảng cách giữa nội dung và viền */
+    word-wrap: break-word; /* Xuống dòng khi nội dung quá dài */
+}
+
+th {
+    background-color: #f4f4f4; /* Màu nền cho tiêu đề bảng */
+    font-weight: bold;
+}
+.select-stauts {
+    padding-bottom: 6px;
+}

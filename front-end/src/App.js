@@ -10,12 +10,10 @@ import './resource/css/bootstrap.min.css'
 import './resource/css/style.css'
 import './resource/css/inq.css'
 
-import DeviceCard from './component/Shared/deviceCard';
 import Header from './component/LayoutCustomer/Header/header';
 import Footer from './component/LayoutCustomer/Footer/footer';
-import AreaSearch from './component/SearchPage/AreaSearch/areaSearch';
-import AreaSort from './component/SearchPage/areaSort';
 import SearchPage from './pages/searchPage';
+import ButtonPage from './component/buttonPage';
 
 function App() {
 
@@ -25,10 +23,7 @@ function App() {
   return (
     <div className='App'>
       <Header />
-      <button className='btn btn-outline-primary' onClick={() => {setPage('search')}}>Trang Tìm kiếm</button>
-      <button className='btn btn-outline-primary' onClick={() => {setPage('cart')}}>Trang Giỏ hàng</button>
-      <button className='btn btn-outline-primary' onClick={() => {setPage('checkout')}}>Trang Trang Thanh Toán</button>
-      <button className='btn btn-outline-primary' onClick={() => {setPage('detail')}}>Trang Chi tiết SP</button>
+      <ButtonPage setPage={setPage} />
       { page === 'search' && <SearchPage />} 
       <Footer />
 

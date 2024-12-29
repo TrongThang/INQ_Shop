@@ -1,0 +1,10 @@
+export default function ButtonPage({setPage}) {
+    return (
+        <>
+            <button className='btn btn-outline-primary' onClick={() => {setPage('search')}}>Trang Tìm kiếm</button>
+            <button className='btn btn-outline-primary' onClick={() => {setPage('cart')}}>Trang Giỏ hàng</button>
+            <button className='btn btn-outline-primary' onClick={() => {setPage('checkout')}}>Trang Trang Thanh Toán</button>
+            <button className='btn btn-outline-primary' onClick={() => {setPage('detail')}}>Trang Chi tiết SP</button>
+        </>
+    )
+}

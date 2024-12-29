@@ -35,9 +35,9 @@ export default function DeviceCard() {
     // };
 
     return (
-        <div className="col-xl-3 col-lg-3 product-items wow fadeInUp" data-wow-delay="0.2s">
-            <div className="service-item ">
-            <div className="service-img">
+        <div className="col-xl-2 col-lg-2 product-items wow fadeInUp me-3" data-wow-delay="0.2s" style={{ padding: "0px"}}>
+            <div className="service-item" >
+                <div className="service-img">
                 <div className="img-change">
                 <img src={device.image} className="img-fluid rounded-top w-100" alt=""/>
                 {/* device.image thay vào nội dung của */}

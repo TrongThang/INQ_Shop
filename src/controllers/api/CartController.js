@@ -139,6 +139,7 @@ const getAllInCartAPI = async (req, res) => {
 // Hàm để lấy giỏ hàng của khách hàng dựa trên cả idCustomer và idDevice
 const getCartAPI = async (req, res) => {
     const data = req.body // Lấy dữ liệu từ body của yêu cầu
+    con
     try {
         // Kiểm tra xem dữ liệu có hợp lệ không (cả idCustomer và idDevice)
         if (!data || !data.idCustomer) {

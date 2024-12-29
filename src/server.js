@@ -16,7 +16,7 @@ const routerAddressBook = require('./routes/addressBookAPI');
 const routerLikeDevice = require('./routes/likedDeviceAPI');
 
 const routerBlog = require('./routes/blogRoute')
-const routerContact = require('./routes/contactRouter')
+const routerContact = require('./routes/contactRoute')
 const routerCart = require('./routes/cartDatabaseRoute');
 
 app.use('/v1/api/blog', routerBlog)

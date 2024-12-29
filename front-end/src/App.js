@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css'
 import './resource/css/style.css';
 // <!-- Libraries Stylesheet -->
 import './resource/lib/animate/animate.min.css'
@@ -14,13 +13,15 @@ import './resource/css/inq.css'
 import DeviceCard from './component/Shared/deviceCard';
 import Header from './component/LayoutCustomer/Header/header';
 import Footer from './component/LayoutCustomer/Footer/footer';
+import AreaSearch from './component/SearchPage/areaSearch';
+
 
 function App() {
   return (
     <div className='App'>
-        <Header />
-        <DeviceCard />
-        <Footer />
+      <Header />
+      
+      <Footer />
 
     </div>
   );

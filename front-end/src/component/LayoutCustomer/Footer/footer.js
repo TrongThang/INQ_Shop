@@ -1,6 +1,6 @@
 export default function Footer() {
     return (
-        <div className="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.2s">
+        <div className="container-fluid footer py-5 wow fadeIn mt-5" data-wow-delay="0.2s">
             <div className="container py-5">
                 <div className="row g-5">
                     <div className="col-xl-12">
@@ -9,14 +9,14 @@ export default function Footer() {
                                 <div className="col-md-6 col-lg-6 col-xl-5">
                                     <div className="footer-item">
                                         <a href="index.html" className="p-0">
-                                            <h3 className="text-white"><i className="fab fa-slack me-3"></i> INQ Shop</h3>
+                                            <h3 className="text-white"><i className="fab fa-slack me-3"/> INQ Shop</h3>
                                         </a>
                                         <p className="text-white mb-4">Dolor amet sit justo amet elitr clita ipsum elitr est.Lorem ipsum dolor sit amet, consectetur adipiscing...</p>
                                         <div className="footer-btn d-flex">
-                                            <a className="btn btn-md-square rounded-circle me-3" href="#"><i className="fab fa-facebook-f"></i></a>
-                                            <a className="btn btn-md-square rounded-circle me-3" href="#"><i className="fab fa-twitter"></i></a>
-                                            <a className="btn btn-md-square rounded-circle me-3" href="#"><i className="fab fa-instagram"></i></a>
-                                            <a className="btn btn-md-square rounded-circle me-0" href="#"><i className="fab fa-linkedin-in"></i></a>
+                                            <a className="btn btn-md-square rounded-circle me-3" href="#"><i className="fab fa-facebook-f"/></a>
+                                            <a className="btn btn-md-square rounded-circle me-3" href="#"><i className="fab fa-twitter"/></a>
+                                            <a className="btn btn-md-square rounded-circle me-3" href="#"><i className="fab fa-instagram"/></a>
+                                            <a className="btn btn-md-square rounded-circle me-0" href="#"><i className="fab fa-linkedin-in"/></a>
                                         </div>
                                     </div>
                                 </div>
@@ -25,14 +25,15 @@ export default function Footer() {
                                 <div className="col-md-6 col-lg-6 col-xl-3">
                                     <div className="footer-item">
                                         <h4 className="text-white mb-4">Liên kết</h4>
-                                        <a href="#"><i className="fas fa-angle-right me-2"></i> About Us</a>
-                                        <a href="#"><i className="fas fa-angle-right me-2"></i> Features</a>
-                                        <a href="#"><i className="fas fa-angle-right me-2"></i> Services</a>
+                                        <a href="#"><i className="fas fa-angle-right me-2"></i> Trang chủ</a>
+                                        <a href="#"><i className="fas fa-angle-right me-2"></i> Danh mục</a>
+                                        <a href="#"><i className="fas fa-angle-right me-2"></i> Giới thiệu</a>
+                                        <a href="#"><i className="fas fa-angle-right me-2"></i> Liên hệ</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="pt-5" style={{ borderTop: "1px solid rgba(255, 255, 255, 0.08)" }}>
+                        <div className="pt-5" style={{ borderTop: "1px" }}>
                             <div className="row g-0">
                                 <div className="col-12">
                                     <div className="row g-4">

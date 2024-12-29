@@ -35,7 +35,7 @@ export default function DeviceCard() {
     // };
 
     return (
-        <div className="col-xl-2 col-lg-2 product-items wow fadeInUp" data-wow-delay="0.2s">
+        <div className="col-xl-3 col-lg-3 product-items wow fadeInUp" data-wow-delay="0.2s">
             <div className="service-item ">
             <div className="service-img">
                 <div className="img-change">

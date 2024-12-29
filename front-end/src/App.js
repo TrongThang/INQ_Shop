@@ -14,6 +14,7 @@ import Header from './component/LayoutCustomer/Header/header';
 import Footer from './component/LayoutCustomer/Footer/footer';
 import SearchPage from './pages/searchPage';
 import ButtonPage from './component/buttonPage';
+import CheckoutPage from './pages/checkoutPage';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
       <Header />
       <ButtonPage setPage={setPage} />
       { page === 'search' && <SearchPage />} 
+      { page === 'checkout' && <CheckoutPage />} 
       <Footer />
 
     </div>

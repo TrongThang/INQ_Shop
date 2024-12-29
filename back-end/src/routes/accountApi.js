@@ -1,6 +1,6 @@
 const express = require('express');
 const {
-    getAllAccountsAPI,
+    getLoginAPI,
     getAccountByIdAPI,
     createAccountAPI,
     updateAccountAPI,
@@ -8,8 +8,7 @@ const {
 } = require('../controllers/api/AccountController');
 const routerAccount = express.Router();
 
-
-routerAccount.get('/', getAllAccountsAPI);   //
+routerAccount.get('/login', getLoginAPI);  
 routerAccount.get('/:id', getAccountByIdAPI);  
 routerAccount.post('/', createAccountAPI);  
 routerAccount.put('/:id', updateAccountAPI);   

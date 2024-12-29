@@ -29,10 +29,6 @@ const SlideShow = sequelize.define('slideshow', {
     type: DataTypes.STRING(500),
     allowNull: true
   },
-  hide_at: {
-    type: DataTypes.DATE,
-    allowNull: true
-  },
   status: {
     type: DataTypes.TINYINT,
     allowNull: true

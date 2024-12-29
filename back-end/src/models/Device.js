@@ -47,6 +47,8 @@ const Device = sequelize.define('device', {
   }
 }, {
   sequelize,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
   tableName: 'device',
   timestamps: true,
   indexes: [
@@ -83,5 +85,8 @@ const Device = sequelize.define('device', {
     },
   ]
 });
+
+const ReviewDevice = require('../models/Review_device')
+Device.hasMany(ReviewDevice, { foreignKey: 'idDevice', as: 'reviews' })
 
 module.exports = Device;

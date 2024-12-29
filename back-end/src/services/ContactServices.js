@@ -21,7 +21,6 @@ const putUpdateContact = async (data) => {
 }
 const checkContactByEmail = async (email) => {
     try {
-       
         const result = await Contact.findOne({
             where: {
                 email: email

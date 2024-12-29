@@ -3,16 +3,26 @@ const Category = require('../../models/Category.js');
 const {
     getAllCategory_User, getAllCategory_Admin,
     getCategoryById, getChildrenCategory,
-    createCategory, updateCategory, deleteCategory
+    createCategory, updateCategory, updateStatusCategory
 } = require('../../services/CategoryServices.js');
 
+const {
+} = require('../../services/AttributeServices.js')
 const getAllCategory_UserAPI = async (req, res) => {
-    const results = await getAllCategory_User();
+    try {
+        const results = await getAllCategory_User();
 
-    return res.status(200).json({
-        errorCode: 0,
-        data: results
-    })
+        return res.status(200).json({
+            errorCode: 0,
+            data: results
+        })
+    } catch (error) {
+        return res.status(401).json({
+            errorCode: 1,
+            error: error
+        })
+    }
+    
 }
 
 const getAllCategory_AdminAPI = async (req, res) => {
@@ -55,7 +65,7 @@ const postCreateCategoryAPI = async (req, res) => {
 const putUpdateCategoryAPI = async (req, res) => {
     const updatedCount = await updateCategory(req.body);
 
-    if (updateCategory)
+    if (updatedCount)
     {
         return res.status(201).json({
             errorCode: 0,
@@ -70,9 +80,10 @@ const putUpdateCategoryAPI = async (req, res) => {
 }
 
 const updateStatusCategoryAPI = async (req, res) => {
-    const updatedCount = await updateStatusCategory(req.body);
+    const countUpdateCategory = await updateStatusCategory(req.body);
+    const countUpdateAttribute = await updateStatusCategory(req.body);
 
-    if (updateCategory)
+    if (updatedCount)
     {
         return res.status(201).json({
             errorCode: 0,

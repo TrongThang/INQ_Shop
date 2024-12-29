@@ -19,6 +19,10 @@ const routerBlog = require('./routes/blogRoute')
 const routerContact = require('./routes/contactRoute')
 const routerCart = require('./routes/cartDatabaseRoute');
 
+const routerDevice = require('./routes/deviceRoute');
+
+app.use('/v1/api/device', routerDevice)
+
 app.use('/v1/api/blog', routerBlog)
 app.use('/v1/api/contact', routerContact)
 app.use('/v1/api/cartDatabase', routerCart)

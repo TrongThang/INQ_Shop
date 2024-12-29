@@ -81,4 +81,7 @@ const ReviewDevice = sequelize.define('review_device', {
   ]
 });
 
+const Device = require('../models/Device');
+// ReviewDevice.belongsTo(Device, { foreignKey: 'idDevice', as: 'device' });
+
 module.exports = ReviewDevice;

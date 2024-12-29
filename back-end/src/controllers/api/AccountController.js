@@ -3,9 +3,9 @@ const {
     getAccountById, 
     createAccount, 
     updateAccount, 
-    updateStatusAccount 
+    softDeleteAccount 
   } = require('../../services/AccountServices');
-
+  
 // Get all accounts
 const getAllAccountsAPI = async (req, res) => {
     try {

@@ -1,18 +1,17 @@
 const express = require('express');
 const {
-    getCartAPI,
-    postAddToCartAPI, putUpdateQuantityDeviceInCartAPI,
-    removeDeviceInCartCookieAPI,removeAllDeviceInCartAPI
+    getCartInCookieAPI, addToCartAPI, 
+    updateQuantityDeviceInCartAPI, removeDeviceInCartAPI,
+    removeAllDeviceInCartAPI
 } = require('../controllers/api/CartController');
 
 const cartRouter = express.Router();
 
 
-cartRouter.get('/', getCartAPI);
-cartRouter.get('/:idCustomer',getCartAPI)
-cartRouter.post('/', postAddToCartAPI);
-cartRouter.put('/:idCustomer/:idDevice', putUpdateQuantityDeviceInCartAPI);
-cartRouter.delete('/:idCustomer/:idDevice', removeDeviceInCartCookieAPI);
-cartRouter.delete('/:idCustomer', removeAllDeviceInCartAPI);
+cartRouter.get('/', getCartInCookieAPI);
+// cartRouter.post('/', addToCartAPI);
+// cartRouter.put('/', updateQuantityDeviceInCartAPI);
+cartRouter.delete('/', removeDeviceInCartAPI);
+cartRouter.delete('/clear', removeAllDeviceInCartAPI);
 
 module.exports = cartRouter;

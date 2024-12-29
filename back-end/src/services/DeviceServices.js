@@ -4,7 +4,7 @@ const Category = require('../models/Category');
 const Device = require('../models/Device');
 const ReviewDevice = require('../models/Review_device');
 
-const getAllDevice_User = async (page = 0, filters = {}) => {
+const getAllDevice_User = async (page = 0, filter = {}) => {
     const { priceMin, priceMax, idCategory, keyword } = filters;
 
     const whereConditions = {
@@ -43,17 +43,21 @@ const getAllDevice_User = async (page = 0, filters = {}) => {
     return await data;
 }
 
-// 0: Sản phẩm ngừng bán
-// >= 1: Sản phẩm đang bán
-// 1: Sản phẩm bán
-// 2: Sản phẩm khuyến mãi
-// 3: Sản phẩm nổi bật
-// 4: Sản phẩm mới
-// Nếu không nhập limit thì mặc định là lấy hết
-const getDeviceByTypeStatus = async (status = 1, limit = {}) => {
+//4: Sản phẩm nổi bật
+const getOutstandingDevice = async () => {
     const data = await Device.findAll({
-        where: { status: status },
-        limit: limit
+        where: { status:3 },
+        limit: 10
+    });
+
+    return await data;
+}
+
+//3: Sản phẩm khuyến mãi - Giá giảm 5%
+const getDiscountDevice = async () => {
+    const data = await Device.findAll({
+        where: { status: 3 },
+        limit: 5
     });
 
     return await data;
@@ -116,11 +120,10 @@ const updateStatusDevice = async ({id, status}) => {
     return updatedCount;
 }
 
-const getAllReviewForDevice = async (id, status = {}) => {
+const getAllReviewForDevice = async (id) => {
     const comments = await ReviewDevice.findAll({
         where: {
             idDevice: id,
-            status: status
         }
     });
 
@@ -151,10 +154,9 @@ const updateStatusReviewForDevice = async ({id, status}) => {
 }
 
 module.exports = {
-    getAllDevice_User, getAllDevice_Admin,
-    getDeviceById, getDeviceByTypeStatus, getTOPDeviceLiked,
+    getAllDevice_User, getAllDevice_Admin, getDeviceById,
+    getOutstandingDevice, getDiscountDevice,
     createDevice, updateDevice, updateStatusDevice,
-
     //Review For Device
     getAllReviewForDevice, createReviewForDevice,
     updateReviewForDevice, updateStatusReviewForDevice

@@ -39,10 +39,6 @@ const removeTagHtml = (paragraph) => {
     return str.replace(/(<([^>]+)>)/ig, '');
 }
 
-const toStringSearch = (str) => {
-	return str.replace(" ", "%");
-}
-
 module.exports = {
 	convertToSlug, removeTagHtml
 }

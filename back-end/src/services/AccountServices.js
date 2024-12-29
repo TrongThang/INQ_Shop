@@ -2,60 +2,29 @@
 const Account = require('../models/Account');
 const Role = require('../models/Role');
 const Employee = require('../models/Employee');
-const CustomerService = require('../services/CustomerServices');
-const EmployeeService = require('../services/EmployeeServices');
 
 const getAllAccounts = async () => {
     return await Account.findAll({
       include: [
-        {
-          model: Role,
-          as: 'role',
-          attributes: ['nameRole']
-        },
-        {
-          model: Employee,
-          as: 'employee',
-          attributes: ['surname', 'lastname']
-        }
+        { model: Role, as: 'role', attributes: ['nameRole'] },
+        { model: Employee, as: 'employee', attributes: ['surname', 'lastname'] }
       ]
     });
-};
-  
+  };
 // Get account by idPerson
-const getAccountByCondition = async (idPerson = {}, username = {}) => {
+const getAccountById = async (idPerson) => {
   return await Account.findOne({
-    where: {
-      idPerson: idPerson,
-      username: username
-    },
+    where: { idPerson },
     include: [
-      {
-        model: Role,
-        as: 'role',
-        attributes: ['nameRole']
-      },
-      {
-        model: Employee,
-        as: 'employee',
-        attributes: ['surname', 'lastname']
-      }
+      { model: Role, as: 'role', attributes: ['nameRole'] },
+      { model: Employee, as: 'employee', attributes: ['surname', 'lastname'] }
     ]
   });
 };
 
 // Create a new account
-const createAccount = async (accountData, personData) => {
-  const resultAccount = await Account.create(accountData);
-  const resultPersonData = null;
-
-  if (accountData.idRole === 'E') {
-    resultPersonData = await EmployeeService.createEmployee(personData)
-  }
-  else if (accountData.idRole === 'C') {
-    resultPersonData = await CustomerService.createCustomer(personData);
-  }
-  return [resultAccount, resultPersonData]; 
+const createAccount = async (accountData) => {
+  return await Account.create(accountData);
 };
 
 // Update an account
@@ -65,38 +34,17 @@ const updateAccount = async (idPerson, accountData) => {
   });
 };
 
-// set Status account:
-// 0: BAN account
-// 1: Account is Active
-
-const updateStatusAccount = async (idPerson, status) => {
+// Soft delete an account (set status to 0)
+const softDeleteAccount = async (idPerson) => {
   return await Account.update({ status: 0 }, {
-    where: {
-      idPerson: idPerson,
-      status: status
-    }
+    where: { idPerson }
   });
 };
 
-const checkPassword = async (username, password) => {
-  const account = getAccountByCondition(username = username)
-  return password === account.password;
-}
-// change Password
-const changePassword = async(username, password) => {
-  if (checkPassword(username, password)) {
-    return await Account.update(password, {
-      where: {username}
-    });
-  }
-
-  return false;
-}
-
 module.exports = {
   getAllAccounts,
-  getAccountByCondition,
+  getAccountById,
   createAccount,
   updateAccount,
-  updateStatusAccount
+  softDeleteAccount
 };

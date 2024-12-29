@@ -1,18 +1,21 @@
-const connection = required('../config/database');
-const Device = require('../models/Device.js');
-const Detail_Device = require('../models/Detail_Device.js');
-const { createReviewForDevice, updateReviewForDevice, updateStatusReviewForDevice } = require('../../services/DeviceServices.js');
+const connection = require('../../config/database.js');
+const Device = require('../../models/Device.js');
 
 const {
     getAllDevice_User, getAllDevice_Admin, getDeviceById,
     createDevice, updateDevice, updateStatusDevice,
     //Review For Device
-    getAllReviewForDevice
-} = reqire('../service/DeviceServices');
+    getAllReviewForDevice, createReviewForDevice, updateReviewForDevice, updateStatusReviewForDevice,
+    getTOPDeviceLiked,
+} = require('../../services/DeviceServices.js');
 
 const getAllDeviceByUserAPI = async (req, res) => {
     try {
-        const results = await getAllDevice_User();
+        const { page = 0, status = 1, limit = 10, priceMin, priceMax, idCategory, keyword } = req.body;
+
+        const filters = { priceMin, priceMax, idCategory, keyword };
+
+        const results = await getAllDevice_User(page, status, parseInt(limit), filters);
 
         return res.status(200).json({
             errorCode: 0,
@@ -27,6 +30,38 @@ const getAllDeviceByUserAPI = async (req, res) => {
     }
 }
 
+const getTOPDeviceLikedAPI = async (req, res) => {
+    try {
+        const results = await getTOPDeviceLiked();
+
+        return res.status(200).json({
+            errorCode: 0,
+            data: results
+        })
+    } catch (error) {
+        return res.status(500).json({
+            errorCode: 1,
+            msg: 'User: Có lỗi xảy ra trong quá trình lấy dữ liệu các Thiết bị',
+            details: error.message,
+        });
+    }
+}
+const getAllDeviceByStatusAPI = async (req, res) => {
+    try {
+        const results = await getDeviceByTypeStatus();
+
+        return res.status(200).json({
+            errorCode: 0,
+            data: results
+        })
+    } catch (error) {
+        return res.status(500).json({
+            errorCode: 1,
+            msg: 'User: Có lỗi xảy ra trong quá trình lấy dữ liệu các Thiết bị',
+            details: error.message,
+        });
+    }
+}
 const getAllDeviceByAdminAPI = async (req, res) => {
     try {
         const results = await getAllDevice_Admin();
@@ -187,8 +222,10 @@ const updateStatusReviewForDeviceAPI = async (req, res) => {
 }
 
 module.exports = {
-    getAllDeviceByUserAPI, getAllDeviceByAdminAPI, getDeviceByIdAPI,
-    postCreateDeviceAPI, putUpdateDeviceAPI, updateStatusDeviceAPI,
+    getAllDeviceByUserAPI, getAllDeviceByAdminAPI,
+    getDeviceByIdAPI, getTOPDeviceLikedAPI,
+    postCreateDeviceAPI, putUpdateDeviceAPI,
+    updateStatusDeviceAPI,
     //Review For Device
     getAllReviewForDeviceAPI, postCreateReviewForDeviceAPI,
     putUpdateReviewForDeviceAPI, updateStatusReviewForDeviceAPI

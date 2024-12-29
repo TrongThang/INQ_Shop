@@ -33,10 +33,14 @@ const updateSlide = async (id, slideData) => {
 };
 
 // Ẩn slide 
-const hideSlide = async (id) => {
-  return await SlideShow.update({ status: 0 }, {
-    where: { id }
-  });
+const updateStatusSlide = async (id, status) => {
+  return await SlideShow.update(
+    {
+      status: status
+    },
+    {
+      where: { id }
+    });
 };
 
 module.exports = {
@@ -44,5 +48,5 @@ module.exports = {
   getSlideById,
   createSlide,
   updateSlide,
-  hideSlide
+  updateStatusSlide
 };

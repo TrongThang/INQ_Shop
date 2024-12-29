@@ -19,4 +19,13 @@ const putUpdateBlog = async (data) => {
     return await findByPKUpdateBlog.update(data);
 };
 
+const updateStatusAttributeGroup = async ({id, status}) => {
+    const [updatedCount] = await Attribute.update(
+        { status: status }, 
+        { where: { id } }
+    );
+
+    return updatedCount;
+}
+    
 module.exports = { getAllBlog, getBlog, postCreateBlog, putUpdateBlog };

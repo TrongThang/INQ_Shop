@@ -9,7 +9,7 @@ const {
     //Attr Group 
     getAllAttributeGroup, getAttributeGroupById,
     createAttributeGroup, updateAttributeGroup,
-    updateStatusAttributeGroup
+    updateStatusAttributeGroupư
 } = reqire('../service/AttributeServices');
 
 const getAllAttributeAPI = async (req, res) => {

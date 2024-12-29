@@ -1,18 +1,18 @@
 var DataTypes = require("sequelize").DataTypes;
 var _account = require("./account");
 var _address_book = require("./address_book");
-var _attribute = require("./attribute");
+var _attribute = require("./Attribute");
 var _attribute_device = require("./attribute_device");
-var _attribute_group = require("./attribute_group");
-var _blog = require("./blog");
-var _cart = require("./cart");
-var _category = require("./category");
+var _attribute_group = require("./Attribute_group");
+var _blog = require("./Blog");
+var _cart = require("./Cart");
+var _category = require("./Category");
 var _contact = require("./Contact");
 var _customer = require("./customer");
 var _detail_import = require("./detail_import");
-var _device = require("./device");
-var _employee = require("./employee");
-var _image_device = require("./image_device");
+var _device = require("./Device");
+var _employee = require("./Employee");
+var _image_device = require("./Image_device");
 var _import_warehouse = require("./import_warehouse");
 var _info_website = require("./info_website");
 var _liked = require("./liked");
@@ -25,7 +25,7 @@ var _permission = require("./Permission");
 var _permission_role = require("./Permission_role");
 var _review_device = require("./Review_device");
 var _role = require("./Role");
-var _slideshow = require("./slideshow");
+var _slideshow = require("./Slideshow");
 var _status = require("./Status");
 var _warehouse = require("./warehouse");
 
@@ -99,9 +99,11 @@ function initModels(sequelize) {
   liked.belongsTo(device, { as: "idDevice_device", foreignKey: "idDevice"});
   device.hasMany(liked, { as: "likeds", foreignKey: "idDevice"});
   order_detail.belongsTo(device, { as: "id_device", foreignKey: "id"});
-  device.hasOne(order_detail, { as: "order_detail", foreignKey: "id"});
-  review_device.belongsTo(device, { as: "idDevice_device", foreignKey: "idDevice"});
-  device.hasMany(review_device, { as: "review_devices", foreignKey: "idDevice"});
+  device.hasOne(order_detail, { as: "order_detail", foreignKey: "id" });
+  
+  review_device.belongsTo(device, {foreignKey: "idDevice", as: 'device'});
+  device.hasMany(review_device, { foreignKey: "idDevice", as: 'reviews' });
+  
   warehouse.belongsTo(device, { as: "idDevice_device", foreignKey: "idDevice"});
   device.hasOne(warehouse, { as: "warehouse", foreignKey: "idDevice"});
   account.belongsTo(employee, { as: "idPerson_employee", foreignKey: "idPerson"});
@@ -112,8 +114,8 @@ function initModels(sequelize) {
   employee.hasMany(import_warehouse, { as: "import_warehouses", foreignKey: "idEmployee"});
   order.belongsTo(employee, { as: "idAdmin_employee", foreignKey: "idAdmin"});
   employee.hasMany(order, { as: "orders", foreignKey: "idAdmin"});
-  slideshow.belongsTo(employee, { as: "idEmployee_employee", foreignKey: "idEmployee"});
-  employee.hasMany(slideshow, { as: "slideshows", foreignKey: "idEmployee"});
+  // slideshow.belongsTo(employee, { as: "idEmployee_employee", foreignKey: "idEmployee"});
+  // employee.hasMany(slideshow, { as: "slideshows", foreignKey: "idEmployee"});
   detail_import.belongsTo(import_warehouse, { as: "id_import_import_warehouse", foreignKey: "id_import"});
   import_warehouse.hasMany(detail_import, { as: "detail_imports", foreignKey: "id_import"});
   info_website.belongsTo(page, { as: "ID_PAGE_page", foreignKey: "ID_PAGE"});

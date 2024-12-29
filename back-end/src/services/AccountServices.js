@@ -4,24 +4,24 @@ const Role = require('../models/Role');
 const Employee = require('../models/Employee');
 const CustomerService = require('../services/CustomerServices');
 const EmployeeService = require('../services/EmployeeServices');
+const { Op } = require('sequelize');
 
-const getAllAccounts = async () => {
-    return await Account.findAll({
-      include: [
-        {
-          model: Role,
-          as: 'role',
-          attributes: ['nameRole']
-        },
-        {
-          model: Employee,
-          as: 'employee',
-          attributes: ['surname', 'lastname']
-        }
-      ]
-    });
-};
-  
+//0: Dừng hoạt động - Bị khoá
+const getLogin = async (username, password, type) => {
+
+  const user = await Account.findOne({
+    where: {
+      username: username,
+      password: password,
+      idRole: type,
+      status: {
+        [Op.gt]: 0 
+      }
+    }
+  })
+  return user;
+}
+
 // Get account by idPerson
 const getAccountByCondition = async (idPerson = {}, username = {}) => {
   return await Account.findOne({
@@ -94,7 +94,7 @@ const changePassword = async(username, password) => {
 }
 
 module.exports = {
-  getAllAccounts,
+  getLogin,
   getAccountByCondition,
   createAccount,
   updateAccount,

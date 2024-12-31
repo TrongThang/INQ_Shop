@@ -23,7 +23,7 @@ const routerCart = require('./routes/cartRoute');
 const routerDevice = require('./routes/deviceRoute');
 
 const routeAPI = require('./routes/routeAPI');
-app.use('/v1/api', routeAPI);
+//app.use('/v1/api', routeAPI);
 app.use('/v1/api/device', routerDevice)
 
 app.use('/v1/api/blog', routerBlog)

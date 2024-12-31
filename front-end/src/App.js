@@ -56,7 +56,6 @@ function App() {
 
   const [page, setPage] = useState('');
 
-
   return (
     <div className='App'>
       <Header />

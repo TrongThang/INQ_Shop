@@ -244,8 +244,6 @@
     border-radius: 5px;
 }
 
-
-
 form .form-group textarea {
     width: 100%;
     height: 150px;
@@ -420,7 +418,7 @@ form .form-group textarea {
 }
 
 .product-items {
-    flex: 0 0 243px;
+    /* flex: 0 0 243px; */
     /* Chia đều không gian cho 5 sản phẩm */
     border: 1px solid #ddd;
     border-radius: 5px;

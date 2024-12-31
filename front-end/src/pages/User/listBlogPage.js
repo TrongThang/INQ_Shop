@@ -1,4 +1,4 @@
-import BlogCart from "../../component/User/Introdution/blogCart";
+import BlogCart from "../../component/user/Introdution/blogCart";
 import Pagination from "../../component/Shared/Pagination/pagination";
 
 function ListBlogPage() {

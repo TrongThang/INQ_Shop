@@ -1,5 +1,5 @@
-import ModalSearch from '../../component/User/Contact/modalSearch';
-import ContactForm from '../../component/User/Contact/contactForm';
+import ModalSearch from '../../component/user/Contact/modalSearch';
+import ContactForm from '../../component/user/Contact/contactForm';
 
 
 function ContactPage() {

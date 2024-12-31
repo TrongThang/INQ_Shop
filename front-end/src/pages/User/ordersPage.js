@@ -1,6 +1,6 @@
 
-import ProfileSidebar from "../../component/User/Profile/navCustomer/profileSidebar";
-import OrderItems from "../../component/User/Profile/orderItems";
+import ProfileSidebar from "../../component/user/Profile/navCustomer/profileSidebar";
+import OrderItems from "../../component/user/Profile/orderItems";
 
 function OrdersPage() {
     return (

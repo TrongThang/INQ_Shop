@@ -1,8 +1,8 @@
 
 import React, { useState } from "react";
 import Header from "../../component/Shared/headerManage";
-import SearchFilter from "../../component/Admin/Mana_customer/searchCustomer";
-import CustomerList from "../../component/Admin/Mana_customer/customerList";
+import SearchFilter from "../../component/admin/Mana_customer/searchCustomer";
+import CustomerList from "../../component/admin/Mana_customer/customerList";
 
 
 const ManaCustomer = () => {

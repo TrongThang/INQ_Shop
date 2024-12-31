@@ -1,5 +1,5 @@
-import ProfileSidebar from '../../component/User/Profile/navCustomer/profileSidebar';
-import AccountCustomer from '../../component/User/Profile/account';
+import ProfileSidebar from '../../component/user/Profile/navCustomer/profileSidebar';
+import AccountCustomer from '../../component/user/Profile/account';
 import '../../resource/css/Profile.css'
 
 function AccountCustomerPage() {

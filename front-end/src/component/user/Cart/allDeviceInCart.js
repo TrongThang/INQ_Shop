@@ -11,7 +11,7 @@ export default function AllDeviceInCart({ devices }) {
                         <input class="form-check-input" type="checkbox" id="selectAll" />
                         <label class="form-check-label" for="selectAll">Chọn tất cả</label>
                     </div>
-                    <button class="btn btn-link text-danger p-0">Xóa</button>
+                    <button class="btn btn-link text-danger p-0">Xóa hết</button>
                 </div>
                 
                 {devices.map((device, index) => (

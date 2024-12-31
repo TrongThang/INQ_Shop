@@ -6,9 +6,6 @@ const Device = require('../models/Device');
 // const { Device, ReviewDevice } = require('../models/Init-models');
 const ReviewDevice = require('../models/Review_device');
 
-<<<<<<< HEAD
-const getAllDevice_User = async (page = 0, filter = {}) => {
-=======
 // 0: Sản phẩm ngừng bán
 // >= 1: Sản phẩm đang bán
 // 1: Sản phẩm bán
@@ -18,7 +15,6 @@ const getAllDevice_User = async (page = 0, filter = {}) => {
 // Nếu không nhập limit thì mặc định là lấy hết
 
 const getAllDevice_User = async (page = 0, status = 1, limit = {},filters = {}) => {
->>>>>>> 5325c7d5e06d8506399c463e3eb00a53859f2c24
     const { priceMin, priceMax, idCategory, keyword } = filters;
 
     const whereConditions = {
@@ -50,29 +46,6 @@ const getAllDevice_User = async (page = 0, status = 1, limit = {},filters = {}) 
     const data = await Device.findAll({
         where: whereConditions,
         limit: limit,
-<<<<<<< HEAD
-        offset: offset
-    });
-
-    return await data;
-}
-
-//4: Sản phẩm nổi bật
-const getOutstandingDevice = async () => {
-    const data = await Device.findAll({
-        where: { status:3 },
-        limit: 10
-    });
-
-    return await data;
-}
-
-//3: Sản phẩm khuyến mãi - Giá giảm 5%
-const getDiscountDevice = async () => {
-    const data = await Device.findAll({
-        where: { status: 3 },
-        limit: 5
-=======
         offset: offset,
         include: [
             {
@@ -85,7 +58,6 @@ const getDiscountDevice = async () => {
             }
         ],
         group: ['Device.idDevice'],
->>>>>>> 5325c7d5e06d8506399c463e3eb00a53859f2c24
     });
 
     return await data;
@@ -153,9 +125,6 @@ const updateStatusDevice = async ({ id, status}) => {
     return updatedCount;
 }
 
-<<<<<<< HEAD
-const getAllReviewForDevice = async (id) => {
-=======
 const updateStatusDeviceByCategory = async ({ idCategory, status }) => {
     //Nếu như trạng thái > 0 thì isHide phải bằng false
     // Để chỉ bật những thiết bị đã bị tắt gián tiếp thôi
@@ -178,10 +147,10 @@ const updateStatusDeviceByCategory = async ({ idCategory, status }) => {
 }
 
 const getAllReviewForDevice = async (id, status = {}) => {
->>>>>>> 5325c7d5e06d8506399c463e3eb00a53859f2c24
     const comments = await ReviewDevice.findAll({
         where: {
             idDevice: id,
+            status: status
         }
     });
 
@@ -220,17 +189,11 @@ const updateStatusReviewForDevice = async ({ id, status }) => {
 }
 
 module.exports = {
-<<<<<<< HEAD
-    getAllDevice_User, getAllDevice_Admin, getDeviceById,
-    getOutstandingDevice, getDiscountDevice,
-    createDevice, updateDevice, updateStatusDevice,
-=======
     getAllDevice_User, getAllDevice_Admin,
     getDeviceById, getTOPDeviceLiked,
     createDevice, updateDevice, updateStatusDevice,
     updateStatusDeviceByCategory,
 
->>>>>>> 5325c7d5e06d8506399c463e3eb00a53859f2c24
     //Review For Device
     getAllReviewForDevice, createReviewForDevice,
     updateReviewForDevice, updateStatusReviewForDevice

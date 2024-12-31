@@ -69,18 +69,8 @@ const removeDeviceCartInCookie = (cart, idRemove) => {
     return newCart;
 }
 
-const getAllInCart = async () => {
-    return await Cart.findAll();
-}
-
-const getCartIdCustomer = async (data) => {
-    const { idCustomer, idDevice } = data;
-    return await Cart.findOne({
-        where: {
-            idCustomer: idCustomer,
-            idDevice: idDevice,
-        },
-    })
+const getCart = async (id) => {
+    return await Cart.findByPk(id)
 }
 
 
@@ -129,7 +119,7 @@ const removeAllDeviceInCart = async (data) => {
     const result = await Cart.destroy({
         where: { 
             idCustomer: idCustomer,
-         }
+        }
     });
 
     if (result > 0) {
@@ -138,13 +128,13 @@ const removeAllDeviceInCart = async (data) => {
         return { message: 'Giỏ hàng trống!' };
     }
 }
+
 module.exports = {
     getCartInCookie, saveCartInCookie,
     addToCartInCookie, updateQuantityDeviceInCartCookie,
     removeDeviceCartInCookie,
     // DATABASE
-    getAllInCart, getCartIdCustomer,
-    postAddDeviceToCart, putUpdateDeviceInCart,
+    getCart,postAddDeviceToCart, putUpdateDeviceInCart,
     removeDeviceInCart, removeAllDeviceInCart,
 
 }

@@ -32,10 +32,16 @@ const postAddToLikedDeviceAPI = async (req, res) => {
     //TO DO SOMETHING
     try{
         const data = req.body;
-        const allLikedDevices = await createLikedDevice(data);
+        const likedDevice = await createLikedDevice(data);
+        if(!likedDevice){
+            return res.status(400).json({
+                success: false,
+                message: "Sản phẩm này đã được yêu thích."
+            });
+        }
         res.status(200).json({
             success: true,
-            data: allLikedDevices
+            data: likedDevice
         });
     }
     catch(error){
@@ -51,16 +57,23 @@ const removeLikedDeviceAPI = async (req, res) => {
     //TO DO SOMETHING
     try{
         const data = req.body;
-        const allLikedDevices = await removeLikedDevice(data);
+        const likedDevice = await removeLikedDevice(data);
+        if(!likedDevice){
+            return res.status(404).json({
+                success: false,
+                message: "Sản phẩm yêu thích không tồn tại."
+            });
+        }
         res.status(200).json({
             success: true,
-            data: allLikedDevices
+            data: likedDevice,
+            message: 'Xóa sản phẩm yêu thích thành công',
         });
     }
     catch(error){
         res.status(500).json({
             success: false,
-            message: 'Lỗi thêm sản phẩm yêu thích',
+            message: 'Lỗi xóa sản phẩm yêu thích',
             error: error.message,
         });
     }

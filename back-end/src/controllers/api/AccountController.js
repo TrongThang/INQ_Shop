@@ -3,19 +3,6 @@ const {
     getAllAccounts, 
     createAccount, 
     updateAccount, 
-<<<<<<< HEAD
-    softDeleteAccount 
-  } = require('../../services/AccountServices');
-  
-// Get all accounts
-const getAllAccountsAPI = async (req, res) => {
-    try {
-      const accounts = await getAllAccounts();
-      res.status(200).json({ success: true, data: accounts });
-    } catch (error) {
-      console.error('Error fetching accounts:', error); // Log the error details
-      res.status(500).json({ success: false, message: 'An error occurred while fetching accounts.' });
-=======
     updateStatusAccount 
 } = require('../../services/AccountServices');
 
@@ -32,7 +19,6 @@ const getLoginAPI = async (req, res) => {
         success: true,
         data: account
       });
->>>>>>> 5325c7d5e06d8506399c463e3eb00a53859f2c24
     }
 
     return res.status(404).json({ success: false, message: 'Account not found' });

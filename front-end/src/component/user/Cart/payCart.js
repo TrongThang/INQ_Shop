@@ -1,7 +1,7 @@
 export default function PayCart({ devices }) {
     
     return (
-        <div class="card mb-4 fixed-bottom">
+        <div class="card mb-4 fixed-bottom m-5 position-sticky">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div class="ms-10">

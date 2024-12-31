@@ -1,5 +1,5 @@
 import React from 'react';
-import modernHouseImg from '../../resource/img/Modern house.png';
+import modernHouseImg from '../../../resource/img/Modern house.png';
 
 const ContactForm = () => {
     return (

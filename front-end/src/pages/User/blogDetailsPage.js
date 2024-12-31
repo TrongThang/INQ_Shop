@@ -1,7 +1,4 @@
-import React from "react";
-
-import BlogDetails from '../component/BlogPage/blogDetails'
-import '../resource/css/blog_details.css'
+import BlogDetails from '../../component/User/Introdution/blogDetails'
 
 function BlogDetailsPage() {
     return (

@@ -1,24 +1,15 @@
-import React from 'react';
+import ModalSearch from '../../component/User/Contact/modalSearch';
+import ContactForm from '../../component/User/Contact/contactForm';
 
 
-
-import ModalSearch from './../component/Contact/modalSearch';
-import ContactForm from './../component/Contact/contactForm';
-
-
-function App() {
+function ContactPage() {
   return (
-    <div className='App'>
-    
       <main>
         <ModalSearch />
         <ContactForm />
       
       </main>
-   
-
-    </div>
   );
 }
 
-export default App;
+export default ContactPage;

@@ -1,5 +1,4 @@
-import React from "react";
-import Demo from "../../resource/img/600x400.jpg"; // Correct image import
+import Demo from "../../../resource/img/600x400.jpg"; // Correct image import
 
 const BlogItem = () => {
     return (

@@ -1,6 +1,3 @@
-import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 const ProfileSidebar = () => {
     return (
         <aside className="col-md-3">

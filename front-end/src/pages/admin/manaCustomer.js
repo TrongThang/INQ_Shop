@@ -1,11 +1,11 @@
 
 import React, { useState } from "react";
-import Header from "./../component/Mana_customer/header";
-import SearchFilter from "./../component/Mana_customer/searchCustomer";
-import Table from "./../component/Mana_customer/customerList";
+import Header from "../../component/Shared/headerManage";
+import SearchFilter from "../../component/Admin/Mana_customer/searchCustomer";
+import CustomerList from "../../component/Admin/Mana_customer/customerList";
 
 
-const App = () => {
+const ManaCustomer = () => {
   const [data, setData] = useState([
     {
       id: "KH-01",
@@ -66,10 +66,10 @@ const App = () => {
       <div className="container-fluid py-4">
         <Header onAdd={handleAdd} onExport={handleExport} />
         <SearchFilter />
-        <Table data={data} />
+        <CustomerList data={data} />
       </div>
     </div>
   );
 };
 
-export default App;
+export default ManaCustomer;

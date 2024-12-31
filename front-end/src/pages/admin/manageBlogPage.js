@@ -1,8 +1,8 @@
 import React from "react";
-import ManageBlogItems from "../component/ManageBlogPage/manageBlogItems";
-import FilterBlog from "../component/ManageBlogPage/filterBlog";
-import Pagination from "../component/Pagination/pagination";
-import HeaderBlog from "../component/ManageBlogPage/headerBlog";
+import ManageBlogItems from "../../component/Admin/ManageBlogPage/manageBlogItems";
+import FilterBlog from "../../component/Admin/ManageBlogPage/filterBlog";
+import Pagination from "../../component/Shared/Pagination/pagination";
+import HeaderBlog from "../../component/Admin/ManageBlogPage/headerBlog";
 
 function ManageBlogPage() {
     return (
@@ -26,7 +26,7 @@ function ManageBlogPage() {
                         </select>
                     </div>
                     {/* Bộ lọc */}
-                  <FilterBlog />
+                    <FilterBlog />
                 </div>
                 <div class="card">
                     <div class="table-responsive">

@@ -1,9 +1,6 @@
-import React from "react";
+import BlogCart from "../../component/User/Introdution/blogCart";
+import Pagination from "../../component/Shared/Pagination/pagination";
 
-import BlogCart from "../component/BlogPage/blogCart";
-import Pagination from "../component/Pagination/pagination";
-
-import '../resource/css/blog.css'
 function ListBlogPage() {
     return (
         <div className="container-fluid blog py-5">

@@ -1,6 +1,6 @@
 import React from "react";
 
-const Table = ({ data }) => {
+const CustomerList = ({ data }) => {
   return (
     <div className="card">
       <div className="table-responsive">
@@ -69,4 +69,4 @@ const Table = ({ data }) => {
   );
 };
 
-export default Table;
+export default CustomerList;

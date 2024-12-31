@@ -1,4 +1,4 @@
-import LoginPopup from '../component/Login/formLogin';
+import LoginPopup from '../../component/User/Login/formLogin';
 
 export default function Login() {
     

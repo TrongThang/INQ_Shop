@@ -1,8 +1,6 @@
-
-import React from 'react';
-import ProfileSidebar from '../component/ProfileCustomer/navCustomer/profileSidebar';
-import AccountCustomer from '../component/ProfileCustomer/account';
-import '../resource/css/Profile.css'
+import ProfileSidebar from '../../component/User/Profile/navCustomer/profileSidebar';
+import AccountCustomer from '../../component/User/Profile/account';
+import '../../resource/css/Profile.css'
 
 function AccountCustomerPage() {
     return (

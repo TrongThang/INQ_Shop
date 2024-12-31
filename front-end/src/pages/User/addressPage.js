@@ -1,7 +1,7 @@
 import React from 'react';
-import ProfileSidebar from '../component/ProfileCustomer/navCustomer/profileSidebar';
-import AddressItems from '../component/ProfileCustomer/addressItems';
-import '../resource/css/Address.css'
+import ProfileSidebar from '../../component/User/Profile/navCustomer/profileSidebar';
+import AddressItems from '../../component/User/Profile/addressItems';
+
 const AddressPage = () => {
     return (
         <div className='container-fluid'>

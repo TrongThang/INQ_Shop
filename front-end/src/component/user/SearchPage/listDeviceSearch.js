@@ -1,4 +1,4 @@
-import DeviceCard from "../Shared/deviceCard";
+import DeviceCard from "../../Shared/deviceCard";
 
 export default function ListDeviceSearch() {
     return (

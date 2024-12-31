@@ -1,5 +1,3 @@
-import React from "react";
-
 const SearchProduct = () => {
     return (
         <div className="row mb-3">

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Header from "./../component/Mana_customer/header";
-import SearchFilter from "./../component/Mana_employee/searchEmployee";
-import Table from "./../component/Mana_employee/employeeList";
+import Header from "../../component/Shared/headerManage";
+import SearchFilter from "../../component/Admin/Mana_employee/searchEmployee";
+import EmployeeTable from "../../component/Admin/Mana_employee/employeeList";
 
 const App = () => {
     const [data, setData] = useState([
@@ -46,7 +46,7 @@ const App = () => {
             <div className="container-fluid py-4">
                 <Header onAdd={handleAdd} onExport={handleExport} />
                 <SearchFilter />
-                <Table data={data} />
+                <EmployeeTable data={data} />
             </div>
         </div>
     );

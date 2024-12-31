@@ -1,5 +1,5 @@
-import ProfileSidebar from "../component/ProfileCustomer/navCustomer/profileSidebar";
-import PasswordForm from "../component/ProfileCustomer/passwordForm";
+import ProfileSidebar from "../../component/User/Profile/navCustomer/profileSidebar";
+import PasswordForm from "../../component/User/Profile/passwordForm";
 
 function ChangePasswordPage() {
     return (

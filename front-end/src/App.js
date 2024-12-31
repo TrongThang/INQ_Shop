@@ -23,34 +23,36 @@ import './resource/css/inq.css'
 // import DeviceCard from './component/Shared/deviceCard';
 // import AreaSearch from './component/SearchPage/areaSearch';
 
-
-
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Contact from './pages/contact';
-import ManaCustomer from './pages/manaCustomer';
-import ManaEmployee from './pages/manaEmployee';
-import ManaProduct from './pages/manaProduct';
-import ManaOrders from './pages/manaOrders';
-
-
 import Header from './component/User/LayoutCustomer/Header/header';
 import Footer from './component/User/LayoutCustomer/Footer/footer';
+
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import ButtonPage from './component/buttonPage';
+
+import LoginAdmin from './component/Admin/Login/login';
+import Contact from './pages/User/contact';
+import ManaCustomer from './pages/Admin/manaCustomer';
+import ManaEmployee from './pages/Admin/manaEmployee';
+import ManaProduct from './pages/Admin/manaProduct';
+import ManaOrders from './pages/Admin/manaOrders';
+import ManageBlogPage from './pages/Admin/manageBlogPage';
+
+
+
+
 import SearchPage from './pages/User/searchPage';
-import ButtonPage from './component/User/buttonPage';
 import CheckoutPage from './pages/User/checkoutPage';
 import DetailDevicePage from './pages/User/detailDevicePage';
 import CartPage from './pages/User/cartPage';
-import LoginAdmin from './component/Admin/Login/login';
 
-import AddressList from './pages/addressPage';
-import Account from './pages/accountCustomerPage';
-import PasswordFormPage from './pages/passwordFormPage';
-import OrdersPage from './pages/ordersPage';
-import ListBlogPage from './pages/lisBlogPage'
-import BlogDetailsPage from './pages/blogDetailsPage';
-import HomePage from './pages/homePage';
-import ManageBlogPage from './pages/manageBlogPage';
-import Login from './pages/loginPage';
+import AddressList from './pages/User/addressPage';
+import Account from './pages/User/accountCustomerPage';
+import ChangePasswordPage from './pages/User/changePasswordPage';
+import OrdersPage from './pages/User/ordersPage';
+import ListBlogPage from './pages/User/listBlogPage'
+import BlogDetailsPage from './pages/User/blogDetailsPage';
+import HomePage from './pages/User/homePage';
+import Login from './pages/User/loginPage';
 
 function App() {
 
@@ -59,7 +61,7 @@ function App() {
   return (
     <div className='App'>
       <Header />
-      {/* <ButtonPage setPage={setPage} /> */}
+      <ButtonPage setPage={setPage} />
       { page === 'search' && <SearchPage />} 
       { page === 'checkout' && <CheckoutPage />} 
       { page === 'detail' && <DetailDevicePage />} 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Header from "./../component/Mana_customer/header";
-import SearchFilter from "./../component/Mana_orders/searchOrders";
-import Table from "./../component/Mana_orders/ordersList";
+import Header from "../../component/Shared/headerManage";
+import SearchFilter from "../../component/Admin/Mana_orders/searchOrders";
+import Table from "../../component/Admin/Mana_orders/ordersList";
 
 const ManaOrders = () => {
     const [data, setData] = useState([

@@ -1,5 +1,3 @@
-import React from "react";
-
 const ProductTable = ({ data }) => {
     return (
         <div className="card">

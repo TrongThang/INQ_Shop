@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './resource/css/style.css';
 // <!-- Libraries Stylesheet -->
 import './resource/lib/animate/animate.min.css'
+//bootstrap/dist/css/bootstrap.min.css
 import './resource/lib/lightbox/css/lightbox.min.css'
 import './resource/lib/owlcarousel/assets/owl.carousel.min.css'
 // <!-- Customized Bootstrap Stylesheet -->
@@ -9,6 +10,7 @@ import './resource/css/bootstrap.min.css'
 // <!-- Template Stylesheet -->
 import './resource/css/style.css'
 import './resource/css/inq.css'
+import './resource/css/login.css';
 
 // Library Script
 // import './resource/lib/wow/wow.min.js'
@@ -24,6 +26,7 @@ import SearchPage from './pages/searchPage';
 import ButtonPage from './component/buttonPage';
 import CheckoutPage from './pages/checkoutPage';
 import DetailDevicePage from './pages/detailDevicePage';
+import Login from './pages/loginPage';
 
 function App() {
 
@@ -34,9 +37,10 @@ function App() {
     <div className='App'>
       <Header />
       <ButtonPage setPage={setPage} />
-      { page === 'search' && <SearchPage />} 
-      { page === 'checkout' && <CheckoutPage />} 
-      { page === 'detail' && <DetailDevicePage />} 
+      { page === 'search' && <SearchPage />}
+      { page === 'checkout' && <CheckoutPage />}
+      { page === 'detail' && <DetailDevicePage />}
+      { page === 'login' && <Login />}
       <Footer />
 
     </div>

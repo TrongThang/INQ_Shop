@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 
-
-import './resource/css/style.css';
-import './resource/css/index.css';
 // <!-- Libraries Stylesheet -->
 import './resource/lib/animate/animate.min.css'
 import './resource/lib/lightbox/css/lightbox.min.css'
@@ -10,10 +7,11 @@ import './resource/lib/owlcarousel/assets/owl.carousel.min.css'
 //  <!-- Icon Font Stylesheet -->
 // <!-- Customized Bootstrap Stylesheet -->
 import './resource/css/bootstrap.min.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 // <!-- Template Stylesheet -->
 import './resource/css/style.css'
 import './resource/css/inq.css'
-import './resource/css/mana_blog_details.css'
 
 
 //Component
@@ -43,6 +41,7 @@ import CheckoutPage from './pages/checkoutPage';
 import DetailDevicePage from './pages/detailDevicePage';
 import CartPage from './pages/cartPage';
 import Login from './component/Admin/Login/login';
+import Carousel from './component/HomePage/carousel';
 
 function App() {
 
@@ -55,13 +54,14 @@ function App() {
       {/* <ButtonPage setPage={setPage} />
       { page === 'search' && <SearchPage />}
       { page === ''}  */}
-      <ManageBlogPage />
-      <ButtonPage setPage={setPage} />
+
+      {/* <ButtonPage setPage={setPage} />
       { page === 'search' && <SearchPage />} 
       { page === 'checkout' && <CheckoutPage />} 
       { page === 'detail' && <DetailDevicePage />} 
       { page === 'cart' && <CartPage />} 
-      { page === 'loginAdmin' && <Login />} 
+      { page === 'loginAdmin' && <Login />}  */}
+      <HomePage />
       <Footer />
     </div>
   );

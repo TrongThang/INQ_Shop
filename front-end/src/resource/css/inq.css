@@ -1,3 +1,4 @@
+/* Address -----------------------------css  */
 .form-container {
     padding: 20px;
     height: 650px;
@@ -7,6 +8,7 @@
     border-right: solid 2px #000;
     margin-right: 15px;
 }
+/* End - Address -----------------------------css  */
 
 .fs-user-p {
     font-size: 12px;
@@ -28,6 +30,8 @@
     color: black;
 }
 
+
+/* Blog ---------------------------------------css */
 .blog .blog-item {
     border-radius: 10px;
     transition: 0.5s;
@@ -98,7 +102,7 @@
 .blog .blog-item:hover .blog-content a.btn:hover {
     color: var(--bs-primary);
 }
-
+/* End - Blog ---------------------------------------css */
 /* CONFIRM PASSWORD */
 .sidebar {
     height: 100vh;
@@ -474,3 +478,42 @@ form .form-group textarea {
 }
 /* END CHECKOUT */
 
+
+/* Order Customer ------------------------------ CSS */
+.nav-pills {
+    display: flex;
+    flex-wrap: nowrap; 
+    justify-content: space-evenly; 
+    margin-bottom: 20px;
+}
+
+.nav-pills .nav-link {
+    color: #6c757d;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    text-align: center;
+    min-width: 90px; 
+}
+
+.nav-pills .nav-link.active {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: #ffffff;
+}
+
+.nav-pills .nav-link:hover {
+    background-color: #ddd;
+    color: #0d6efd;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.no-orders {
+    font-size: 1.2rem;
+    color: #6c757d;
+}
+/* Order Customer ------------------------------ CSS */

@@ -1,7 +1,7 @@
 
 import ProfileSidebar from "../component/ProfileCustomer/navCustomer/profileSidebar";
 import OrderItems from "../component/ProfileCustomer/orderItems";
-import '../resource/css/orders_customer.css'
+
 function OrdersPage() {
     return (
         <div className="container-fluid my-4">

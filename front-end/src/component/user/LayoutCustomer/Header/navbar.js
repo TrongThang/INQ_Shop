@@ -1,4 +1,5 @@
 import AreaCustomer from "../Header/areaCustomer";
+import SearchHeader from "./searchHeader";
 
 export default function Navbar() {
     return (
@@ -32,6 +33,8 @@ export default function Navbar() {
                     <a href="blog.html" className="nav-item nav-link">Liên hệ</a>
                 </div>
             </div>
+
+            <SearchHeader />
             <AreaCustomer />
         </nav>
     );

@@ -146,27 +146,6 @@
 /* END CONFIRM PASSWORD */
 
 /* CRUD Category */
-.form-group {
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: 15px;
-}
-.form-group label {
-    flex: 0 0 25%;
-    max-width: 25%;
-    padding-right: 10px;
-    box-sizing: border-box;
-    font-weight: bold;
-}
-.form-group input,
-.form-group select {
-    flex: 1;
-    max-width: 75%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
 .form-actions {
     text-align: center;
     margin-top: 20px;
@@ -196,18 +175,6 @@
 /* END CRUD Category */
 
 /* CRUD Contact */
-.form-group {
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: 15px;
-}
-.form-group label {
-    flex: 0 0 25%;
-    max-width: 25%;
-    padding-right: 10px;
-    box-sizing: border-box;
-    font-weight: bold;
-}
 .form-group input,
 .form-group select {
     flex: 1;
@@ -244,8 +211,6 @@
     border-radius: 5px;
 }
 
-
-
 form .form-group textarea {
     width: 100%;
     height: 150px;
@@ -255,9 +220,7 @@ form .form-group textarea {
     border: 1px solid #ced4da;
     border-radius: 4px;
 }
-.form-group label {
-    flex: 0 0 15%;
-}
+
 .btn-save-text {
     margin-right: 110px;
 }
@@ -420,7 +383,7 @@ form .form-group textarea {
 }
 
 .product-items {
-    flex: 0 0 243px;
+    /* flex: 0 0 243px; */
     /* Chia đều không gian cho 5 sản phẩm */
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -502,3 +465,12 @@ form .form-group textarea {
     margin-bottom: 10px;
 }
 /* END UPLOAD */
+
+/* CHECKOUT */
+#form-checkout label{
+    font-weight: bold;
+    color: rgba(21, 16, 16, 0.875);
+    margin-top: 5px;
+}
+/* END CHECKOUT */
+

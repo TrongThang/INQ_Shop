@@ -26,12 +26,11 @@ import SearchPage from './pages/searchPage';
 import ButtonPage from './component/buttonPage';
 import CheckoutPage from './pages/checkoutPage';
 import DetailDevicePage from './pages/detailDevicePage';
-import Login from './pages/loginPage';
+import LoginPage from './pages/loginPage';
 
 function App() {
 
   const [page, setPage] = useState('');
-  
 
   return (
     <div className='App'>
@@ -40,7 +39,7 @@ function App() {
       { page === 'search' && <SearchPage />}
       { page === 'checkout' && <CheckoutPage />}
       { page === 'detail' && <DetailDevicePage />}
-      { page === 'login' && <Login />}
+      { page === 'login' && <LoginPage />}
       <Footer />
 
     </div>

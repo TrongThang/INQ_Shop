@@ -1,51 +1,71 @@
-
 const LoginPopup = () => {
   return (
-        <div id="wrapper">
-          <span className="icon-close">
-            <ion-icon name="close-outline"></ion-icon>
-          </span>
-
-          <div className="form-box login">
-            <h2 className="text-primary">ĐĂNG NHẬP</h2>
-            <form action="#">
-              <div className="input-box">
-                <span className="icon">
-                  <ion-icon name="mail-outline"></ion-icon>
-                </span>
-                <input type="text" required />
-                <label>Tài khoản hoặc Email</label>
+    <div
+      className="modal fade"
+      id="loginModal"
+      tabIndex="-1"
+      aria-labelledby="loginModalLabel"
+      aria-hidden="true"
+    >
+      <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title text-primary" id="loginModalLabel">
+              ĐĂNG NHẬP
+            </h5>
+            <button
+              type="button"
+              className="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div className="modal-body">
+            <form>
+              <div className="mb-3">
+                <label htmlFor="email" className="form-label">
+                  Tài khoản hoặc Email
+                </label>
+                <input type="text" className="form-control" id="email" required />
               </div>
-              <div className="input-box">
-                <span className="icon">
-                  <ion-icon name="lock-closed-outline"></ion-icon>
-                </span>
-                <input type="password" required />
-                <label>Mật khẩu</label>
+              <div className="mb-3">
+                <label htmlFor="password" className="form-label">
+                  Mật khẩu
+                </label>
+                <input
+                  type="password"
+                  className="form-control"
+                  id="password"
+                  required
+                />
               </div>
-              <div className="forgot">
+              <div className="mb-3 text-end">
                 <a href="#">Quên mật khẩu?</a>
               </div>
-              <br />
-              <button type="submit" className="btn-login">
+              <button type="submit" className="btn btn-primary w-100 mb-2">
                 Đăng nhập
               </button>
-              <button type="submit" className="btn-register">
+              <button type="button" className="btn btn-outline-primary w-100">
                 Đăng ký ngay
               </button>
-
-              <h2>- Hoặc -</h2>
-
-              <button type="button" className="btn-login-google">
+              <h5 className="text-center mt-3">- Hoặc -</h5>
+              <button
+                type="button"
+                className="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center mt-2"
+              >
                 <img
                   src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg"
-                  alt=""
+                  alt="Google"
+                  className="me-2"
                 />
                 <span>Tiếp tục với Google</span>
               </button>
             </form>
           </div>
         </div>
-      );}
+      </div>
+    </div>
+  );
+};
 
 export default LoginPopup;

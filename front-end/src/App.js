@@ -17,6 +17,14 @@ import './resource/css/mana_blog_details.css'
 
 
 //Component
+// Library Script
+// import './resource/lib/wow/wow.min.js'
+// import './resource/lib/easing/easing.min.js'
+// import './resource/lib/waypoints/waypoints.min.js'
+// import './resource/lib/counterup/counterup.min.js'
+// import './resource/lib/lightbox/js/lightbox.min.js'
+// import './resource/lib/owlcarousel/owl.carousel.min.js'
+
 import Header from './component/LayoutCustomer/Header/header';
 import Footer from './component/LayoutCustomer/Footer/footer';
 
@@ -30,6 +38,11 @@ import ListBlogPage from './pages/lisBlogPage'
 import BlogDetailsPage from './pages/blogDetailsPage';
 import HomePage from './pages/homePage';
 import ManageBlogPage from './pages/manageBlogPage';
+import ButtonPage from './component/buttonPage';
+import CheckoutPage from './pages/checkoutPage';
+import DetailDevicePage from './pages/detailDevicePage';
+import CartPage from './pages/cartPage';
+import Login from './component/Admin/Login/login';
 
 function App() {
 
@@ -43,6 +56,12 @@ function App() {
       { page === 'search' && <SearchPage />}
       { page === ''}  */}
       <ManageBlogPage />
+      <ButtonPage setPage={setPage} />
+      { page === 'search' && <SearchPage />} 
+      { page === 'checkout' && <CheckoutPage />} 
+      { page === 'detail' && <DetailDevicePage />} 
+      { page === 'cart' && <CartPage />} 
+      { page === 'loginAdmin' && <Login />} 
       <Footer />
     </div>
   );

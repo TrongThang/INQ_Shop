@@ -18,13 +18,13 @@ import './resource/css/inq.css'
 // import './resource/lib/lightbox/js/lightbox.min.js'
 // import './resource/lib/owlcarousel/owl.carousel.min.js'
 
-import Header from './component/LayoutCustomer/Header/header';
-import Footer from './component/LayoutCustomer/Footer/footer';
-import SearchPage from './pages/searchPage';
-import ButtonPage from './component/buttonPage';
-import CheckoutPage from './pages/checkoutPage';
-import DetailDevicePage from './pages/detailDevicePage';
-import CartPage from './pages/cartPage';
+import Header from './component/User/LayoutCustomer/Header/header';
+import Footer from './component/User/LayoutCustomer/Footer/footer';
+import SearchPage from './pages/User/searchPage';
+import ButtonPage from './component/User/buttonPage';
+import CheckoutPage from './pages/User/checkoutPage';
+import DetailDevicePage from './pages/User/detailDevicePage';
+import CartPage from './pages/User/cartPage';
 import Login from './component/Admin/Login/login';
 
 function App() {

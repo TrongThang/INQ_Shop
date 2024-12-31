@@ -5,6 +5,7 @@ import './resource/css/style.css';
 import './resource/css/index.css';
 // <!-- Libraries Stylesheet -->
 import './resource/lib/animate/animate.min.css'
+//bootstrap/dist/css/bootstrap.min.css
 import './resource/lib/lightbox/css/lightbox.min.css'
 import './resource/lib/owlcarousel/assets/owl.carousel.min.css'
 //  <!-- Icon Font Stylesheet -->
@@ -13,7 +14,7 @@ import './resource/css/bootstrap.min.css'
 // <!-- Template Stylesheet -->
 import './resource/css/style.css'
 import './resource/css/inq.css'
-import './resource/css/mana_blog_details.css'
+import './resource/css/login.css';
 
 // Library Script
 // import './resource/lib/wow/wow.min.js'
@@ -43,7 +44,7 @@ import ButtonPage from './component/User/buttonPage';
 import CheckoutPage from './pages/User/checkoutPage';
 import DetailDevicePage from './pages/User/detailDevicePage';
 import CartPage from './pages/User/cartPage';
-import Login from './component/Admin/Login/login';
+import LoginAdmin from './component/Admin/Login/login';
 
 import AddressList from './pages/addressPage';
 import Account from './pages/accountCustomerPage';
@@ -53,6 +54,7 @@ import ListBlogPage from './pages/lisBlogPage'
 import BlogDetailsPage from './pages/blogDetailsPage';
 import HomePage from './pages/homePage';
 import ManageBlogPage from './pages/manageBlogPage';
+import Login from './pages/loginPage';
 
 function App() {
 
@@ -62,16 +64,14 @@ function App() {
   return (
     <div className='App'>
       <Header />
-      <ButtonPage setPage={setPage} />
+      {/* <ButtonPage setPage={setPage} /> */}
       { page === 'search' && <SearchPage />} 
       { page === 'checkout' && <CheckoutPage />} 
       { page === 'detail' && <DetailDevicePage />} 
       { page === 'cart' && <CartPage />} 
-      { page === 'loginAdmin' && <Login />} 
-      {/* <ButtonPage setPage={setPage} />
-      { page === 'search' && <SearchPage />}
-      { page === ''}  */}
-      <ManageBlogPage />
+      {page === 'loginAdmin' && <LoginAdmin />} 
+      
+      { page === 'login' && <Login />}
       <Footer />
     </div>
   );

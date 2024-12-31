@@ -14,17 +14,36 @@ const getAllLikedDevices = async(data) => {
 
 // Thêm một sản phẩm yêu thích
 const createLikedDevice = async (data) => {
+    //Kiểm tra xem sản phẩm này đã có trong sản phẩm yêu thích của khách hàng chưa
+    const exists = await Likeds.findOne({
+        where: {
+            idCustomer: data.idCustomer,
+            idDevice: data.idDevice
+        }
+    });
+
+    if (exists) {
+        return false;
+    }
     return Likeds.create(data);
 };
 
 // Xóa một sản phẩm yêu thích
 const removeLikedDevice = async (data) => {
-    const idCustomer = data.idCustomer;
-    const idDevice = data.idDevice;
+    const exists = await Likeds.findOne({
+        where: {
+            idCustomer: data.idCustomer,
+            idDevice: data.idDevice
+        }
+    });
+
+    if (!exists) {
+        return false;
+    }
     return await Likeds.destroy({
         where: {
-            idCustomer: idCustomer,
-            idDevice: idDevice
+            idCustomer: data.idCustomer,
+            idDevice: data.idDevice
         }
     });
 }

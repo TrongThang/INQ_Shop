@@ -8,7 +8,7 @@ const Header = ({ onAdd, onExport }) => {
         <button className="btn btn-primary me-2" onClick={onAdd}>
           <i className="bi bi-plus"></i> Thêm
         </button>
-        <button className="btn btn-secondary" onClick={onExport}>
+        <button className="btn btn-success " onClick={onExport}>
           <i className="bi bi-download"></i> Xuất file
         </button>
       </div>

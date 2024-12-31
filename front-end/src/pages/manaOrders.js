@@ -17,7 +17,7 @@ const ManaOrders = () => {
         },
         {
             orderId: "DH002",
-            customerName: "Nguyễn An",
+            customerName: "Nguyễn Anh Quân",
             totalAmount: "500.000đ",
             paymentMethod: "Chuyển khoản",
             phone: "0123456789",

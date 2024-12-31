@@ -22,7 +22,7 @@ const App = () => {
             id: "NV002",
             username: "nguyenan",
             lastName: "Nguyễn",
-            firstName: "An",
+            firstName: "Anh Quân",
             cccd: "077987654321",
             email: "nguyenan@gmail.com",
             phone: "09876543210",

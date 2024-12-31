@@ -24,6 +24,7 @@ import SearchPage from './pages/searchPage';
 import ButtonPage from './component/buttonPage';
 import CheckoutPage from './pages/checkoutPage';
 import DetailDevicePage from './pages/detailDevicePage';
+import CartPage from './pages/cartPage';
 
 function App() {
 
@@ -37,6 +38,7 @@ function App() {
       { page === 'search' && <SearchPage />} 
       { page === 'checkout' && <CheckoutPage />} 
       { page === 'detail' && <DetailDevicePage />} 
+      { page === 'cart' && <CartPage />} 
       <Footer />
 
     </div>

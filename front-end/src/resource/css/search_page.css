@@ -1,0 +1,66 @@
+.product-card {
+    transition: transform 0.3s ease-in-out;
+}
+
+.product-card:hover {
+    transform: scale(1.1);
+}
+
+.search-list {
+    position: fixed;
+    top: 50;
+    left: 20px;
+    width: 200px;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+}
+
+.slider-container {
+    position: relative;
+    width: 100%;
+    height: 8px;
+}
+
+.slider-track {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 100%;
+    height: 4px;
+    background: #ddd;
+    border-radius: 4px;
+    z-index: 1; /* Track ở lớp dưới */
+}
+
+.thumb {
+    position: absolute;
+    width: 100%;
+    z-index: 2; /* Thumb ở lớp trên */
+    pointer-events: none; /* Tránh xung đột khi kéo */
+}
+
+.thumb::-webkit-slider-thumb {
+    pointer-events: auto; /* Thumb có thể kéo */
+    width: 16px;
+    height: 16px;
+    background-color: #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #fff;
+    position: relative; /* Đảm bảo thumb nằm trên */
+    z-index: 3; /* Thumb nằm trên tất cả */
+}
+
+.slider-track::before {
+    content: "";
+    position: absolute;
+    height: 4px;
+    background: #007bff;
+    border-radius: 4px;
+    z-index: 1; /* Phần highlight nằm dưới thumb */
+    transform: translateY(-50%);
+}

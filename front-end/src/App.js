@@ -25,6 +25,7 @@ import ButtonPage from './component/buttonPage';
 import CheckoutPage from './pages/checkoutPage';
 import DetailDevicePage from './pages/detailDevicePage';
 import CartPage from './pages/cartPage';
+import Login from './component/Admin/Login/login';
 
 function App() {
 
@@ -39,6 +40,7 @@ function App() {
       { page === 'checkout' && <CheckoutPage />} 
       { page === 'detail' && <DetailDevicePage />} 
       { page === 'cart' && <CartPage />} 
+      { page === 'loginAdmin' && <Login />} 
       <Footer />
 
     </div>

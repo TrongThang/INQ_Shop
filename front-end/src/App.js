@@ -22,6 +22,19 @@ import './resource/css/mana_blog_details.css'
 // import './resource/lib/counterup/counterup.min.js'
 // import './resource/lib/lightbox/js/lightbox.min.js'
 // import './resource/lib/owlcarousel/owl.carousel.min.js'
+// import DeviceCard from './component/Shared/deviceCard';
+import Header from './component/LayoutCustomer/Header/header';
+import Footer from './component/LayoutCustomer/Footer/footer';
+// import AreaSearch from './component/SearchPage/areaSearch';
+
+import ModalSearch from './component/Contact/modalSearch';
+import ContactForm from './component/Contact/contactForm';
+
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import ManaCustomer from './pages/manaCustomer';
+import ManaEmployee from './pages/manaEmployee';
+import ManaProduct from './pages/manaProduct';
+
 
 import Header from './component/User/LayoutCustomer/Header/header';
 import Footer from './component/User/LayoutCustomer/Footer/footer';

@@ -1,0 +1,53 @@
+import React, { useState } from "react";
+import Header from "./../component/Mana_customer/header";
+import SearchFilter from "./../component/Mana_product/searchProduct";
+import Table from "./../component/Mana_product/productList";
+
+const App = () => {
+    const [data, setData] = useState([
+        {
+            id: "SP001",
+            productName: "Tivi thông minh",
+            image: "https://placehold.co/100x100",
+            costPrice: "5.000.000",
+            salePrice: "15.000.000",
+            stock: 50,
+            creator: "Trần Văn Tuấn",
+            createdDate: "20/11/2023",
+            modifiedDate: "20/11/2023",
+            status: "Hoạt động",
+        },
+        {
+            id: "SP002",
+            productName: "Đèn thông minh",
+            image: "https://placehold.co/100x100",
+            costPrice: "5.000.000",
+            salePrice: "15.000.000",
+            stock: 50,
+            creator: "Trần Văn Tuấn",
+            createdDate: "29/10/2024",
+            modifiedDate: "29/10/2024",
+            status: "Ngừng hoạt động",
+        },
+    ]);
+
+    const handleAdd = () => {
+        alert("Thêm sản phẩm!");
+    };
+
+    const handleExport = () => {
+        alert("Xuất file!");
+    };
+
+    return (
+        <div className="main-content-inner">
+            <div className="container-fluid py-4">
+                <Header onAdd={handleAdd} onExport={handleExport} />
+                <SearchFilter />
+                <Table data={data} />
+            </div>
+        </div>
+    );
+};
+
+export default App;

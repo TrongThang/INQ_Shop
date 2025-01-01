@@ -37,9 +37,6 @@ import ManaProduct from './pages/admin/manaProduct';
 import ManaOrders from './pages/admin/manaOrders';
 import ManageBlogPage from './pages/admin/manageBlogPage';
 
-
-
-
 import SearchPage from './pages/user/searchPage';
 import CheckoutPage from './pages/user/checkoutPage';
 import DetailDevicePage from './pages/user/detailDevicePage';
@@ -53,6 +50,7 @@ import ListBlogPage from './pages/user/listBlogPage'
 import BlogDetailsPage from './pages/user/blogDetailsPage';
 import HomePage from './pages/user/homePage';
 import Login from './pages/user/loginPage';
+import Admin from './pages/admin';
 
 function App() {
 
@@ -60,21 +58,7 @@ function App() {
 
   return (
     <div className='App'>
-      <Header />
-      <ButtonPage setPage={setPage} />
-      { page === 'search' && <SearchPage />} 
-      { page === 'checkout' && <CheckoutPage />} 
-      { page === 'detail' && <DetailDevicePage />} 
-      { page === 'cart' && <CartPage />} 
-      {page === 'loginAdmin' && <LoginAdmin />} 
-      
-      { page === 'login' && <Login />}
-      <Contact />
-      <ManaCustomer/>
-      <ManaEmployee/>
-      <ManaProduct/>
-      <ManaOrders/>
-      <Footer />
+      <Admin />
     </div>
   );
 }

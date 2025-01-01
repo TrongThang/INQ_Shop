@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Header from "../../component/Shared/headerManage";
-import SearchFilter from "../../component/admin/Mana_employee/searchEmployee";
-import EmployeeTable from "../../component/admin/Mana_employee/employeeList";
+import SearchFilter from "../../component/Admin/Mana_employee/searchEmployee";
+import EmployeeTable from "../../component/Admin/Mana_employee/employeeList";
 
 const App = () => {
     const [data, setData] = useState([

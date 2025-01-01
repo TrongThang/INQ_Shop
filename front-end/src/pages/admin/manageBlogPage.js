@@ -1,8 +1,8 @@
 import React from "react";
-import ManageBlogItems from "../../component/admin/ManageBlogPage/manageBlogItems";
-import FilterBlog from "../../component/admin/ManageBlogPage/filterBlog";
+import ManageBlogItems from "../../component/Admin/Mana_blog/manageBlogItems";
+import FilterBlog from "../../component/Admin/Mana_blog/filterBlog";
 import Pagination from "../../component/Shared/Pagination/pagination";
-import HeaderBlog from "../../component/admin/ManageBlogPage/headerBlog";
+import HeaderBlog from "../../component/Admin/Mana_blog/headerBlog";
 
 function ManageBlogPage() {
     return (

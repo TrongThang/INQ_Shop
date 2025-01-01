@@ -1,4 +1,4 @@
-import Sidebar from "../../component/admin/Layout/Sidebar/sidebar";
+import Sidebar from "../../component/Admin/Layout/Sidebar/sidebar";
 
 export default function PageAdmin() {
     return (

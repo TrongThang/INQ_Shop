@@ -1,6 +1,6 @@
 import React from 'react';
 
-import image from '../../resource/img/600x400.jpg'
+import image from '../../../resource/img/600x400.jpg'
 const ManageBlogItems = () => {
   return (
     <tr>

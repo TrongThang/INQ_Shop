@@ -1,105 +1,89 @@
+import React from 'react';
+import OwlCarousel from 'react-owl-carousel';
+import 'owl.carousel/dist/assets/owl.carousel.css';  // Import Owl Carousel styles
+import 'owl.carousel/dist/assets/owl.theme.default.css';  // Import default Owl theme
+import Carou from '../../../resource/img/carousel-2.png'; // Update the image path accordingly
 
-(function ($) {
-    "use strict";
+const Carousel = () => {
+  // Carousel options
+  const options = {
+    items: 1, // Show only 1 item at a time
+    loop: true, // Infinite loop
+    margin: 10, // Space between items
+    nav: true, // Show navigation arrows
+    navText: [
+      "<i class='bi bi-arrow-left'></i>",
+      "<i class='bi bi-arrow-right'></i>",
+    ],
+    dots: true, // Show pagination dots
+    autoplay: false, // Disable autoplay for better manual control
+  };
 
-    // Spinner
-    var spinner = function () {
-        setTimeout(function () {
-            if ($('#spinner').length > 0) {
-                $('#spinner').removeClass('show');
-            }
-        }, 1);
-    };
-    spinner(0);
-    
-    
-    // Initiate the wowjs
-    new WOW().init();
-    
+  return (
+    <div className="header-carousel">
+      <OwlCarousel className="owl-theme" {...options}>
+        {/* Carousel Item 1 */}
+        <div className="header-carousel-item bg-primary">
+          <div className="carousel-caption">
+            <div className="container">
+              <div className="row g-4 align-items-center">
+                <div className="col-lg-7">
+                  <div className="text-sm-center text-md-start">
+                    <h4 className="text-white text-uppercase fw-bold mb-4">DỊCH VỤ IOT NHÀ THÔNG MINH</h4>
+                    <h1 className="display-1 text-white mb-4">
+                      Biến đổi không gian sống của bạn với Smart Home IoT
+                    </h1>
+                    <p className="mb-5 fs-5 line-clamp">
+                      Chúng tôi cung cấp các giải pháp IoT (Internet of Things) giúp biến ngôi nhà của bạn thành một không gian sống thông minh và tiện nghi.
+                    </p>
+                    <div className="d-flex justify-content-center justify-content-md-start flex-shrink-0 mb-4">
+                      <a className="btn btn-light rounded-pill py-3 px-4 px-md-5 me-2" href="#">Xem Chi tiết</a>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-lg-5">
+                  <div className="carousel-img" style={{ objectFit: "cover" }}>
+                    <img src={Carou} className="img-fluid w-100" alt="carousel-img" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-    // Sticky Navbar
-    $(window).scroll(function () {
-        if ($(this).scrollTop() > 45) {
-            $('.nav-bar').addClass('sticky-top shadow-sm').css('top', '0px');
-        } else {
-            $('.nav-bar').removeClass('sticky-top shadow-sm').css('top', '-100px');
-        }
-    });
+        {/* Carousel Item 2 */}
+        <div className="header-carousel-item bg-primary">
+          <div className="carousel-caption">
+            <div className="container">
+              <div className="row gy-4 gy-lg-0 gx-0 gx-lg-5 align-items-center">
+                <div className="col-lg-5">
+                  <div className="carousel-img">
+                    <img src={Carou} className="img-fluid w-100" alt="carousel-img" />
+                  </div>
+                </div>
+                <div className="col-lg-7">
+                  <div className="text-sm-center text-md-end">
+                    <h4 className="text-white text-uppercase fw-bold mb-4">DỊCH VỤ IOT NHÀ THÔNG MINH</h4>
+                    <h1 className="display-1 text-white mb-4">
+                      Biến đổi không gian sống của bạn với Smart Home IoT
+                    </h1>
+                    <p className="mb-5 fs-5 line-clamp">
+                      Chúng tôi cung cấp các giải pháp IoT (Internet of Things) giúp biến ngôi nhà của bạn thành một không gian sống thông minh và tiện nghi.
+                    </p>
+                    <div className="d-flex justify-content-center justify-content-md-end flex-shrink-0 mb-4">
+                      <a className="btn btn-light rounded-pill py-3 px-4 px-md-5 me-2" href="#">Xem chi tiết</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
+        {/* Thêm các item khác nếu cần */}
+      </OwlCarousel>
+    </div>
+  );
+};
 
-    // Header carousel
-    $(".header-carousel").owlCarousel({
-        animateOut: 'fadeOut',
-        items: 1,
-        margin: 0,
-        stagePadding: 0,
-        autoplay: true,
-        smartSpeed: 500,
-        dots: true,
-        loop: true,
-        nav : true,
-        navText : [
-            '<i class="bi bi-arrow-left"></i>',
-            '<i class="bi bi-arrow-right"></i>'
-        ],
-    });
-
-
-
-    // testimonial carousel
-    $(".testimonial-carousel").owlCarousel({
-        autoplay: true,
-        smartSpeed: 1500,
-        center: false,
-        dots: false,
-        loop: true,
-        margin: 25,
-        nav : true,
-        navText : [
-            '<i class="fa fa-arrow-right"></i>',
-            '<i class="fa fa-arrow-left"></i>'
-        ],
-        responsiveClass: true,
-        responsive: {
-            0:{
-                items:1
-            },
-            576:{
-                items:1
-            },
-            768:{
-                items:2
-            },
-            992:{
-                items:2
-            },
-            1200:{
-                items:2
-            }
-        }
-    });
-
-
-    // Facts counter
-    $('[data-toggle="counter-up"]').counterUp({
-        delay: 5,
-        time: 2000
-    });
-
-
-   // Back to top button
-   $(window).scroll(function () {
-    if ($(this).scrollTop() > 300) {
-        $('.back-to-top').fadeIn('slow');
-    } else {
-        $('.back-to-top').fadeOut('slow');
-    }
-    });
-    $('.back-to-top').click(function () {
-        $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
-        return false;
-    });
-
-
-})(jQuery);
-
+export default Carousel;

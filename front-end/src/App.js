@@ -7,11 +7,11 @@ import './resource/lib/lightbox/css/lightbox.min.css'
 import './resource/lib/owlcarousel/assets/owl.carousel.min.css'
 //  <!-- Icon Font Stylesheet -->
 // <!-- Customized Bootstrap Stylesheet -->
-import './resource/css/bootstrap.min.css'
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import './resource/lib/owlcarousel/owl.carousel.min'
+
 // <!-- Template Stylesheet -->
 import './resource/css/inq.css'
+import './resource/css/style.css'
 
 
 //Component
@@ -31,30 +31,32 @@ import Footer from './component/user/LayoutCustomer/Footer/footer';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ButtonPage from './component/buttonPage';
 
-import LoginAdmin from './component/admin/Login/login';
-import Contact from './pages/user/contact';
-import ManaCustomer from './pages/admin/manaCustomer';
-import ManaEmployee from './pages/admin/manaEmployee';
-import ManaProduct from './pages/admin/manaProduct';
-import ManaOrders from './pages/admin/manaOrders';
-import ManageBlogPage from './pages/admin/manageBlogPage';
+import LoginAdmin from './component/Admin/Login/login';
+import Contact from './pages/User/contact';
+import ManaCustomer from './pages/Admin/manaCustomer';
+import ManaEmployee from './pages/Admin/manaEmployee';
+import ManaProduct from './pages/Admin/manaProduct';
+import ManaOrders from './pages/Admin/manaOrders';
+import ManageBlogPage from './pages/Admin/manageBlogPage';
 
 
 
 
-import SearchPage from './pages/user/searchPage';
-import CheckoutPage from './pages/user/checkoutPage';
-import DetailDevicePage from './pages/user/detailDevicePage';
-import CartPage from './pages/user/cartPage';
+import SearchPage from './pages/User/searchPage';
+import CheckoutPage from './pages/User/checkoutPage';
+import DetailDevicePage from './pages/User/detailDevicePage';
+import CartPage from './pages/User/cartPage';
 
-import AddressList from './pages/user/addressPage';
-import Account from './pages/user/accountCustomerPage';
-import ChangePasswordPage from './pages/user/changePasswordPage';
-import OrdersPage from './pages/user/ordersPage';
-import ListBlogPage from './pages/user/listBlogPage'
-import BlogDetailsPage from './pages/user/blogDetailsPage';
-import HomePage from './pages/user/homePage';
-import Login from './pages/user/loginPage';
+import AddressList from './pages/User/addressPage';
+import Account from './pages/User/accountCustomerPage';
+import ChangePasswordPage from './pages/User/changePasswordPage';
+import OrdersPage from './pages/User/ordersPage';
+import ListBlogPage from './pages/User/listBlogPage'
+import BlogDetailsPage from './pages/User/blogDetailsPage';
+import HomePage from './pages/User/homePage';
+import Login from './pages/User/loginPage';
+import CRUD_blog from './component/Admin/Mana_blog/CRUD_blog/CRUD_blog';
+import CRUD_orders from './component/Admin/Mana_orders/CRUD_orders/crud_Orders';
 
 function App() {
 
@@ -63,7 +65,7 @@ function App() {
   return (
     <div className='App'>
       <Header />
-      <ButtonPage setPage={setPage} />
+      {/* <ButtonPage setPage={setPage} />
       { page === 'search' && <SearchPage />} 
       { page === 'checkout' && <CheckoutPage />} 
       { page === 'detail' && <DetailDevicePage />} 
@@ -75,7 +77,8 @@ function App() {
       <ManaCustomer/>
       <ManaEmployee/>
       <ManaProduct/>
-      <ManaOrders/>
+      <ManaOrders/> */}
+      <HomePage />
       <Footer />
     </div>
   );

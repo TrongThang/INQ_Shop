@@ -3,14 +3,10 @@ import '../resource/assets/css/typography.css'
 import '../resource/assets/css/default-css.css'
 import '../resource/assets/css/styles.css'
 import '../resource/assets/css/responsive.css'
-
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import 'jquery-slimscroll/jquery.slimscroll.min.js';
-import 'owl.carousel/dist/assets/owl.carousel.css';
 
-
-
+// import 'jquery-slimscroll/jquery.slimscroll.min.js';
+// import 'owl.carousel/dist/assets/owl.carousel.css';
 
 
 import Sidebar from "../component/admin/Layout/Sidebar/sidebar";

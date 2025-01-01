@@ -36,8 +36,12 @@ import ManaEmployee from './pages/admin/manaEmployee';
 import ManaProduct from './pages/admin/manaProduct';
 import ManaOrders from './pages/admin/manaOrders';
 import ManageBlogPage from './pages/admin/manageBlogPage';
+import ManaCategory from './pages/admin/manaCategory';
+import ManaAttribute from './pages/admin/manaAttribute';
+import ManaGroupAttr from './pages/admin/manaGroupAttr';
 
-
+import CRUDAttribute from './pages/admin/crudAttribute';
+import CRUDGroupAttr from './pages/admin/crudGroupAttr';
 
 
 import SearchPage from './pages/user/searchPage';
@@ -53,11 +57,14 @@ import ListBlogPage from './pages/user/listBlogPage'
 import BlogDetailsPage from './pages/user/blogDetailsPage';
 import HomePage from './pages/user/homePage';
 import Login from './pages/user/loginPage';
+import Register from './pages/user/registerPage';
+import Liked from './pages/user/likedDevice';
+
 
 function App() {
 
   const [page, setPage] = useState('');
-
+  
   return (
     <div className='App'>
       <Header />
@@ -69,11 +76,18 @@ function App() {
       {page === 'loginAdmin' && <LoginAdmin />} 
       
       { page === 'login' && <Login />}
+      { page === 'register' && <Register />}
+      { page === 'liked' && <Liked />}
       <Contact />
       <ManaCustomer/>
       <ManaEmployee/>
       <ManaProduct/>
       <ManaOrders/>
+      <ManaCategory/>
+      <ManaAttribute/>
+      <ManaGroupAttr/>
+      <CRUDAttribute/>
+      <CRUDGroupAttr/>
       <Footer />
     </div>
   );

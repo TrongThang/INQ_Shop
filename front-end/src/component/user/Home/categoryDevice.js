@@ -5,7 +5,7 @@ const CategoryDevice = () => {
   return (
     <div className="container py-5">
       <div className="text-center mx-auto pb-5" style={{ maxWidth: '800px' }}>
-        <h1 className="display-4">Danh Mục Sản phẩm</h1>
+        <h1 className="display-4 fw-bold">Danh Mục Sản phẩm</h1>
       </div>
       <div className="row justify-content-center">
         <div className="position-relative">

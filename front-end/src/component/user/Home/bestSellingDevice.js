@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import blog1 from '../../../resource/img/blog-1.png';
 
-const FeaturedDevices = () => {
+const BestSeelingDeivce = () => {
     const products = [
         {
             name: 'Đèn Thông Minh Minh',
@@ -161,4 +161,4 @@ const FeaturedDevices = () => {
     );
 };
 
-export default FeaturedDevices;
+export default BestSeelingDeivce;

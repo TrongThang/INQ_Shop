@@ -5,11 +5,14 @@ import './resource/lib/animate/animate.min.css'
 //bootstrap/dist/css/bootstrap.min.css
 import './resource/lib/lightbox/css/lightbox.min.css'
 import './resource/lib/owlcarousel/assets/owl.carousel.min.css'
+import './resource/assets/css/bootstrap.min.css'
+
 //  <!-- Icon Font Stylesheet -->
 // <!-- Customized Bootstrap Stylesheet -->
-import './resource/lib/owlcarousel/owl.carousel.min'
+import './resource/assets/css/bootstrap.min.css'
 
 // <!-- Template Stylesheet -->
+// import './resource/css/inq.css'
 import './resource/css/inq.css'
 import './resource/css/style.css'
 
@@ -60,6 +63,7 @@ import CRUD_orders from './component/Admin/Mana_orders/CRUD_orders/crud_Orders';
 
 function App() {
 
+ 
   const [page, setPage] = useState('');
 
   return (

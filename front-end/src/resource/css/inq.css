@@ -312,13 +312,18 @@ form .form-group textarea {
 /* Index */
 .product-container {
     display: flex;
-    gap: 5px;
-    /* Khoảng cách giữa sản phẩm */
-    overflow: hidden;
-    /* Ẩn phần dư thừa */
+    gap: 5px; /* Space between items */
+    overflow: hidden; /* Hide overflow */
     scroll-behavior: smooth;
     max-width: 1240px;
     margin: 0 auto;
+}
+
+.product-items {
+    flex: 0 0 219px;
+    /* Chia đều không gian cho 5 sản phẩm */
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
 .line-clamp {
@@ -384,13 +389,6 @@ form .form-group textarea {
 .img-change:hover::after {
     opacity: 1;
     /* Hiển thị lớp phủ khi hover */
-}
-
-.product-items {
-    /* flex: 0 0 243px; */
-    /* Chia đều không gian cho 5 sản phẩm */
-    border: 1px solid #ddd;
-    border-radius: 5px;
 }
 
 .service-img img {

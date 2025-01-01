@@ -1,6 +1,6 @@
-import AreaTabOfDevice from "../component/detailDevice/areaDetailInfo/areaTabOfDevice";
-import AreaImage from "../component/detailDevice/Info/areaImage";
-import InfoDevice from "../component/detailDevice/Info/infoDevice";
+import AreaTabOfDevice from "../../component/user/detailDevice/areaDetailInfo/areaTabOfDevice";
+import AreaImage from "../../component/user/detailDevice/Info/areaImage";
+import InfoDevice from "../../component/user/detailDevice/Info/infoDevice";
 
 
 export default function DetailDevicePage() {

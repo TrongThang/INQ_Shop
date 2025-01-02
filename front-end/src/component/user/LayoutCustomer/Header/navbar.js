@@ -15,7 +15,7 @@ export default function Navbar() {
             </button>
             {/* <!-- Navbar Links --> */}
             <div className="collapse navbar-collapse" id="navbarCollapse">
-                <div className="navbar-nav mx-auto">
+                <div className="navbar-nav ">
                     <a href="index.html" className="nav-item nav-link active">Trang chủ</a>
                     <div className="nav-item dropdown">
                         <a href="google.com" className="nav-link" data-bs-toggle="dropdown">

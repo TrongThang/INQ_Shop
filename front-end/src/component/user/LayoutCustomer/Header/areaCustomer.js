@@ -62,11 +62,14 @@ export default function AreaCustomer({isLogged}) {
                         {isLogged === true ?
                             <>
                                 <Link to="\profile" className="dropdown-item">Hồ sơ</Link>
+                                <Link to="\profile\orders" className="dropdown-item">Đơn hàng</Link>
+                                <Link to="\profile\address" className="dropdown-item">Địa chỉ</Link>
                                 <Link to="\sign-up" className="dropdown-item">Đăng xuất</Link>    
                             </>
                             :
                             <>
                                 <Link to="\sign-in" className="dropdown-item">Đăng nhập</Link>
+                                <Link to="\sign-in" className="dropdown-item">Đăng ký</Link>
                             </>
                         }
                     </div>

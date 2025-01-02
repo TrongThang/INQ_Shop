@@ -1,9 +1,10 @@
 const { 
-    getLogin,
-    getAllAccounts, 
-    createAccount, 
-    updateAccount, 
-    updateStatusAccount 
+  getLogin,
+  getAllAccounts, 
+  createAccount, 
+  updateAccount, 
+  updateStatusAccount,
+  changePassword,
 } = require('../../services/AccountServices');
 
 const getLoginAPI = async (req, res) => {

@@ -94,9 +94,8 @@ const changePassword = async(username, password) => {
 }
 
 module.exports = {
-  getLogin,
-  getAccountByCondition,
-  createAccount,
-  updateAccount,
-  updateStatusAccount
+  getLogin, getAccountByCondition,
+  createAccount,updateAccount,
+  updateStatusAccount,
+  changePassword
 };

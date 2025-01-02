@@ -7,20 +7,20 @@ import CategoryList from "../../component/admin/Mana_category/categoryList";
 const ManaCategory = () => {
     const [data, setData] = useState([
         {
-          category: "Đèn thông minh",
-          image: "https://placehold.co/100x100",
-          parentCategory: "Đèn ngoài trời",
-          createdDate: "20/11/2023",
-          modifiedDate: "20/11/2023",
-          status: "Hoạt động",
+            category: "Đèn thông minh",
+            image: "https://placehold.co/100x100",
+            parentCategory: "Đèn ngoài trời",
+            createdDate: "20/11/2023",
+            modifiedDate: "20/11/2023",
+            status: "Hoạt động",
         },
         {
-          category: "Cửa tự động",
-          image: "https://placehold.co/100x100",
-          parentCategory: "Nhà cửa",
-          createdDate: "07/10/2022",
-          modifiedDate: "07/10/2022",
-          status: "Đang cập nhật",
+            category: "Cửa tự động",
+            image: "https://placehold.co/100x100",
+            parentCategory: "Nhà cửa",
+            createdDate: "07/10/2022",
+            modifiedDate: "07/10/2022",
+            status: "Đang cập nhật",
         },
     ]);
     return (

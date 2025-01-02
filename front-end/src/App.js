@@ -29,10 +29,13 @@ function App() {
   const [page, setPage] = useState('user');
   
   return (
-    <div className='App'>
-      <Header />
-      <Footer />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/" element={<User />} />
+      </Routes>
+    </Router>
+      
   );
 }
 

@@ -1,6 +1,7 @@
 //const path = require('path');
 const express = require('express');
 const cookieParser = require('cookie-parser')
+const cors = require('cors');
 
 const configViewEngine = (app) => {
     //app.set('views', './src/views');
@@ -10,6 +11,8 @@ const configViewEngine = (app) => {
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use(cookieParser());
+    app.use(cors());
+
 }
 
 module.exports = configViewEngine;

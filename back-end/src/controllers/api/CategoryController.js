@@ -11,7 +11,8 @@ const {
 const getAllCategory_UserAPI = async (req, res) => {
     try {
         const results = await getAllCategory_User();
-
+        
+        console.log('Category API: ', results);
         return res.status(200).json({
             errorCode: 0,
             data: results

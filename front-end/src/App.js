@@ -26,11 +26,13 @@ function App() {
   const [page, setPage] = useState('user');
   
   return (
-    <div className='App'>
-      {page === 'admin' && <Admin /> }
-
-      {page === 'user' && <User />}
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/" element={<User />} />
+      </Routes>
+    </Router>
+      
   );
 }
 

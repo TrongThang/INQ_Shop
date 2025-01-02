@@ -1,5 +1,6 @@
 import React from 'react';
 
+import image from '../../../resource/img/600x400.jpg'
 const ManageBlogItems = () => {
   return (
     <tr>
@@ -11,7 +12,7 @@ const ManageBlogItems = () => {
       <td>Nguyễn Văn A</td>
       <td>320</td>
       <td>
-        <img src="/placeholder.svg" alt="Thumbnail" width="50" />
+        <img src={image} alt="Thumbnail" width="50" />
       </td>
       <td>20/11/2023</td>
       <td>

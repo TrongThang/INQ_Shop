@@ -23,13 +23,13 @@ import Admin from './pages/admin';
 
 function App() {
 
-  const [page, setPage] = useState('');
+  const [page, setPage] = useState('user');
   
   return (
     <div className='App'>
-      <Admin />
+      {page === 'admin' && <Admin /> }
 
-      {/* <User /> */}
+      {page === 'user' && <User />}
     </div>
   );
 }

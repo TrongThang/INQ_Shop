@@ -145,34 +145,6 @@
 }
 /* END CONFIRM PASSWORD */
 
-/* CRUD Category */
-.form-actions {
-    text-align: center;
-    margin-top: 20px;
-}
-.btn-save {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    color: white;
-    background-color: #00bfff;
-    cursor: pointer;
-    font-size: 16px;
-}
-.btn-save:hover {
-    background-color: #009acd;
-}
-.back-link {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #000000;
-    text-decoration: none;
-    border: 1px solid  #000000;
-    padding: 7px;
-    border-radius: 5px;
-}
-/* END CRUD Category */
 
 /* CRUD Contact */
 .form-group input,
@@ -249,12 +221,6 @@ form .form-group textarea {
     margin-bottom: 15px;
 }
 
-.btn-save {
-    background-color: #00c0ff !important;
-    color: white;
-    font-weight: bold;
-    width: 100px;
-}
 /* END CRUD Employee  */
 
 /* CRUD Device  */

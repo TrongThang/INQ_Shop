@@ -68,7 +68,7 @@ function App() {
       { page === 'login' && <Login />}
       { page === 'register' && <Register />}
       { page === 'liked' && <Liked />}
-      <Contact />
+      {/* <Contact />
       <ManaCustomer/>
       <ManaEmployee/>
       <ManaProduct/>
@@ -77,10 +77,10 @@ function App() {
       <ManaAttribute/>
       <ManaGroupAttr/>
       <CRUDAttribute/>
-      <CRUDGroupAttr/>
+      <CRUDGroupAttr/> */}
       <Footer />
-      
-      <Admin />
+
+      {/* <Admin /> */}
     </div>
   );
 }

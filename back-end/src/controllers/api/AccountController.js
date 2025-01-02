@@ -12,9 +12,11 @@ const getLoginAPI = async (req, res) => {
     console.log(username, password, type)
 
     const account = await getLogin(username, password, type);
-
     if (account)
     {
+      req.session.isLogged = true;
+      req.session.idPerson = account.idPerson;
+      
       return res.status(200).json({
         success: true,
         data: account

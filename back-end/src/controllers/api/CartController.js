@@ -5,11 +5,7 @@ const {
     getCartInCookie, saveCartInCookie, 
     addToCartInCookie, updateQuantityDeviceInCartCookie,
     removeDeviceCartInCookie,
-
-    //Database
-    getCart,
-    postAddDeviceToCart, putUpdateDeviceInCart,
-    removeDeviceInCart, removeAllDeviceInCart
+    
 } = require('../../services/CartServices');
 
 const issetDataCart = (data) => {
@@ -21,17 +17,17 @@ const issetDataCart = (data) => {
 
 const getCartAPI = async (req, res) => {
     try {
-        const cartData = null;
-        if (req.session.isLogged) {
+        let cartData = null;
+        // if (req.session.isLogged) {
 
-            cartData = await getCart(req.body.idCustomer);
+        //     cartData = await getCart(req.session.idCustomer);
 
-            return res.status(200).json({
-                errorCode: 0,
-                type: 'database',
-                data: (cartData !== null ? cartData : "Vui lòng thêm sản phẩm vào giỏ hàng!"),
-            });
-        }
+        //     return res.status(200).json({
+        //         errorCode: 0,
+        //         type: 'database',
+        //         data: (cartData !== null ? cartData : "Vui lòng thêm sản phẩm vào giỏ hàng!"),
+        //     });
+        // }
         
         //COOKIE
         cartData = getCartInCookie(req);

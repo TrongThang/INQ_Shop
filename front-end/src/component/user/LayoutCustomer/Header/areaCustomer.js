@@ -1,9 +1,32 @@
-export default function AreaCustomer() {
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
+export default function AreaCustomer({isLogged}) {
+    const [deviceInCart, setDeviceInCart] = useState([]);
+    const fetchDeviceInCart = async () => {
+        try {
+            const response = await fetch('http://localhost:8081/api/cart');
+            const result = await response.json();
+            console.log('Area Customer: ', result.data)
+
+            setDeviceInCart(result.data);
+        } catch (err) {
+            console.error(err);
+        } finally {
+        }
+    }
+    const reduceMoneyInCart = () => {
+        return Number(deviceInCart.reduce((total, currentValue) => total + (currentValue.quantity * currentValue.sellingPrice), 0));
+    }
+
+    useEffect(() => {
+        fetchDeviceInCart();
+    }, []);
     return (
         <>
         {/* <!-- Price & Cart --> */}
             <div class="d-flex align-items-center">
-                <span className="me-2 fw-bold">100.000 VNĐ</span>
+                <span className="me-2 fw-bold">{reduceMoneyInCart().toLocaleString()} VNĐ</span>
                 <a
                     href="google.com"
                     className="btn btn-light btn-lg-square rounded-circle position-relative wow tada"
@@ -14,7 +37,9 @@ export default function AreaCustomer() {
                         style={{ marginLeft: "-3px", marginTop: "5px" }}
                     ></i>
                     <div className="position-absolute" style={{ top: "0px", right: "0px", }}>
-                        <span className="bg-danger badge badge-warning">4</span>
+                        <span className="bg-danger badge badge-warning" style={{ fontSize: "0.7rem", marginTop: "5px" }}>
+                            {deviceInCart.length}
+                        </span>
                     </div>
                 </a>
             </div>
@@ -34,8 +59,16 @@ export default function AreaCustomer() {
                         </span>
                     </a>
                     <div className="dropdown-menu" style={{ left: "-15px" }}>
-                        <a href="FAQ.html" className="dropdown-item">Hồ sơ</a>
-                        <a href="404.html" className="dropdown-item">Đăng xuất</a>
+                        {isLogged === true ?
+                            <>
+                                <Link to="\profile" className="dropdown-item">Hồ sơ</Link>
+                                <Link to="\sign-up" className="dropdown-item">Đăng xuất</Link>    
+                            </>
+                            :
+                            <>
+                                <Link to="\sign-in" className="dropdown-item">Đăng nhập</Link>
+                            </>
+                        }
                     </div>
                 </div>
                 {/* <!-- END PROFILE --> */}

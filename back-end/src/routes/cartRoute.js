@@ -7,7 +7,6 @@ const {
 
 const cartRouter = express.Router();
 
-
 cartRouter.get('/', getCartAPI);
 cartRouter.get('/:idCustomer',getCartAPI)
 cartRouter.post('/', postAddToCartAPI);

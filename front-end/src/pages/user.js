@@ -4,12 +4,12 @@ import { useEffect, useState } from "react";
 
 export default function User() {
     const [categories, setCategories] = useState([]);
+    const [isLogged, setIsLogged] = useState(false);
 
     const fetchDataCategories = async () => {
         try {
             const response = await fetch('http://localhost:8081/api/category');
             const result = await response.json();
-            console.log(result.data)
 
             setCategories(result.data);
         } catch (err) {
@@ -24,7 +24,7 @@ export default function User() {
 
     return (
         <>
-            <HeaderUser categories={categories} />
+            <HeaderUser categories={categories} isLogged={isLogged} />
 
             <FooterUser categories={categories} />
         </>

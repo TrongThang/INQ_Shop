@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import AreaCustomer from "../Header/areaCustomer";
 import SearchHeader from "./searchHeader";
 
-export default function Navbar({categories}) {
+export default function Navbar({categories, isLogged}) {
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light d-flex justify-content-between align-items-center">
@@ -26,19 +26,19 @@ export default function Navbar({categories}) {
                         </div>
                         <div className="dropdown-menu">
                             {categories.map((category, index) => (
-                                <Link key={index} to={`/category/${category.id}`} className="dropdown-item m-2">
+                                <Link key={index} to={`/category/${category.id}`} className="dropdown-item mb-2">
                                     {category.nameCategory}
                                 </Link>
                             ))}
                         </div>
                     </div>
-                    <a href="service.html" className="nav-item nav-link">Giới thiệu</a>
-                    <a href="blog.html" className="nav-item nav-link">Liên hệ</a>
+                    <Link to="/introdution" className="nav-item nav-link">Giới thiệu</Link>
+                    <Link to="/contact" className="nav-item nav-link">Liên hệ</Link>
                 </div>
             </div>
 
             <SearchHeader />
-            <AreaCustomer />
+            <AreaCustomer isLogged={isLogged} />
         </nav>
     );
 };

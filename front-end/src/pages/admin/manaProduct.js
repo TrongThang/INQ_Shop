@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import Header from "../../component/Shared/headerManage";
 import SearchFilter from "../../component/admin/Mana_product/searchProduct";
 import Table from "../../component/admin/Mana_product/productList";
+import AddOrEditProduct from "../../component/admin/Mana_product/addOrEditProduct";
 
-const App = () => {
+const ManaProduct = () => {
     const [data, setData] = useState([
         {
             id: "SP001",
@@ -42,12 +43,14 @@ const App = () => {
     return (
         <div className="main-content-inner">
             <div className="container-fluid py-4">
-                <Header onAdd={handleAdd} onExport={handleExport} />
+                {/* <Header onAdd={handleAdd} onExport={handleExport} />
                 <SearchFilter />
-                <Table data={data} />
+                <Table data={data} /> */}
+                <AddOrEditProduct />
+                
             </div>
         </div>
     );
 };
 
-export default App;
+export default ManaProduct;

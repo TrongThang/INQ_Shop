@@ -10,7 +10,7 @@
 }
 
 .owl-carousel {
-    display: none;
+    display: block;
     width: 100%;
     z-index: 1
 }

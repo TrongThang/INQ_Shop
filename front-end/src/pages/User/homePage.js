@@ -8,7 +8,6 @@ import Services from "../../component/user/Home/services";
 function HomePage() {
     return (
         <>
-            <Carousel />
             <CategoryDevice />
             <FeaturedDevice />
             <BestSeelingDeivce />

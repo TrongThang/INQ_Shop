@@ -15,9 +15,11 @@ const routerCategory = require('./routes/categoryRoute');
 const cartRouter = require('./routes/cartRoute');
 const routerAddressBook = require('./routes/addressBookAPI');
 const routerLikeDevice = require('./routes/likedDeviceAPI');
+const routerInfoWebsite = require('./routes/infoWebsiteRoute');
+
 
 const routerBlog = require('./routes/blogRoute')
-const routerContact = require('./routes/contactRouter')
+//const routerContact = require('./routes/contactRouter')
 const routerCart = require('./routes/cartRoute');
 
 const routerDevice = require('./routes/deviceRoute');
@@ -27,7 +29,7 @@ const routeAPI = require('./routes/routeAPI');
 app.use('/v1/api/device', routerDevice)
 
 app.use('/v1/api/blog', routerBlog)
-app.use('/v1/api/contact', routerContact)
+//app.use('/v1/api/contact', routerContact)
 app.use('/v1/api/cart', routerCart)
 
 app.use('/v1/api/customer', routerCustomer);
@@ -39,6 +41,8 @@ app.use('/v1/api/category', routerCategory);
 app.use('/v1/api/cartCookie', cartRouter);
 app.use('/v1/api/addressBook/', routerAddressBook);
 app.use('/v1/api/likedDevice/', routerLikeDevice);
+app.use('/v1/api/info-website', routerInfoWebsite);
+
 
 
 app.listen(port, () => {

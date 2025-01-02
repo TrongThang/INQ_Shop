@@ -1,6 +1,6 @@
-import AreaSearch from "../../component/User/SearchPage/AreaSearch/areaSearch";
-import AreaSort from "../../component/User/SearchPage/areaSort";
-import ListDeviceSearch from "../../component/User/SearchPage/listDeviceSearch";
+import AreaSearch from "../../component/user/SearchPage/AreaSearch/areaSearch";
+import AreaSort from "../../component/user/SearchPage/areaSort";
+import ListDeviceSearch from "../../component/user/SearchPage/listDeviceSearch";
 
 export default function SearchPage() {
     return (

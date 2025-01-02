@@ -1,4 +1,3 @@
-import React from 'react';
 const AccountCustomer = () => {
     return (
         <div className="container-form col-md-8 col-lg-6 me-auto py-4 mt-4 shadow-sm rounded">

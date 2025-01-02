@@ -1,6 +1,6 @@
-import InfoAddress from "../../component/User/Cart/infoAddress";
-import AllDeviceInCart from "../../component/User/Cart/allDeviceInCart";
-import PayCart from "../../component/User/Cart/payCart";
+import InfoAddress from "../../component/user/Cart/infoAddress";
+import AllDeviceInCart from "../../component/user/Cart/allDeviceInCart";
+import PayCart from "../../component/user/Cart/payCart";
 
 export default function CartPage() {
     const devices = [

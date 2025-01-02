@@ -1,4 +1,4 @@
-import BlogDetails from '../../component/user/Introdution/blogDetails'
+import BlogDetails from '../../../component/user/Introdution/blogDetails'
 
 function BlogDetailsPage() {
     return (

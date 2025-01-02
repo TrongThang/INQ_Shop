@@ -1,4 +1,4 @@
-import RegisterPopup from '../../component/user/Register/formRegister';
+import RegisterPopup from '../../../component/user/Register/formRegister';
 
 export default function Register() {
     

@@ -1,5 +1,5 @@
-import BlogCart from "../../component/user/Introdution/blogCart";
-import Pagination from "../../component/Shared/Pagination/pagination";
+import BlogCart from "../../../component/user/Introdution/blogCart";
+import Pagination from "../../../component/Shared/Pagination/pagination";
 
 function ListBlogPage() {
     return (

@@ -1,6 +1,6 @@
 import React from 'react';
-import ProfileSidebar from '../../component/user/Profile/navCustomer/profileSidebar';
-import AddressItems from '../../component/user/Profile/addressItems';
+import ProfileSidebar from '../../../component/user/Profile/navCustomer/profileSidebar';
+import AddressItems from '../../../component/user/Profile/addressItems';
 
 const AddressPage = () => {
     return (

@@ -15,7 +15,7 @@ export default function InfoDevice(device = null, customerLiked = false) {
         <div class="col-xl-7 mb-4">
             <span>{ device.category.name }</span>
             <h1>
-                {device.name} 
+                {device.name}
                 <div>
                     {customerLiked
                         ? <span><i class="fa-solid fa-heart text-danger ms-2"></i></span>

@@ -1,5 +1,6 @@
 import HeaderUser from "../component/user/LayoutCustomer/Header/header";
 import FooterUser from "../component/user/LayoutCustomer/Footer/footer";
+import Liked from "../pages/user/likedDevice";
 import { useEffect, useState } from "react";
 
 export default function User() {
@@ -25,7 +26,7 @@ export default function User() {
     return (
         <>
             <HeaderUser categories={categories} isLogged={isLogged} />
-
+            <Liked />
             <FooterUser categories={categories} />
         </>
     )

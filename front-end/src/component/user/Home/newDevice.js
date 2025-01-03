@@ -1,95 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import blog1 from '../../../resource/img/blog-1.png';
 
-const NewDevice = () => {
-    const products = [
-        {
-            name: 'Đèn Thông Minh Minh',
-            price: '500,000 VND',
-            rating: '⭐⭐⭐⭐⭐ (4.5/5)',
-            description: 'Kiểm soát ánh sáng linh hoạt, phù hợp với nhu cầu sử dụng và tiết kiệm năng lượng cho gia đình bạn.',
-            image: '',
-            link: '#'
-        },
-        {
-            name: 'Đèn Thông Minh Minh',
-            price: '500,000 VND',
-            rating: '⭐⭐⭐⭐⭐ (4.5/5)',
-            description: 'Kiểm soát ánh sáng linh hoạt, phù hợp với nhu cầu sử dụng và tiết kiệm năng lượng cho gia đình bạn.',
-            image: '',
-            link: '#'
-        },
-        {
-            name: 'Hệ Thống An Ninh',
-            price: '1,200,000 VND',
-            rating: '⭐⭐⭐⭐ (4.2/5)',
-            description: 'Giám sát 24/7 với camera thông minh, cảm biến và cảnh báo, đảm bảo ngôi nhà luôn an toàn.',
-            image: '',
-            link: '#'
-        },
-        {
-            name: 'Cảm Biến Thông Minh',
-            price: '800,000 VND',
-            rating: '⭐⭐⭐⭐⭐ (4.8/5)',
-            description: 'Tích hợp cảm biến nhiệt độ, độ ẩm và chuyển động để tối ưu hóa trải nghiệm trong ngôi nhà bạn.',
-            image: '',
-            link: '#'
-        },
-        {
-            name: 'Khóa Cửa Thông Minh',
-            price: '1,000,000 VND',
-            rating: '⭐⭐⭐⭐⭐ (4.7/5)',
-            description: 'Bảo mật nâng cao với khóa cửa thông minh tích hợp vân tay, mã số và điều khiển từ xa.',
-            image: '',
-            link: '#'
-        },
-        {
-            name: 'Khóa Cửa Thông Minh',
-            price: '1,000,000 VND',
-            rating: '⭐⭐⭐⭐⭐ (4.7/5)',
-            description: 'Bảo mật nâng cao với khóa cửa thông minh tích hợp vân tay, mã số và điều khiển từ xa.',
-            image: '',
-            link: '#'
-        },
-        {
-            name: 'Khóa Cửa Thông Minh',
-            price: '1,000,000 VND',
-            rating: '⭐⭐⭐⭐⭐ (4.7/5)',
-            description: 'Bảo mật nâng cao với khóa cửa thông minh tích hợp vân tay, mã số và điều khiển từ xa.',
-            image: '',
-            link: '#'
-        }, {
-            name: 'Khóa Cửa Thông Minh',
-            price: '1,000,000 VND',
-            rating: '⭐⭐⭐⭐⭐ (4.7/5)',
-            description: 'Bảo mật nâng cao với khóa cửa thông minh tích hợp vân tay, mã số và điều khiển từ xa.',
-            image: '',
-            link: '#'
-        },
-        {
-            name: 'Khóa Cửa Thông Minh',
-            price: '1,000,000 VND',
-            rating: '⭐⭐⭐⭐⭐ (4.7/5)',
-            description: 'Bảo mật nâng cao với khóa cửa thông minh tích hợp vân tay, mã số và điều khiển từ xa.',
-            image: '',
-            link: '#'
-        },
-        {
-            name: 'Khóa Cửa Thông Minh',
-            price: '1,000,000 VND',
-            rating: '⭐⭐⭐⭐⭐ (4.7/5)',
-            description: 'Bảo mật nâng cao với khóa cửa thông minh tích hợp vân tay, mã số và điều khiển từ xa.',
-            image: '',
-            link: '#'
+const FeaturedDevices = () => {
+    const [device, setDevice] = useState([]);
+
+    const fetchDataCategories = async () => {
+        try {
+            const response = await fetch('http://localhost:8081/api/device/featured');
+            const result = await response.json();
+            console.log(result.data)
+
+            setDevice(result.data);
+        } catch (err) {
+            console.error(err);
+        } finally {
         }
-    ];
+    };
+
+    useEffect(() => {
+        fetchDataCategories()
+    }, []);
+
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const productsPerPage = 5;
 
     // Handle Next button click: Move one product forward
     const handleNext = () => {
-        if (currentIndex + 1 < products.length) {
+        if (currentIndex + 1 < device.length) {
             setCurrentIndex(currentIndex + 1);
         }
     };
@@ -102,7 +41,7 @@ const NewDevice = () => {
     };
 
     // Slice the products array to display the current set of 5 products
-    const visibleProducts = products.slice(currentIndex, currentIndex + productsPerPage);
+    const visibleProducts = device.slice(currentIndex, currentIndex + productsPerPage);
 
     return (
         <div className="container py-5">
@@ -123,21 +62,29 @@ const NewDevice = () => {
                     )}
 
                     <div className="d-flex overflow-hidden product-container product-container-best-seller">
-                        {visibleProducts.map((product, index) => (
-                            <div key={index} className="device-items   wow fadeInUp" data-wow-delay="0.2s">
+                        {visibleProducts.map((device, index) => (
+                            <div key={index} className="device-items wow fadeInUp" data-wow-delay="0.2s">
                                 <div className="service-item">
                                     <div className="service-img">
                                         <div className="img-change">
-                                            <img src={blog1} className="img-fluid rounded-top w-100" alt={product.name} />
+                                            <img src={blog1} className="img-fluid rounded-top w-100" alt={device.name} />
                                         </div>
                                     </div>
                                     <div className="service-content p-4">
                                         <div className="service-content-inner">
-                                            <a href={product.link} className="d-inline-block h4 mb-2 text-decoration-none">{product.name}</a>
-                                            <p className="mb-2 text-primary fw-bold">{product.price}</p>
-                                            <p className="mb-2">{product.rating}</p>
-                                            <p className="mb-4 line-clamp-p">{product.description}</p>
-                                            <a className="btn btn-primary rounded-pill py-2 px-4" href={product.link}>Chi tiết</a>
+                                            <Link to="/details" className="line-clamp-title-device  h4 mb-2 text-decoration-none">{device.name}</Link>
+                                            <p className="mb-2 text-primary fw-bold">
+                                                {Number(device.sellingPrice).toLocaleString("vi-VN", {
+                                                    style: "currency",
+                                                    currency: "VND",
+                                                })}
+                                            </p>
+                                            <p className="mb-2 line-clamp-p">{device.descriptionNormal}</p>
+                                            <p className="mb-2">
+                                                <span className="stars" style={{ '--rating': device.reviews[0]?.averageRating || 5 }}></span>
+                                                {" "}({parseFloat(device.reviews[0]?.averageRating || 5).toFixed(1)}/5)
+                                            </p>
+                                            <Link to="/details" className="btn btn-primary rounded-pill py-2 px-4">Chi tiết</Link>
                                         </div>
                                     </div>
                                 </div>
@@ -150,7 +97,7 @@ const NewDevice = () => {
                         <button
                             className="btn slider-btn next-btn position-absolute top-50 end-0 translate-middle-y"
                             onClick={handleNext}
-                            disabled={currentIndex + productsPerPage >= products.length} // Disable if it's the last page
+                            disabled={currentIndex + productsPerPage >= device.length} // Disable if it's the last page
                         >
                             <i className="fa fa-chevron-right"></i>
                         </button>
@@ -161,4 +108,4 @@ const NewDevice = () => {
     );
 };
 
-export default NewDevice;
+export default FeaturedDevices;

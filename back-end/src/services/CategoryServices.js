@@ -7,6 +7,24 @@ const {
     updateStatusDeviceByCategory
 } = require('../services/DeviceServices');
 
+const getCategoryByUser = async () => {
+    try {
+        const categories = await Category.findAll({
+            where: {
+                isHide: false, // Chỉ lấy các danh mục không ẩn
+                status: 1      // Chỉ lấy danh mục có trạng thái hoạt động
+            },
+            order: [['created_at', 'ASC']], // Sắp xếp theo thời gian tạo tăng dần
+            limit: 5                        // Giới hạn 5 danh mục đầu tiên
+        });
+
+        return categories; // Trả về danh sách 5 danh mục
+    } catch (error) {
+        console.error("Error fetching categories:", error);
+        throw error; // Ném lỗi nếu có vấn đề xảy ra
+    }
+};
+
 
 const getAllCategory_User = async () => {
     const data = await Category.findAll({
@@ -101,7 +119,7 @@ const updateStatusCategory = async ({ id, status }) => {
 }
 
 module.exports = {
-    getAllCategory_User, getAllCategory_Admin,
+    getAllCategory_User, getAllCategory_Admin, getCategoryByUser,
     getCategoryById, getChildrenCategory,
     createCategory, updateCategory, updateStatusCategory
 }

@@ -1,3 +1,24 @@
+.stars {
+    --full-stars: 0;
+    --empty-stars: 5;
+    display: inline-block;
+    position: relative;
+    font-size: 20px;
+    color: #FFD700;
+  }
+  
+  .stars::before {
+    content: "★★★★★";
+    background: #FFD700;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+  
+  .stars {
+    --full-stars: calc(var(--rating) * 20);
+  }
+  
+
 /* Address -----------------------------css  */
 .form-container {
     padding: 20px;
@@ -53,6 +74,7 @@
     z-index: 1000;
     background: #b8daff;
 }
+
 .carousel-button i {
     font-size: 20px;
 }
@@ -364,7 +386,7 @@ form .form-group textarea {
 }
 
 .device-items {
-    flex: 0 0 240px;
+    flex: 0 0 244px;
     /* Chia đều không gian cho 5 sản phẩm */
     border: 1px solid #ddd;
     border-radius: 5px;

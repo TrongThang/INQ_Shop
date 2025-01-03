@@ -21,12 +21,10 @@ import User from './pages/user';
 import Admin from './pages/admin';
 import Header from './component/user/LayoutCustomer/Header/header';
 import Footer from './component/user/LayoutCustomer/Footer/footer';
-import HomePage from './pages/User/homePage';
-import DetailDevicePage from './pages/User/detailDevicePage';
+
 
 
 import CartPage from './pages/user/cartPage';
-
 import Register from "./pages/user/Account/registerPage";
 import SearchPage from "./pages/user/searchPage";
 
@@ -62,6 +60,7 @@ function App() {
               <Route path="changePassword" element={<ChangePassword />} />
             </Route> */}
             <Route path="/search/*" element={<SearchPage />} />
+
           </Route>
       </Routes>
     </Router>

@@ -9,7 +9,7 @@ export default function InfoDevice(device = null, customerLiked = false) {
         starRating: 4,
         sellingPrice: "200.000",
     };
-    customerLiked = true;ư
+    customerLiked = true;
 
     return (
         <div class="col-xl-7 mb-4">

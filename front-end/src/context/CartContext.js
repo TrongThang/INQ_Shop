@@ -27,6 +27,20 @@ export const CartProvider = ({ children }) => {
         }
     ]);
 
+    const handleInputQuantity = (idDevice, quantity) => {
+        if (isNaN(quantity) || quantity < 1) {
+            return;
+        }
+        
+        setCart((prevCart) => {
+            return prevCart.map((item) => {
+                if (item.idDevice === idDevice) {
+                    return { ...item, quantity: quantity };
+                }
+                return item;
+            })
+        });
+    }
     const addToCart = (device) => {
         setCart((prevCart) => {
             // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
@@ -86,13 +100,23 @@ export const CartProvider = ({ children }) => {
             return accumulator + (currentValue.quantity * currentValue.sellingPrice)
         }, 0);
     }
+    
+    const getTotalItem = () => {
+        return cart.length;
+    }
 
     const handleCheckout = () => {
         return console.log("Checkout");
     }
 
     return (
-        <CartContext.Provider value={{ cart, addToCart, plusDeviceInCart,minusDeviceInCart, removeFromCart, removeAllCart, getTotalPrice, handleCheckout }}>
+        <CartContext.Provider value={{
+            cart, addToCart,
+            plusDeviceInCart, minusDeviceInCart,
+            removeFromCart, removeAllCart,
+            getTotalPrice, handleCheckout, getTotalItem,
+            handleInputQuantity,
+        }}>
             {children}
         </CartContext.Provider>
     )

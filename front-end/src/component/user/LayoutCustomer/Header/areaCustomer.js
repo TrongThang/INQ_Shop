@@ -1,24 +1,21 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useCart } from "../../../../context/CartContext";
 
-export default function AreaCustomer({isLogged}) {
-    const [deviceInCart, setDeviceInCart] = useState([]);
+export default function AreaCustomer({ isLogged }) {
+    const { getTotalItem, getTotalPrice } = useCart();
+
     const fetchDeviceInCart = async () => {
         try {
             const response = await fetch('http://localhost:8081/api/cart');
             const result = await response.json();
             console.log('Area Customer: ', result.data)
-
-            setDeviceInCart(result.data);
+            
         } catch (err) {
             console.error(err);
         } finally {
         }
     }
-    const reduceMoneyInCart = () => {
-        return Number(deviceInCart.reduce((total, currentValue) => total + (currentValue.quantity * currentValue.sellingPrice), 0));
-    }
-
     useEffect(() => {
         fetchDeviceInCart();
     }, []);
@@ -26,7 +23,7 @@ export default function AreaCustomer({isLogged}) {
         <>
         {/* <!-- Price & Cart --> */}
             <div class="d-flex align-items-center">
-                <span className="me-2 fw-bold">{reduceMoneyInCart().toLocaleString()} VNĐ</span>
+                <span className="me-2 fw-bold">{getTotalPrice().toLocaleString()} VNĐ</span>
                 <a
                     href="google.com"
                     className="btn btn-light btn-lg-square rounded-circle position-relative wow tada"
@@ -38,7 +35,7 @@ export default function AreaCustomer({isLogged}) {
                     ></i>
                     <div className="position-absolute" style={{ top: "0px", right: "0px", }}>
                         <span className="bg-danger badge badge-warning" style={{ fontSize: "0.7rem", marginTop: "5px" }}>
-                            {deviceInCart.length}
+                            {getTotalItem()}
                         </span>
                     </div>
                 </a>

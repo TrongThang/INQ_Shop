@@ -26,7 +26,7 @@ export default function Navbar({categories, isLogged}) {
                         </div>
                         <div className="dropdown-menu">
                             {categories.map((category, index) => (
-                                <Link key={index} to={`/category/${category.id}`} className="dropdown-item mb-2">
+                                <Link key={index} to={`/search?category=${category.slug}`} className="dropdown-item mb-2">
                                     {category.nameCategory}
                                 </Link>
                             ))}

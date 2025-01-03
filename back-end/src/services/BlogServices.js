@@ -19,6 +19,22 @@ const putUpdateBlog = async (data) => {
     return await findByPKUpdateBlog.update(data);
 };
 
+const updateScoreForBlog = async (data) => {
+    const { idBlog, idCustomer, score } = data;
+
+    const [updatedCount] = await Blog.update(
+        { score: value }, 
+        {
+            where:
+            {
+                idCustomer: idCustomer,
+                idBlog: idBlog,
+                
+            }
+        }
+    );
+}
+
 const updateStatusAttributeGroup = async ({id, status}) => {
     const [updatedCount] = await Attribute.update(
         { status: status }, 

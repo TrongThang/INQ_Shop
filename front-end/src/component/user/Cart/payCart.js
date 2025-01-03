@@ -2,7 +2,6 @@ import { useCart } from "../../../context/CartContext";
 
 export default function PayCart() {
     const { cart, handleCheckout,getTotalPrice } = useCart();
-    console.log(cart)
     return (
         <div class="card mb-4 fixed-bottom m-5 position-sticky">
             <div class="card-body">

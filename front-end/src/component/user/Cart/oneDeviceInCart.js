@@ -2,7 +2,7 @@ import { useCart } from "../../../context/CartContext";
 
 export default function OneDeviceInCart({ device, index }) {
     //TO DO Add and Minus
-    const { addToCart, plusDeviceInCart, minusDeviceInCart, removeFromCart} = useCart();
+    const { addToCart, handleInputQuantity , plusDeviceInCart, minusDeviceInCart, removeFromCart} = useCart();
     return (
         <div class="row align-items-center mb-3" key={index}>
             <div class="col-auto">
@@ -22,7 +22,12 @@ export default function OneDeviceInCart({ device, index }) {
                         onClick={() => minusDeviceInCart(device.idDevice)}
                         {...device.quantity <= 1 && { disabled: true }}
                     >-</button>
-                    <input type="text" class="form-control text-center" value={device.quantity} readonly />
+                    <input
+                        type="text"
+                        class="form-control text-center"
+                        value={device.quantity}
+                        onChange={(e) => handleInputQuantity(device.idDevice, e.target.value)}
+                    />
                     <button
                         class="btn btn-outline-primary"
                         type="button"

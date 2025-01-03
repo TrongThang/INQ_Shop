@@ -1,5 +1,5 @@
 const connection = require('../config/database');
-const { Op, Sequelize } = require('sequelize');
+const { Op, Sequelize, or } = require('sequelize');
 const { convertToSlug } = require('../helpers/stringHelper');
 const Category = require('../models/Category');
 const Device = require('../models/Device');
@@ -14,8 +14,6 @@ const ReviewDevice = require('../models/Review_device');
 // 4: Sản phẩm mới
 // 5: sản phẩm bán chạy
 // Nếu không nhập limit thì mặc định là lấy hết
-
-
 const getAllDeviceByStatus = async (status = 1, limit = {}) => {
     const whereConditions = {
         status: {
@@ -44,13 +42,12 @@ const getAllDeviceByStatus = async (status = 1, limit = {}) => {
 };
 
 
-
-const getAllDevice_User = async (page = 0, status = 1, limit = {}, filters = {}) => {
+const getAllDevice_User = async (page = 0, status = 1, limit = {}, filters = {}, order = {}) => {
     const { priceMin, priceMax, idCategory, keyword } = filters;
 
     const whereConditions = {
         status: {
-            [Op.eq]: status
+            [Op.gte]: status
         }
     };
 
@@ -63,7 +60,6 @@ const getAllDevice_User = async (page = 0, status = 1, limit = {}, filters = {})
             whereConditions.sellingPrice[Op.lte] = priceMax;
         }
     }
-
 
     if (keyword) {
         whereConditions[Op.or] = [
@@ -87,13 +83,23 @@ const getAllDevice_User = async (page = 0, status = 1, limit = {}, filters = {})
                     [Sequelize.fn('AVG', Sequelize.col('rating')), 'averageRating']
                 ],
                 required: false
+            },
+            {
+                model: Category,
+                as: 'categoryDevice',
+                attributes: ['id', 'nameCategory']
             }
         ],
-        group: ['Device.idDevice']
+        attributes: [
+            'idDevice', 'name', 'slug', 'sellingPrice', 'image', 'descriptionNormal',
+        ],
+        group: ['Device.idDevice'],
+        order: order,
     });
 
     return await data;
 }
+
 const getTOPDeviceLiked = async () => {
     const data = await Device.findAll({
         where: {
@@ -220,7 +226,7 @@ const updateStatusReviewForDevice = async ({ id, status }) => {
 }
 
 module.exports = {
-    getAllDevice_User, getAllDeviceForStatus, getAllDevice_Admin, 
+    getAllDevice_User, getAllDeviceByStatus, getAllDevice_Admin, 
     getDeviceById, getTOPDeviceLiked,
     createDevice, updateDevice, updateStatusDevice,
     updateStatusDeviceByCategory,

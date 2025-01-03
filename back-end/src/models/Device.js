@@ -87,7 +87,12 @@ const Device = sequelize.define('device', {
 });
 
 const ReviewDevice = require('../models/Review_device')
+const Category = require('../models/Category')
+
 Device.hasMany(ReviewDevice, { foreignKey: 'idDevice', as: 'reviews' })
 ReviewDevice.belongsTo(Device, { foreignKey: 'idDevice', as: 'device' });
+
+Category.hasMany(Device, { foreignKey: 'idCategory', as: 'devices' });
+Device.belongsTo(Category, { foreignKey: 'idCategory', as: 'categoryDevice' });
 
 module.exports = Device;

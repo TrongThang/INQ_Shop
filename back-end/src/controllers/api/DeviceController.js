@@ -11,11 +11,20 @@ const {
 
 const getAllDeviceByUserAPI = async (req, res) => {
     try {
-        const { page = 0, status = 1, limit = 10, priceMin, priceMax, idCategory, keyword } = req.body;
+        const { page = 0, status = 1, limit = 10, priceMin, priceMax, idCategory } = req.body;
+
+        const { keyword, orderBy, sortBy } = req.query;
+        
+        let order = [];
+        if (orderBy && sortBy) {
+            order = [[orderBy, sortBy.toUpperCase()]];
+        } else {
+            order = [['name', 'ASC']]; 
+        }
 
         const filters = { priceMin, priceMax, idCategory, keyword };
 
-        const results = await getAllDevice_User(page, status, parseInt(limit), filters);
+        const results = await getAllDevice_User(page, status, parseInt(limit), filters, order);
 
         return res.status(200).json({
             errorCode: 0,
@@ -29,6 +38,7 @@ const getAllDeviceByUserAPI = async (req, res) => {
         });
     }
 }
+
 const getAllDevice_FeaturedAPI = async (req, res) => {
     try {
         const { status = 3, limit = 10 } = req.body;
@@ -47,6 +57,7 @@ const getAllDevice_FeaturedAPI = async (req, res) => {
         });
     }
 }
+
 const getAllDevice_NewAPI = async (req, res) => {
     try {
         const { status = 4, limit = 10 } = req.body;
@@ -65,6 +76,7 @@ const getAllDevice_NewAPI = async (req, res) => {
         });
     }
 }
+
 const getAllDevice_BestSellingAPI = async (req, res) => {
     try {
         const { status = 5, limit = 10 } = req.body;
@@ -83,7 +95,6 @@ const getAllDevice_BestSellingAPI = async (req, res) => {
         });
     }
 }
-
 
 const getTOPDeviceLikedAPI = async (req, res) => {
     try {

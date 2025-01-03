@@ -4,7 +4,7 @@ require('dotenv').config()  // gọi ra để sử dụng.
 const configViewEngine = require('./config/viewEngine');
 const connection = require('./config/database');
 const app = express();
-const port = 8080;
+const port = 8081;
 configViewEngine(app)
 
 const routeAPI = require('./routes/routeAPI');

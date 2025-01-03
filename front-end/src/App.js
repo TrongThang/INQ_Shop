@@ -21,9 +21,8 @@ import User from './pages/user';
 import Admin from './pages/admin';
 import Header from './component/user/LayoutCustomer/Header/header';
 import Footer from './component/user/LayoutCustomer/Footer/footer';
-import HomePage from './pages/User/homePage';
-import DetailDevicePage from './pages/User/detailDevicePage';
-
+import HomePage from './pages/user/homePage';
+import DetailDevicePage from './pages/user/detailDevicePage';
 
 import CartPage from './pages/user/cartPage';
 

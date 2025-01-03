@@ -16,6 +16,7 @@ routerDevice.get('/bestselling', getAllDevice_BestSellingAPI);
 
 
 routerDevice.get('/', getAllDeviceByUserAPI);
+routerDevice.get('/:keyword', getAllDeviceByUserAPI);
 
 routerDevice.get('/', getDeviceByIdAPI);
 routerDevice.get('/top-device', getTOPDeviceLikedAPI);

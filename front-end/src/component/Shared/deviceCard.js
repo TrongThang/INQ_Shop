@@ -1,31 +1,22 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-const DeviceCard = () => {
-    const [device, setDevice] = useState(null);
-    const [loadingDevice, setLoadingDevice] = useState(false);
+const DeviceCard = ({device}) => {
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoadingDevice(true); // Bắt đầu tải dữ liệu
-                const response = await fetch('https://api.example.com/v1/api/getDeivceById/id');
-                const result = await response.json();
-                setDevice(result); // Cập nhật state với dữ liệu API
-            } catch (err) {
-                console.error(err);
-            } finally {
-                setLoadingDevice(false); // Dừng trạng thái tải
-            }
-        };
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await fetch(`http://localhost:8080/api/device/${idDevice}`);
+    //             const result = await response.json();
+    //             setDevice(result); // Cập nhật state với dữ liệu API
+    //         } catch (err) {
+    //             console.error(err);
+    //         } finally {
+    //         }
+    //     };
+    //     fetchData();
+    // }, [idDevice]); // Chỉ chạy khi `loadingDevice` thay đổi
 
-        if (loadingDevice) {
-            fetchData();
-        }
-    }, [loadingDevice]); // Chỉ chạy khi `loadingDevice` thay đổi
-
-    const handleLoadDevice = () => {
-        setLoadingDevice(true); // Kích hoạt tải dữ liệu
-    };
 
     return (
         <div className="col-xl-2 col-lg-2 product-items wow fadeInUp me-3" data-wow-delay="0.2s" style={{ padding: "0px"}}>
@@ -38,14 +29,25 @@ const DeviceCard = () => {
             </div>
             <div className="service-content p-4">
                 <div className="service-content-inner">
-                <a href="#" className="d-inline-block h4 mb-2 ">Đèn Thông Minh Minh</a> 
-                <p className="mb-2 text-primary fw-bold">500,000 VND</p>
-                <p className="mb-2">⭐⭐⭐⭐⭐ (4.5/5)</p>
-                <p className="mb-4 line-clamp-p">
-                    Kiểm soát ánh sáng linh hoạt, phù hợp với nhu cầu sử dụng và tiết kiệm
-                    năng lượng cho gia đình bạn.
-                </p>
-                <a className="btn btn-primary rounded-pill py-2 px-4" href="#">Chi tiết</a>
+                    <Link
+                        to="/details"
+                        className="line-clamp-title-device h4 mb-2 text-decoration-none"
+                        style={{ maxWidth: "200px", maxHeight: "55px", minWidth: "200px", minHeight: "55px" }}
+                    >{device.name}</Link>
+                    <p className="mb-2 text-primary fw-bold">
+                        {Number(device.sellingPrice).toLocaleString("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                        })}
+                    </p>
+                    <p className="mb-2">
+                        {"⭐".repeat(Math.round(device.reviews[0]?.averageRating || 5))}{" "}
+                        ({parseFloat(device.reviews[0]?.averageRating || 5).toFixed(1)}/5)
+                    </p>
+                    <p className="mb-4 line-clamp-p">
+                        {device.descriptionNormal}
+                    </p>
+                    <Link to="/details" className="btn btn-primary rounded-pill py-2 px-4">Chi tiết</Link>
                 </div>
             </div>
             </div>

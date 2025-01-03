@@ -4,10 +4,70 @@
     height: 650px;
 }
 
+.header-carousel {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.carousel-caption {
+    z-index: 10;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+
+.carousel-caption {
+    z-index: 2;
+}
+
+.carousel-container {
+    overflow: hidden;
+    position: relative;
+}
+
+.carousel-button {
+    border-radius: 50%;
+    padding: 10px 20px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f9fa;
+    border: none;
+    cursor: pointer;
+}
+
+.scroll-to-top {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 20px;
+    right: 20px;
+    border-radius: 50%;
+    padding: 10px;
+    z-index: 1000;
+    background: #b8daff;
+}
+.carousel-button i {
+    font-size: 20px;
+}
+
+.carousel-button:hover {
+    background-color: #e2e6ea;
+}
+
+
+
 .icon-line-right {
     border-right: solid 2px #000;
     margin-right: 15px;
 }
+
 /* End - Address -----------------------------css  */
 
 .fs-user-p {
@@ -102,6 +162,7 @@
 .blog .blog-item:hover .blog-content a.btn:hover {
     color: var(--bs-primary);
 }
+
 /* End - Blog ---------------------------------------css */
 /* CONFIRM PASSWORD */
 .sidebar {
@@ -147,6 +208,7 @@
     border-bottom: 1px solid rgba(161, 161, 161, 0.3);
     padding-bottom: 35px;
 }
+
 /* END CONFIRM PASSWORD */
 
 
@@ -160,10 +222,12 @@
     border-radius: 4px;
     box-sizing: border-box;
 }
+
 .form-actions {
     text-align: center;
     margin-top: 20px;
 }
+
 .btn-save {
     padding: 10px 20px;
     border: none;
@@ -173,16 +237,18 @@
     cursor: pointer;
     font-size: 16px;
 }
+
 .btn-save:hover {
     background-color: #009acd;
 }
+
 .back-link {
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 20px;
     color: #000000;
     text-decoration: none;
-    border: 1px solid  #000000;
+    border: 1px solid #000000;
     padding: 7px;
     border-radius: 5px;
 }
@@ -200,6 +266,7 @@ form .form-group textarea {
 .btn-save-text {
     margin-right: 110px;
 }
+
 /* END CRUD Contact */
 
 /* CRUD Employee  */
@@ -229,8 +296,9 @@ form .form-group textarea {
 
 /* CRUD Device  */
 .specifi {
-    padding-bottom:200px ;
+    padding-bottom: 200px;
 }
+
 /* END CRUD Device  */
 
 /* CRUD Customer Detail */
@@ -259,7 +327,7 @@ form .form-group textarea {
 .form-container {
     background: white;
     border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .form-label {
@@ -273,29 +341,39 @@ form .form-group textarea {
         text-align: left;
     }
 }
+
 /* END Customer Detail */
 
 /* Index */
 .product-container {
     display: flex;
-    gap: 5px; /* Space between items */
-    overflow: hidden; /* Hide overflow */
+    gap: 5px;
+    /* Space between items */
+    overflow: hidden;
+    /* Hide overflow */
     scroll-behavior: smooth;
     max-width: 1240px;
     margin: 0 auto;
 }
 
 .product-items {
-    flex: 0 0 219px;
+
     /* Chia đều không gian cho 5 sản phẩm */
     border: 1px solid #ddd;
     border-radius: 5px;
 }
 
-.line-clamp {
+.device-items {
+    flex: 0 0 240px;
+    /* Chia đều không gian cho 5 sản phẩm */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.line-clamp-title-device {
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 2;
     /* Giới hạn số dòng */
     overflow: hidden;
 }
@@ -303,7 +381,7 @@ form .form-group textarea {
 .line-clamp-p {
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
+    -webkit-line-clamp: 2;
     /* Giới hạn số dòng */
     overflow: hidden;
 }
@@ -410,6 +488,7 @@ form .form-group textarea {
 .slider-btn:hover {
     background-color: #0056b3;
 }
+
 /* END Index */
 
 /* UPLOAD */
@@ -432,22 +511,24 @@ form .form-group textarea {
     color: #007bff;
     margin-bottom: 10px;
 }
+
 /* END UPLOAD */
 
 /* CHECKOUT */
-#form-checkout label{
+#form-checkout label {
     font-weight: bold;
     color: rgba(21, 16, 16, 0.875);
     margin-top: 5px;
 }
+
 /* END CHECKOUT */
 
 
 /* Order Customer ------------------------------ CSS */
 .nav-pills {
     display: flex;
-    flex-wrap: nowrap; 
-    justify-content: space-evenly; 
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
     margin-bottom: 20px;
 }
 
@@ -456,7 +537,7 @@ form .form-group textarea {
     padding: 0.5rem 1rem;
     border-radius: 0.25rem;
     text-align: center;
-    min-width: 90px; 
+    min-width: 90px;
 }
 
 .nav-pills .nav-link.active {
@@ -480,4 +561,5 @@ form .form-group textarea {
     font-size: 1.2rem;
     color: #6c757d;
 }
+
 /* Order Customer ------------------------------ CSS */

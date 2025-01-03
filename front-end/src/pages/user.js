@@ -7,7 +7,7 @@ export default function User() {
 
     const fetchDataCategories = async () => {
         try {
-            const response = await fetch('http://localhost:8081/api/category');
+            const response = await fetch('http://localhost:8080/api/category');
             const result = await response.json();
             console.log(result.data)
 

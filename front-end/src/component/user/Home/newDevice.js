@@ -107,7 +107,7 @@ const NewDevice = () => {
     return (
         <div className="container py-5">
             <div className="text-center mx-auto pb-5" style={{ maxWidth: '800px' }}>
-                <h1 className="display-4 fw-bold">Sản Phẩm Nổi Bật</h1>
+                <h1 className="display-4 fw-bold">Sản Phẩm Mới</h1>
             </div>
             <div className="row justify-content-center">
                 <div className="position-relative">
@@ -124,7 +124,7 @@ const NewDevice = () => {
 
                     <div className="d-flex overflow-hidden product-container product-container-best-seller">
                         {visibleProducts.map((product, index) => (
-                            <div key={index} className="product-items product-items-best-seller wow fadeInUp" data-wow-delay="0.2s">
+                            <div key={index} className="device-items   wow fadeInUp" data-wow-delay="0.2s">
                                 <div className="service-item">
                                     <div className="service-img">
                                         <div className="img-change">

@@ -1,22 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
-export default function Footer() {
-    const [categories, setCategories] = useState([]); // Dữ liệu danh mục
+export default function Footer({ categories }) {
     const [isCategoryVisible, setIsCategoryVisible] = useState(false); // Trạng thái hiển thị danh mục
-
-    // Hàm tải dữ liệu danh mục từ API
-    const fetchCategories = () => {
-        fetch("http://localhost:8081/api/categories")
-            .then(response => response.json())
-            .then(data => setCategories(data))
-            .catch(error => console.error("Error fetching categories:", error));
-    };
 
     // Hàm xử lý khi click vào "Danh mục"
     const handleCategoryClick = () => {
-        if (!isCategoryVisible) {
-            fetchCategories(); // Gọi API chỉ khi chưa tải dữ liệu
-        }
         setIsCategoryVisible(!isCategoryVisible); // Thay đổi trạng thái hiển thị
     };
 
@@ -53,10 +42,10 @@ export default function Footer() {
                                         {isCategoryVisible && (
                                             <div className="mt-2">
                                                 {categories.length > 0 ? (
-                                                    categories.map((category) => (
-                                                        <a key={category.id} href={`/${category.slug}`}>
-                                                            <i className="fas fa-angle-right me-2"></i> {category.name}
-                                                        </a>
+                                                    categories.map((category, index) => (
+                                                        <Link key={index} to={`/category/${category.id}`} className="dropdown-item m-2">
+                                                            {category.nameCategory}
+                                                        </Link>
                                                     ))
                                                 ) : (
                                                     <p className="text-white">Đang tải danh mục...</p>
@@ -69,7 +58,7 @@ export default function Footer() {
                                 </div>
                             </div>
                         </div>
-                        <div className="pt-5" style={{ borderTop: "1px" }}>
+                        <div className="pt-5" style={{ borderTop: "1px solid #ccc" }}>
                             <div className="row g-0">
                                 <div className="col-12">
                                     <div className="row g-4">
@@ -80,7 +69,7 @@ export default function Footer() {
                                                 </div>
                                                 <div>
                                                     <h4 className="text-white">Địa chỉ</h4>
-                                                    <p className="mb-0"> 272Đt743, TP.Dĩ An, Tỉnh Bình Dương </p>
+                                                    <p className="mb-0">272Đt743, TP.Dĩ An, Tỉnh Bình Dương</p>
                                                 </div>
                                             </div>
                                         </div>

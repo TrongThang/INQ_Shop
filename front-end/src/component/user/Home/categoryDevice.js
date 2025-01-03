@@ -1,6 +1,5 @@
 import React from 'react';
 
-import '../../../resource/assets/css/bootstrap.min.css'
 const CategoryDevice = () => {
   return (
     <div className="container py-5">

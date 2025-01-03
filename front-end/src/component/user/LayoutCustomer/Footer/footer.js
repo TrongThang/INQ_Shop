@@ -1,4 +1,25 @@
-export default function Footer({categories}) {
+import React, { useEffect, useState } from "react";
+
+export default function Footer() {
+    const [categories, setCategories] = useState([]); // Dữ liệu danh mục
+    const [isCategoryVisible, setIsCategoryVisible] = useState(false); // Trạng thái hiển thị danh mục
+
+    // Hàm tải dữ liệu danh mục từ API
+    const fetchCategories = () => {
+        fetch("http://localhost:8081/api/categories")
+            .then(response => response.json())
+            .then(data => setCategories(data))
+            .catch(error => console.error("Error fetching categories:", error));
+    };
+
+    // Hàm xử lý khi click vào "Danh mục"
+    const handleCategoryClick = () => {
+        if (!isCategoryVisible) {
+            fetchCategories(); // Gọi API chỉ khi chưa tải dữ liệu
+        }
+        setIsCategoryVisible(!isCategoryVisible); // Thay đổi trạng thái hiển thị
+    };
+
     return (
         <div className="container-fluid footer py-5 wow fadeIn mt-5" data-wow-delay="0.2s">
             <div className="container py-5">
@@ -9,24 +30,39 @@ export default function Footer({categories}) {
                                 <div className="col-md-6 col-lg-6 col-xl-5">
                                     <div className="footer-item">
                                         <a href="index.html" className="p-0">
-                                            <h3 className="text-white"><i className="fab fa-slack me-3"/> INQ Shop</h3>
+                                            <h3 className="text-white"><i className="fab fa-slack me-3" /> INQ Shop</h3>
                                         </a>
                                         <p className="text-white mb-4">Dolor amet sit justo amet elitr clita ipsum elitr est.Lorem ipsum dolor sit amet, consectetur adipiscing...</p>
                                         <div className="footer-btn d-flex">
-                                            <a className="btn btn-md-square rounded-circle me-3" href="#"><i className="fab fa-facebook-f"/></a>
-                                            <a className="btn btn-md-square rounded-circle me-3" href="#"><i className="fab fa-twitter"/></a>
-                                            <a className="btn btn-md-square rounded-circle me-3" href="#"><i className="fab fa-instagram"/></a>
-                                            <a className="btn btn-md-square rounded-circle me-0" href="#"><i className="fab fa-linkedin-in"/></a>
+                                            <a className="btn btn-md-square rounded-circle me-3" href="#"><i className="fab fa-facebook-f" /></a>
+                                            <a className="btn btn-md-square rounded-circle me-3" href="#"><i className="fab fa-twitter" /></a>
+                                            <a className="btn btn-md-square rounded-circle me-3" href="#"><i className="fab fa-instagram" /></a>
+                                            <a className="btn btn-md-square rounded-circle me-0" href="#"><i className="fab fa-linkedin-in" /></a>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="col-md-3 col-lg-2"></div>
-                                
+
                                 <div className="col-md-6 col-lg-6 col-xl-3">
                                     <div className="footer-item">
                                         <h4 className="text-white mb-4">Liên kết</h4>
                                         <a href="#"><i className="fas fa-angle-right me-2"></i> Trang chủ</a>
-                                        <a href="#"><i className="fas fa-angle-right me-2"></i> Danh mục</a>
+                                        <a href="#" onClick={handleCategoryClick}>
+                                            <i className="fas fa-angle-right me-2"></i> Danh mục
+                                        </a>
+                                        {isCategoryVisible && (
+                                            <div className="mt-2">
+                                                {categories.length > 0 ? (
+                                                    categories.map((category) => (
+                                                        <a key={category.id} href={`/${category.slug}`}>
+                                                            <i className="fas fa-angle-right me-2"></i> {category.name}
+                                                        </a>
+                                                    ))
+                                                ) : (
+                                                    <p className="text-white">Đang tải danh mục...</p>
+                                                )}
+                                            </div>
+                                        )}
                                         <a href="#"><i className="fas fa-angle-right me-2"></i> Giới thiệu</a>
                                         <a href="#"><i className="fas fa-angle-right me-2"></i> Liên hệ</a>
                                     </div>

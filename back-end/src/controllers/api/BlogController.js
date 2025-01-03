@@ -2,9 +2,37 @@ const {
     getAllBlog,
     getBlog,
     postCreateBlog,
-    putUpdateBlog
+    putUpdateBlog,
+
+    getAllBlog_user
 } = require('../../services/BlogServices.js')
 
+
+// Hàm xử lý lấy tất cả các blog của người dùng
+const getAllBlogUserAPI = async (req, res) => {
+    try {
+        // Gọi hàm lấy tất cả các blog của người dùng từ file services
+        const result = await getAllBlog_user();
+
+        // Kiểm tra nếu không có kết quả hoặc kết quả trống
+        if (!result || result.length === 0) {
+            // Trả về mã lỗi 404 và thông báo nếu không tìm thấy blog của người dùng
+            return res.status(404).json({ message: "No user blogs found" });
+        }
+
+        // Trả về dữ liệu blog của người dùng trong trường hợp thành công
+        res.status(200).json({
+            errorCode: 0,
+            data: result,
+            message: "successfully"
+        });
+    } catch (error) {
+        // Xử lý lỗi nếu có sự cố khi lấy blog của người dùng
+        console.error("Error fetching user blogs:", error);
+        // Trả về mã lỗi 500 và thông báo lỗi nếu có lỗi xảy ra trong quá trình lấy dữ liệu
+        res.status(500).json({ message: "An error occurred while fetching user blogs" });
+    }
+};
 // Hàm xử lý lấy tất cả các blog
 const getAllBlogAPI = async (req, res) => {
     try {
@@ -59,7 +87,22 @@ const getBlogAPI = async (req, res) => {
         res.status(500).json({ message: "An error occurred while fetching the blog" });
     }
 };
+const getAllOrOneBlogAPI_user = async (req, res) => {
+    const data = req.body;
+    console.log("Request Body:", data); // In ra body để kiểm tra
 
+    // Kiểm tra nếu 'data' có chứa thông tin blog (ví dụ: có trường 'id')
+    if (data && data.id) {
+        // Nếu có 'id', gọi hàm getBlogAPI
+        console.log("Fetching specific blog with ID:", data.id);
+        await getBlogAPI(req, res);
+        return;
+    }
+
+    // Nếu không có 'id', gọi hàm getAllBlogAPI_user để lấy tất cả các blog
+    console.log("Fetching all blogs");
+    await getAllBlogUserAPI(req, res);
+};
 const getAllOrOneBlogAPI = async (req, res) => {
     const data = req.body;
     console.log("Request Body:", data); // In ra body để kiểm tra
@@ -140,5 +183,6 @@ const putUpdateBlogAPI = async (req, res) => {
     }
 };
 module.exports = {
-    getAllBlogAPI, getBlogAPI, postCreateBlogAPI, putUpdateBlogAPI, getAllOrOneBlogAPI
+    getAllBlogAPI, getBlogAPI, postCreateBlogAPI, putUpdateBlogAPI, getAllOrOneBlogAPI,
+    getAllOrOneBlogAPI_user
 }

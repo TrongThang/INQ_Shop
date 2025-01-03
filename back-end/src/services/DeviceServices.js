@@ -38,7 +38,10 @@ const getAllDevice_User = async (page = 0, status = 1, limit = {},filters = {}) 
     }
 
     if (keyword) {
-        whereConditions.name = { [Op.like]: `%${keyword}%`}
+        whereConditions[Op.or] = [
+            { name: { [Op.like]: `%${keyword}%` } },
+            { descriptionNormal: { [Op.like]: `%${keyword}%` } }
+        ];
     }
 
     const offset = page * limit;
@@ -47,6 +50,7 @@ const getAllDevice_User = async (page = 0, status = 1, limit = {},filters = {}) 
         where: whereConditions,
         limit: limit,
         offset: offset,
+        subQuery: false,
         include: [
             {
                 model: ReviewDevice,
@@ -57,7 +61,7 @@ const getAllDevice_User = async (page = 0, status = 1, limit = {},filters = {}) 
                 required: false
             }
         ],
-        group: ['Device.idDevice'],
+        group: ['Device.idDevice']
     });
 
     return await data;

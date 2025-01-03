@@ -20,6 +20,16 @@ import ButtonPage from './component/buttonPage';
 import User from './pages/user';
 import Admin from './pages/admin';
 
+import CartPage from './pages/user/cartPage';
+
+import Register from "./pages/user/Account/registerPage";
+import SearchPage from "./pages/user/searchPage";
+
+import ProfileCustomer from "./pages/user/Profile/accountCustomerPage";
+import AddressPage from "./pages/user/Profile/addressPage";
+import ChangePassword from "./pages/user/Profile/changePasswordPage";
+import OrdersPage from "./pages/user/Profile/ordersPage";
+import { CartProvider } from './context/CartContext';
 
 function App() {
 
@@ -28,8 +38,26 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/" element={<User />} />
+        {/* ADMIN */}
+        <Route path="/admin" element={<Admin />}>
+        
+        </Route>
+        {/* USER */}
+          <Route path="/"
+          element={
+            <CartProvider>
+              <User />
+            </CartProvider>
+            }
+          >
+            <Route path="cart" element={<CartPage />} />
+            {/* <Route path="/profile" element={<ProfileCustomer />} >
+              <Route path="address" element={<AddressPage />} />
+              <Route path="orders" element={<OrdersPage />} />
+              <Route path="changePassword" element={<ChangePassword />} />
+            </Route> */}
+            <Route path="/search/*" element={<SearchPage />} />
+          </Route>
       </Routes>
     </Router>
       

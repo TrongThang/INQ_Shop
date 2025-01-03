@@ -1,7 +1,8 @@
-import useState from 'react'
+import { useCart } from "../../../context/CartContext";
+
 export default function OneDeviceInCart({ device, index }) {
     //TO DO Add and Minus
-
+    const { addToCart, plusDeviceInCart, minusDeviceInCart, removeFromCart} = useCart();
     return (
         <div class="row align-items-center mb-3" key={index}>
             <div class="col-auto">
@@ -15,19 +16,32 @@ export default function OneDeviceInCart({ device, index }) {
             </div>
             <div class="col-auto">
                 <div class="input-group input-group-sm" style={{ width: "120px" }}>
-                    <button class="btn btn-outline-primary" type="button">-</button>
+                    <button
+                        class="btn btn-outline-primary"
+                        type="button"
+                        onClick={() => minusDeviceInCart(device.idDevice)}
+                        {...device.quantity <= 1 && { disabled: true }}
+                    >-</button>
                     <input type="text" class="form-control text-center" value={device.quantity} readonly />
-                    <button class="btn btn-outline-primary" type="button">+</button>
+                    <button
+                        class="btn btn-outline-primary"
+                        type="button"
+                        onClick={() => plusDeviceInCart(device.idDevice)}
+                        // {...device.quantity >= device.quantityInStock && { disabled: true }}
+                    >+</button>
                 </div>
             </div>
             <div style={{maxWidth: "170px"}}>
-                <p class="mb-0 fw-bold">{device.sellingPrice.toLocaleString()} VNĐ</p>
+                <p class="mb-0 fw-bold">{Number(device.sellingPrice).toLocaleString()} VNĐ</p>
             </div>
             <div style={{maxWidth: "170px"}}>
                 <p class="mb-0 fw-bold">{(device.sellingPrice * device.quantity).toLocaleString()} VNĐ</p>
             </div>
             <div class="col-auto">
-                <button class="btn btn-sm btn-outline-danger">Xóa</button>
+                <button
+                    class="btn btn-sm btn-outline-danger"
+                    onClick={() => removeFromCart(device.idDevice)}
+                >Xóa</button>
             </div>
         </div>
     )

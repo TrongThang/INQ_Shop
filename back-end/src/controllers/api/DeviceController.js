@@ -2,11 +2,11 @@ const connection = require('../../config/database.js');
 const Device = require('../../models/Device.js');
 
 const {
-    getAllDevice_User, getAllDevice_Admin, getDeviceById,
+    getAllDevice_User,getAllDeviceForStatus, getAllDevice_Admin, getDeviceById,
     createDevice, updateDevice, updateStatusDevice,
     //Review For Device
     getAllReviewForDevice, createReviewForDevice, updateReviewForDevice, updateStatusReviewForDevice,
-    getTOPDeviceLiked,
+    getTOPDeviceLiked, 
 } = require('../../services/DeviceServices.js');
 
 const getAllDeviceByUserAPI = async (req, res) => {
@@ -29,6 +29,61 @@ const getAllDeviceByUserAPI = async (req, res) => {
         });
     }
 }
+const getAllDevice_FeaturedAPI = async (req, res) => {
+    try {
+        const { status = 3, limit = 10 } = req.body;
+
+        const results = await getAllDeviceForStatus(status, parseInt(limit));
+
+        return res.status(200).json({
+            errorCode: 0,
+            data: results
+        })
+    } catch (error) {
+        return res.status(500).json({
+            errorCode: 1,
+            msg: 'User: Có lỗi xảy ra trong quá trình lấy dữ liệu các Thiết bị',
+            details: error.message,
+        });
+    }
+}
+const getAllDevice_NewAPI = async (req, res) => {
+    try {
+        const { status = 4, limit = 10 } = req.body;
+
+        const results = await getAllDeviceForStatus(status, parseInt(limit));
+
+        return res.status(200).json({
+            errorCode: 0,
+            data: results
+        })
+    } catch (error) {
+        return res.status(500).json({
+            errorCode: 1,
+            msg: 'User: Có lỗi xảy ra trong quá trình lấy dữ liệu các Thiết bị',
+            details: error.message,
+        });
+    }
+}
+const getAllDevice_BestSellingAPI = async (req, res) => {
+    try {
+        const { status = 5, limit = 10 } = req.body;
+
+        const results = await getAllDeviceForStatus(status, parseInt(limit));
+
+        return res.status(200).json({
+            errorCode: 0,
+            data: results
+        })
+    } catch (error) {
+        return res.status(500).json({
+            errorCode: 1,
+            msg: 'User: Có lỗi xảy ra trong quá trình lấy dữ liệu các Thiết bị',
+            details: error.message,
+        });
+    }
+}
+
 
 const getTOPDeviceLikedAPI = async (req, res) => {
     try {
@@ -222,7 +277,7 @@ const updateStatusReviewForDeviceAPI = async (req, res) => {
 }
 
 module.exports = {
-    getAllDeviceByUserAPI, getAllDeviceByAdminAPI,
+    getAllDeviceByUserAPI,getAllDevice_FeaturedAPI, getAllDevice_NewAPI, getAllDevice_BestSellingAPI, getAllDeviceByAdminAPI,
     getDeviceByIdAPI, getTOPDeviceLikedAPI,
     postCreateDeviceAPI, putUpdateDeviceAPI,
     updateStatusDeviceAPI,

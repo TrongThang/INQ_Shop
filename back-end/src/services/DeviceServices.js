@@ -12,14 +12,45 @@ const ReviewDevice = require('../models/Review_device');
 // 2: Sản phẩm khuyến mãi
 // 3: Sản phẩm nổi bật
 // 4: Sản phẩm mới
+// 5: sản phẩm bán chạy
 // Nếu không nhập limit thì mặc định là lấy hết
 
-const getAllDevice_User = async (page = 0, status = 1, limit = {},filters = {}) => {
+
+const getAllDeviceForStatus = async (status = 1, limit = {}) => {
+    const whereConditions = {
+        status: {
+            [Op.eq]: status
+        }
+    };
+
+    const data = await Device.findAll({
+        where: whereConditions,
+        limit: limit,
+        subQuery: false,
+        include: [
+            {
+                model: ReviewDevice,
+                as: 'reviews',
+                attributes: [
+                    [Sequelize.fn('AVG', Sequelize.col('rating')), 'averageRating']
+                ],
+                required: false
+            }
+        ],
+        group: ['Device.idDevice']
+    });
+
+    return data; // Trả về danh sách sản phẩm
+};
+
+
+
+const getAllDevice_User = async (page = 0, status = 1, limit = {}, filters = {}) => {
     const { priceMin, priceMax, idCategory, keyword } = filters;
 
     const whereConditions = {
         status: {
-            [Op.gte]: status
+            [Op.eq]: status
         }
     };
 
@@ -33,12 +64,9 @@ const getAllDevice_User = async (page = 0, status = 1, limit = {},filters = {}) 
         }
     }
 
-    if (idCategory) {
-        whereConditions.idCategory = idCategory;
-    }
 
     if (keyword) {
-        whereConditions.name = { [Op.like]: `%${keyword}%`}
+        whereConditions.name = { [Op.like]: `%${keyword}%` }
     }
 
     const offset = page * limit;
@@ -62,7 +90,6 @@ const getAllDevice_User = async (page = 0, status = 1, limit = {},filters = {}) 
 
     return await data;
 }
-
 const getTOPDeviceLiked = async () => {
     const data = await Device.findAll({
         where: {
@@ -94,7 +121,7 @@ const getDeviceById = async (id) => {
     });
 }
 
-const createDevice = async ( body ) => {
+const createDevice = async (body) => {
     const slug = convertToSlug(body.name);
     body.slug = slug;
 
@@ -111,14 +138,14 @@ const updateDevice = async (body) => {
     return updatedCount;
 }
 
-const updateStatusDevice = async ({ id, status}) => {
+const updateStatusDevice = async ({ id, status }) => {
     const valueIsHide = status <= 0 ? true : false;
 
     const [updatedCount] = await Device.update(
         {
             status: status,
             isHide: valueIsHide
-        }, 
+        },
         { where: { id } }
     );
 
@@ -137,7 +164,7 @@ const updateStatusDeviceByCategory = async ({ idCategory, status }) => {
     const [updateCount] = await Device.update(
         {
             status: status
-        }, 
+        },
         {
             where: whereCondition
         }
@@ -157,9 +184,9 @@ const getAllReviewForDevice = async (id, status = {}) => {
     return comments;
 }
 
-const createReviewForDevice = async ( body ) => {
+const createReviewForDevice = async (body) => {
     const reviewForDevice = await ReviewDevice.create({ body });
-    
+
     return reviewForDevice;
 }
 
@@ -181,7 +208,7 @@ const updateStatusReviewForDevice = async ({ id, status }) => {
         {
             status: status,
             isHide: valueIsHide
-        }, 
+        },
         { where: { idDevice: id } }
     );
 
@@ -189,12 +216,12 @@ const updateStatusReviewForDevice = async ({ id, status }) => {
 }
 
 module.exports = {
-    getAllDevice_User, getAllDevice_Admin,
+    getAllDevice_User, getAllDeviceForStatus, getAllDevice_Admin, 
     getDeviceById, getTOPDeviceLiked,
     createDevice, updateDevice, updateStatusDevice,
     updateStatusDeviceByCategory,
 
     //Review For Device
     getAllReviewForDevice, createReviewForDevice,
-    updateReviewForDevice, updateStatusReviewForDevice
+    updateReviewForDevice, updateStatusReviewForDevice,
 }

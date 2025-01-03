@@ -1,5 +1,7 @@
 import HeaderUser from "../component/user/LayoutCustomer/Header/header";
 import FooterUser from "../component/user/LayoutCustomer/Footer/footer";
+import ListBlogPage from "./user/Introdution/listBlogPage";
+import Contact from "./user/contact";
 import { useEffect, useState } from "react";
 
 export default function User() {
@@ -25,7 +27,8 @@ export default function User() {
     return (
         <>
             <HeaderUser categories={categories} isLogged={isLogged} />
-
+            <ListBlogPage />
+            <Contact />
             <FooterUser categories={categories} />
         </>
     )

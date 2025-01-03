@@ -19,7 +19,7 @@ import ButtonPage from './component/buttonPage';
 
 import User from './pages/user';
 import Admin from './pages/admin';
-
+import BlogDetailsPage from './pages/user/Introdution/blogDetailsPage';
 
 function App() {
 
@@ -30,6 +30,7 @@ function App() {
       <Routes>
         <Route path="/admin" element={<Admin />} />
         <Route path="/" element={<User />} />
+        <Route path="/blog/:id" element={<BlogDetailsPage/>} />
       </Routes>
     </Router>
       

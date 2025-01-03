@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const BlogCart = ({ blog }) => {
     const formatDate = (dateString) => {
@@ -31,13 +32,20 @@ const BlogCart = ({ blog }) => {
                             <span className="bi bi-heart-fill text-primary"></span> {blog.score}
                         </div>
                     </div>
-                    <a href="#" className="h4 d-inline-block mb-3">
+                    {/* <a href="#" className="h4 d-inline-block mb-3">
                         {blog.title}
                     </a>
-                    <p className="mb-3">{blog.content}</p>
+                    <p className="mb-3">{blog.contentNormal}</p>
                     <a href="#" className="btn p-0">
                         Xem thêm <i className="fa fa-arrow-right"></i>
-                    </a>
+                    </a> */}
+                    <Link to={`/blog/${blog.id}`} className="h4 d-inline-block mb-3">
+                        {blog.title}
+                    </Link>
+                    <p className="mb-3">{blog.contentNormal}</p>
+                    <Link to={`/blog/${blog.id}`} className="btn p-0">
+                        Xem thêm <i className="fa fa-arrow-right"></i>
+                    </Link>
                 </div>
             </div>
         </div>

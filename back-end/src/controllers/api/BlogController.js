@@ -59,31 +59,51 @@ const getAllBlogAPI = async (req, res) => {
     }
 };
 
-// Hàm xử lý lấy một blog theo yêu cầu
+// // Hàm xử lý lấy một blog theo yêu cầu
+// const getBlogAPI = async (req, res) => {
+//     // Lấy dữ liệu từ body của yêu cầu
+//     const data = req.body;
+
+//     try {
+//         // Gọi hàm lấy thông tin blog cụ thể từ cơ sở dữ liệu
+//         const result = await getBlog(data);
+//         if(data.id)
+//         // Kiểm tra nếu không có kết quả hoặc kết quả trống
+//         if (!result || result.length === 0) {
+//             // Trả về mã lỗi 404 và thông báo nếu không tìm thấy blog với ID hoặc dữ liệu cung cấp
+//             return res.status(404).json({ message: "Blog not found" });
+//         }
+
+//         // Trả về dữ liệu blog trong trường hợp thành công
+//         res.status(200).json({
+//             errorCode: 0,
+//             data: result,
+//             message: "successfully"
+//         });
+//     } catch (error) {
+//         // Xử lý lỗi nếu có sự cố khi lấy blog
+//         console.error("Error fetching blog:", error);
+//         // Trả về mã lỗi 500 và thông báo lỗi nếu có lỗi xảy ra trong quá trình lấy dữ liệu
+//         res.status(500).json({ message: "An error occurred while fetching the blog" });
+//     }
+// };
 const getBlogAPI = async (req, res) => {
-    // Lấy dữ liệu từ body của yêu cầu
-    const data = req.body;
+    const { id } = req.params;
 
     try {
-        // Gọi hàm lấy thông tin blog cụ thể từ cơ sở dữ liệu
-        const result = await getBlog(data);
-        if(data.id)
-        // Kiểm tra nếu không có kết quả hoặc kết quả trống
-        if (!result || result.length === 0) {
-            // Trả về mã lỗi 404 và thông báo nếu không tìm thấy blog với ID hoặc dữ liệu cung cấp
+        const blog = await getBlog({ id });
+
+        if (!blog) {
             return res.status(404).json({ message: "Blog not found" });
         }
 
-        // Trả về dữ liệu blog trong trường hợp thành công
         res.status(200).json({
             errorCode: 0,
-            data: result,
+            data: blog,
             message: "successfully"
         });
     } catch (error) {
-        // Xử lý lỗi nếu có sự cố khi lấy blog
         console.error("Error fetching blog:", error);
-        // Trả về mã lỗi 500 và thông báo lỗi nếu có lỗi xảy ra trong quá trình lấy dữ liệu
         res.status(500).json({ message: "An error occurred while fetching the blog" });
     }
 };
@@ -184,5 +204,5 @@ const putUpdateBlogAPI = async (req, res) => {
 };
 module.exports = {
     getAllBlogAPI, getBlogAPI, postCreateBlogAPI, putUpdateBlogAPI, getAllOrOneBlogAPI,
-    getAllOrOneBlogAPI_user
+    getAllOrOneBlogAPI_user,
 }

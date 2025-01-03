@@ -78,7 +78,7 @@ const BlogDetails = () => {
           <h2 className="mb-4">{blog.title}</h2>
           <p className="w-75">{blog.content}</p>
           <img
-            src={blog.image_url || "https://via.placeholder.com/1000x600"}
+            src={blog.imgage || "https://via.placeholder.com/1000x600"}
             alt="Hình ảnh bài viết"
             className="img-fluid rounded mb-4"
           />

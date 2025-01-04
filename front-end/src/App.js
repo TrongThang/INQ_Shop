@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 
 // <!-- Libraries Stylesheet -->
 import './resource/lib/animate/animate.min.css'
-//bootstrap/dist/css/bootstrap.min.css
 import './resource/lib/lightbox/css/lightbox.min.css'
 //  <!-- Icon Font Stylesheet -->
 // <!-- Customized Bootstrap Stylesheet -->
@@ -19,10 +18,8 @@ import ButtonPage from './component/buttonPage';
 
 import User from './pages/user';
 import Admin from './pages/admin';
-import Header from './component/user/LayoutCustomer/Header/header';
-import Footer from './component/user/LayoutCustomer/Footer/footer';
-
-
+import HomePage from './pages/user/homePage'
+import DetailDevicePage from './pages/user/detailDevicePage';
 
 import CartPage from './pages/user/cartPage';
 import Register from "./pages/user/Account/registerPage";
@@ -60,7 +57,7 @@ function App() {
               <Route path="changePassword" element={<ChangePassword />} />
             </Route> */}
             <Route path="/search/*" element={<SearchPage />} />
-
+            <Route path="/device/:slug" element={<DetailDevicePage />} />
           </Route>
       </Routes>
     </Router>

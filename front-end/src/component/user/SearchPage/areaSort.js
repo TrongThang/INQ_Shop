@@ -1,18 +1,28 @@
-export default function AreaSort() {
+import { useState } from "react";
+
+export default function AreaSort({ onSortChange }) {
+    const [sortOption, setSortOption] = useState('');
+    
+    const handleSortChange = (e) => {
+        const selectedSort = e.target.value;
+        setSortOption(selectedSort);
+        onSortChange(selectedSort);
+    }
     return (
-        <section>
-            <span>Sắp xếp theo</span>
-            <button className="btn btn-primary ms-3">Liên quan</button>                    
-            <button className="btn btn-light">Bán chạy</button>                    
-            <div className="nav-item dropdown btn">
-                <a href="#" className="nav-link dropdown-hover">
-                    <span className="dropdown-toggle">Giá</span>
-                </a>
-                <div className="dropdown-menu">
-                    <a href="#" className="dropdown-item">Giá: Thấp đến cao</a>
-                    <a href="#" className="dropdown-item">Giá: Cao đến thấp</a>
-                </div>
-            </div>              
-        </section>
+        <div className="mb-3">
+            <label htmlFor="sort" className="form-label">Sắp xếp theo:</label>
+            <select
+                id="sort"
+                className="form-select"
+                value={sortOption}
+                onChange={handleSortChange}
+            >
+                <option value="">Mặc định</option>
+                <option value="sellingPrice_asc">Giá tăng dần</option>
+                <option value="sellingPrice_desc">Giá giảm dần</option>
+                {/* <option value="name_asc">Tên A-Z</option>
+                <option value="name_desc">Tên Z-A</option> */}
+            </select>
+        </div>
     )
 }

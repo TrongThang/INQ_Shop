@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 const ProfileSidebar = () => {
     return (
         <aside className="col-md-3">
@@ -20,9 +21,9 @@ const ProfileSidebar = () => {
                     <i className="bi bi-chevron-down float-end"></i>
                 </a>
                 <div className="collapse" id="accountSubmenu">
-                    <a href="#" className="list-group-item list-group-item-action ps-5 text-primary">Hồ sơ</a>
-                    <a href="#" className="list-group-item list-group-item-action ps-5">Địa chỉ</a>
-                    <a href="#" className="list-group-item list-group-item-action ps-5">Đổi mật khẩu</a>
+                <Link to="/profile-info" className="list-group-item list-group-item-action ps-5 text-primary">Hồ sơ</Link>
+                <Link to="/adress" className="list-group-item list-group-item-action ps-5 text-primary">Địa chỉ</Link>
+                <Link to="/changepassword" className="list-group-item list-group-item-action ps-5 text-primary">Đổi mật khẩu</Link>
                 </div>
             </div>
         </aside>

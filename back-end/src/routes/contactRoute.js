@@ -12,4 +12,4 @@ routerContact.post('/', postCreateContactAPI);
 routerContact.put('/', putUpdateContactAPI);
 
 
-module.exports = routerCategory;
+module.exports = routerContact;

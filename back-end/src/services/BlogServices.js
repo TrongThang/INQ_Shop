@@ -1,9 +1,35 @@
 const { Op, where } = require('sequelize');
 const Blog = require('../models/Blog');
+const Category = require('../models/Category');
 
+
+
+const getAllBlog_user = async () => {
+    return await Blog.findAll({
+        where: {
+            status: 1
+        },
+        include: [
+            {
+                model: Category,
+                as: 'category',
+                attributes: ['id', 'nameCategory']
+            }
+        ]
+    });
+};
 const getAllBlog = async () => {
-    return await Blog.findAll();
-}
+    return await Blog.findAll({
+        include: [
+            {
+                model: Category,
+                as: 'category',
+                attributes: ['id', 'nameCategory']
+            }
+         
+        ]
+    });
+};
 
 const getBlog = async (data) => {
     const id = data.id;
@@ -44,4 +70,4 @@ const updateStatusAttributeGroup = async ({id, status}) => {
     return updatedCount;
 }
     
-module.exports = { getAllBlog, getBlog, postCreateBlog, putUpdateBlog };
+module.exports = { getAllBlog, getBlog, postCreateBlog, putUpdateBlog,getAllBlog_user };

@@ -3,6 +3,25 @@ import Carou from "../../../resource/img/carousel-2.png";
 import Blog from "../../../resource/img/blog-1.png";
 
 const Carousel = () => {
+  const [carousel, setCarousel] = useState([]);
+
+  const fetchDataCategories = async () => {
+    try {
+      const response = await fetch('http://localhost:8081/api/sildeshow');
+      const result = await response.json();
+      console.log(result.data)
+
+      setCarousel(result.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+    }
+  };
+
+  useEffect(() => {
+    fetchDataCategories()
+  }, []);
+
   const slides = [
     {
       id: 1,

@@ -220,7 +220,7 @@ const updateStatusReviewForDevice = async ({ id, status }) => {
 }
 
 module.exports = {
-    getAllDevice_User, getAllDeviceForStatus, getAllDevice_Admin, 
+    getAllDevice_User, getAllDeviceByStatus, getAllDevice_Admin, 
     getDeviceById, getTOPDeviceLiked,
     createDevice, updateDevice, updateStatusDevice,
     updateStatusDeviceByCategory,

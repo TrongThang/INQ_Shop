@@ -7,7 +7,7 @@ const FeaturedDevices = () => {
 
     const fetchDataCategories = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/device/admin');
+            const response = await fetch('http://localhost:8081/api/device/featured');
             const result = await response.json();
             console.log(result.data)
 
@@ -73,8 +73,17 @@ const FeaturedDevices = () => {
                                     <div className="service-content p-4">
                                         <div className="service-content-inner">
                                             <Link to="/details" className="line-clamp-title-device  h4 mb-2 text-decoration-none">{device.name}</Link>
-                                            <p className="mb-2 text-primary fw-bold">{device.sellingPrice}</p>
-                                            <p className="mb-4 line-clamp-p">{device.descriptionNormal}</p>
+                                            <p className="mb-2 text-primary fw-bold">
+                                                {Number(device.sellingPrice).toLocaleString("vi-VN", {
+                                                    style: "currency",
+                                                    currency: "VND",
+                                                })}
+                                            </p>
+                                            <p className="mb-2 line-clamp-p">{device.descriptionNormal}</p>
+                                            <p className="mb-2">
+                                                <span className="stars" style={{ '--rating': device.reviews[0]?.averageRating || 5 }}></span>
+                                                {" "}({parseFloat(device.reviews[0]?.averageRating || 5).toFixed(1)}/5)
+                                            </p>
                                             <Link to="/details" className="btn btn-primary rounded-pill py-2 px-4">Chi tiết</Link>
                                         </div>
                                     </div>

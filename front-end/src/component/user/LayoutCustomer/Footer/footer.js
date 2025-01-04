@@ -35,8 +35,8 @@ export default function Footer({ categories }) {
                                 <div className="col-md-6 col-lg-6 col-xl-3">
                                     <div className="footer-item">
                                         <h4 className="text-white mb-4">Liên kết</h4>
-                                        <a href="#"><i className="fas fa-angle-right me-2"></i> Trang chủ</a>
-                                        <a href="#" onClick={handleCategoryClick}>
+                                        <a ><i className="fas fa-angle-right me-2"></i> Trang chủ</a>
+                                        <a  onClick={handleCategoryClick}>
                                             <i className="fas fa-angle-right me-2"></i> Danh mục
                                         </a>
                                         {isCategoryVisible && (

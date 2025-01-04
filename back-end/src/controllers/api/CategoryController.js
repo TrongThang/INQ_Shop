@@ -1,7 +1,7 @@
 const Category = require('../../models/Category.js');
 
 const {
-    getAllCategory_User, getAllCategory_Admin,
+    getAllCategory_User, getCategoryByUser, getAllCategory_Admin,
     getCategoryById, getChildrenCategory,
     createCategory, updateCategory, updateStatusCategory
 } = require('../../services/CategoryServices.js');
@@ -24,6 +24,23 @@ const getAllCategory_UserAPI = async (req, res) => {
         })
     }
     
+}
+const getCategoryByUserAPI = async (req, res) => {
+    try {
+        const results = await getCategoryByUser();
+        
+        console.log('Category API: ', results);
+        return res.status(200).json({
+            errorCode: 0,
+            data: results
+        })
+    } catch (error) {
+        return res.status(401).json({
+            errorCode: 1,
+            error: error
+        })
+    }
+
 }
 
 const getAllCategory_AdminAPI = async (req, res) => {
@@ -99,7 +116,7 @@ const updateStatusCategoryAPI = async (req, res) => {
 }
     
 module.exports = {
-    getAllCategory_UserAPI, getAllCategory_AdminAPI, 
+    getAllCategory_UserAPI, getAllCategory_AdminAPI, getCategoryByUserAPI,
     getCategoryByIdAPI, getChildrenCategoryAPI,
     postCreateCategoryAPI, putUpdateCategoryAPI,
     updateStatusCategoryAPI

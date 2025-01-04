@@ -11,7 +11,7 @@ export default function User() {
 
     const fetchDataCategories = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/category');
+            const response = await fetch('http://localhost:8081/api/category');
             const result = await response.json();
 
             setCategories(result.data);
@@ -30,7 +30,6 @@ export default function User() {
             <HeaderUser categories={categories} isLogged={isLogged} />
                 <Outlet />
             <FooterUser categories={categories} />
-                
         </>
     )
 }

@@ -2,7 +2,7 @@ const connection = require('../../config/database.js');
 const Device = require('../../models/Device.js');
 
 const {
-    getAllDevice_User,getAllDeviceForStatus, getAllDevice_Admin, getDeviceById,
+    getAllDevice_User,getAllDeviceByStatus, getAllDevice_Admin, getDeviceById,
     createDevice, updateDevice, updateStatusDevice,
     //Review For Device
     getAllReviewForDevice, createReviewForDevice, updateReviewForDevice, updateStatusReviewForDevice,
@@ -33,7 +33,7 @@ const getAllDevice_FeaturedAPI = async (req, res) => {
     try {
         const { status = 3, limit = 10 } = req.body;
 
-        const results = await getAllDeviceForStatus(status, parseInt(limit));
+        const results = await getAllDeviceByStatus(status, parseInt(limit));
 
         return res.status(200).json({
             errorCode: 0,
@@ -51,7 +51,7 @@ const getAllDevice_NewAPI = async (req, res) => {
     try {
         const { status = 4, limit = 10 } = req.body;
 
-        const results = await getAllDeviceForStatus(status, parseInt(limit));
+        const results = await getAllDeviceByStatus(status, parseInt(limit));
 
         return res.status(200).json({
             errorCode: 0,
@@ -69,7 +69,7 @@ const getAllDevice_BestSellingAPI = async (req, res) => {
     try {
         const { status = 5, limit = 10 } = req.body;
 
-        const results = await getAllDeviceForStatus(status, parseInt(limit));
+        const results = await getAllDeviceByStatus(status, parseInt(limit));
 
         return res.status(200).json({
             errorCode: 0,

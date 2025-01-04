@@ -1,5 +1,6 @@
 const sequelize = require('../config/database');
 const { DataTypes } = require('sequelize');
+const Category = require('./Category');
 
 Blog = sequelize.define('blog', {
   id: {
@@ -85,4 +86,5 @@ Blog = sequelize.define('blog', {
   ]
 });
 
+Blog.belongsTo(Category, { foreignKey: 'idCategory', as: 'category' });
 module.exports = Blog;

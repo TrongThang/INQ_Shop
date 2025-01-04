@@ -1,7 +1,24 @@
+import React, { useEffect, useState } from "react";
 import BlogCart from "../../../component/user/Introdution/blogCart";
 import Pagination from "../../../component/Shared/Pagination/pagination";
 
 function ListBlogPage() {
+    const [blogs, setBlogs] = useState([]);
+
+    useEffect(() => {
+        const fetchBlogs = async () => {
+            try {
+                const response = await fetch('http://localhost:8081/api/blog');
+                const data = await response.json();
+                setBlogs(data.data);
+            } catch (error) {
+                console.error("Error fetching blogs:", error);
+            }
+        };
+
+        fetchBlogs();
+    }, []);
+
     return (
         <div className="container-fluid blog py-5">
             <div className="container py-5">
@@ -16,18 +33,14 @@ function ListBlogPage() {
                     </h5>
                 </div>
                 <div className="row g-4 justify-content-center">
-                    <BlogCart />
-                    <BlogCart />
-                    <BlogCart />
-                    <BlogCart />
-                    <BlogCart />
-                    <BlogCart />
-
+                    {blogs.map((blog, index) => (
+                        <BlogCart key={index} blog={blog} />
+                    ))}
                     <Pagination />
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default ListBlogPage;

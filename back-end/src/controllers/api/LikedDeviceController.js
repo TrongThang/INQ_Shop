@@ -11,9 +11,8 @@ const {
 const getAllLikedDeviceAPI = async (req, res) => {
     //TO DO SOMETHING
     try{
-        const data = req.body;
-        console.log(data);
-        const allLikedDevices = await getAllLikedDevices(data);
+        const { idCustomer } = req.params;
+        const allLikedDevices = await getAllLikedDevices(idCustomer);
         res.status(200).json({
             success: true,
             data: allLikedDevices
@@ -56,8 +55,7 @@ const postAddToLikedDeviceAPI = async (req, res) => {
 const removeLikedDeviceAPI = async (req, res) => {
     //TO DO SOMETHING
     try{
-        const data = req.body;
-        const likedDevice = await removeLikedDevice(data);
+        const likedDevice = await removeLikedDevice(req.params);
         if(!likedDevice){
             return res.status(404).json({
                 success: false,
@@ -101,12 +99,10 @@ const removeAllLikedDeviceAPI = async (req, res) => {
 const removeAllOrSingleLikedDeviceAPI = async (req, res) => {
     //TO DO SOMETHING
     try {
-        const data = req.body;
-        console.log(data);
-        const idDevice = data.idDevice;
-        if (idDevice) {
+        const { data } = req.params;
+        if (data.idDevice) {
             // Xóa một sản phẩm yêu thích
-            removeLikedDeviceAPI(req, res)
+            removeLikedDeviceAPI(idDevice)
         } else {
             // Xóa tất cả sản phẩm yêu thích
             removeAllLikedDeviceAPI(req, res);
@@ -121,5 +117,6 @@ const removeAllOrSingleLikedDeviceAPI = async (req, res) => {
 module.exports = {
     getAllLikedDeviceAPI,
     postAddToLikedDeviceAPI,
-    removeAllOrSingleLikedDeviceAPI
+    removeLikedDeviceAPI,
+    removeAllLikedDeviceAPI,
 }

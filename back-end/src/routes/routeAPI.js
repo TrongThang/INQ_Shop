@@ -12,14 +12,16 @@ const routerAddressBook = require('./addressBookAPI');
 const routerLikeDevice = require('./likedDeviceAPI');
 
 const routerBlog = require('./blogRoute')
-// const routerContact = require('./contactRouter')
+
+const routerContact = require('./contactRoute')
+
 const routerCart = require('./cartRoute');
 
 const routerDevice = require('./deviceRoute');
 
 router.use('/device', routerDevice);
 router.use('/blog', routerBlog);
-// router.use('/contact', routerContact);
+router.use('/contact', routerContact);
 router.use('/cart', routerCart);
 router.use('/customer', routerCustomer);
 router.use('/employee', routerEmployee);

@@ -2,7 +2,7 @@ const connection = require('../../config/database.js');
 const Device = require('../../models/Device.js');
 
 const {
-    getAllDevice_User,getAllDeviceForStatus, getAllDevice_Admin, getDeviceById,
+    getAllDevice_User, getAllDevice_Admin, getDeviceBySlug,
     createDevice, updateDevice, updateStatusDevice,
     //Review For Device
     getAllReviewForDevice, createReviewForDevice, updateReviewForDevice, updateStatusReviewForDevice,
@@ -145,9 +145,10 @@ const getAllDeviceByAdminAPI = async (req, res) => {
     }
 }
 
-const getDeviceByIdAPI = async (req, res) => {
+const getDeviceBySlugAPI = async (req, res) => {
     try {
-        const results = await getDeviceById(req.params.idDevice);
+        console.log(req.params.slug);
+        const results = await getDeviceBySlug(req.params.slug);
 
         return res.status(200).json({
             errorCode: 0,
@@ -289,7 +290,7 @@ const updateStatusReviewForDeviceAPI = async (req, res) => {
 
 module.exports = {
     getAllDeviceByUserAPI,getAllDevice_FeaturedAPI, getAllDevice_NewAPI, getAllDevice_BestSellingAPI, getAllDeviceByAdminAPI,
-    getDeviceByIdAPI, getTOPDeviceLikedAPI,
+    getDeviceBySlugAPI, getTOPDeviceLikedAPI,
     postCreateDeviceAPI, putUpdateDeviceAPI,
     updateStatusDeviceAPI,
     //Review For Device

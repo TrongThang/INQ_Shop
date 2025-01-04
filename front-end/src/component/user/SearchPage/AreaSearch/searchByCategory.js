@@ -3,6 +3,15 @@ import { useEffect, useState } from "react";
 export default function SearchByCategory({ searchResult }) {
     const [categories, setCategories] = useState([]);
 
+    const handleCheckCategory = (categoryId, isChecked) => {
+        setCategories((prevCategories) =>
+            prevCategories.map((category) =>
+                category.id === categoryId
+                    ? { ...category, checked: isChecked }
+                    : category
+            )
+        );
+    };
     // Lọc danh mục duy nhất từ searchResult
     useEffect(() => {
         const uniqueCategories = [];
@@ -14,6 +23,7 @@ export default function SearchByCategory({ searchResult }) {
                 uniqueCategories.push({
                     id: item.categoryDevice.id,
                     name: item.categoryDevice.nameCategory,
+                    checked: false,
                 });
             }
         });
@@ -33,6 +43,7 @@ export default function SearchByCategory({ searchResult }) {
                                 className="custom-control-input"
                                 value={category.id}
                                 id={`cat-${category.id}`}
+                                onChange={(e) => handleCheckCategory(category.id, e.target.checked)}
                             />
                             <label
                                 className="text-primary custom-control-label ms-2 fw-bold"

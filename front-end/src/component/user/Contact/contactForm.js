@@ -1,6 +1,5 @@
 import React from 'react';
 import modernHouseImg from '../../../resource/img/Modern house.png';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 const ContactForm = () => {
     return (

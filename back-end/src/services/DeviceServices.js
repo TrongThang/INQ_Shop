@@ -1,5 +1,5 @@
 const connection = require('../config/database');
-const { Op, Sequelize, or } = require('sequelize');
+const { Op, Sequelize, or, where } = require('sequelize');
 const { convertToSlug } = require('../helpers/stringHelper');
 const Category = require('../models/Category');
 const Device = require('../models/Device');
@@ -120,12 +120,17 @@ const getAllDevice_Admin = async () => {
     return await data;
 }
 
-const getDeviceById = async (id) => {
-    return await Device.findByPK(id, {
+const getDeviceBySlug = async (slug) => {
+    console.log(slug);
+    return await Device.findOne({
+        where: {
+            slug: slug
+        },
         include: [
             {
                 model: Category,
-                as: 'categoryDevice'
+                as: 'categoryDevice',
+                attributes: ['id', 'nameCategory']
             }
         ],
     });
@@ -227,7 +232,7 @@ const updateStatusReviewForDevice = async ({ id, status }) => {
 
 module.exports = {
     getAllDevice_User, getAllDeviceByStatus, getAllDevice_Admin, 
-    getDeviceById, getTOPDeviceLiked,
+    getDeviceBySlug, getTOPDeviceLiked,
     createDevice, updateDevice, updateStatusDevice,
     updateStatusDeviceByCategory,
 

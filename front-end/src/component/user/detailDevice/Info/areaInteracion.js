@@ -1,13 +1,10 @@
 import {useState} from 'react';
-export default function AreaInteraction() {
+export default function AreaInteraction({ setQuantity }) {
     const [count, setCount] = useState(1);
     const handleMinus = () => {
-        // if (count <= 1) {
-        //     setCount(1);
-        //     return;
-        // }
-        // setCount(count => count - 1);
         setCount((prevCount) => Math.max(prevCount - 1, 1));
+
+        setQuantity(count - 1);
     }
     const handleInput = (value) => {
         const numericValue = parseInt(value);
@@ -15,10 +12,11 @@ export default function AreaInteraction() {
         // Kiểm tra nếu numericValue là số hợp lệ và lớn hơn 0
         if (!isNaN(numericValue) && numericValue > 0) {
             setCount(numericValue);
+            setQuantity(numericValue);
         }
     }
     return (
-        <div class="input-group w-50 mb-3">
+        <div class="input-group w-50 mb-3 mt-5">
             <h5>Số lượng:</h5>
             <div class="d-flex align-items-center">
                 <button

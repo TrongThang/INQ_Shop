@@ -14,7 +14,7 @@ routerSlideShow.get('/:id', getSlideByIdAPI); //
 
 routerSlideShow.post('/', createSlideAPI);    //
 routerSlideShow.put('/:id', updateSlideAPI);   //
-routerSlideShow.delete('/:id', hideSlideAPI);   //
+routerSlideShow.put('/status/:id', hideSlideAPI);   //
 
 
 module.exports = routerSlideShow;

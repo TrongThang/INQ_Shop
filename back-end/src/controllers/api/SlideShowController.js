@@ -3,7 +3,7 @@ const {
     getSlideById,
     createSlide,
     updateSlide,
-    hideSlide
+    updateStatusSlide
   } = require('../../services/SlideShowServices');
   
   // Lấy danh sách slide
@@ -51,9 +51,10 @@ const {
       if (!link || link.trim() === "") {
           return res.status(400).json({ success: false, message: "Link là bắt buộc." });
       }
-      if (image && !/^https?:\/\/.*\.(jpg|jpeg|png|gif|bmp|svg)$/.test(image)) {
-          return res.status(400).json({ success: false, message: "Image phải là URL hợp lệ (jpg, jpeg, png, gif)." });
-      }
+      if (image && !/\.(jpg|jpeg|png|gif|bmp|svg)$/i.test(image)) {
+        return res.status(400).json({ success: false, message: "Image phải là tệp hợp lệ (jpg, jpeg, png, gif, bmp, svg)." });
+    }
+
      
 
       // Tạo slide mới nếu dữ liệu hợp lệ
@@ -112,7 +113,7 @@ const {
   const hideSlideAPI = async (req, res) => {
     try {
       const { id } = req.params;
-      const result = await hideSlide(id);
+      const result = await updateStatusSlide(id);
       if (result[0]) {
         res.status(200).json({ success: true, message: 'Slide hidden successfully.' });
       } else {

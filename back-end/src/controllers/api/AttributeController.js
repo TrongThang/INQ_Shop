@@ -1,5 +1,3 @@
-const connection = required('../config/database');
-const Attribute = require('../models/Attribute.js');
 
 const {
     getAllAttribute, getAttributeByCategoryAndAncestors, getAttributeById,
@@ -9,8 +7,8 @@ const {
     //Attr Group 
     getAllAttributeGroup, getAttributeGroupById,
     createAttributeGroup, updateAttributeGroup,
-    updateStatusAttributeGroupư
-} = reqire('../service/AttributeServices');
+    updateStatusAttributeGroup
+} = require('../../../src/services/AttributeServices');
 
 const getAllAttributeAPI = async (req, res) => {
     try {
@@ -64,9 +62,9 @@ const getAttributeByCategoryAPI = async (req, res) => {
 };
 
 const postCreateAttributeAPI = async (req, res) => {
+    console.log(req.body);
     try {
         const results = await createAttribute(req.body);
-
         return res.status(200).json({
             errorCode: 0,
             data: results

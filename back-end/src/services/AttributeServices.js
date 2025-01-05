@@ -44,22 +44,15 @@ const getAttributeByCategoryAndAncestors = async ( idCate ) => {
 }
 
 const getAttributeById = async ( id ) => {
-    const data = await Attribute.findByPk(id, {
-        include: [
-            {
-                model: Category,
-                as: 'categoryAttribute'
-            },
-        ],
-    });
-
+    const data = await Attribute.findByPk(id);
+    console.log(data);
     return await data;
 }
 /// ATTRIBUTE
 const createAttribute = async ( body ) => {
-    const Attribute = await Attribute.create( body )
+    const Attr = await Attribute.create( body )
 
-    return Attribute;
+    return Attr;
 }
 
 const updateAttribute = async ({ id, ...body }) => { 

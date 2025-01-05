@@ -4,6 +4,7 @@ const { DataTypes } = require('sequelize');
 const Attribute = sequelize.define('attribute', {
   id: {
     type: DataTypes.INTEGER,
+    autoIncrement: true,
     allowNull: false,
     primaryKey: true
   },
@@ -43,6 +44,8 @@ const Attribute = sequelize.define('attribute', {
   sequelize,
   tableName: 'attribute',
   timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
   indexes: [
     {
       name: "PRIMARY",

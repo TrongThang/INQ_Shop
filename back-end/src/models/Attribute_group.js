@@ -7,7 +7,7 @@ const Attribute_group = sequelize.define('attribute_group', {
     allowNull: false,
     primaryKey: true
   },
-  nameAttribute: {
+  nameAttributeGroup: {
     type: DataTypes.STRING(500),
     allowNull: true
   },

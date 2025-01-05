@@ -12,6 +12,7 @@ const routerAddressBook = require('./addressBookAPI');
 const routerLikeDevice = require('./likedDeviceAPI');
 
 const routerBlog = require('./blogRoute')
+const routerAttribute= require('./attributeRoute')
 // const routerContact = require('./contactRouter')
 const routerCart = require('./cartRoute');
 
@@ -29,5 +30,6 @@ router.use('/category', routerCategory);
 router.use('/cartCookie', cartRouter);
 router.use('/addressBook', routerAddressBook);
 router.use('/likedDevice', routerLikeDevice);
+router.use('/attribute', routerAttribute);
 
 module.exports = router;

@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import RegisterPopup from '../../../../component/user/Register/formRegister';
+import Register from "../../../../pages/user/Account/registerPage";
+import ButtonPage from "../../../buttonPage";
 
 export default function AreaCustomer({isLogged}) {
     const [deviceInCart, setDeviceInCart] = useState([]);
@@ -69,7 +72,8 @@ export default function AreaCustomer({isLogged}) {
                             :
                             <>
                                 <Link to="\sign-in" className="dropdown-item">Đăng nhập</Link>
-                                <Link to="\sign-in" className="dropdown-item">Đăng ký</Link>
+                                <button className="dropdown-item" data-bs-toggle="modal" data-bs-target="#registerModal">Đăng ký</button>
+                                <RegisterPopup />
                             </>
                         }
                     </div>

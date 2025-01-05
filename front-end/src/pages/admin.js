@@ -9,13 +9,14 @@ import '../resource/assets/css/responsive.css'
 
 
 import Sidebar from "../component/admin/Layout/Sidebar/sidebar";
-import ContentAdmin from '../component/admin/Layout/contentAdmin.js'
+import ContentAdmin from '../component/admin/Layout/contentAdmin.js';
 
 export default function Admin() {
     return (
         <>
             <div class="page-container">
                 <Sidebar />
+                
                 <ContentAdmin />
             </div>
         </>

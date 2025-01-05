@@ -8,7 +8,7 @@ export default function Specifications() {
             </h2>
             <div
                 id="collapseOne"
-                class="accordion-collapse collapse"
+                class=""
                 aria-labelledby="headingOne"
                 data-bs-parent="#accordionExample"
             >

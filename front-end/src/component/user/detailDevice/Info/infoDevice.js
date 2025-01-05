@@ -25,15 +25,20 @@ export default function InfoDevice({ device, customerLiked = false }) {
             </h1>
             <div class="rating d-flex align-items-center">
             <div>
-                {/* {[...Array(device.starRating)].map((_, i) => (
+                <i className="fas fa-star text-warning"></i>
+                <i className="fas fa-star text-warning"></i>
+                <i className="fas fa-star text-warning"></i>
+                <i className="fas fa-star text-warning"></i>
+                    
+                {/* {[...Array(device.rating)].map((_, i) => (
                     <i key={i} className="fas fa-star text-warning"></i>
                 ))}
-                {[...Array(5 - device.starRating)].map((_, i) => (
-                    <i key={i + device.starRating} className="far fa-star text-warning"></i>
+                {[...Array(5 - device.rating)].map((_, i) => (
+                    <i key={i + device.rating} className="far fa-star text-warning"></i>
                 ))} */}
             </div>
 
-                <span class="ms-2 text-muted">({ device.starRating }/5)</span>
+                <span class="ms-2 text-muted">( { 4 }/5 )</span>
             </div>
             <h4><strong>Giá:</strong> <span class="text-primary fw-bold">{Number(device.sellingPrice).toLocaleString()}</span> VNĐ</h4>
             

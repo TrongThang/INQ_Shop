@@ -6,7 +6,7 @@ const DeviceCard = ({ device }) => {
     const { addToCart } = useCart();
     
     return (
-        <div className="col-xl-2 col-lg-2 product-items wow fadeInUp me-3" data-wow-delay="0.2s" style={{ padding: "0px"}}>
+        <div className="col-xl-2 col-lg-2 product-items wow fadeInUp me-3 mb-5" data-wow-delay="0.2s" style={{ padding: "0px"}}>
             <div
                 className="service-item"
                 onClick={() => addToCart(device, 1)}
@@ -21,8 +21,8 @@ const DeviceCard = ({ device }) => {
                 <div className="service-content-inner">
                     <Link
                         to={`/device/${device.slug}`}
-                        className="line-clamp-title-device h4 mb-2 text-decoration-none"
-                        style={{ maxWidth: "200px", maxHeight: "55px", minWidth: "200px", minHeight: "55px" }}
+                        className="line-clamp-title-device h4  text-decoration-none"
+                        style={{ maxHeight: "55px", minHeight: "55px" }}
                     >{device.name}</Link>
                     <p className="mb-2 text-primary fw-bold">
                         {Number(device.sellingPrice).toLocaleString()} VNĐ

@@ -4,7 +4,7 @@ export default function PlaceToRating() {
             <div className="mb-3">
                 <label className="form-label text- display-6">Đánh giá</label>
                 <div className="rating d-flex align-items-center">
-                    <span className="stars">
+                    <span >
                         <i className="fa-regular fa-star" data-value="1"></i>
                         <i className="fa-regular fa-star" data-value="2"></i>
                         <i className="fa-regular fa-star" data-value="3"></i>

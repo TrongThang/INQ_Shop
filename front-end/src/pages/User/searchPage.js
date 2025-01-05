@@ -52,7 +52,10 @@ export default function SearchPage() {
         <div className="mt-5 col-12 row">
             <AreaSearch searchResult={searchResult} />
             <div className="row col-xl-10">
+
                 <AreaSort onSortChange={handleSortChange} />
+                <h3>Có tổng { searchResult.length } thiết bị được tìm thấy</h3>
+
                 <ListDeviceSearch data={searchResult} />
             </div>
         </div>

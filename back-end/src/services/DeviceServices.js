@@ -5,6 +5,7 @@ const Category = require('../models/Category');
 const Device = require('../models/Device');
 // const { Device, ReviewDevice } = require('../models/Init-models');
 const ReviewDevice = require('../models/Review_device');
+const Customer = require('../models/Customer');
 
 // 0: Sản phẩm ngừng bán
 // >= 1: Sản phẩm đang bán
@@ -131,8 +132,19 @@ const getDeviceBySlug = async (slug) => {
                 model: Category,
                 as: 'categoryDevice',
                 attributes: ['id', 'nameCategory']
+            },
+            {
+                model: ReviewDevice,
+                as: 'reviews',
+                attributes: ['comment', 'rating', 'created_at', 'updated_at'],
+                include: [{
+                    model: Customer,
+                    as: 'customerReview',
+                    attributes: ['surname', 'lastName', 'image']
+                }]
             }
         ],
+        logging: true,
     });
 }
 

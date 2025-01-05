@@ -35,16 +35,8 @@ const ReviewDevice = sequelize.define('review_device', {
     type: DataTypes.STRING(500),
     allowNull: true
   },
-  image: {
-    type: DataTypes.STRING(500),
-    allowNull: true
-  },
   note: {
     type: DataTypes.STRING(500),
-    allowNull: true
-  },
-  hide_at: {
-    type: DataTypes.DATE,
     allowNull: true
   },
   status: {
@@ -55,6 +47,8 @@ const ReviewDevice = sequelize.define('review_device', {
   sequelize,
   tableName: 'review_device',
   timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
   indexes: [
     {
       name: "PRIMARY",
@@ -82,6 +76,10 @@ const ReviewDevice = sequelize.define('review_device', {
 });
 
 const Device = require('../models/Device');
+const Customer = require('./Customer');
+// ReviewDevice.belongsTo(Device, { foreignKey: 'idDevice', as: 'device' });
+ReviewDevice.belongsTo(Customer, { foreignKey: 'idCustomer', as: 'customerReview' })
+Customer.hasMany(ReviewDevice, { foreignKey: 'id', as: 'customerReview' })
 // ReviewDevice.belongsTo(Device, { foreignKey: 'idDevice', as: 'device' });
 
 module.exports = ReviewDevice;

@@ -13,7 +13,7 @@ export default function AreaSort({ onSortChange }) {
             <label htmlFor="sort" className="form-label">Sắp xếp theo:</label>
             <select
                 id="sort"
-                className="form-select"
+                className="form-select w-25"
                 value={sortOption}
                 onChange={handleSortChange}
             >

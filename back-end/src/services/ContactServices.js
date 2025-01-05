@@ -19,6 +19,7 @@ const putUpdateContact = async (data) => {
     const updateContact = await Contact.findByPk(id);
     return await updateContact.update(data);
 }
+
 const checkContactByEmail = async (email) => {
     try {
         const result = await Contact.findOne({
@@ -36,8 +37,11 @@ const checkContactByEmail = async (email) => {
 
 module.exports = {
     checkContactByEmail,
+
     getAllContact,
     getContact,
+
     postCreateContact,
+    
     putUpdateContact,
 };

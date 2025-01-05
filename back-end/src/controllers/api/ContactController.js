@@ -29,10 +29,10 @@ const getAllContactAPI = async (req, res) => {
 //hàm xử lý lấy liên hệ theo yêu cầu
 const getContactAPI = async (req, res) => {
     try {
-        const data = req.body;
+        const { id } = req.params;
 
-        const result = await getContact(data);
-        // Nếu không tìm thấy liên hệ
+        const result = await getContact({ id });
+
         if (!result) {
             return res.status(404).json({ message: "Contact not found" });
         }
@@ -127,10 +127,11 @@ const postCreateContactAPI = async (req, res) => {
 //hàm xử lý cập nhật liên hệ
 const putUpdateContactAPI = async (req, res) => {
     try {
+        const { id } = req.params;
         const data = req.body;
-        console.log("Request Data:", data);
+
         // Cập nhật liên hệ với dữ liệu đã kiểm tra
-        const result = await putUpdateContact(data);
+        const result = await putUpdateContact({ id, ...data });
 
         if (!result) {
             return res.status(404).json({ message: "Contact not found" });
@@ -140,7 +141,7 @@ const putUpdateContactAPI = async (req, res) => {
         res.status(200).json({
             errorCode: 0,
             data: result,
-            message: "successfully"
+            message: "Contact updated successfully"
         });
     } catch (error) {
         console.error("Error updating contact:", error.message);
@@ -151,6 +152,7 @@ const putUpdateContactAPI = async (req, res) => {
 };
 
 module.exports = {
+    getContactAPI,
     getAllContactOrgetOneContact,
     postCreateContactAPI,
     putUpdateContactAPI,

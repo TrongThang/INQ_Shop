@@ -2,13 +2,13 @@ import React from "react";
 import { useState, useEffect } from "react";
 import UpdateAttributeForm from "../../../component/admin/CRUD_attribute/updateAttributeForm";
 
-function CRUDAttribute({ onback, attributeId}) {
+function UpdateAttribute({ onback, attributeId}) {
     const [category, setCategory] = useState([]);
     const [groupAttr, setGroupAttr] = useState([]);
     const [attribute, setAttribute] = useState([]);
     const fetchDataAtrribute = async () => {
         try {
-            // Gửi yêu cầu lấy dữ liệu đến API
+            // Gửi yêu cầu lấy dữ liệu thuộc tính đến API
             const response = await fetch(`http://localhost:8081/api/attribute/${attributeId}`);
             const result = await response.json();
             setAttribute(result.data);
@@ -18,7 +18,7 @@ function CRUDAttribute({ onback, attributeId}) {
     };
         const fetchDataCategory = async () => {
             try {
-                // Gửi yêu cầu lấy dữ liệu đến API
+                // Gửi yêu cầu lấy dữ liệu danh mục đến API
                 const response = await fetch(`http://localhost:8081/api/category`);
                 const result = await response.json();
                 setCategory(result.data);
@@ -28,7 +28,7 @@ function CRUDAttribute({ onback, attributeId}) {
         };
         const fetchDataGroupAttr = async () => {
             try {
-                // Gửi yêu cầu lấy dữ liệu đến API
+                // Gửi yêu cầu lấy dữ liệu nhóm thuộc tính đến API
                 const response = await fetch(`http://localhost:8081/api/attribute/groupAttr`);
                 const result = await response.json();
                 setGroupAttr(result.data);
@@ -51,4 +51,4 @@ function CRUDAttribute({ onback, attributeId}) {
     );
 }
 
-export default CRUDAttribute;
+export default UpdateAttribute;

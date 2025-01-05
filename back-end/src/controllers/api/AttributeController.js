@@ -80,8 +80,9 @@ const postCreateAttributeAPI = async (req, res) => {
 
 const putUpdateAttributeAPI = async (req, res) => {
     try {
-        const results = await updateAttribute(req.body);
-
+        const data = req.body;
+        const {id} = req.params;
+        const results = await updateAttribute({id, data});
         return res.status(200).json({
             errorCode: 0,
             data: results
@@ -97,9 +98,9 @@ const putUpdateAttributeAPI = async (req, res) => {
 
 const updateStatusAttributeAPI = async (req, res) => {
     try {
-        const id = req.body.id;
+        const { id }= req.params;
         const status = req.body.status;
-        const results = await updateStatusAttribute(id, status);
+        const results = await updateStatusAttribute({id, status});
 
         return res.status(200).json({
             errorCode: 0,

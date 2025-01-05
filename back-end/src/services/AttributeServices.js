@@ -55,21 +55,25 @@ const createAttribute = async ( body ) => {
     return Attr;
 }
 
-const updateAttribute = async ({ id, ...body }) => { 
-    const [updatedCount] = await Attribute.update(body, {
-        where: { id }
+const updateAttribute = async ({ id, data }) => { 
+    if (data.required !== undefined) {
+        data.required = data.required === "1" || data.required === 1 || data.required === true;
+    }
+    const updatedAttr = await Attribute.update(data, {
+        where: { id: id }
     });
 
-    return updatedCount;
+    return updatedAttr;
 }
 
 const updateStatusAttribute = async ({id, status}) => {
-    const [updatedCount] = await Attribute.update(
+    console.log(id, status);
+    const updatedAttr = await Attribute.update(
         { status: status }, 
-        { where: { id } }
+        { where:  { id : id } }
     );
 
-    return updatedCount;
+    return updatedAttr;
 }
 /// END ATTRIBUTE
 

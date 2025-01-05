@@ -7,15 +7,22 @@ const UpdateAttributeForm = ({ categories, groupAtrrs, attribute }) => {
     const [nameAttribute, setNameAttribute] = useState("");
     const [idGroupAttribute, setIdGroupAttribute] = useState("");
     const [idCategory, setIdCategory] = useState("");
-    const [dataType, setDataType] = useState("");
+    const [datatype, setDataType] = useState("");
     const [required, setRequired] = useState("");
     const [status, setStatus] = useState("");
-
     // Cập nhật state khi nhận được giá trị từ prop 'attribute'
     useEffect(() => {
+        const formatDate = (date) => {
+            const d = new Date(date);
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0'); // Thêm số 0 nếu tháng nhỏ hơn 10
+            const day = String(d.getDate()).padStart(2, '0'); // Thêm số 0 nếu ngày nhỏ hơn 10
+            return `${year}-${month}-${day}`;
+        };
+
         if (attribute) {
-            setCreatedAt(attribute.createdAt);
-            setUpdatedAt(attribute.updatedAt);
+            setCreatedAt(formatDate(attribute.created_at));
+            setUpdatedAt(formatDate(attribute.updated_at));
             setNameAttribute(attribute.nameAttribute);
             setIdGroupAttribute(attribute.idGroupAttribute);
             setIdCategory(attribute.idCategory);
@@ -26,22 +33,21 @@ const UpdateAttributeForm = ({ categories, groupAtrrs, attribute }) => {
         
         setLoading(false);
     }, [attribute]);
-
+    
     useEffect(() => {
         // Lấy ngày hiện tại
         const currentDate = new Date();
         const formattedDate = currentDate.toISOString().split("T")[0];
-        setCreatedAt(formattedDate);
         setUpdatedAt(formattedDate);
-
     }, []);
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         setLoading(true); // Bắt đầu loading
 
         const data = {
             nameAttribute,
-            dataType,
+            datatype,
             required,
             idGroupAttribute,
             idCategory,
@@ -49,10 +55,10 @@ const UpdateAttributeForm = ({ categories, groupAtrrs, attribute }) => {
             createdAt,
             updatedAt,
         };
-
+        console.log("data: ",data);
         try {
-            const response = await fetch("http://localhost:8081/api/attribute", {
-                method: "POST",
+            const response = await fetch(`http://localhost:8081/api/attribute/${attribute.id}`, {
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -153,7 +159,7 @@ const UpdateAttributeForm = ({ categories, groupAtrrs, attribute }) => {
                     <select
                         id="data-type"
                         className="form-select"
-                        value={dataType}
+                        value={datatype}
                         onChange={(e) => setDataType(e.target.value)}
                     >
                         <option value="" disabled hidden>Chọn kiểu dữ liệu</option>

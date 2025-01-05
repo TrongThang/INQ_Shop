@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import * as XLSX from "xlsx";
 
 import SearchAttribute from "../../../component/admin/Mana_attribute/searchAttribute";
 import AttributeList from "../../../component/admin/Mana_attribute/attributeList";
@@ -9,6 +10,13 @@ const ManaAttribute = () => {
     const [attribute, setAttribute] = useState([]);
     const [formState, setFormState] = useState(0);
     const [selectedAttributeId, setSelectedAttributeId] = useState([]);
+
+    const handleExport = () => {
+        const worksheet = XLSX.utils.json_to_sheet(attribute);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Attribute");
+        XLSX.writeFile(workbook, "attribute_data.xlsx");
+      };
 
     const handleFormAddClick = () => {
         setFormState(1); // Hiển thị form "Thêm"
@@ -21,6 +29,10 @@ const ManaAttribute = () => {
 
     const handleBackClick = () => {
         setFormState(0); // Quay lại trang chính
+    };
+
+    const handleDelete = (id) => {
+        setAttribute(attribute.filter((attr) => attr.id !== id));
     };
 
     const fetchDataAtrribute = async () => {
@@ -44,8 +56,8 @@ const ManaAttribute = () => {
             {formState === 0 && (
                 <div className="main-content-inner">
                     <div className="container-fluid py-4">
-                        <SearchAttribute onback={handleFormAddClick} />
-                        <AttributeList attributes={attribute} onEdit={handleFormUpdateClick}/>
+                        <SearchAttribute onback={handleFormAddClick} onExport={handleExport} attributes={attribute}   />
+                        <AttributeList attributes={attribute} onEdit={handleFormUpdateClick} onDelete={handleDelete}/>
                     </div>
                 </div>
             )}

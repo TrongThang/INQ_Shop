@@ -1,5 +1,12 @@
-const SearchAttribute = ({ onback }) => {
-  
+import * as XLSX from "xlsx";
+
+const SearchAttribute = ({ onback, onExport, attributes }) => {
+  const handleExport = () => {
+    const worksheet = XLSX.utils.json_to_sheet(attributes);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Attribute");
+    XLSX.writeFile(workbook, "attribute_data.xlsx");
+  };
   return (
     <>
             <div className="d-flex justify-content-between mb-3">
@@ -8,7 +15,7 @@ const SearchAttribute = ({ onback }) => {
                 <button className="btn btn-primary me-2" onClick={onback}>
                   <i className="bi bi-plus"></i> Thêm
                 </button>
-                <button className="btn btn-success ">
+                <button className="btn btn-success " onClick={handleExport}>
                   <i className="bi bi-download"></i> Xuất file
                 </button>
               </div>

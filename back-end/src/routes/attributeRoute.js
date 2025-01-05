@@ -14,5 +14,6 @@ routerAttribute.get('/groupAttr', getAllAttributeGroupAPI);
 routerAttribute.get('/:id', getAttributeByIdAPI);
 routerAttribute.post('/', postCreateAttributeAPI);
 routerAttribute.put('/:id', putUpdateAttributeAPI);
+routerAttribute.put('/updateStatus/:id', updateStatusAttributeAPI);
 
 module.exports = routerAttribute;

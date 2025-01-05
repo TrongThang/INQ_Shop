@@ -2,7 +2,27 @@ import React from "react";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 
-const AttributeList = ({ attributes, onEdit }) => {
+const AttributeList = ({ attributes, onEdit, onDelete }) => {
+    const handleDelete = async (id) => {
+        try {
+            const response = await fetch(`http://localhost:8081/api/attribute/updateStatus/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ status: 0 })
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                console.log("Xóa thành công:", result);
+            } else {
+                console.error("Lỗi khi xóa:", result);
+            }
+        } catch (error) {
+            console.error("Lỗi trong quá trình xóa:", error);
+        }
+    }
     return (
         <div className="card">
             <div className="table-responsive">
@@ -21,7 +41,6 @@ const AttributeList = ({ attributes, onEdit }) => {
                             <th>Ngày tạo</th>
                             <th>Ngày sửa</th>
                             <th>Trạng thái</th>
-                            <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -52,7 +71,7 @@ const AttributeList = ({ attributes, onEdit }) => {
                                                     <i className="bi bi-pencil"></i> Sửa
                                                 </a>
                                             </li>
-                                            <li>
+                                            <li onClick={() => handleDelete(item.id)}>
                                                 <a className="dropdown-item text-danger" href="#">
                                                     <i className="bi bi-trash"></i> Xóa
                                                 </a>

@@ -108,11 +108,12 @@ const updateAttributeGroup = async ({ id, ...body }) => {
 }
 
 const updateStatusAttributeGroup = async ({id, status}) => {
-    const [updatedCount] = await Attribute.update(
+  
+    const [updatedCount] = await AttributeGroup.update(
         { status: status }, 
         { where: { id } }
     );
-
+   
     return updatedCount;
 }
 

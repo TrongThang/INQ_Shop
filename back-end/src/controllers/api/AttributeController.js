@@ -1,5 +1,4 @@
-const connection = required('../config/database');
-const Attribute = require('../models/Attribute.js');
+
 
 const {
     getAllAttribute, getAttributeByCategoryAndAncestors, getAttributeById,
@@ -9,8 +8,8 @@ const {
     //Attr Group 
     getAllAttributeGroup, getAttributeGroupById,
     createAttributeGroup, updateAttributeGroup,
-    updateStatusAttributeGroupư
-} = reqire('../service/AttributeServices');
+    updateStatusAttributeGroup
+} = require('../../../src/services/AttributeServices');
 
 const getAllAttributeAPI = async (req, res) => {
     try {
@@ -171,39 +170,50 @@ const postCreateAttributeGroupAPI = async (req, res) => {
 
 const putUpdateAttributeGroupAPI = async (req, res) => {
     try {
-        const results = await updateAttributeGroup(req.body);
+        const { id } = req.params;
+        const data = req.body;
+
+        const result = await updateAttributeGroup({ id, ...data });
+
+        if (result === 0) {
+            return res.status(404).json({ message: "Attribute group not found" });
+        }
 
         return res.status(200).json({
             errorCode: 0,
-            data: results
-        })
+            data: result,
+            message: "Attribute group updated successfully"
+        });
     } catch (error) {
         return res.status(500).json({
             errorCode: 1,
-            msg: 'Cập nhật giá trị thuộc tính thất bại',
+            msg: 'Cập nhật nhóm thuộc tính thất bại',
             details: error.message,
         });
     }
-}
+};
 
 const updateStatusAttributeGroupAPI = async (req, res) => {
     try {
-        const id = req.body.id;
+        const { id } = req.params;
         const status = req.body.status;
-        const results = await updateStatusAttributeGroup(id, status);
+        
+        const result = await updateStatusAttributeGroup({id, status});
 
-        return res.status(200).json({
-            errorCode: 0,
-            data: results
-        })
-    } catch (error) {
-        return res.status(500).json({
-            errorCode: 1,
-            msg: 'Cập nhật trạng thái thuộc tính thất bại',
-            details: error.message,
+   
+        if (!result) {
+            return res.status(404).json({ message: "AttributeGroup not found" });
+        }
+
+      
+        res.status(200).json({
+            message: "Status AttributeGroup updated successfully!",
+            data: result
         });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
     }
-}
+};
 
 module.exports = {
     getAllAttributeAPI, getAttributeByIdAPI, getAttributeByCategoryAPI,

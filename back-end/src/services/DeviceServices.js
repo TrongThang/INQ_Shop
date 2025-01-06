@@ -6,6 +6,8 @@ const Device = require('../models/Device');
 // const { Device, ReviewDevice } = require('../models/Init-models');
 const ReviewDevice = require('../models/Review_device');
 const Customer = require('../models/Customer');
+const Attribute = require('../models/Attribute');
+const AttributeDevice = require('../models/Attribute_device');
 
 // 0: Sản phẩm ngừng bán
 // >= 1: Sản phẩm đang bán
@@ -172,7 +174,14 @@ const getDeviceBySlug = async (slug) => {
         order: [['created_at', 'DESC']]
     })
 
+    const attributeDevice = await AttributeDevice.findAll({
+        where: {
+            idDevice: device.idDevice
+        }
+    })
+
     device.reviews = review;
+    device.attributeDevice = attributeDevice;
 
     return device;
 }

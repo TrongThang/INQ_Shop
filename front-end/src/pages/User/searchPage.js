@@ -8,6 +8,8 @@ export default function SearchPage() {
     const location = useLocation();
     const navigate = useNavigate(); 
     const [searchResult, setSearchResult] = useState([]); 
+    const [dataToShow, setDataToShow] = useState([]); 
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -25,14 +27,17 @@ export default function SearchPage() {
 
                     if (result.errorCode === 0) {
                         setSearchResult(result.data);
+                        setDataToShow(result.data)
                     } else {
                         console.error("Lỗi từ API:", result.msg);
                         setSearchResult([]); 
+                        setDataToShow([])
                     }
                 }
             } catch (err) {
                 console.error(err);
             } finally {
+                setLoading(false);
             }
         };
         fetchData();
@@ -48,9 +53,13 @@ export default function SearchPage() {
         navigate(`?${queryParam.toString()}`);
     };
 
+    if (loading) {
+        return <div>Đang tải...</div>;
+    }
+
     return (
         <div className="mt-5 col-12 row">
-            <AreaSearch searchResult={searchResult} />
+            <AreaSearch searchResult={searchResult} setDataToShow={setDataToShow} />
             <div className="row col-xl-10">
 
                 <AreaSort onSortChange={handleSortChange} />

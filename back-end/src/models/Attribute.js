@@ -43,6 +43,8 @@ const Attribute = sequelize.define('attribute', {
   sequelize,
   tableName: 'attribute',
   timestamps: true,
+  createdAt: false,
+  updatedAt: false,
   indexes: [
     {
       name: "PRIMARY",

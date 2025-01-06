@@ -29,7 +29,8 @@ const DeviceCard = ({ device }) => {
                         {Number(device.sellingPrice).toLocaleString()} VNĐ
                     </p>
                     <p className="mb-2">
-                        <StarRating rating={ device.reviews.avgRating } />
+                        {console.log('Số sao', device.name, ':',(device.reviews?.[0]?.averageRating ?? "No rating available"))}    
+                        <StarRating rating={ device.reviews?.[0]?.averageRating ?? 0 } />
                     </p>
                     <p className="mb-4 line-clamp-p">
                         {device.descriptionNormal}

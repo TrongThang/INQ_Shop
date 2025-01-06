@@ -1,4 +1,5 @@
-export default function StarRating ({ rating }) {
+export default function StarRating({ rating }) {
+    const ratingFormat = parseFloat(parseFloat(rating).toFixed(1)) === 0 ? parseInt(0) : parseFloat(rating).toFixed(1)
     const stars = [];
     for (let i = 1; i <= 5; i++) {
     if (i <= Math.floor(rating)) {
@@ -13,5 +14,5 @@ export default function StarRating ({ rating }) {
     }
     }
 
-    return <div>{stars}</div>;
+    return <div>{stars} ({ ratingFormat }/5)</div>;
 };

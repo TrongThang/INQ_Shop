@@ -122,11 +122,11 @@ const getAllDevice_Admin = async () => {
 }
 
 const getDeviceBySlug = async (slug) => {
-    console.log(slug);
-    return await Device.findOne({
+    const device = await Device.findOne({
         where: {
             slug: slug
         },
+        subQuery: false,
         include: [
             {
                 model: Category,
@@ -136,16 +136,45 @@ const getDeviceBySlug = async (slug) => {
             {
                 model: ReviewDevice,
                 as: 'reviews',
-                attributes: ['comment', 'rating', 'created_at', 'updated_at'],
+                attributes: [
+                    'comment', 'rating', 'created_at', 'updated_at'],
                 include: [{
                     model: Customer,
                     as: 'customerReview',
                     attributes: ['surname', 'lastName', 'image']
-                }]
+                }],
+                required: false
             }
         ],
-        logging: true,
+        attributes: {
+            include: [
+                [Sequelize.literal(`(
+                    SELECT AVG(rating)
+                    FROM review_device AS review
+                    WHERE review.idDevice = Device.idDevice
+                )`), 'averageRating']
+            ]
+        },
     });
+
+    const review = await ReviewDevice.findAll({
+        where: {
+            idDevice: device.idDevice,
+        },
+        include: [{
+            model: Customer,
+            as: 'customerReview',
+            attributes: ['surname', 'lastName', 'image']
+        }],
+        attributes: [
+            'comment', 'rating', 'created_at', 'updated_at'
+        ],
+        order: [['created_at', 'DESC']]
+    })
+
+    device.reviews = review;
+
+    return device;
 }
 
 const createDevice = async (body) => {

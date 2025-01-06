@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
+import StarRating from "../../component/Shared/starRating";
+
 const DeviceCard = ({ device }) => {
-    
     const { addToCart } = useCart();
     
     return (
@@ -28,8 +29,7 @@ const DeviceCard = ({ device }) => {
                         {Number(device.sellingPrice).toLocaleString()} VNĐ
                     </p>
                     <p className="mb-2">
-                        {"⭐".repeat(Math.round(device.reviews[0]?.averageRating || 5))}{" "}
-                        ({parseFloat(device.reviews[0]?.averageRating || 5).toFixed(1)}/5)
+                        <StarRating rating={ device.reviews.avgRating } />
                     </p>
                     <p className="mb-4 line-clamp-p">
                         {device.descriptionNormal}

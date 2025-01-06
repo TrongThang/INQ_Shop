@@ -1,5 +1,6 @@
 import moment from 'moment'
 import 'moment/locale/vi';
+import StarRating from '../../../../Shared/starRating';
 
 export default function Rating({ review }) {
     return (
@@ -18,11 +19,7 @@ export default function Rating({ review }) {
                     </div>
                     <div className="d-flex justify-content-between align-items-center">
                         <div className="d-flex flex-row">
-                        <i className="fas fa-star text-warning me-2"></i>
-                        <i className="fas fa-star text-warning me-2"></i>
-                        <i className="fas fa-star text-warning me-2"></i>
-                        <i className="fas fa-star text-warning me-2"></i>
-                        <i className="fas fa-star text-warning me-2"></i>
+                            <StarRating rating={review.rating} />
                         </div>
                     </div>
                 </div>

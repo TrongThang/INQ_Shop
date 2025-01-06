@@ -3,7 +3,8 @@ const {
     getAllContactOrgetOneContact,
     postCreateContactAPI,
     putUpdateContactAPI,
-    getContactAPI
+    getContactAPI,
+    deleteContactAPI
 } = require('../controllers/api/ContactController.js');
 const routerContact = express.Router();
 
@@ -15,6 +16,6 @@ routerContact.get('/:id', getContactAPI);
 routerContact.post('/', postCreateContactAPI);
 
 routerContact.put('/:id', putUpdateContactAPI);
-
+routerContact.delete('/:id', deleteContactAPI);
 
 module.exports = routerContact;

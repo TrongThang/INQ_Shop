@@ -34,10 +34,23 @@ const checkContactByEmail = async (email) => {
     }
     
 };
-
+const deleteContact = async (id) => {
+    try {
+        const contact = await Contact.findByPk(id);
+        if (contact) {
+            await contact.destroy();
+            return { message: 'Contact deleted successfully' };
+        } else {
+            return { message: 'Contact not found' };
+        }
+    } catch (error) {
+        console.error("Error deleting contact:", error);
+        throw error;
+    }
+};
 module.exports = {
     checkContactByEmail,
-
+    deleteContact,
     getAllContact,
     getContact,
 

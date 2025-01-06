@@ -59,11 +59,11 @@ const ContactList = ({ contacts, onEdit,onDelete}) => {
                                                     <i className="bi bi-pencil"></i> Sửa
                                                 </a>
                                             </li>
-                                            {/* <li onClick={() => onDelete(contact.id)}>
+                                            <li onClick={() => onDelete(contact.id)}>
                                                 <a className="dropdown-item text-danger" href="#">
                                                     <i className="bi bi-trash"></i> Xóa
                                                 </a>
-                                            </li> */}
+                                            </li>
                                         </ul>
                                     </div>
                                 </td>

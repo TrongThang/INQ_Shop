@@ -40,7 +40,24 @@ const ManaContact = () => {
           useEffect(() => {
             fetchDataContact();
            }, []);   
+    
 
+           const handleDeleteContact = async (id) => {
+            try {
+                const response = await fetch(`http://localhost:8081/api/contact/${id}`, {
+                    method: 'DELETE',
+                });
+                if (response.ok) {
+                    setContact(contact.filter((item) => item.id !== id));
+                    alert("Contact deleted successfully!");
+                } else {
+                    const result = await response.json();
+                    alert(`Error: ${result.message}`);
+                }
+            } catch (err) {
+                console.error("Error deleting contact:", err);
+            }
+        };       
     return (
    
       <>
@@ -50,7 +67,7 @@ const ManaContact = () => {
         <div className="main-content-inner">
           <div className="container-fluid py-4">
             <SearchContact   contacts={contact}  onExport={handleExport}  />
-            <ContactTable contacts={contact}  onEdit={handleFormUpdateClick}   />
+            <ContactTable contacts={contact}  onEdit={handleFormUpdateClick} onDelete={handleDeleteContact}   />
           </div>
         </div>
         )}

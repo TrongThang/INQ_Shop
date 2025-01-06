@@ -33,13 +33,13 @@ const AddGroupAttrForm = ({ GroupAttrs }) => {
         } catch (error) {
             console.error("Error during form submission:", error);
         } finally {
-            setLoading(false); // Dừng loading
+            setLoading(false); 
         }
     };
 
     return (
         <div className="bg-white p-4 rounded shadow-sm">
-            <h5 className="mb-4">Thông tin Chi tiết Nhóm Thuộc tính</h5>
+            <h5 className="mb-4">Thêm mới nhóm thuộc tính</h5>
             <form onSubmit={handleSubmit}>
                 
 

@@ -1,4 +1,7 @@
-export default function Rating({review}) {
+import moment from 'moment'
+import 'moment/locale/vi';
+
+export default function Rating({ review }) {
     return (
         <div className="card-body">
             <div className="d-flex flex-start mt-2">
@@ -11,7 +14,7 @@ export default function Rating({review}) {
                         {review.surname} {review.lastName}
                             <span className="text-body ms-2">{review.comment}</span>
                         </h6>
-                        <p className="mb-0">{ review.created_at }</p>
+                        <p className="mb-0">{moment(review.created_at).fromNow() }</p>
                     </div>
                     <div className="d-flex justify-content-between align-items-center">
                         <div className="d-flex flex-row">

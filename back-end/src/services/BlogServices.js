@@ -5,22 +5,22 @@ const getAllBlog = async () => {
     return await Blog.findAll();
 }
 
-const getBlog = async (data) => {
-    const id = data.id;
+const getBlog = async (id) => {
     return await Blog.findByPk(id);
 }
 
 const postCreateBlog = async (data) => {
     return await Blog.create(data)
 }
+
 const putUpdateBlog = async (data) => {
     const id = data.id;
     const findByPKUpdateBlog = await Blog.findByPk(id);
     return await findByPKUpdateBlog.update(data);
 };
 
-const updateStatusAttributeGroup = async ({id, status}) => {
-    const [updatedCount] = await Attribute.update(
+const updateStatusBlog = async ({id, status}) => {
+    const [updatedCount] = await Blog.update(
         { status: status }, 
         { where: { id } }
     );
@@ -28,4 +28,4 @@ const updateStatusAttributeGroup = async ({id, status}) => {
     return updatedCount;
 }
     
-module.exports = { getAllBlog, getBlog, postCreateBlog, putUpdateBlog };
+module.exports = { getAllBlog, getBlog, postCreateBlog, putUpdateBlog, updateStatusBlog };

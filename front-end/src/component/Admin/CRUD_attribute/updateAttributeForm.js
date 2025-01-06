@@ -38,6 +38,7 @@ const UpdateAttributeForm = ({ categories, groupAtrrs, attribute }) => {
         // Lấy ngày hiện tại
         const currentDate = new Date();
         const formattedDate = currentDate.toISOString().split("T")[0];
+        // Gán ngày sửa là ngày hiện tại trước khi update
         setUpdatedAt(formattedDate);
     }, []);
 

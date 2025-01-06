@@ -15,7 +15,7 @@ const SearchAttribute = ({ onback, onExport, attributes }) => {
                 <button className="btn btn-primary me-2" onClick={onback}>
                   <i className="bi bi-plus"></i> Thêm
                 </button>
-                <button className="btn btn-success " onClick={handleExport}>
+                <button className="btn btn-success" onClick={handleExport}>
                   <i className="bi bi-download"></i> Xuất file
                 </button>
               </div>

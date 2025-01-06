@@ -31,10 +31,6 @@ const ManaAttribute = () => {
         setFormState(0); // Quay lại trang chính
     };
 
-    const handleDelete = (id) => {
-        setAttribute(attribute.filter((attr) => attr.id !== id));
-    };
-
     const fetchDataAtrribute = async () => {
         try {
             // Gửi yêu cầu lấy dữ liệu đến API
@@ -57,7 +53,7 @@ const ManaAttribute = () => {
                 <div className="main-content-inner">
                     <div className="container-fluid py-4">
                         <SearchAttribute onback={handleFormAddClick} onExport={handleExport} attributes={attribute}   />
-                        <AttributeList attributes={attribute} onEdit={handleFormUpdateClick} onDelete={handleDelete}/>
+                        <AttributeList attributes={attribute} onEdit={handleFormUpdateClick} />
                     </div>
                 </div>
             )}

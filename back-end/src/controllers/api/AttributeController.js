@@ -171,7 +171,6 @@ const postCreateAttributeGroupAPI = async (req, res) => {
 const putUpdateAttributeGroupAPI = async (req, res) => {
     try {
         const results = await updateAttributeGroup(req.body);
-
         return res.status(200).json({
             errorCode: 0,
             data: results

@@ -2,7 +2,7 @@ import React from "react";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 
-const AttributeList = ({ attributes, onEdit, onDelete }) => {
+const AttributeList = ({ attributes, onEdit }) => {
     const handleDelete = async (id) => {
         try {
             const response = await fetch(`http://localhost:8081/api/attribute/updateStatus/${id}`, {

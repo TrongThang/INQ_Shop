@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import RegisterPopup from '../../../../component/user/Register/formRegister';
-import Register from "../../../../pages/user/Account/registerPage";
-import ButtonPage from "../../../buttonPage";
+import { useCart } from "../../../../context/CartContext";
+
+export default function AreaCustomer({ isLogged }) {
+    const { getTotalItem, getTotalPrice } = useCart();
 
     const fetchDeviceInCart = async () => {
         try {

@@ -101,22 +101,22 @@ const getTOPDeviceLikedAPI = async (req, res) => {
         });
     }
 }
-const getAllDeviceByStatusAPI = async (req, res) => {
-    try {
-        const results = await getDeviceByTypeStatus();
+// const getAllDeviceByStatusAPI = async (req, res) => {
+//     try {
+//         const results = await getDeviceByTypeStatus();
 
-        return res.status(200).json({
-            errorCode: 0,
-            data: results
-        })
-    } catch (error) {
-        return res.status(500).json({
-            errorCode: 1,
-            msg: 'User: Có lỗi xảy ra trong quá trình lấy dữ liệu các Thiết bị',
-            details: error.message,
-        });
-    }
-}
+//         return res.status(200).json({
+//             errorCode: 0,
+//             data: results
+//         })
+//     } catch (error) {
+//         return res.status(500).json({
+//             errorCode: 1,
+//             msg: 'User: Có lỗi xảy ra trong quá trình lấy dữ liệu các Thiết bị',
+//             details: error.message,
+//         });
+//     }
+// }
 const getAllDeviceByAdminAPI = async (req, res) => {
     try {
         const results = await getAllDevice_Admin();

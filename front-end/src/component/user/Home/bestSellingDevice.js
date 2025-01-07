@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import blog1 from '../../../resource/img/blog-1.png';
 
-const FeaturedDevices = () => {
+const BestSeelingDeivce = () => {
     const [device, setDevice] = useState([]);
 
     const fetchDataCategories = async () => {
         try {
-            const response = await fetch('http://localhost:8081/api/device/featured');
+            const response = await fetch('http://localhost:8081/api/device/bestselling');
             const result = await response.json();
             console.log(result.data)
 
@@ -108,4 +108,4 @@ const FeaturedDevices = () => {
     );
 };
 
-export default FeaturedDevices;
+export default BestSeelingDeivce;

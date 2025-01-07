@@ -29,21 +29,24 @@ import ProfileCustomer from "./pages/user/Profile/accountCustomerPage";
 import AddressPage from "./pages/user/Profile/addressPage";
 import ChangePassword from "./pages/user/Profile/changePasswordPage";
 import OrdersPage from "./pages/user/Profile/ordersPage";
+import HomePage from './pages/user/homePage';
 import { CartProvider } from './context/CartContext';
+import AccountCustomerPage from './pages/user/Profile/accountCustomerPage';
+import ChangePasswordPage from './pages/user/Profile/changePasswordPage';
 
 function App() {
 
   const [page, setPage] = useState('user');
-  
+
   return (
     <Router>
       <Routes>
         {/* ADMIN */}
         <Route path="/admin" element={<Admin />}>
-        
+
         </Route>
         {/* USER */}
-          <Route path="/"
+        <Route path="/"
           element={
             <CartProvider>
               <User />
@@ -64,7 +67,7 @@ function App() {
           </Route>
       </Routes>
     </Router>
-      
+
   );
 }
 

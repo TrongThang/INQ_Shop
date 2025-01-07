@@ -20,9 +20,14 @@
   
 
 /* Address -----------------------------css  */
+.container-form {
+    width: 850px;
+}
+
 .form-container {
     padding: 20px;
     height: 650px;
+    width: 850px;
 }
 
 .header-carousel {

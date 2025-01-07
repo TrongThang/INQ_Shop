@@ -1,8 +1,24 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import ProfileSidebar from '../../../component/user/Profile/navCustomer/profileSidebar';
 import AddressItems from '../../../component/user/Profile/addressItems';
 
 const AddressPage = () => {
+    const [address, setAddress] = useState([]);
+    const fetchDataCategories = async () => {
+        try {
+            const response = await fetch('http://localhost:8081/api/addressBook?id=1');
+            const result = await response.json();
+
+            setAddress(result.data);
+        } catch (err) {
+            console.error(err);
+        } finally {
+        }
+    };
+
+    useEffect(() => {
+        fetchDataCategories()
+    }, []);
     return (
         <div className='container-fluid'>
             <div className='row ms-4'>

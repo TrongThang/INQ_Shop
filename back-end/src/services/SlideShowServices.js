@@ -36,7 +36,7 @@ const updateSlide = async (id, slideData) => {
 const updateStatusSlide = async (id, status) => {
   return await SlideShow.update(
     {
-      status: status
+      status: 0
     },
     {
       where: { id }

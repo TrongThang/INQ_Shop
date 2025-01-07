@@ -15,6 +15,8 @@ const routerBlog = require('./blogRoute')
 
 const routerContact = require('./contactRoute')
 
+const routerAttributeGroup= require('./attributegroupRoute')
+
 const routerCart = require('./cartRoute');
 
 const routerDevice = require('./deviceRoute');
@@ -31,5 +33,9 @@ router.use('/category', routerCategory);
 router.use('/cartCookie', cartRouter);
 router.use('/addressBook', routerAddressBook);
 router.use('/likedDevice', routerLikeDevice);
+
+router.use('/attributeGroup', routerAttributeGroup);
+
+
 
 module.exports = router;

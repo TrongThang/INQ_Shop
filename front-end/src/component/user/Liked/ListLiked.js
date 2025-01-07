@@ -1,6 +1,5 @@
 const ListLiked = ({ idCustomer, devices }) => {
     // Hàm xóa sản phẩm yêu thích
-    console.log(idCustomer);
   const handleRemoveLiked = async (idDevice) => {
     try {
       // Gửi yêu cầu xóa đến API

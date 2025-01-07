@@ -12,5 +12,5 @@ const routeAPI = require('./routes/routeAPI');
 app.use('/api', routeAPI);
 
 app.listen(port, () => {
-    console.log(`Run server ${port}`)   
+    console.log(`Run server ${port}`);
 })

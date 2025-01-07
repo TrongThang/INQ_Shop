@@ -3,8 +3,7 @@ const {
     getBlog,
     postCreateBlog,
     putUpdateBlog,
-
-    getAllBlog_user
+    updateStatusBlog,
 } = require('../../services/BlogServices.js')
 
 
@@ -38,7 +37,7 @@ const getAllBlogAPI = async (req, res) => {
     try {
         // Gọi hàm lấy tất cả các blog từ file services
         const result = await getAllBlog();
-
+        console.log(result);
         // Kiểm tra nếu không có kết quả hoặc kết quả trống
         if (!result || result.length === 0) {
             // Trả về mã lỗi 404 và thông báo nếu không tìm thấy blog
@@ -88,14 +87,11 @@ const getAllBlogAPI = async (req, res) => {
 //     }
 // };
 const getBlogAPI = async (req, res) => {
+    // Lấy dữ liệu từ body của yêu cầu
     const { id } = req.params;
-
     try {
-        const blog = await getBlog({ id });
-
-        if (!blog) {
-            return res.status(404).json({ message: "Blog not found" });
-        }
+        // Gọi hàm lấy thông tin blog cụ thể từ cơ sở dữ liệu
+        const result = await getBlog(id);
 
         res.status(200).json({
             errorCode: 0,
@@ -178,6 +174,7 @@ const postCreateBlogAPI = async (req, res) => {
         res.status(500).json({ message: "An error occurred while creating the blog." });
     }
 };
+
 //hàm xử lý cập nhật tin tức
 const putUpdateBlogAPI = async (req, res) => {
     try {
@@ -202,7 +199,32 @@ const putUpdateBlogAPI = async (req, res) => {
         res.status(500).json({ message: "An error occurred while updating the blog." });
     }
 };
+
+const putUpdateStatusBlogAPI = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const status = req.body.status;
+        console.log("Update status blog with ID:", id, "to status:", status);
+        // Gọi hàm cập nhật trạng thái blog trong cơ sở dữ liệu
+        const updatedBlog = await updateStatusBlog({ id, status });
+
+        // Nếu không tìm thấy blog để cập nhật
+        if (!updatedBlog) {
+            return res.status(404).json({ message: "Blog not found" });
+        }
+
+        // Trả về thông báo thành công và trạng thái blog đã cập nhật
+        res.status(200).json({
+            message: "Status blog updated successfully!",
+            data: updatedBlog
+        });
+    } catch (error) {
+        // Xử lý lỗi nếu có sự cố trong quá trình cập nhật blog
+        console.error("Error updating blog:", error.message);
+        res.status(500).json({ message: "An error occurred while updating the blog." });
+    }
+};
+
 module.exports = {
-    getAllBlogAPI, getBlogAPI, postCreateBlogAPI, putUpdateBlogAPI, getAllOrOneBlogAPI,
-    getAllOrOneBlogAPI_user,
+    getAllBlogAPI, getBlogAPI, postCreateBlogAPI, putUpdateBlogAPI, getAllOrOneBlogAPI, putUpdateStatusBlogAPI
 }

@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useCart } from "../../../../context/CartContext";
-
-export default function AreaCustomer({ isLogged }) {
-    const { getTotalItem, getTotalPrice } = useCart();
+import RegisterPopup from '../../../../component/user/Register/formRegister';
+import Register from "../../../../pages/user/Account/registerPage";
+import ButtonPage from "../../../buttonPage";
 
     const fetchDeviceInCart = async () => {
         try {
@@ -66,7 +65,8 @@ export default function AreaCustomer({ isLogged }) {
                             :
                             <>
                                 <Link to="\sign-in" className="dropdown-item">Đăng nhập</Link>
-                                <Link to="\sign-in" className="dropdown-item">Đăng ký</Link>
+                                <button className="dropdown-item" data-bs-toggle="modal" data-bs-target="#registerModal">Đăng ký</button>
+                                <RegisterPopup />
                             </>
                         }
                     </div>

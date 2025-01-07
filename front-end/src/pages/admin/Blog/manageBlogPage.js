@@ -1,65 +1,57 @@
 import React from "react";
-import ManageBlogItems from "../../component/admin/ManageBlogPage/manageBlogItems";
-import FilterBlog from "../../component/admin/ManageBlogPage/filterBlog";
-import Pagination from "../../component/Shared/Pagination/pagination";
-import HeaderBlog from "../../component/admin/ManageBlogPage/headerBlog";
+import { useState, useEffect } from "react";
+import ManageBlogItems from "../../../component/admin/Mana_blog/manageBlogItems";
+import AddBlog from "../../../component/admin/Mana_blog/CRUD_blog/AddBlog";
+import UpdateBlog from "../../../component/admin/Mana_blog/CRUD_blog/UpdateBlog";
+import HeaderBlog from "../../../component/admin/Mana_blog/headerBlog";
 
 function ManageBlogPage() {
+    const [blog, setBlog] = useState([]);
+    const [formState, setFormState] = useState(0);
+    const [selectedBlogId, setSelectedBlogId] = useState([]);
+
+    const fetchDataBlog = async () => {
+        try {
+            // Gửi yêu cầu lấy dữ liệu danh mục đến API
+            const response = await fetch(`http://localhost:8081/api/blog`);
+            const result = await response.json();
+            setBlog(result.data);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    useEffect(() => {
+        fetchDataBlog();
+    }, []);
+
+    const handleFormAddClick = () => {
+        setFormState(1); // Hiển thị form "Thêm"
+    };
+
+    const handleFormUpdateClick = (id) => {
+        setFormState(2); // Hiển thị form "Cập nhật"
+        setSelectedBlogId(id);
+    };
+
+    const handleBackClick = () => {
+        setFormState(0); // Quay lại trang chính
+    };
+
     return (
-        <div class="main-content-inner">
-            <div class="container-fluid py-4">
-                <HeaderBlog />
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <div class="input-group">
-                            <span class="input-group-text">
-                                <i class="bi bi-search"></i>
-                            </span>
-                            <input type="text" class="form-control" placeholder="Tìm kiếm bài viết" />
-                        </div>
+        <>
+            {formState === 1 && <AddBlog onBack={handleBackClick} />} {/* Form Thêm */}
+            {formState === 2 && <UpdateBlog onBack={handleBackClick} blogId={selectedBlogId} />} {/* Form Cập nhật */}
+
+            {formState === 0 && (
+                <div class="main-content-inner">
+                    <div class="container-fluid py-4">
+                        <HeaderBlog onAdd={handleFormAddClick} />
+                        <ManageBlogItems onUpdate={handleFormUpdateClick} blogs={blog} />
                     </div>
-                    <div class="col-md-2 ">
-                        <select class="form-select status">
-                            <option>Trạng thái</option>
-                            <option>Hiển thị</option>
-                            <option>Ẩn</option>
-                        </select>
-                    </div>
-                    {/* Bộ lọc */}
-                    <FilterBlog />
                 </div>
-                <div class="card">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle">
-                            <thead>
-                                <tr>
-                                    <th width="40">
-                                        <input type="checkbox" />
-                                    </th>
-                                    <th>Mã tin</th>
-                                    <th>Tiêu đề</th>
-                                    <th>Tác giả</th>
-                                    <th>Lượt xem</th>
-                                    <th>Hình ảnh</th>
-                                    <th>Ngày đăng</th>
-                                    <th>Trạng Thái</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {/* duyệt hết giữ liệu có trong database */}
-                                <ManageBlogItems />
-                                <ManageBlogItems />
-                                <ManageBlogItems />
-                                <ManageBlogItems />
-                                <ManageBlogItems />
-                            </tbody>
-                        </table>
-                    </div>
-                    <Pagination />
-                </div>
-            </div>
-        </div>
-    )
+            )}
+        </>
+    );
 };
 export default ManageBlogPage;

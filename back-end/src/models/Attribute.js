@@ -5,6 +5,7 @@ const AttributeGroup = require('./Attribute_group');
 const Attribute = sequelize.define('attribute', {
   id: {
     type: DataTypes.INTEGER,
+    autoIncrement: true,
     allowNull: false,
     primaryKey: true
   },
@@ -44,8 +45,8 @@ const Attribute = sequelize.define('attribute', {
   sequelize,
   tableName: 'attribute',
   timestamps: true,
-  createdAt: false,
-  updatedAt: false,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
   indexes: [
     {
       name: "PRIMARY",

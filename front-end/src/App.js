@@ -56,6 +56,7 @@ function App() {
               <Route path="orders" element={<OrdersPage />} />
               <Route path="changePassword" element={<ChangePassword />} />
             </Route> */}
+              <Route path="/profile/orders" element={<OrdersPage />} />
             <Route path="/search/*" element={<SearchPage />} />
             <Route path="/device/:slug" element={<DetailDevicePage />} />
           </Route>

@@ -124,6 +124,7 @@ const getAllDevice_Admin = async () => {
 }
 
 const getDeviceBySlug = async (slug) => {
+
     const device = await Device.findOne({
         where: {
             slug: slug
@@ -177,7 +178,14 @@ const getDeviceBySlug = async (slug) => {
     const attributeDevice = await AttributeDevice.findAll({
         where: {
             idDevice: device.idDevice
-        }
+        },
+        include: [
+            {
+                model: AttributeGroup,
+                as: 'attributeGroup',
+                attributes: ['name']
+            }
+        ]  
     })
 
     device.reviews = review;

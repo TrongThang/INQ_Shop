@@ -1,5 +1,6 @@
 const sequelize = require('../config/database');
 const { DataTypes } = require('sequelize');
+const AttributeGroup = require('./Attribute_group');
 
 const Attribute = sequelize.define('attribute', {
   id: {
@@ -70,5 +71,8 @@ const Attribute = sequelize.define('attribute', {
     },
   ]
 });
+
+Attribute.hasMany(AttributeGroup, { foreignKey: 'idDevice', as: 'attributeGroup' })
+AttributeGroup.belongsTo(Attribute, { foreignKey: 'idDevice', as: 'attributes' });
 
 module.exports = Attribute;

@@ -9,6 +9,7 @@ const getAllInfoWebsite = async() => {
 
 // Thêm một thông tin website
 const createInfoWebsite = async (data) => {
+    data.KEY_NAME = data.KEY_NAME.ToUpperCase();
     return await InfoWebsite.create(data);
 };
 

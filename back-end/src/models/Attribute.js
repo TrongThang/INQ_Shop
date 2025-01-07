@@ -73,7 +73,11 @@ const Attribute = sequelize.define('attribute', {
   ]
 });
 
-Attribute.hasMany(AttributeGroup, { foreignKey: 'idDevice', as: 'attributeGroup' })
-AttributeGroup.belongsTo(Attribute, { foreignKey: 'idDevice', as: 'attributes' });
+// Attribute.hasMany(AttributeGroup, { foreignKey: 'idDevice', as: 'attributeGroup' })
+// AttributeGroup.belongsTo(Attribute, { foreignKey: 'idDevice', as: 'attributes' });
+
+// Attribute.belongsTo(AttributeGroup, { foreignKey: 'idGroupAttribute', as: 'attributeGroup' });
+Attribute.belongsTo(AttributeGroup, { foreignKey: 'idGroupAttribute', as: 'attributeGroup' });
+AttributeGroup.hasMany(Attribute, { foreignKey: 'idGroupAttribute', as: 'attributes' });
 
 module.exports = Attribute;

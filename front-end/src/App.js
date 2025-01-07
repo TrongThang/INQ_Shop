@@ -21,21 +21,14 @@ import User from './pages/user';
 import Admin from './pages/admin';
 import HomePage from './pages/user/homePage'
 import DetailDevicePage from './pages/user/detailDevicePage';
+import LoginPage from './pages/user/Account/loginPage';
 
 import CartPage from './pages/user/cartPage';
-import Register from "./pages/user/Account/registerPage";
-import Login from "./pages/user/Account/loginPage";
 import SearchPage from "./pages/user/searchPage";
-
 import ProfileCustomer from "./pages/user/Profile/accountCustomerPage";
-import AddressPage from "./pages/user/Profile/addressPage";
-import ChangePassword from "./pages/user/Profile/changePasswordPage";
-import DetailDevicePage from "./pages/user/detailDevicePage";
+
 import OrdersPage from "./pages/user/Profile/ordersPage";
-import HomePage from './pages/user/homePage';
 import { CartProvider } from './context/CartContext';
-import AccountCustomerPage from './pages/user/Profile/accountCustomerPage';
-import ChangePasswordPage from './pages/user/Profile/changePasswordPage';
 
 
 
@@ -58,17 +51,18 @@ function App() {
               <User />
             </CartProvider>
             }
-          >
+        >
             <Route path='home' element={<HomePage />} />
             <Route path="cart" element={<CartPage />} />
-            
+            <Route path="login-in" element={<LoginPage />} />
+            <Route path="profile" element={<ProfileCustomer />} />
             {/* <Route path="/profile" element={<ProfileCustomer />} >
               <Route path="address" element={<AddressPage />} />
               <Route path="orders" element={<OrdersPage />} />
               <Route path="changePassword" element={<ChangePassword />} />
             </Route> */}
-              <Route path="/profile/orders" element={<OrdersPage />} />
-          <Route path="/search/*" element={<SearchPage />} />
+            <Route path="/profile/orders" element={<OrdersPage />} />
+            <Route path="/search/*" element={<SearchPage />} />
             <Route path="/device/:slug" element={<DetailDevicePage />} />
           </Route>
       </Routes>

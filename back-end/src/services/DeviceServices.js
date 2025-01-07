@@ -8,6 +8,42 @@ const ReviewDevice = require('../models/Review_device');
 const Customer = require('../models/Customer');
 const Attribute = require('../models/Attribute');
 const AttributeDevice = require('../models/Attribute_device');
+const Attribute_group = require('../models/Attribute_group');
+
+// HÀM XỬ LÝ
+function groupAttributesByGroup(attributeDeviceList) {
+    const result = {};
+
+    attributeDeviceList.forEach((item) => {
+        const group = item.attributes.attributeGroup?.dataValues || {}; // Lấy `dataValues` hoặc đối tượng rỗng
+
+        const groupId = group.id || null; // Lấy id nhóm hoặc null
+
+        const groupName = group.name; // Lấy tên nhóm
+
+        // Nếu nhóm chưa tồn tại trong kết quả, tạo mới
+        if (!result[groupId]) {
+            result[groupId] = {
+                idAttributeGroup: groupId,
+                nameGroup: groupName,
+                attributes: [],
+            };
+        }
+
+        // Thêm thuộc tính vào danh sách của nhóm
+        result[groupId].attributes.push({
+            nameAttribute: item.attributes.nameAttribute,
+            required: item.attributes.required,
+            value: item.value,
+            status: item.status,
+        });
+    });
+
+    // Trả về danh sách các nhóm thuộc tính
+    return Object.values(result);
+}
+
+
 
 // 0: Sản phẩm ngừng bán
 // >= 1: Sản phẩm đang bán
@@ -125,7 +161,7 @@ const getAllDevice_Admin = async () => {
 
 const getDeviceBySlug = async (slug) => {
 
-    const device = await Device.findOne({
+    let device = await Device.findOne({
         where: {
             slug: slug
         },
@@ -175,21 +211,33 @@ const getDeviceBySlug = async (slug) => {
         order: [['created_at', 'DESC']]
     })
 
-    // const attributeDevice = await AttributeDevice.findAll({
-    //     where: {
-    //         idDevice: device.idDevice
-    //     },
-    //     include: [
-    //         {
-    //             model: AttributeGroup,
-    //             as: 'attributeGroup',
-    //             attributes: ['name']
-    //         }
-    //     ]  
-    // })
+    const attributeDevice = await AttributeDevice.findAll({
+        where: {
+            idDevice: device.idDevice
+        },
+        include: [
+            {
+                model: Attribute,
+                as: 'attributes',
+                include: [
+                    {
+                        model: Attribute_group,
+                        as: 'attributeGroup',
+                        attributes: ['id','name']
+                    }
+                ],
+                attributes: ['nameAttribute', 'required']
+                
+            }
+        ],
+        attributes: ['value', 'status']
+    })
+
+    device = device.toJSON(); 
 
     device.reviews = review;
-    // device.attributeDevice = attributeDevice;
+
+    device.attributes = groupAttributesByGroup(attributeDevice);
 
     return device;
 }

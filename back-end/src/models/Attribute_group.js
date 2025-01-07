@@ -1,7 +1,8 @@
 const sequelize = require('../config/database');
 const { DataTypes } = require('sequelize');
+const Attribute = require('./Attribute');
 
-const Attribute_group = sequelize.define('attribute_group', {
+const AttributeGroup = sequelize.define('attribute_group', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -32,4 +33,4 @@ const Attribute_group = sequelize.define('attribute_group', {
   ]
 });
 
-module.exports = Attribute_group;
+module.exports = AttributeGroup;

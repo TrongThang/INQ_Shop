@@ -12,7 +12,6 @@ export default function DetailDevicePage() {
     console.log(`Fetching: http://localhost:8081/api/device/detail/${slug}`);
 
     useEffect(() => {
-        console.log('Slug value - useEffect:', slug);
         
         const fetchData = async () => {
             try {

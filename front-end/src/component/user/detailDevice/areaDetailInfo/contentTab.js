@@ -11,7 +11,7 @@ export default function ContentTab({ device }) {
     return (
         <div className="tab-content" id="productTabsContent">
             <OverviewDevice device={device} />
-            <ListSpecifications />
+            <ListSpecifications attributes={ device.attributes } />
             <AreaRating device={device}/>
         </div>
     );

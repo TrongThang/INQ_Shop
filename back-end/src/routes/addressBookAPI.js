@@ -1,6 +1,8 @@
 const express = require('express');
 const {
     getAllOrSingleAddressBookAPI,
+    getAddressBookAPI,
+    removeAddressBookByIdAPI,
     getAddressBooksByIdCustomerAPI,
     postCreateAddressBookAPI,
     putUpdateAddressBookAPI
@@ -8,9 +10,10 @@ const {
 const routerAddressBook = express.Router();
 
 
-routerAddressBook.get('/', getAllOrSingleAddressBookAPI );
+routerAddressBook.get('/:idCustomer', getAddressBooksByIdCustomerAPI);
 routerAddressBook.get('/Customer', getAddressBooksByIdCustomerAPI );
 routerAddressBook.post('/', postCreateAddressBookAPI);
-routerAddressBook.put('/', putUpdateAddressBookAPI);
+routerAddressBook.put('/:id/:idCustomer', putUpdateAddressBookAPI);
+routerAddressBook.delete('/:id/:idCustomer', removeAddressBookByIdAPI);
 
 module.exports = routerAddressBook;

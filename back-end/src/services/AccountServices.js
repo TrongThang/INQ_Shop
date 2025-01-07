@@ -8,14 +8,13 @@ const { Op } = require('sequelize');
 
 //0: Dừng hoạt động - Bị khoá
 const getLogin = async (username, password, type) => {
-
   const user = await Account.findOne({
     where: {
       username: username,
       password: password,
       idRole: type,
       status: {
-        [Op.gt]: 0 
+        [Op.gt]: 0
       }
     }
   })
@@ -55,7 +54,7 @@ const createAccount = async (accountData, personData) => {
   else if (accountData.idRole === 'C') {
     resultPersonData = await CustomerService.createCustomer(personData);
   }
-  return [resultAccount, resultPersonData]; 
+  return [resultAccount, resultPersonData];
 };
 
 // Update an account
@@ -83,10 +82,10 @@ const checkPassword = async (username, password) => {
   return password === account.password;
 }
 // change Password
-const changePassword = async(username, password) => {
+const changePassword = async (username, password) => {
   if (checkPassword(username, password)) {
     return await Account.update(password, {
-      where: {username}
+      where: { username }
     });
   }
 
@@ -95,7 +94,7 @@ const changePassword = async(username, password) => {
 
 module.exports = {
   getLogin, getAccountByCondition,
-  createAccount,updateAccount,
+  createAccount, updateAccount,
   updateStatusAccount,
   changePassword
 };

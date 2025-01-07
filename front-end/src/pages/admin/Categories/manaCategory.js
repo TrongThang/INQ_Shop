@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import Header from "../../component/Shared/headerManage";
+import Header from "../../../component/Shared/headerManage";
 
-import SearchCategory from "../../component/admin/Mana_category/searchCategory";
-import CategoryList from "../../component/admin/Mana_category/categoryList";
-
+import SearchCategory from '../../../component/admin/Mana_category/SearchCategory';
+import CategoryList from "../../../component/admin/Mana_category/categoryList";
 const ManaCategory = () => {
     const [data, setData] = useState([
         {

@@ -7,6 +7,7 @@ import './resource/lib/lightbox/css/lightbox.min.css'
 //  <!-- Icon Font Stylesheet -->
 // <!-- Customized Bootstrap Stylesheet -->
 import './resource/css/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './resource/css/style.css';
 
 // <!-- Template Stylesheet -->
@@ -23,16 +24,21 @@ import DetailDevicePage from './pages/user/detailDevicePage';
 
 import CartPage from './pages/user/cartPage';
 import Register from "./pages/user/Account/registerPage";
+import Login from "./pages/user/Account/loginPage";
 import SearchPage from "./pages/user/searchPage";
 
 import ProfileCustomer from "./pages/user/Profile/accountCustomerPage";
 import AddressPage from "./pages/user/Profile/addressPage";
 import ChangePassword from "./pages/user/Profile/changePasswordPage";
+import DetailDevicePage from "./pages/user/detailDevicePage";
 import OrdersPage from "./pages/user/Profile/ordersPage";
 import HomePage from './pages/user/homePage';
 import { CartProvider } from './context/CartContext';
 import AccountCustomerPage from './pages/user/Profile/accountCustomerPage';
 import ChangePasswordPage from './pages/user/Profile/changePasswordPage';
+
+
+
 
 function App() {
 
@@ -43,8 +49,8 @@ function App() {
       <Routes>
         {/* ADMIN */}
         <Route path="/admin" element={<Admin />}>
-
         </Route>
+
         {/* USER */}
         <Route path="/"
           element={

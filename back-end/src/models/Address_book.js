@@ -58,5 +58,8 @@ const Address_book = sequelize.define('address_book', {
     },
   ]
 });
+const Customer = require('../models/Customer');
+Address_book.belongsTo(Customer, { foreignKey: 'idCustomer', as: 'customer' });
+Customer.hasMany(Address_book, { foreignKey: 'idCustomer', as: 'addresses' });
 
 module.exports = Address_book;

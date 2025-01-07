@@ -7,7 +7,7 @@ export default function Navbar({categories, isLogged}) {
     return (
         <nav className="navbar navbar-expand-lg navbar-light d-flex justify-content-between align-items-center">
             {/* <!-- Logo --> */}
-            <Link to="/home" className="navbar-brand p-0 me-auto">
+            <Link to="/" className="navbar-brand p-0 me-auto">
                 <h1 className="text-primary mb-0">
                     <i className="fab fa-slack me-2"></i>INQ Shop
                 </h1>
@@ -19,7 +19,7 @@ export default function Navbar({categories, isLogged}) {
             {/* <!-- Navbar Links --> */}
             <div className="collapse navbar-collapse" id="navbarCollapse">
                 <div className="navbar-nav mx-auto">
-                    <Link to="/home" className="nav-item nav-link active">Trang chủ</Link>
+                    <Link to="/" className="nav-item nav-link active">Trang chủ</Link>
                     <div className="nav-item dropdown">
                         <div className="nav-link" data-bs-toggle="dropdown">
                             <span className="dropdown-toggle">Danh mục</span>

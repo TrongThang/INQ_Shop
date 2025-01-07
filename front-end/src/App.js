@@ -50,14 +50,16 @@ function App() {
             </CartProvider>
             }
           >
+            <Route path='home' element={<HomePage />} />
             <Route path="cart" element={<CartPage />} />
+            
             {/* <Route path="/profile" element={<ProfileCustomer />} >
               <Route path="address" element={<AddressPage />} />
               <Route path="orders" element={<OrdersPage />} />
               <Route path="changePassword" element={<ChangePassword />} />
             </Route> */}
               <Route path="/profile/orders" element={<OrdersPage />} />
-            <Route path="/search/*" element={<SearchPage />} />
+          <Route path="/search/*" element={<SearchPage />} />
             <Route path="/device/:slug" element={<DetailDevicePage />} />
           </Route>
       </Routes>

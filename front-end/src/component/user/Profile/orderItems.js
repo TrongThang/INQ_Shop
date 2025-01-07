@@ -16,7 +16,7 @@ const OrderItems = () => {
         <tbody>
             <tr class="parent-row collapsed" data-bs-toggle="collapse" data-bs-target="#child-1">
             <td>
-                <span>Product 1</span>
+                <span>Dơn hàng 1</span>
                 <span class="float-end arrow-icon">&#9660;</span>
             </td>
             </tr>
@@ -26,10 +26,10 @@ const OrderItems = () => {
                 <table class="table mb-0">
                 <thead>
                     <tr>
-                    <th scope="col">Image</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Unit Price</th>
-                    <th scope="col">Total</th>
+                    <th scope="col">Hình Ảnh</th>
+                    <th scope="col">Số lượng</th>
+                    <th scope="col">Đơn giá</th>
+                    <th scope="col">Tổng tiền</th>
                     </tr>
                 </thead>
                 <tbody>

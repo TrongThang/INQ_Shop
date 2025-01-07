@@ -175,21 +175,21 @@ const getDeviceBySlug = async (slug) => {
         order: [['created_at', 'DESC']]
     })
 
-    const attributeDevice = await AttributeDevice.findAll({
-        where: {
-            idDevice: device.idDevice
-        },
-        include: [
-            {
-                model: AttributeGroup,
-                as: 'attributeGroup',
-                attributes: ['name']
-            }
-        ]  
-    })
+    // const attributeDevice = await AttributeDevice.findAll({
+    //     where: {
+    //         idDevice: device.idDevice
+    //     },
+    //     include: [
+    //         {
+    //             model: AttributeGroup,
+    //             as: 'attributeGroup',
+    //             attributes: ['name']
+    //         }
+    //     ]  
+    // })
 
     device.reviews = review;
-    device.attributeDevice = attributeDevice;
+    // device.attributeDevice = attributeDevice;
 
     return device;
 }

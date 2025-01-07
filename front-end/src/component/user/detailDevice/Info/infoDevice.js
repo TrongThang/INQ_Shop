@@ -28,8 +28,6 @@ export default function InfoDevice({ device, customerLiked = false }) {
                 <div>
                     <StarRating rating={device.averageRating} />
                 </div>
-
-                <span class="ms-2 text-muted">( { parseFloat(device.averageRating).toFixed(1) }/5 )</span>
             </div>
             <h4><strong>Giá:</strong> <span class="text-primary fw-bold">{Number(device.sellingPrice).toLocaleString()}</span> VNĐ</h4>
             

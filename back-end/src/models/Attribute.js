@@ -1,9 +1,11 @@
 const sequelize = require('../config/database');
 const { DataTypes } = require('sequelize');
+const AttributeGroup = require('./Attribute_group');
 
 const Attribute = sequelize.define('attribute', {
   id: {
     type: DataTypes.INTEGER,
+    autoIncrement: true,
     allowNull: false,
     primaryKey: true
   },
@@ -43,6 +45,8 @@ const Attribute = sequelize.define('attribute', {
   sequelize,
   tableName: 'attribute',
   timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
   indexes: [
     {
       name: "PRIMARY",
@@ -68,5 +72,8 @@ const Attribute = sequelize.define('attribute', {
     },
   ]
 });
+
+Attribute.hasMany(AttributeGroup, { foreignKey: 'idDevice', as: 'attributeGroup' })
+AttributeGroup.belongsTo(Attribute, { foreignKey: 'idDevice', as: 'attributes' });
 
 module.exports = Attribute;

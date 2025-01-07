@@ -4,10 +4,11 @@ const { DataTypes } = require('sequelize');
 const Attribute_group = sequelize.define('attribute_group', {
   id: {
     type: DataTypes.INTEGER,
+    autoIncrement: true,
     allowNull: false,
     primaryKey: true
   },
-  nameAttribute: {
+  nameAttributeGroup: {
     type: DataTypes.STRING(500),
     allowNull: true
   },

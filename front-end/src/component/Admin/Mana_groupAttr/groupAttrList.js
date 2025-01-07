@@ -1,6 +1,6 @@
 import React from "react";
-
-const GroupAttrList = ({ data }) => {
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+const GroupAttrList = ({ GroupAttrs ,onEdit,onDelete}) => {
     return (
         <div className="card">
             <div className="table-responsive">
@@ -17,14 +17,14 @@ const GroupAttrList = ({ data }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {data.map((item, index) => (
+                        {GroupAttrs.map((item, index) => (
                             <tr key={index}>
                                 <td><input type="checkbox" /></td>
                                 <td>{item.id}</td>
-                                <td>{item.name}</td>
+                                <td>{item.nameAttributeGroup}</td>
                                 <td>
-                                    <span className={`badge ${item.status === "Hoạt động" ? "bg-success" : "bg-danger"}`}>
-                                        {item.status}
+                                <span className={`badge ${item.status === 1 ? "bg-success" : item.status === 0 ? "bg-danger" : "bg-warning text-dark"}`}>
+                                        {item.status === 1 ? "Hoạt động" : "Ngừng hoạt động"}
                                     </span>
                                 </td>
                                 <td>
@@ -33,12 +33,12 @@ const GroupAttrList = ({ data }) => {
                                             <i className="bi bi-three-dots-vertical"></i>
                                         </button>
                                         <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                                            <li>
+                                        <li onClick={() => onEdit(item.id)}>
                                                 <a className="dropdown-item" href="#">
                                                     <i className="bi bi-pencil"></i> Sửa
                                                 </a>
                                             </li>
-                                            <li>
+                                            <li onClick={() => onDelete(item.id)}>
                                                 <a className="dropdown-item text-danger" href="#">
                                                     <i className="bi bi-trash"></i> Xóa
                                                 </a>

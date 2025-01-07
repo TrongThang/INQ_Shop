@@ -44,8 +44,8 @@ export default function AreaCustomer({ isLogged }) {
             {/* <!-- Price & Cart --> */}
             <div class="d-flex align-items-center">
                 <span className="me-2 fw-bold">{getTotalPrice().toLocaleString()} VNĐ</span>
-                <a
-                    href="google.com"
+                <Link
+                    to="/cart"
                     className="btn btn-light btn-lg-square rounded-circle position-relative wow tada"
                     data-wow-delay=".9s"
                 >
@@ -58,7 +58,7 @@ export default function AreaCustomer({ isLogged }) {
                             {getTotalItem()}
                         </span>
                     </div>
-                </a>
+                </Link>
             </div>
 
             {/* <!-- END Price & Cart --> */}
@@ -66,15 +66,15 @@ export default function AreaCustomer({ isLogged }) {
             {/* <!-- PROFILE --> */}
             <div className="d-none d-xl-flex flex-shrink-0 ps-4">
                 <div className="nav-item dropdown">
-                    <a
-                        href="google.com"
-                        className="nav-link btn btn-light btn-lg-square rounded-circle position-relative"
+                    <Link 
+                        href="google.com" 
+                        className="nav-link btn btn-light btn-lg-square rounded-circle position-relative" 
                         data-bs-toggle="dropdown"
                     >
                         <span className="dropdown">
                             <i className="fa-solid fa-user fa-2x"></i>
                         </span>
-                    </a>
+                    </Link>
                     <div className="dropdown-menu" style={{ left: "-15px" }}>
                         {isLogged === true ?
                             <>

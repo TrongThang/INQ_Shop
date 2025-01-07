@@ -41,21 +41,21 @@ export const CartProvider = ({ children }) => {
             })
         });
     }
-    const addToCart = (device) => {
+    const addToCart = (device, quantity) => {
         setCart((prevCart) => {
             // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
             const existingDevice = prevCart.find(item => item.idDevice === device.idDevice);
 
             if (existingDevice) {
-                // Nếu có, tăng số lượng lên 1
+                // Nếu có, tăng số lượng theo số lượng của sản phẩm đó.
                 return prevCart.map(item =>
-                    item.id === device.id
-                        ? { ...item, quantity: item.quantity + 1 }
+                    item.idDevice === device.idDevice
+                        ? { ...item, quantity: Number(item.quantity) + Number(quantity) }
                         : item
                 );
             } else {
-                // Nếu chưa có, thêm sản phẩm mới vào giỏ với quantity = 1
-                return [...prevCart, { ...device, quantity: 1 }];
+                // Nếu chưa có, thêm sản phẩm mới vào giỏ với quantity = item.quantity
+                return [...prevCart, { ...device, quantity: quantity }];
             }
         });
     }

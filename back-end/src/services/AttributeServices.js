@@ -44,39 +44,36 @@ const getAttributeByCategoryAndAncestors = async ( idCate ) => {
 }
 
 const getAttributeById = async ( id ) => {
-    const data = await Attribute.findByPk(id, {
-        include: [
-            {
-                model: Category,
-                as: 'categoryAttribute'
-            },
-        ],
-    });
-
+    const data = await Attribute.findByPk(id);
+    console.log(data);
     return await data;
 }
 /// ATTRIBUTE
 const createAttribute = async ( body ) => {
-    const Attribute = await Attribute.create( body )
+    const Attr = await Attribute.create( body )
 
-    return Attribute;
+    return Attr;
 }
 
-const updateAttribute = async ({ id, ...body }) => { 
-    const [updatedCount] = await Attribute.update(body, {
-        where: { id }
+const updateAttribute = async ({ id, data }) => { 
+    if (data.required !== undefined) {
+        data.required = data.required === "1" || data.required === 1 || data.required === true;
+    }
+    const updatedAttr = await Attribute.update(data, {
+        where: { id: id }
     });
 
-    return updatedCount;
+    return updatedAttr;
 }
 
 const updateStatusAttribute = async ({id, status}) => {
-    const [updatedCount] = await Attribute.update(
+    console.log(id, status);
+    const updatedAttr = await Attribute.update(
         { status: status }, 
-        { where: { id } }
+        { where:  { id : id } }
     );
 
-    return updatedCount;
+    return updatedAttr;
 }
 /// END ATTRIBUTE
 
@@ -108,11 +105,12 @@ const updateAttributeGroup = async ({ id, ...body }) => {
 }
 
 const updateStatusAttributeGroup = async ({id, status}) => {
-    const [updatedCount] = await Attribute.update(
+  
+    const [updatedCount] = await AttributeGroup.update(
         { status: status }, 
         { where: { id } }
     );
-
+   
     return updatedCount;
 }
 

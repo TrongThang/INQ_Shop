@@ -7,7 +7,7 @@ function OrdersPage() {
         <div className="container-fluid my-4">
             <div class="row ms-4 ">
                 <ProfileSidebar />
-                <div className="col-md-6 col-xl-8">
+                <div className="col-md-9 col-xl-9">
                     <div className="card">
                         <div className="card-body">
                             <h2 className="card-title mb-4">Đơn mua của tôi</h2>

@@ -1,7 +1,6 @@
 import React from 'react';
 import modernHouseImg from '../../../resource/img/Modern house.png';
 
-
 const ContactForm = ({ formData, handleChange, handleSubmit }) => {
   return (
     <div className="container-fluid contact bg-light">

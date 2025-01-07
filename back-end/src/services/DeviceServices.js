@@ -1,10 +1,13 @@
 const connection = require('../config/database');
-const { Op, Sequelize } = require('sequelize');
+const { Op, Sequelize, or, where } = require('sequelize');
 const { convertToSlug } = require('../helpers/stringHelper');
 const Category = require('../models/Category');
 const Device = require('../models/Device');
 // const { Device, ReviewDevice } = require('../models/Init-models');
 const ReviewDevice = require('../models/Review_device');
+const Customer = require('../models/Customer');
+const Attribute = require('../models/Attribute');
+const AttributeDevice = require('../models/Attribute_device');
 
 // 0: Sản phẩm ngừng bán
 // >= 1: Sản phẩm đang bán
@@ -14,8 +17,6 @@ const ReviewDevice = require('../models/Review_device');
 // 4: Sản phẩm mới
 // 5: sản phẩm bán chạy
 // Nếu không nhập limit thì mặc định là lấy hết
-
-
 const getAllDeviceByStatus = async (status = 1, limit = {}) => {
     const whereConditions = {
         status: {
@@ -44,13 +45,12 @@ const getAllDeviceByStatus = async (status = 1, limit = {}) => {
 };
 
 
-
-const getAllDevice_User = async (page = 0, status = 1, limit = {}, filters = {}) => {
+const getAllDevice_User = async (page = 0, status = 1, limit = {}, filters = {}, order = {}) => {
     const { priceMin, priceMax, idCategory, keyword } = filters;
 
     const whereConditions = {
         status: {
-            [Op.eq]: status
+            [Op.gte]: status
         }
     };
 
@@ -63,7 +63,6 @@ const getAllDevice_User = async (page = 0, status = 1, limit = {}, filters = {})
             whereConditions.sellingPrice[Op.lte] = priceMax;
         }
     }
-
 
     if (keyword) {
         whereConditions[Op.or] = [
@@ -87,13 +86,23 @@ const getAllDevice_User = async (page = 0, status = 1, limit = {}, filters = {})
                     [Sequelize.fn('AVG', Sequelize.col('rating')), 'averageRating']
                 ],
                 required: false
+            },
+            {
+                model: Category,
+                as: 'categoryDevice',
+                attributes: ['id', 'nameCategory']
             }
         ],
-        group: ['Device.idDevice']
+        attributes: [
+            'idDevice', 'name', 'slug', 'sellingPrice', 'image', 'descriptionNormal',
+        ],
+        group: ['Device.idDevice'],
+        order: order,
     });
 
     return await data;
 }
+
 const getTOPDeviceLiked = async () => {
     const data = await Device.findAll({
         where: {
@@ -114,15 +123,75 @@ const getAllDevice_Admin = async () => {
     return await data;
 }
 
-const getDeviceById = async (id) => {
-    return await Device.findByPK(id, {
+const getDeviceBySlug = async (slug) => {
+
+    const device = await Device.findOne({
+        where: {
+            slug: slug
+        },
+        subQuery: false,
         include: [
             {
                 model: Category,
-                as: 'categoryDevice'
+                as: 'categoryDevice',
+                attributes: ['id', 'nameCategory']
+            },
+            {
+                model: ReviewDevice,
+                as: 'reviews',
+                attributes: [
+                    'comment', 'rating', 'created_at', 'updated_at'],
+                include: [{
+                    model: Customer,
+                    as: 'customerReview',
+                    attributes: ['surname', 'lastName', 'image']
+                }],
+                required: false
             }
         ],
+        attributes: {
+            include: [
+                [Sequelize.literal(`(
+                    SELECT AVG(rating)
+                    FROM review_device AS review
+                    WHERE review.idDevice = Device.idDevice
+                )`), 'averageRating']
+            ]
+        },
     });
+
+    const review = await ReviewDevice.findAll({
+        where: {
+            idDevice: device.idDevice,
+        },
+        include: [{
+            model: Customer,
+            as: 'customerReview',
+            attributes: ['surname', 'lastName', 'image']
+        }],
+        attributes: [
+            'comment', 'rating', 'created_at', 'updated_at'
+        ],
+        order: [['created_at', 'DESC']]
+    })
+
+    // const attributeDevice = await AttributeDevice.findAll({
+    //     where: {
+    //         idDevice: device.idDevice
+    //     },
+    //     include: [
+    //         {
+    //             model: AttributeGroup,
+    //             as: 'attributeGroup',
+    //             attributes: ['name']
+    //         }
+    //     ]  
+    // })
+
+    device.reviews = review;
+    // device.attributeDevice = attributeDevice;
+
+    return device;
 }
 
 const createDevice = async (body) => {
@@ -221,7 +290,7 @@ const updateStatusReviewForDevice = async ({ id, status }) => {
 
 module.exports = {
     getAllDevice_User, getAllDeviceByStatus, getAllDevice_Admin, 
-    getDeviceById, getTOPDeviceLiked,
+    getDeviceBySlug, getTOPDeviceLiked,
     createDevice, updateDevice, updateStatusDevice,
     updateStatusDeviceByCategory,
 

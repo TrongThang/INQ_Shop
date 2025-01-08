@@ -40,6 +40,7 @@ export default function User() {
         <>
             <HeaderUser categories={categories} isLogged={isLogged} />
             <Outlet />
+           
             <FooterUser categories={categories} />
         </>
     )

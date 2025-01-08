@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { CartProvider } from './context/CartContext';
 
 // <!-- Libraries Stylesheet -->
 import './resource/lib/animate/animate.min.css'
@@ -13,7 +14,6 @@ import './resource/css/style.css';
 // <!-- Template Stylesheet -->
 import './resource/css/inq.css'
 
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import ButtonPage from './component/buttonPage';
 
@@ -23,19 +23,17 @@ import HomePage from './pages/user/homePage'
 import DetailDevicePage from './pages/user/detailDevicePage';
 
 import CartPage from './pages/user/cartPage';
-import Register from "./pages/user/Account/registerPage";
-import Login from "./pages/user/Account/loginPage";
 import SearchPage from "./pages/user/searchPage";
 
 import ProfileCustomer from "./pages/user/Profile/accountCustomerPage";
 import AddressPage from "./pages/user/Profile/addressPage";
-import ChangePassword from "./pages/user/Profile/changePasswordPage";
-import DetailDevicePage from "./pages/user/detailDevicePage";
 import OrdersPage from "./pages/user/Profile/ordersPage";
-import HomePage from './pages/user/homePage';
-import { CartProvider } from './context/CartContext';
+
+import ChangePassword from "./pages/user/Profile/changePasswordPage";
 import AccountCustomerPage from './pages/user/Profile/accountCustomerPage';
 import ChangePasswordPage from './pages/user/Profile/changePasswordPage';
+import Login from "./pages/user/Account/loginPage";
+import Register from "./pages/user/Account/registerPage";
 
 
 
@@ -56,11 +54,15 @@ function App() {
           element={
             <CartProvider>
               <User />
+              <Login />
+              <Register />
             </CartProvider>
             }
           >
-            <Route path='home' element={<HomePage />} />
+            <Route path='' element={<HomePage />} />
             <Route path="cart" element={<CartPage />} />
+            
+            <Route path="/profile/address" element={<AddressPage />} />
             
             {/* <Route path="/profile" element={<ProfileCustomer />} >
               <Route path="address" element={<AddressPage />} />

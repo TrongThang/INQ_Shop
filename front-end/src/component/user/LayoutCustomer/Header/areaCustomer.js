@@ -66,9 +66,9 @@ export default function AreaCustomer({ isLogged }) {
             {/* <!-- PROFILE --> */}
             <div className="d-none d-xl-flex flex-shrink-0 ps-4">
                 <div className="nav-item dropdown">
-                    <Link 
-                        href="google.com" 
-                        className="nav-link btn btn-light btn-lg-square rounded-circle position-relative" 
+                    <Link
+                        href="google.com"
+                        className="nav-link btn btn-light btn-lg-square rounded-circle position-relative"
                         data-bs-toggle="dropdown"
                     >
                         <span className="dropdown">
@@ -90,18 +90,24 @@ export default function AreaCustomer({ isLogged }) {
                             </>
                             :
                             <>
-                                <Link
-                                    to="/login-in"
+                                <a
+                                    herf="#"
                                     className="dropdown-item"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#loginModal"
+                                    style={{ cursor: "pointer" }}   
                                 >
                                     Đăng nhập
-                                </Link>
-                                <Link
+                                </a>
+                                <a
                                     to="/resgister"
                                     className="dropdown-item"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#registerModal"
+                                    style={{ cursor: "pointer" }} 
                                 >
                                     Đăng Ký
-                                </Link>
+                                </a>
                             </>
                         }
                     </div>

@@ -1,12 +1,6 @@
 import FooterAdmin from "./Footer/footer";
 import HeaderAdmin from "./Header/headerAdmin";
-import SiteAdmin from "../../../pages/admin/SiteAdmin/siteAdmin";
-import ManaSlideshow from "../../../pages/admin/Slideshow/manaSlideshow";
-import ManaContact from "../../../pages/admin/Contact/manaContact";
-import ManaAttibuteGroup from "../../../pages/admin/GroupAttribute/manaGroupAttr";
-
-import ManaCustomer from "../../../pages/admin/Customer/manaCustomer";
-
+import ManaBlog from "../../../pages/admin/Blog/manageBlogPage";
 
 
 export default function ContentAdmin() {
@@ -15,10 +9,8 @@ export default function ContentAdmin() {
             <HeaderAdmin />
             {/* <SiteAdmin /> */}
             {/* <ManaSlideshow /> */}
-            {/* <ManaContact/> */}
-            {/* <ManaAttibuteGroup/> */}
-            <ManaCustomer/>
-      
+            {/* <ManaAttribute /> */}
+            <ManaBlog />
             <FooterAdmin />
         </div>
     )

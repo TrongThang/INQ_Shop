@@ -41,7 +41,7 @@ const BlogCart = ({ blog }) => {
                     </a> */}
                     <Link to={`/blog/${blog.id}`} className="h4 d-inline-block mb-3">
                         {blog.title}
-                    </Link>
+                    </Link> 
                     <p className="mb-3">{blog.contentNormal}</p>
                     <Link to={`/blog/${blog.id}`} className="btn p-0">
                         Xem thêm <i className="fa fa-arrow-right"></i>

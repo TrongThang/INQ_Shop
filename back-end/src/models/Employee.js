@@ -15,10 +15,6 @@ const Employee = sequelize.define('employee', {
     type: DataTypes.STRING(500),
     allowNull: true
   },
-  // identityNumber: {
-  //   type: DataTypes.STRING(500),
-  //   allowNull: true
-  // },
   email: {
     type: DataTypes.STRING(500),
     allowNull: true
@@ -46,7 +42,7 @@ const Employee = sequelize.define('employee', {
 }, {
   sequelize,
   tableName: 'employee',
-  timestamps: true, 
+  timestamps: true,
   createdAt: 'created_at',
 
   updatedAt: false,

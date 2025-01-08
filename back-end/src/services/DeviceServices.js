@@ -5,6 +5,45 @@ const Category = require('../models/Category');
 const Device = require('../models/Device');
 // const { Device, ReviewDevice } = require('../models/Init-models');
 const ReviewDevice = require('../models/Review_device');
+const Customer = require('../models/Customer');
+const Attribute = require('../models/Attribute');
+const AttributeDevice = require('../models/Attribute_device');
+const Attribute_group = require('../models/Attribute_group');
+
+// HÀM XỬ LÝ
+function groupAttributesByGroup(attributeDeviceList) {
+    const result = {};
+
+    attributeDeviceList.forEach((item) => {
+        const group = item.attributes.attributeGroup?.dataValues || {}; // Lấy `dataValues` hoặc đối tượng rỗng
+
+        const groupId = group.id || null; // Lấy id nhóm hoặc null
+
+        const groupName = group.name; // Lấy tên nhóm
+
+        // Nếu nhóm chưa tồn tại trong kết quả, tạo mới
+        if (!result[groupId]) {
+            result[groupId] = {
+                idAttributeGroup: groupId,
+                nameGroup: groupName,
+                attributes: [],
+            };
+        }
+
+        // Thêm thuộc tính vào danh sách của nhóm
+        result[groupId].attributes.push({
+            nameAttribute: item.attributes.nameAttribute,
+            required: item.attributes.required,
+            value: item.value,
+            status: item.status,
+        });
+    });
+
+    // Trả về danh sách các nhóm thuộc tính
+    return Object.values(result);
+}
+
+
 
 // 0: Sản phẩm ngừng bán
 // >= 1: Sản phẩm đang bán
@@ -121,19 +160,86 @@ const getAllDevice_Admin = async () => {
 }
 
 const getDeviceBySlug = async (slug) => {
-    console.log(slug);
-    return await Device.findOne({
+
+    let device = await Device.findOne({
         where: {
             slug: slug
         },
+        subQuery: false,
         include: [
             {
                 model: Category,
                 as: 'categoryDevice',
                 attributes: ['id', 'nameCategory']
+            },
+            {
+                model: ReviewDevice,
+                as: 'reviews',
+                attributes: [
+                    'comment', 'rating', 'created_at', 'updated_at'],
+                include: [{
+                    model: Customer,
+                    as: 'customerReview',
+                    attributes: ['surname', 'lastName', 'image']
+                }],
+                required: false
             }
         ],
+        attributes: {
+            include: [
+                [Sequelize.literal(`(
+                    SELECT AVG(rating)
+                    FROM review_device AS review
+                    WHERE review.idDevice = Device.idDevice
+                )`), 'averageRating']
+            ]
+        },
     });
+
+    const review = await ReviewDevice.findAll({
+        where: {
+            idDevice: device.idDevice,
+        },
+        include: [{
+            model: Customer,
+            as: 'customerReview',
+            attributes: ['surname', 'lastName', 'image']
+        }],
+        attributes: [
+            'comment', 'rating', 'created_at', 'updated_at'
+        ],
+        order: [['created_at', 'DESC']]
+    })
+
+    const attributeDevice = await AttributeDevice.findAll({
+        where: {
+            idDevice: device.idDevice
+        },
+        include: [
+            {
+                model: Attribute,
+                as: 'attributes',
+                include: [
+                    {
+                        model: Attribute_group,
+                        as: 'attributeGroup',
+                        attributes: ['id','name']
+                    }
+                ],
+                attributes: ['nameAttribute', 'required']
+                
+            }
+        ],
+        attributes: ['value', 'status']
+    })
+
+    device = device.toJSON(); 
+
+    device.reviews = review;
+
+    device.attributes = groupAttributesByGroup(attributeDevice);
+
+    return device;
 }
 
 const createDevice = async (body) => {

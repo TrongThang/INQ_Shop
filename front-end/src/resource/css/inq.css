@@ -20,9 +20,14 @@
   
 
 /* Address -----------------------------css  */
+.container-form {
+    width: 850px;
+}
+
 .form-container {
     padding: 20px;
     height: 650px;
+    width: 850px;
 }
 
 .header-carousel {
@@ -585,3 +590,15 @@ form .form-group textarea {
 }
 
 /* Order Customer ------------------------------ CSS */
+
+
+/* DROPDOWN MENU */
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -1px;
+}

@@ -15,15 +15,14 @@ const Customer = sequelize.define('customer', {
     type: DataTypes.STRING(500),
     allowNull: true
   },
+  image: {
+    type: DataTypes.STRING(500),
+    allowNull: true
+  },
   phone: {
     type: DataTypes.STRING(500),
     allowNull: true
   },
-  // identityNumber: {
-  //   type: DataTypes.STRING(500),
-  //   allowNull: true,
-  //   unique: "identityNumber"
-  // },
   birthdate: {
     type: DataTypes.DATEONLY,
     allowNull: true
@@ -64,20 +63,6 @@ const Customer = sequelize.define('customer', {
       ]
     },
   ]
-});
-
-Customer.beforeCreate(async (instance, options) => {
-  console.log("Hook beforeCreate được kích hoạt");
-  const lastCustomer = await Customer.findOne({
-    attributes: ['id'],
-    order: [['id', 'DESC']],
-    where: { id: { [Sequelize.Op.like]: 'KH-%' } }
-  });
-
-  const lastId = lastCustomer ? parseInt(lastCustomer.id.replace('KH-', ''), 10) : 0;
-  const newId = `KH-${lastId + 1}`;
-  console.log("Generated ID:", newId);
-  instance.id = newId;
 });
 
 

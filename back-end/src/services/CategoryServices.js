@@ -7,6 +7,26 @@ const {
     updateStatusDeviceByCategory
 } = require('../services/DeviceServices');
 
+const groupCategoriesByListCategories = (categoriesList) => {
+    
+    const findChildren = (parentId) => {
+        return categoriesList
+            .filter((item) => item.parentId === parentId)
+            .map((child) => ({
+                ...child, // Giữ thông tin danh mục hiện tại
+                children: findChildren(child.id), // Đệ quy tìm các con
+            }));
+    };
+
+    const result = categoriesList
+        .filter((item) => item.parentId === null)
+        .map((rootCategory) => ({
+            ...rootCategory, // Giữ thông tin danh mục gốc
+            children: findChildren(rootCategory.id), // Tìm các con của danh mục gốc
+        }));
+        
+}
+
 const getCategoryByUser = async () => {
     try {
         const categories = await Category.findAll({
@@ -30,6 +50,7 @@ const getAllCategory_User = async () => {
     const data = await Category.findAll({
         where: { status: 1},
     });
+
 
     return await data;
 }

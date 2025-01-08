@@ -12,14 +12,12 @@ const routerAddressBook = require('./addressBookAPI');
 const routerLikeDevice = require('./likedDeviceAPI');
 
 const routerBlog = require('./blogRoute')
-
+const routerAttribute= require('./attributeRoute')
 const routerContact = require('./contactRoute')
-
-const routerAttributeGroup= require('./attributegroupRoute')
-
 const routerCart = require('./cartRoute');
 
 const routerDevice = require('./deviceRoute');
+const routerInfoWebsite = require('./infoWebsiteRoute');
 
 
 
@@ -35,8 +33,10 @@ router.use('/category', routerCategory);
 router.use('/cartCookie', cartRouter);
 router.use('/addressBook', routerAddressBook);
 router.use('/likedDevice', routerLikeDevice);
+router.use('/attribute', routerAttribute);
+router.use('/setting-web', routerInfoWebsite);
 
-router.use('/attributeGroup', routerAttributeGroup);
+// router.use('/attributeGroup', routerAttributeGroup);
 
 
 

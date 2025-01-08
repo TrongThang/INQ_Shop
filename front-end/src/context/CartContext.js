@@ -1,37 +1,35 @@
-import React, { createContext, useState, useContext, } from 'react';
+import React, { createContext, useState, useContext, useEffect, } from 'react';
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-    const [cart, setCart] = useState([
-        {
-            idDevice: 1,
-            image: "https://placehold.co/200x200",
-            name: "Camera chống trộm",
-            quantity: 1,
-            sellingPrice: 1992000,
-        },
-        {
-            idDevice: 2,
-            image: "https://placehold.co/200x200",
-            name: "Thiết bị báo cháy",
-            quantity: 1,
-            sellingPrice: 1500000,
-        },
-        {
-            idDevice: 3,
-            image: "https://placehold.co/200x200",
-            name: "Thiết bị tưới nước tự động",
-            quantity:2,
-            sellingPrice: 500000,
+    const [cart, setCart] = useState([]);
+
+    const fetchDataCart = async () => {
+        try {
+            const response = await fetch('http://localhost:8081/api/cart')
+            if (!response.ok) {
+                throw new Error("Lỗi lấy dữ liệu từ giỏ hàng");
+            }
+            const result = await response.json()
+
+            setCart(result.data)
+        } catch (error) {
+            
         }
-    ]);
+    }
+
+    useEffect(() => {
+        fetchDataCart()
+    }, []);
 
     const handleInputQuantity = (idDevice, quantity) => {
         if (isNaN(quantity) || quantity < 1) {
             return;
         }
         
+
+
         setCart((prevCart) => {
             return prevCart.map((item) => {
                 if (item.idDevice === idDevice) {
@@ -41,7 +39,14 @@ export const CartProvider = ({ children }) => {
             })
         });
     }
+
     const addToCart = (device, quantity) => {
+        const cartItem = {
+            idDevice: device.idDevice,
+            name: device.name,
+            quantity: Number(quantity),
+        };
+
         setCart((prevCart) => {
             // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
             const existingDevice = prevCart.find(item => item.idDevice === device.idDevice);

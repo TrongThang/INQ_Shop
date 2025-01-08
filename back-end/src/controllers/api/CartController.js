@@ -5,7 +5,9 @@ const {
     getCartInCookie, saveCartInCookie, 
     addToCartInCookie, updateQuantityDeviceInCartCookie,
     removeDeviceCartInCookie,
-    
+    // DATABASE
+    getCart,postAddDeviceToCart, putUpdateDeviceInCart,
+    removeDeviceInCart, removeAllDeviceInCart,
 } = require('../../services/CartServices');
 
 const issetDataCart = (data) => {
@@ -51,7 +53,6 @@ const postAddToCartAPI = async (req, res) => {
         const data = req.body;
         const newCart = null;
         if (req.session.isLogged) {
-
             // Kiểm tra xem thiết bị đã có trong giỏ hàng của khách hàng chưa
             const existingDevice = await Cart.findOne({
                 where: {

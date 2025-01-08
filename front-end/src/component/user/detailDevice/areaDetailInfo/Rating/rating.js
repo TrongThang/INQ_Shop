@@ -1,4 +1,8 @@
-export default function Rating() {
+import moment from 'moment'
+import 'moment/locale/vi';
+import StarRating from '../../../../Shared/starRating';
+
+export default function Rating({ review }) {
     return (
         <div className="card-body">
             <div className="d-flex flex-start mt-2">
@@ -8,18 +12,14 @@ export default function Rating() {
                 <div className="w-100">
                     <div className="d-flex justify-content-between align-items-center mb-3">
                         <h6 className="text-primary fw-bold mb-0">
-                        Trọng Thắng
-                        <span className="text-body ms-2">Hmm, Sản phẩm khá đẹp 😎</span>
+                        {review.surname} {review.lastName}
+                            <span className="text-body ms-2">{review.comment}</span>
                         </h6>
-                        <p className="mb-0">2 days ago</p>
+                        <p className="mb-0">{moment(review.created_at).fromNow() }</p>
                     </div>
                     <div className="d-flex justify-content-between align-items-center">
                         <div className="d-flex flex-row">
-                        <i className="fas fa-star text-warning me-2"></i>
-                        <i className="fas fa-star text-warning me-2"></i>
-                        <i className="fas fa-star text-warning me-2"></i>
-                        <i className="fas fa-star text-warning me-2"></i>
-                        <i className="fas fa-star text-warning me-2"></i>
+                            <StarRating rating={review.rating} />
                         </div>
                     </div>
                 </div>

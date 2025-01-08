@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useSettingWeb } from "../../../../context/settingWebContext";
 
 export default function Footer({ categories }) {
+    const { setting } = useSettingWeb();
+    
     const [isCategoryVisible, setIsCategoryVisible] = useState(false); // Trạng thái hiển thị danh mục
 
     // Hàm xử lý khi click vào "Danh mục"
@@ -23,10 +26,19 @@ export default function Footer({ categories }) {
                                         </a>
                                         <p className="text-white mb-4">Dolor amet sit justo amet elitr clita ipsum elitr est.Lorem ipsum dolor sit amet, consectetur adipiscing...</p>
                                         <div className="footer-btn d-flex">
-                                            <a className="btn btn-md-square rounded-circle me-3" href="#"><i className="fab fa-facebook-f" /></a>
-                                            <a className="btn btn-md-square rounded-circle me-3" href="#"><i className="fab fa-twitter" /></a>
-                                            <a className="btn btn-md-square rounded-circle me-3" href="#"><i className="fab fa-instagram" /></a>
-                                            <a className="btn btn-md-square rounded-circle me-0" href="#"><i className="fab fa-linkedin-in" /></a>
+                                            
+                                            {/* {setting.LOGO[0].map(([key, value], index) => (
+                                                <Link key={index} className="btn btn-md-square rounded-circle me-3">
+                                                    <i className="fab fa-facebook-f" />
+                                                </Link>
+                                            ))} */}
+                                            
+                                            <Link className="btn btn-md-square rounded-circle me-3" href="#">
+                                                <i className="fab fa-instagram" />
+                                            </Link>
+                                            <Link className="btn btn-md-square rounded-circle me-0" href="#">
+                                                <i className="fab fa-linkedin-in" />
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>

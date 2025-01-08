@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useCart } from "../../../../context/CartContext";
 import AreaInteraction from "./areaInteracion";
+import StarRating from "../../../Shared/starRating";
 
 export default function InfoDevice({ device, customerLiked = false }) {
     const [quantity, setQuantity] = useState(1);
@@ -24,16 +25,9 @@ export default function InfoDevice({ device, customerLiked = false }) {
                 {device.name}
             </h1>
             <div class="rating d-flex align-items-center">
-            <div>
-                {/* {[...Array(device.starRating)].map((_, i) => (
-                    <i key={i} className="fas fa-star text-warning"></i>
-                ))}
-                {[...Array(5 - device.starRating)].map((_, i) => (
-                    <i key={i + device.starRating} className="far fa-star text-warning"></i>
-                ))} */}
-            </div>
-
-                <span class="ms-2 text-muted">({ device.starRating }/5)</span>
+                <div>
+                    <StarRating rating={device.averageRating} />
+                </div>
             </div>
             <h4><strong>Giá:</strong> <span class="text-primary fw-bold">{Number(device.sellingPrice).toLocaleString()}</span> VNĐ</h4>
             

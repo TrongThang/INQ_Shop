@@ -1,14 +1,14 @@
 import HeaderUser from "../component/user/LayoutCustomer/Header/header";
 import FooterUser from "../component/user/LayoutCustomer/Footer/footer";
-import ListBlogPage from "./user/Introdution/listBlogPage";
-import Contact from "./user/contact";
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+
 
 export default function User() {
     const [categories, setCategories] = useState([]);
     const [isLogged, setIsLogged] = useState(false);
-
+    const navigate = useNavigate();
     const fetchDataCategories = async () => {
         try {
             const response = await fetch('http://localhost:8081/api/category');
@@ -21,6 +21,16 @@ export default function User() {
         }
     };
 
+
+    useEffect(() => {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            // Nếu không có token, chuyển hướng về trang đăng nhập
+        } else {
+            setIsLogged(true);
+        }
+    }, [navigate]);
+
     useEffect(() => {
         fetchDataCategories()
     }, []);
@@ -28,7 +38,7 @@ export default function User() {
     return (
         <>
             <HeaderUser categories={categories} isLogged={isLogged} />
-                <Outlet />
+            <Outlet />
             <FooterUser categories={categories} />
         </>
     )

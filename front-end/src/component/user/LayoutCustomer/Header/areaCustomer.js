@@ -1,16 +1,36 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useCart } from "../../../../context/CartContext";
-
+import LogoutToast from "../../Notification/logoutToast";
 export default function AreaCustomer({ isLogged }) {
     const { getTotalItem, getTotalPrice } = useCart();
+    const [showToast, setShowToast] = useState(false);
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        localStorage.removeItem("authToken");
+        isLogged = false;
+
+        // Show the toast notification
+        setShowToast(true);
+        navigate('/');
+        setTimeout(() => {
+            window.location.reload();
+        }, 1500);
+        // Redirect to login page after a short de  lay
+
+        // Hide the toast after 3 seconds
+        setTimeout(() => {
+            setShowToast(false);
+        }, 1500);
+    };
 
     const fetchDeviceInCart = async () => {
         try {
             const response = await fetch('http://localhost:8081/api/cart');
             const result = await response.json();
             console.log('Area Customer: ', result.data)
-            
+
         } catch (err) {
             console.error(err);
         } finally {
@@ -21,7 +41,7 @@ export default function AreaCustomer({ isLogged }) {
     }, []);
     return (
         <>
-        {/* <!-- Price & Cart --> */}
+            {/* <!-- Price & Cart --> */}
             <div class="d-flex align-items-center">
                 <span className="me-2 fw-bold">{getTotalPrice().toLocaleString()} VNĐ</span>
                 <Link
@@ -42,7 +62,7 @@ export default function AreaCustomer({ isLogged }) {
             </div>
 
             {/* <!-- END Price & Cart --> */}
-            
+
             {/* <!-- PROFILE --> */}
             <div className="d-none d-xl-flex flex-shrink-0 ps-4">
                 <div className="nav-item dropdown">
@@ -58,21 +78,37 @@ export default function AreaCustomer({ isLogged }) {
                     <div className="dropdown-menu" style={{ left: "-15px" }}>
                         {isLogged === true ?
                             <>
-                                <Link to="\profile" className="dropdown-item">Hồ sơ</Link>
-                                <Link to="\profile\orders" className="dropdown-item">Đơn hàng</Link>
-                                <Link to="\profile\address" className="dropdown-item">Địa chỉ</Link>
-                                <Link to="\sign-up" className="dropdown-item">Đăng xuất</Link>    
+                                <Link to="/profile" className="dropdown-item">Hồ sơ</Link>
+                                <Link to="/profile/orders" className="dropdown-item">Đơn hàng</Link>
+                                <Link to="/profile/address" className="dropdown-item">Địa chỉ</Link>
+                                <button
+                                    onClick={handleLogout}  // Handle logout here
+                                    className="dropdown-item"
+                                >
+                                    Đăng xuất
+                                </button>
                             </>
                             :
                             <>
-                                <Link to="\sign-in" className="dropdown-item">Đăng nhập</Link>
-                                <Link to="\sign-in" className="dropdown-item">Đăng ký</Link>
+                                <Link
+                                    to="/login-in"
+                                    className="dropdown-item"
+                                >
+                                    Đăng nhập
+                                </Link>
+                                <Link
+                                    to="/resgister"
+                                    className="dropdown-item"
+                                >
+                                    Đăng Ký
+                                </Link>
                             </>
                         }
                     </div>
                 </div>
                 {/* <!-- END PROFILE --> */}
             </div>
+            <LogoutToast show={showToast} />
         </>
     );
 }

@@ -29,6 +29,10 @@ import ProfileCustomer from "./pages/user/Profile/accountCustomerPage";
 import AddressPage from "./pages/user/Profile/addressPage";
 import ChangePassword from "./pages/user/Profile/changePasswordPage";
 import OrdersPage from "./pages/user/Profile/ordersPage";
+
+import ListBlogPage from "./pages/user/Introdution/listBlogPage";
+import DetailBlogPage from "./pages/user/Introdution/blogDetailsPage";
+
 import { CartProvider } from './context/CartContext';
 
 function App() {
@@ -56,6 +60,8 @@ function App() {
               <Route path="orders" element={<OrdersPage />} />
               <Route path="changePassword" element={<ChangePassword />} />
             </Route> */}
+            <Route path="/introdution" element={<ListBlogPage />} />
+            <Route path="/blog/:id" element={<DetailBlogPage />} />
             <Route path="/search/*" element={<SearchPage />} />
             <Route path="/device/:slug" element={<DetailDevicePage />} />
           </Route>

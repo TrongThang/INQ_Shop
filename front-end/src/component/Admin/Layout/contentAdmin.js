@@ -5,6 +5,8 @@ import ManaSlideshow from "../../../pages/admin/Slideshow/manaSlideshow";
 import ManaContact from "../../../pages/admin/Contact/manaContact";
 import ManaAttibuteGroup from "../../../pages/admin/GroupAttribute/manaGroupAttr";
 
+import ManaCustomer from "../../../pages/admin/Customer/manaCustomer";
+
 
 
 export default function ContentAdmin() {
@@ -14,7 +16,8 @@ export default function ContentAdmin() {
             {/* <SiteAdmin /> */}
             {/* <ManaSlideshow /> */}
             {/* <ManaContact/> */}
-            <ManaAttibuteGroup/>
+            {/* <ManaAttibuteGroup/> */}
+            <ManaCustomer/>
       
             <FooterAdmin />
         </div>

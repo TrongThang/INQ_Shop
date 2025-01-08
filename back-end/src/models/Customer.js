@@ -19,11 +19,11 @@ const Customer = sequelize.define('customer', {
     type: DataTypes.STRING(500),
     allowNull: true
   },
-  identityNumber: {
-    type: DataTypes.STRING(500),
-    allowNull: true,
-    unique: "identityNumber"
-  },
+  // identityNumber: {
+  //   type: DataTypes.STRING(500),
+  //   allowNull: true,
+  //   unique: "identityNumber"
+  // },
   birthdate: {
     type: DataTypes.DATEONLY,
     allowNull: true

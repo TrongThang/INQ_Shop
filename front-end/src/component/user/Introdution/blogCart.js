@@ -28,9 +28,9 @@ const BlogCart = ({ blog }) => {
                         <div className="small">
                             <span className="fa fa-calendar text-primary"></span> {formatDate(blog.created_at)}
                         </div>
-                        <div className="small">
+                        {/* <div className="small">
                             <span className="bi bi-heart-fill text-primary"></span> {blog.score}
-                        </div>
+                        </div> */}
                     </div>
                     {/* <a href="#" className="h4 d-inline-block mb-3">
                         {blog.title}

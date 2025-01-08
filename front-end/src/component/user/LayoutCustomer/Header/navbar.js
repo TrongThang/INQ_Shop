@@ -2,15 +2,18 @@ import { Link } from "react-router-dom";
 import AreaCustomer from "../Header/areaCustomer";
 import SearchHeader from "./searchHeader";
 import RecursiveDropdown from "./recursiveDropdown";
+import { useSettingWeb } from "../../../../context/settingWebContext";
 
 export default function Navbar({categories, isLogged}) {
-
+    const { setting } = useSettingWeb();
+    
     return (
         <nav className="navbar navbar-expand-lg navbar-light d-flex justify-content-between align-items-center">
             {/* <!-- Logo --> */}
             <Link to="/" className="navbar-brand p-0 me-auto">
                 <h1 className="text-primary mb-0">
-                    <i className="fab fa-slack me-2"></i>INQ Shop
+                    {/* {}<i className="fab fa-slack me-2"></i>INQ Shop */}
+                    {DOMParser} {<div dangerouslySetInnerHTML={{ __html: setting.LOGO }} /> }
                 </h1>
             </Link>
             {/* <!-- Toggler for Mobile View --> */}
@@ -20,7 +23,7 @@ export default function Navbar({categories, isLogged}) {
             {/* <!-- Navbar Links --> */}
             <div className="collapse navbar-collapse" id="navbarCollapse">
                 <div className="navbar-nav mx-auto">
-                    <Link to="/" className="nav-item nav-link active">Trang chủ</Link>
+                    <Link to={ setting.LINK_NAVBAR_INDEX } className="nav-item nav-link active">{ setting.LAYOUT_NAVBAR_INDEX }</Link>
                     {/* <div className="nav-item dropdown">
                         <div className="nav-link" data-bs-toggle="dropdown">
                             <span className="dropdown-toggle">Danh mục</span>
@@ -35,8 +38,8 @@ export default function Navbar({categories, isLogged}) {
                     </div> */}
                     <RecursiveDropdown  />
 
-                    <Link to="/introdution" className="nav-item nav-link">Giới thiệu</Link>
-                    <Link to="/contact" className="nav-item nav-link">Liên hệ</Link>
+                    <Link to={setting.LINK_NAVBAR_INTRODUTION} className="nav-item nav-link">{ setting.LAYOUT_NAVBAR_INTRODUTION || "Giới thiệu" }</Link>
+                    <Link to={setting.LINK_NAVBAR_BLOG} className="nav-item nav-link">{setting.LAYOUT_NAVBAR_BLOG || "Bài viết"}</Link>
                 </div>
             </div>
 

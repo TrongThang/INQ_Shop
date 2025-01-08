@@ -1,10 +1,9 @@
 import HeaderUser from "../component/user/LayoutCustomer/Header/header";
 import FooterUser from "../component/user/LayoutCustomer/Footer/footer";
-import ListBlogPage from "./user/Introdution/listBlogPage";
-import Contact from "./user/contact";
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
+
 
 export default function User() {
     const [categories, setCategories] = useState([]);

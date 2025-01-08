@@ -1,15 +1,28 @@
-import React, { createContext, useState, useContext, } from 'react';
+import React, { createContext, useState, useContext, useEffect, } from 'react';
 const InfoWebsiteContext = createContext();
 
 export const InfoWebsiteProvider = ({ children }) => {
-    const fetchData = async () => {
-        const data = await fetch('http://localhost:8081/api/setting-web')
+    const [setting, setSetting] = useState([])
 
-        return await data
+    const fetchData = async () => {
+        try {
+            const response = await fetch('http://localhost:8081/api/setting-web')
+
+            if (!response.ok) {
+                throw new Error('Không lấy được dữ liệu cài đặt của Website');
+            }
+
+            const result = await response.json();
+            setSetting(result.data);
+        } catch (error) {
+            console.error('Lỗi:', error);
+        }
     }
 
+    useEffect(() => {
+        fetchData()
+    }, []);
 
-    const [setting, setSetting] = useState([fetchData()])
 
     
     return (

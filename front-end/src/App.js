@@ -29,44 +29,47 @@ import ProfileCustomer from "./pages/user/Profile/accountCustomerPage";
 
 import OrdersPage from "./pages/user/Profile/ordersPage";
 import { CartProvider } from './context/CartContext';
+import { InfoWebsiteProvider } from './context/settingWebContext';
 
 
 
 
 function App() {
 
-  const [page, setPage] = useState('user');
-
   return (
-    <Router>
-      <Routes>
-        {/* ADMIN */}
-        <Route path="/admin" element={<Admin />}>
-        </Route>
-
-        {/* USER */}
-        <Route path="/"
-          element={
-            <CartProvider>
-              <User />
-            </CartProvider>
-            }
-        >
-            <Route path='home' element={<HomePage />} />
-            <Route path="cart" element={<CartPage />} />
-            <Route path="login-in" element={<LoginPage />} />
-            <Route path="profile" element={<ProfileCustomer />} />
-            {/* <Route path="/profile" element={<ProfileCustomer />} >
-              <Route path="address" element={<AddressPage />} />
-              <Route path="orders" element={<OrdersPage />} />
-              <Route path="changePassword" element={<ChangePassword />} />
-            </Route> */}
-            <Route path="/profile/orders" element={<OrdersPage />} />
-            <Route path="/search/*" element={<SearchPage />} />
-            <Route path="/device/:slug" element={<DetailDevicePage />} />
+    <InfoWebsiteProvider>
+      <Router>
+        <Routes>
+          {/* ADMIN */}
+          <Route path="/admin" element={<Admin />}>
           </Route>
-      </Routes>
-    </Router>
+
+          {/* USER */}
+          <Route path="/"
+            element={
+              <CartProvider>
+                <User />
+              </CartProvider>
+              }
+          >
+              <Route path='home' element={<HomePage />} />
+              <Route path="cart" element={<CartPage />} />
+              <Route path="login-in" element={<LoginPage />} />
+              <Route path="profile" element={<ProfileCustomer />} />
+              {/* <Route path="/profile" element={<ProfileCustomer />} >
+                <Route path="address" element={<AddressPage />} />
+                <Route path="orders" element={<OrdersPage />} />
+                <Route path="changePassword" element={<ChangePassword />} />
+              </Route> */}
+              <Route path="/profile/orders" element={<OrdersPage />} />
+              <Route path="/search/*" element={<SearchPage />} />
+              <Route path="/device/:slug" element={<DetailDevicePage />} />
+            </Route>
+
+        </Routes>
+      </Router>
+    </InfoWebsiteProvider>
+      
 
   );
 }

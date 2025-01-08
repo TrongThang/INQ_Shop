@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import AreaCustomer from "../Header/areaCustomer";
 import SearchHeader from "./searchHeader";
+import RecursiveDropdown from "./recursiveDropdown";
 
 export default function Navbar({categories, isLogged}) {
 
@@ -20,7 +21,7 @@ export default function Navbar({categories, isLogged}) {
             <div className="collapse navbar-collapse" id="navbarCollapse">
                 <div className="navbar-nav mx-auto">
                     <Link to="/" className="nav-item nav-link active">Trang chủ</Link>
-                    <div className="nav-item dropdown">
+                    {/* <div className="nav-item dropdown">
                         <div className="nav-link" data-bs-toggle="dropdown">
                             <span className="dropdown-toggle">Danh mục</span>
                         </div>
@@ -31,7 +32,9 @@ export default function Navbar({categories, isLogged}) {
                                 </Link>
                             ))}
                         </div>
-                    </div>
+                    </div> */}
+                    <RecursiveDropdown  />
+
                     <Link to="/introdution" className="nav-item nav-link">Giới thiệu</Link>
                     <Link to="/contact" className="nav-item nav-link">Liên hệ</Link>
                 </div>

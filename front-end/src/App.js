@@ -25,6 +25,8 @@ import LoginPage from './pages/user/Account/loginPage';
 
 import CartPage from './pages/user/cartPage';
 import SearchPage from "./pages/user/searchPage";
+import AddressPage from "./pages/user/Profile/addressPage";
+import BlogPage from "./pages/user/Introdution/listBlogPage";
 import ProfileCustomer from "./pages/user/Profile/accountCustomerPage";
 
 import OrdersPage from "./pages/user/Profile/ordersPage";
@@ -58,11 +60,14 @@ function App() {
               <Route path="login-in" element={<LoginPage />} />
               <Route path="profile" element={<ProfileCustomer />} />
               <Route path="contact" element={<ContactPage />} />
+              <Route path="blog" element={<BlogPage />} />
+              {/* <Route path="introdution" element={<BlogPage />} /> */}
               {/* <Route path="/profile" element={<ProfileCustomer />} >
                 <Route path="address" element={<AddressPage />} />
                 <Route path="orders" element={<OrdersPage />} />
                 <Route path="changePassword" element={<ChangePassword />} />
               </Route> */}
+              <Route path="/profile/address" element={<AddressPage />} />
               <Route path="/profile/orders" element={<OrdersPage />} />
               <Route path="/search/*" element={<SearchPage />} />
               <Route path="/device/:slug" element={<DetailDevicePage />} />

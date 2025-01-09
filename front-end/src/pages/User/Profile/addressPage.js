@@ -29,6 +29,9 @@ const AddressPage = () => {
             const decoded = jwtDecode(token); // Decode the JWT token
             setIdCustomer(decoded.idPerson); // Set idCustomer from decoded token
         }
+
+        document.title = 'Địa chỉ | INQ';
+
     }, []);
 
     // Lấy danh sách địa chỉ cho khách hàng cụ thể

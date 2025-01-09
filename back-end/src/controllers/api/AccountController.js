@@ -18,31 +18,26 @@ const getLoginAPI = async (req, res) => {
     let token;
     if (account) {
       // Tạo token JWT khi đăng nhập thành công
-      if (account) {
-        // Create a JWT token when login is successful
-        token = jwt.sign(
-          {
-            idPerson: account.idPerson,
-            username: account.username,
-            idRole: account.idRole
-          },
-          process.env.SECRET_KEY, // Use secret key from environment variable
-          { expiresIn: '1h' } // Token expires after 1 hour
-        );
-      }
+      
+      token = jwt.sign(
+        {
+          idPerson: account.idPerson,
+          username: account.username,
+          idRole: account.idRole
+        },
+        process.env.SECRET_KEY, // Use secret key from environment variable
+        { expiresIn: '1h' } // Token expires after 1 hour
+      );
+      
 
       // Lưu thông tin vào session nếu cần thiết
       req.session.isLogged = true;
       req.session.idPerson = account.idPerson;
 
-      return res.status(200).json({
-        success: true,
-        data: { token }, // Trả về token thay vì thông tin người dùng
-        message: 'Đăng nhập thành công',
-      });
+      return res.status(200).json({ ttoken });
     }
 
-    return res.status(404).json({ success: false, message: 'Tài khoản hoặc mật khẩu không tồn tại' });
+    return res.status(404).json(false);
   } catch (error) {
     return res.status(500).json({
       success: false,

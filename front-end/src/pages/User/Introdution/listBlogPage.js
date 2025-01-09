@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import BlogCart from "../../../component/user/Introdution/blogCart";
+import BlogCard from "../../../component/user/Introdution/blogCard";
 import Pagination from "../../../component/Shared/Pagination/pagination";
 
 function ListBlogPage() {
@@ -35,7 +35,7 @@ function ListBlogPage() {
                 </div>
                 <div className="row g-4 justify-content-center">
                     {blogs.map((blog, index) => (
-                        <BlogCart key={index} blog={blog} />
+                        <BlogCard key={index} blog={blog} />
                     ))}
                     <Pagination />
                 </div>

@@ -1,8 +1,14 @@
 
+import { useEffect } from "react";
 import ProfileSidebar from "../../../component/user/Profile/navCustomer/profileSidebar";
 import OrderItems from "../../../component/user/Profile/orderItems";
 
 function OrdersPage() {
+
+    useEffect(() => {
+        document.title = 'Đơn hàng | INQ'
+    }, []);
+    
     return (
         <div className="container-fluid my-4">
             <div class="row ms-4 ">

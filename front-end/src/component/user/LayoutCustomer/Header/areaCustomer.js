@@ -42,7 +42,7 @@ export default function AreaCustomer({ isLogged }) {
     return (
         <>
             {/* <!-- Price & Cart --> */}
-            <div class="d-flex align-items-center">
+            <div className="d-flex align-items-center">
                 <span className="me-2 fw-bold">{getTotalPrice().toLocaleString()} VNĐ</span>
                 <Link
                     to="/cart"

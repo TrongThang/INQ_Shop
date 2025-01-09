@@ -17,9 +17,9 @@ export default function SearchHeader() {
 
     }
     return (
-        <form class="d-flex ms-lg-4 me-5" onSubmit={ hanldeSearch }>
+        <form className="d-flex ms-lg-4 me-5" onSubmit={ hanldeSearch }>
             <input 
-                class="form-control me-2 " 
+                className="form-control me-2 " 
                 type="search" 
                 placeholder="Tìm kiếm..." 
                 aria-label="Search"
@@ -28,10 +28,10 @@ export default function SearchHeader() {
             />
             <button
                 to={`/search?keyword=${encodeURIComponent(keyword)}`}
-                class="btn btn-outline-primary"
+                className="btn btn-outline-primary"
                 type="submit"
             >
-                <i class="fa-solid fa-search"></i>
+                <i className="fa-solid fa-search"></i>
             </button>
         </form>
     )

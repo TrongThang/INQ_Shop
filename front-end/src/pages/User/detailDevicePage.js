@@ -21,18 +21,20 @@ export default function DetailDevicePage() {
                 }
                 const result = await response.json();
                 setDevice(result.data);
+
             } catch (error) {
                 console.error('Lỗi:', error);
             }
         };
         
         fetchData();
-        
-        console.log('Lấy data Detail: ', device);
+        console.log('Tên sản phẩm: ', device)
 
     }, [slug]);
 
-    
+    useEffect(() => {
+        document.title = `${device.name} | INQ` 
+    }, [])
     return (
         <div className="container-fluid faq-section bg-light py-5">
             <div className="container py-5">

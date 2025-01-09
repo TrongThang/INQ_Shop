@@ -30,6 +30,7 @@ import ProfileCustomer from "./pages/user/Profile/accountCustomerPage";
 import OrdersPage from "./pages/user/Profile/ordersPage";
 import { CartProvider } from './context/CartContext';
 import { InfoWebsiteProvider } from './context/settingWebContext';
+import ContactPage from './pages/user/contact';
 
 
 
@@ -52,10 +53,11 @@ function App() {
               </CartProvider>
               }
           >
-              <Route path='home' element={<HomePage />} />
+              <Route path='/' element={<HomePage />} />
               <Route path="cart" element={<CartPage />} />
               <Route path="login-in" element={<LoginPage />} />
               <Route path="profile" element={<ProfileCustomer />} />
+              <Route path="contact" element={<ContactPage />} />
               {/* <Route path="/profile" element={<ProfileCustomer />} >
                 <Route path="address" element={<AddressPage />} />
                 <Route path="orders" element={<OrdersPage />} />

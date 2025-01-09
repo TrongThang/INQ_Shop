@@ -1,5 +1,6 @@
 const sequelize = require('../config/database');
 const { DataTypes } = require('sequelize');
+const Device = require('./Device');
 
 const Cart = sequelize.define('cart', {
   idCustomer: {
@@ -14,13 +15,14 @@ const Cart = sequelize.define('cart', {
   },
   idDevice: {
     type: DataTypes.INTEGER,
-    allowNull: true,
+    allowNull: false,
+    primaryKey: true,
     references: {
       model: 'device',
       key: 'idDevice'
     }
   },
-  stock: {
+  quantity: {
     type: DataTypes.INTEGER,
     allowNull: true
   }
@@ -34,7 +36,7 @@ const Cart = sequelize.define('cart', {
       unique: true,
       using: "BTREE",
       fields: [
-        { name: "idCustomer" },
+        { name: "idCustomer",  name: "idDevice" },
       ]
     },
     {
@@ -46,5 +48,8 @@ const Cart = sequelize.define('cart', {
     },
   ]
 });
+
+Device.hasMany(Cart, { foreignKey: 'idDevice', as: 'carts' })
+Cart.belongsTo(Device, { foreignKey: 'idDevice', as: 'device' });
 
 module.exports = Cart;

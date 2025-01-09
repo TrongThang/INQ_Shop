@@ -11,39 +11,43 @@ export default function Login() {
 
     const navigate = useNavigate();
 
- const handleLogin = async (e) => {
-  e.preventDefault();
+    const handleLogin = async (e) => {
+      e.preventDefault();
 
-  try {
-    const response = await fetch('http://localhost:8081/api/account/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password, type: 'CUS' }),
-    });
+      try {
+        const response = await fetch('http://localhost:8081/api/account/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, password, type: 'CUS' }),
+        });
 
-    const result = await response.json();
+        const result = await response.json();
 
-    if (response.ok) {
-      if (result.data && result.data.token) {
-        const token = result.data.token;
-        console.log('Token:', token); // Hiển thị token ra console
-        localStorage.setItem('authToken', token); // Lưu token vào localStorage
-        setShowToast(true); // Hiển thị thông báo đăng nhập thành công
-        navigate('/'); // Điều hướng đến trang chủ
-      } else {
-        setErrorMessage('Token không được trả về từ server');
+        if (response.ok) {
+          if (result.data && result.data.token) {
+            const token = result.data.token;
+            console.log('Token:', token); // Hiển thị token ra console
+            localStorage.setItem('authToken', token); // Lưu token vào localStorage
+            setShowToast(true); // Hiển thị thông báo đăng nhập thành công
+            navigate('/'); // Điều hướng đến trang chủ
+          } else {
+            setErrorMessage('Token không được trả về từ server');
+          }
+        } else {
+          setErrorMessage(result.message || 'Đăng nhập thất bại');
+        }
+      } catch (err) {
+        console.error(err);
+        setErrorMessage('Đã xảy ra lỗi trong quá trình đăng nhập');
       }
-    } else {
-      setErrorMessage(result.message || 'Đăng nhập thất bại');
-    }
-  } catch (err) {
-    console.error(err);
-    setErrorMessage('Đã xảy ra lỗi trong quá trình đăng nhập');
-  }
-};
+    };
 
+    useEffect(() => {
+        document.title = 'Đăng nhập | INQ'
+      }, []);
+    
     return (
         <>
             <LoginPopup

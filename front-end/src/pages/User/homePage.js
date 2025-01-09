@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import BestSeelingDeivce from "../../component/user/Home/bestSellingDevice";
 import Carousel from "../../component/user/Home/carousel";
 import CategoryDevice from "../../component/user/Home/categoryDevice";
@@ -6,6 +7,11 @@ import NewDevice from "../../component/user/Home/newDevice";
 import Services from "../../component/user/Home/services";
 
 function HomePage() {
+
+    useEffect(() => {
+        document.title = 'Trang chủ | INQ'
+    }, []);
+    
     return (
         <>
             <Carousel />

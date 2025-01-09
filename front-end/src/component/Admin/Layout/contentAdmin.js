@@ -5,7 +5,7 @@ import ManaBlog from "../../../pages/admin/Blog/manageBlogPage";
 
 export default function ContentAdmin() {
     return (
-        <div class="main-content">
+        <div className="main-content">
             <HeaderAdmin />
             {/* <SiteAdmin /> */}
             {/* <ManaSlideshow /> */}

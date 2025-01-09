@@ -44,8 +44,8 @@ function ManageBlogPage() {
             {formState === 2 && <UpdateBlog onBack={handleBackClick} blogId={selectedBlogId} />} {/* Form Cập nhật */}
 
             {formState === 0 && (
-                <div class="main-content-inner">
-                    <div class="container-fluid py-4">
+                <div className="main-content-inner">
+                    <div className="container-fluid py-4">
                         <HeaderBlog onAdd={handleFormAddClick} />
                         <ManageBlogItems onUpdate={handleFormUpdateClick} blogs={blog} />
                     </div>

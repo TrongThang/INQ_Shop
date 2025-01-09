@@ -42,10 +42,10 @@ export default function HeaderAdmin({ idUserProps }) {
                 <div className="col-md-6 col-sm-4 clearfix">
                     <ul className="notification-area d-flex justify-content-end align-items-center">
                         <li id="full-view">
-                            <i class="fa-solid fa-maximize"></i>    
+                            <i className="fa-solid fa-maximize"></i>    
                         </li>
                         <li id="full-view-exit">
-                            <i class="fa-solid fa-minimize"></i>
+                            <i className="fa-solid fa-minimize"></i>
                         </li>
                         <li className="dropdown">
                             <i class="fa-solid fa-bell">

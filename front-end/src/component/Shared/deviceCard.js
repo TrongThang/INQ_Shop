@@ -10,12 +10,13 @@ const DeviceCard = ({ device }) => {
         <div className="col-xl-2 col-lg-2 product-items wow fadeInUp me-3 mb-5" data-wow-delay="0.2s" style={{ padding: "0px"}}>
             <div
                 className="service-item"
-                onClick={() => addToCart(device, 1)}
             >
                 <div className="service-img">
-                <div className="img-change">
-                <img src="https://placehold.co/200x100" className="img-fluid rounded-top w-100" alt="Smart Lighting"/>
-                {/* device.image thay vào nội dung của */}
+                <div className="img-change" onClick={() => addToCart(device, 1)}>
+                    <img
+                        src="https://placehold.co/200x100" 
+                        className="img-fluid rounded-top w-100" alt="Smart Lighting"
+                    />
                 </div>
             </div>
             <div className="service-content p-4">
@@ -28,8 +29,7 @@ const DeviceCard = ({ device }) => {
                     <p className="mb-2 text-primary fw-bold">
                         {Number(device.sellingPrice).toLocaleString()} VNĐ
                     </p>
-                    <p className="mb-2">
-                        {console.log('Số sao', device.name, ':',(device.reviews?.[0]?.averageRating ?? "No rating available"))}    
+                    <p className="mb-2"> 
                         <StarRating rating={ device.reviews?.[0]?.averageRating ?? 0 } />
                     </p>
                     <p className="mb-4 line-clamp-p">

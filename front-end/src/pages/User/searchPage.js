@@ -5,6 +5,10 @@ import ListDeviceSearch from "../../component/user/SearchPage/listDeviceSearch";
 import { useLocation, useNavigate  } from "react-router-dom";
 
 export default function SearchPage() {
+    useEffect(() => {
+        document.title = 'Tìm kiếm | INQ'
+    }, []);
+    
     const location = useLocation();
     const navigate = useNavigate(); 
     const [searchResult, setSearchResult] = useState([]); 

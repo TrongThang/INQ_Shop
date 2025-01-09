@@ -32,21 +32,21 @@ export default function SearchByCategory({ searchResult }) {
     }, [searchResult]);
 
     return (
-        <div class="product-sidebar">
-            <div class="product-sidebar-widget">
-                <h5 class="product-sidebar-widget-title">Danh mục</h5>
-                <ul class="list-group">
+        <div className="product-sidebar">
+            <div className="product-sidebar-widget">
+                <h5 className="product-sidebar-widget-title">Danh mục</h5>
+                <ul className="list-group">
                     {categories.map((category) => (
-                        <li key={category.id} className="list-group-item">
+                        <li key={category.id} classNameName="list-group-item">
                             <input
                                 type="checkbox"
-                                className="custom-control-input"
+                                classNameName="custom-control-input"
                                 value={category.id}
                                 id={`cat-${category.id}`}
                                 onChange={(e) => handleCheckCategory(category.id, e.target.checked)}
                             />
                             <label
-                                className="text-primary custom-control-label ms-2 fw-bold"
+                                classNameName="text-primary custom-control-label ms-2 fw-bold"
                                 htmlFor={`cat-${category.id}`}
                             >
                                 {category.name}

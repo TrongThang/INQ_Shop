@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ModalSearch from '../../component/user/Contact/modalSearch';
 import ContactForm from '../../component/user/Contact/contactForm';
 
 function ContactPage() {
+  useEffect(() => {
+    document.title = 'Liên hệ | INQ'
+  }, []);
+
   const [formData, setFormData] = useState({
     fullname: '',
     email: '',

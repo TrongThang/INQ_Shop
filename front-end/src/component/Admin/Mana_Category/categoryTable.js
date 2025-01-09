@@ -2,9 +2,9 @@ import CategoryRow from "./categoryRow";
 
 export default function CategoryTable({categories}) {
     return (
-        <div class="card">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle">
+        <div className="card">
+            <div className="table-responsive">
+                <table className="table table-hover align-middle">
                     <thead>
                         <tr>
                             <th><input type="checkbox"/></th>

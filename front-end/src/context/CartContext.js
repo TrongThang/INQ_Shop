@@ -1,13 +1,26 @@
 import React, { createContext, useState, useContext, useEffect, } from 'react';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { jwtDecode } from 'jwt-decode';
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
+    const [idCustomer, setIdCustomer] = useState(null);
+
+    useEffect(() => {
+        const token = localStorage.getItem('authToken');
+        if (token) {
+            const decoded = jwtDecode(token);
+            setIdCustomer(decoded.idPerson);
+        }
+    }, []);
 
     const fetchDataCart = async () => {
         try {
-            const response = await fetch('http://localhost:8081/api/cart')
+            console.log('ID Customer: ', idCustomer)
+            const response = await fetch(`http://localhost:8081/api/cart/${idCustomer}`)
             if (!response.ok) {
                 throw new Error("Lỗi lấy dữ liệu từ giỏ hàng");
             }
@@ -20,49 +33,53 @@ export const CartProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        fetchDataCart()
-    }, []);
+        if (idCustomer) {
+            fetchDataCart();
+        }
+    }, [idCustomer]);
 
-    const handleInputQuantity = (idDevice, quantity) => {
+    const handleInputQuantity = (device, quantity) => {
         if (isNaN(quantity) || quantity < 1) {
             return;
         }
-        
 
-
-        setCart((prevCart) => {
-            return prevCart.map((item) => {
-                if (item.idDevice === idDevice) {
-                    return { ...item, quantity: quantity };
-                }
-                return item;
-            })
-        });
+        addToCart(device, quantity, 'input')
     }
 
-    const addToCart = (device, quantity) => {
+    const addToCart = async (device, quantity, type = null) => {
         const cartItem = {
             idDevice: device.idDevice,
-            name: device.name,
             quantity: Number(quantity),
         };
 
-        setCart((prevCart) => {
-            // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-            const existingDevice = prevCart.find(item => item.idDevice === device.idDevice);
-
-            if (existingDevice) {
-                // Nếu có, tăng số lượng theo số lượng của sản phẩm đó.
-                return prevCart.map(item =>
-                    item.idDevice === device.idDevice
-                        ? { ...item, quantity: Number(item.quantity) + Number(quantity) }
-                        : item
-                );
-            } else {
-                // Nếu chưa có, thêm sản phẩm mới vào giỏ với quantity = item.quantity
-                return [...prevCart, { ...device, quantity: quantity }];
+        if (idCustomer) {
+            try {
+                const response = await axios.post('http://localhost:8081/api/cart/', {
+                    ...cartItem,
+                    idCustomer: idCustomer,
+                    type: type
+                });
+                setCart(response.data.newCart)
+            } catch (error) {
+                console.log('Lỗi thêm sản phẩm vào giỏ hàng cho KH logged:', error)
             }
-        });
+        } else {
+            try {
+                console.log('Thêm SP - No Logged');
+                const existingCart = Cookies.get('cart') ? JSON.parse(Cookies.get('cart')) : [];
+
+                const updatedCart = existingCart.find(item => item.idDevice === device.idDevice)
+                    ? existingCart.map(item => item.idDevice === device.idDevice
+                        ? { ...item, quantity: item.quantity + Number(quantity) }
+                        : item
+                    )
+                    : [...existingCart, cartItem];
+                Cookies.set('cart', JSON.stringify(updatedCart), { expires: 7 });
+                setCart(updatedCart);
+            } catch (error) {
+                console.error('Lỗi cập nhật giỏ hàng vào cookie:', error)
+            }
+        }
     }
 
     const plusDeviceInCart = (idDevice) => {
@@ -92,18 +109,57 @@ export const CartProvider = ({ children }) => {
         });
     };
 
-    const removeFromCart = (idDevice) => {
-        setCart(cart.filter(item => item.idDevice !== idDevice));
+    const removeFromCart = async (idDevice) => {
+        if (idCustomer) {
+            console.log('idDevice Remove: ', idDevice)
+            try {
+                const response = await axios.delete(`http://localhost:8081/api/cart/${idCustomer}/${idDevice}`);
+
+                setCart(response.data.newCart)
+            } catch (error) {
+                console.log('Lỗi xoá 1 sản phẩm vào giỏ hàng cho KH logged:', error)
+            }
+        } else {
+            try {
+                const existingCart = Cookies.get('cart') ? JSON.parse(Cookies.get('cart')) : [];
+
+                const updatedCart = existingCart.filter(item => item.idDevice !== idDevice);
+
+                Cookies.set('cart', JSON.stringify(updatedCart), { expires: 7 });
+
+                setCart(updatedCart);
+            } catch (error) {
+                console.error('Lỗi xoá 1 sản phẩm trong giỏ hàng trong cookie:', error)
+            }
+        }
     }
 
-    const removeAllCart = () => {
-        setCart([]); 
+    const removeAllCart = async () => {
+        if (idCustomer) {
+            try {
+                const response = await axios.delete(`http://localhost:8081/api/cart/${idCustomer}`);
+
+                setCart(response.data.newCart)
+            } catch (error) {
+                console.log('Lỗi xoá hết giỏ hàng cho KH logged:', error)
+            }
+        } else {
+            try {
+                Cookies.remove('cart');
+
+                setCart([]);
+            } catch (error) {
+                console.error('Lỗi cập nhật giỏ hàng vào cookie:', error)
+            }
+        }
     };
 
     const getTotalPrice = () => {
-        return cart.reduce((accumulator, currentValue) => {
-            return accumulator + (currentValue.quantity * currentValue.sellingPrice)
-        }, 0);
+        if (cart) {
+            return cart.reduce((accumulator, currentValue) => {
+                return accumulator + (currentValue.quantity * currentValue.sellingPrice)
+            }, 0);
+        }
     }
     
     const getTotalItem = () => {

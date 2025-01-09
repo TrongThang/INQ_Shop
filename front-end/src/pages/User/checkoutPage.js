@@ -3,8 +3,8 @@ import ListDeviceOrder from "../../component/user/Checkout/listDeviceOrder";
 
 export default function CheckoutPage() {
     return (
-        <div class="">
-            <div class="row">
+        <div className="">
+            <div className="row">
                 <InfoOrder />
 
                 <ListDeviceOrder />

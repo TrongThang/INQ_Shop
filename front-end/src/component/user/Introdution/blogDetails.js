@@ -23,7 +23,7 @@ const BlogDetails = () => {
         };
 
         fetchBlog();
-
+        document.title = blog.title;
         // Kiểm tra trạng thái đã bỏ phiếu từ localStorage
         const voted = localStorage.getItem(`voted_${id}`);
         if (voted) {

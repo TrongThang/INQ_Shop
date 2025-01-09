@@ -15,8 +15,9 @@ function ListBlogPage() {
                 console.error("Error fetching blogs:", error);
             }
         };
-
+        
         fetchBlogs();
+        document.title = 'Bài viết | INQ'
     }, []);
 
     return (

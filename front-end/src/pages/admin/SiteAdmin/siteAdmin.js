@@ -6,7 +6,7 @@ export default function SiteAdmin() {
     return (
         <>
             <NavTabInfoWeb />
-            <div class="tab-content" id="pills-tabContent">
+            <div className="tab-content" id="pills-tabContent">
                 <AreaDashboard />
                 <AreaInfoWeb />
             </div>

@@ -2,7 +2,8 @@ const connection = require('../../config/database.js');
 const Device = require('../../models/Device.js');
 
 const {
-    getAllDevice_User, getAllDevice_Admin, getDeviceBySlug,
+    getAllDevice_User, getAllDevice_Admin, getAllDeviceByStatus,
+    getDeviceBySlug,
     createDevice, updateDevice, updateStatusDevice,
     //Review For Device
     getAllReviewForDevice, createReviewForDevice, updateReviewForDevice, updateStatusReviewForDevice,

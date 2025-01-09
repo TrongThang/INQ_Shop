@@ -14,7 +14,7 @@ import ContentAdmin from '../component/admin/Layout/contentAdmin.js';
 export default function Admin() {
     return (
         <>
-            <div class="page-container">
+            <div className="page-container">
                 <Sidebar />
                 
                 <ContentAdmin />

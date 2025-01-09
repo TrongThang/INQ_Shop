@@ -26,7 +26,7 @@ const getCart = async (idCustomer) => {
         include: {
             model: Device,
             as: 'device',
-            attributes: ['sellingPrice', 'name'],
+            attributes: ['sellingPrice', 'name', 'image', 'slug'],
         },
         attributes: ['idDevice', 'quantity']
     })
@@ -37,6 +37,8 @@ const getCart = async (idCustomer) => {
             quantity: cart.quantity,
             sellingPrice: cart.device?.sellingPrice,
             name: cart.device.name,
+            image: cart.device.image,
+            slug: cart.device.slug,
         }
     });
 

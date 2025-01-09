@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import blog1 from '../../../resource/img/blog-1.png';
+import DeviceCard from "../../Shared/deviceCard";
 
 const FeaturedDevices = () => {
     const [device, setDevice] = useState([]);
@@ -63,32 +62,7 @@ const FeaturedDevices = () => {
 
                     <div className="d-flex overflow-hidden product-container product-container-best-seller">
                         {visibleProducts.map((device, index) => (
-                            <div key={index} className="device-items wow fadeInUp" data-wow-delay="0.2s">
-                                <div className="service-item">
-                                    <div className="service-img">
-                                        <div className="img-change">
-                                            <img src={blog1} className="img-fluid rounded-top w-100" alt={device.name} />
-                                        </div>
-                                    </div>
-                                    <div className="service-content p-4">
-                                        <div className="service-content-inner">
-                                            <Link to="/details" className="line-clamp-title-device  h4 mb-2 text-decoration-none">{device.name}</Link>
-                                            <p className="mb-2 text-primary fw-bold">
-                                                {Number(device.sellingPrice).toLocaleString("vi-VN", {
-                                                    style: "currency",
-                                                    currency: "VND",
-                                                })}
-                                            </p>
-                                            <p className="mb-2 line-clamp-p">{device.descriptionNormal}</p>
-                                            <p className="mb-2">
-                                                <span className="stars" style={{ '--rating': device.reviews[0]?.averageRating || 5 }}></span>
-                                                {" "}({parseFloat(device.reviews[0]?.averageRating || 5).toFixed(1)}/5)
-                                            </p>
-                                            <Link to="/details" className="btn btn-primary rounded-pill py-2 px-4">Chi tiết</Link>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <DeviceCard key={index} device={device} />
                         ))}
                     </div>
 

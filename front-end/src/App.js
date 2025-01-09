@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 // <!-- Libraries Stylesheet -->
 import './resource/lib/animate/animate.min.css'
@@ -13,7 +13,6 @@ import './resource/css/style.css';
 // <!-- Template Stylesheet -->
 import './resource/css/inq.css'
 
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import ButtonPage from './component/buttonPage';
 
@@ -28,7 +27,6 @@ import SearchPage from "./pages/user/searchPage";
 import AddressPage from "./pages/user/Profile/addressPage";
 import BlogPage from "./pages/user/Introdution/listBlogPage";
 import ProfileCustomer from "./pages/user/Profile/accountCustomerPage";
-
 import OrdersPage from "./pages/user/Profile/ordersPage";
 import { CartProvider } from './context/CartContext';
 import { InfoWebsiteProvider } from './context/settingWebContext';

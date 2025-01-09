@@ -5,19 +5,19 @@
     position: relative;
     font-size: 20px;
     color: #FFD700;
-  }
-  
-  .stars::before {
+}
+
+.stars::before {
     content: "★★★★★";
     background: #FFD700;
     -webkit-background-clip: text;
     color: transparent;
-  }
-  
-  .stars {
+}
+
+.stars {
     --full-stars: calc(var(--rating) * 20);
-  }
-  
+}
+
 
 /* Address -----------------------------css  */
 .container-form {
@@ -395,6 +395,12 @@ form .form-group textarea {
     /* Chia đều không gian cho 5 sản phẩm */
     border: 1px solid #ddd;
     border-radius: 5px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}  
+
+.device-items:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
 }
 
 .line-clamp-title-device {

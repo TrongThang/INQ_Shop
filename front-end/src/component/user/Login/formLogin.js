@@ -3,16 +3,31 @@ import { Link } from "react-router-dom";
 
 const Login = ({ username, setUsername, password, setPassword, handleLogin, errorMessage }) => {
   return (
-    <div className="container">
-    
-     {/* Login Form */}
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <div className="card">
-            <div className="card-header">
-              <h5 className="card-title">ĐĂNG NHẬP</h5>
+    <>
+      {/* Trigger button for opening the modal */}
+   
+      {/* Modal for Login */}
+      <div
+        className="modal fade"
+        id="loginModal"
+        tabIndex="-1"
+        aria-labelledby="loginModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="loginModalLabel">
+                ĐĂNG NHẬP
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
             </div>
-            <div className="card-body">
+            <div className="modal-body">
               <form onSubmit={handleLogin}>
                 <div className="mb-3">
                   <label htmlFor="email" className="form-label">
@@ -46,22 +61,23 @@ const Login = ({ username, setUsername, password, setPassword, handleLogin, erro
                 <button type="submit" className="btn btn-primary w-100 mb-2">
                   Đăng nhập
                 </button>
-                <Link to="/resgister" className="btn btn-outline-primary w-100 mb-2">
+                <a href="#" className="btn btn-outline-primary w-100 mb-2"
+                  data-bs-toggle="modal"
+                  data-bs-target="#registerModal"
+                >
                   Đăng ký ngay
-                </Link>
+                </a>
               </form>
 
               {/* Display error message if any */}
               {errorMessage && (
-                <div className="alert alert-danger mt-3">
-                  {errorMessage}
-                </div>
+                <div className="alert alert-danger mt-3">{errorMessage}</div>
               )}
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

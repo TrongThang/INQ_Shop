@@ -1,6 +1,7 @@
 const express = require('express');
 const {
     getAllLikedDeviceAPI,
+    getLikedDeviceAPI,
     postAddToLikedDeviceAPI,
     removeLikedDeviceAPI,
     removeAllLikedDeviceAPI,
@@ -8,8 +9,8 @@ const {
 const routerLikedDevice = express.Router();
 
 
-routerLikedDevice.get('/', getAllLikedDeviceAPI );
 routerLikedDevice.get('/:idCustomer', getAllLikedDeviceAPI );
+routerLikedDevice.get('/:idCustomer/:idDevice', getLikedDeviceAPI );
 routerLikedDevice.post('/', postAddToLikedDeviceAPI);
 routerLikedDevice.delete('/:idCustomer/:idDevice', removeLikedDeviceAPI);
 

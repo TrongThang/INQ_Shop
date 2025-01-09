@@ -26,6 +26,7 @@ import LoginPage from './pages/user/Account/loginPage';
 import CartPage from './pages/user/cartPage';
 import SearchPage from "./pages/user/searchPage";
 import ProfileCustomer from "./pages/user/Profile/accountCustomerPage";
+import LikedDevice from "./pages/user/likedDevice";
 
 import OrdersPage from "./pages/user/Profile/ordersPage";
 import { CartProvider } from './context/CartContext';
@@ -64,6 +65,7 @@ function App() {
               <Route path="/profile/orders" element={<OrdersPage />} />
               <Route path="/search/*" element={<SearchPage />} />
               <Route path="/device/:slug" element={<DetailDevicePage />} />
+              <Route path="/likeDevice" element={<LikedDevice />} />
             </Route>
 
         </Routes>

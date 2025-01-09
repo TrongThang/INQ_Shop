@@ -37,6 +37,7 @@ import Contact from "./pages/user/contact";
 import { CartProvider } from './context/CartContext';
 import { InfoWebsiteProvider } from './context/settingWebContext';
 import ContactPage from './pages/user/contact';
+import RegisterPage from './pages/user/Account/registerPage';
 
 
 
@@ -56,6 +57,8 @@ function App() {
             element={
               <CartProvider>
                 <User />
+                <LoginPage />
+                <RegisterPage />
               </CartProvider>
               }
           >
@@ -78,8 +81,6 @@ function App() {
         </Routes>
       </Router>
     </InfoWebsiteProvider>
-      
-
   );
 }
 

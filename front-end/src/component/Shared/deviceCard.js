@@ -11,7 +11,7 @@ const DeviceCard = ({ device }) => {
                 className="service-item"
             >
                 <div className="service-img">
-                    <div className="img-change" onClick={addToCart(device, 1)}>
+                    <div className="img-change" >
                         <img src={`/resource/img/${device.image}`} className="img-fluid rounded-top w-100"
                             style={{ height: "300px", objectFit: "cover" }}
                             alt="Smart Lighting" />

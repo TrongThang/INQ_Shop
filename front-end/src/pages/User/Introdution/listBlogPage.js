@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import BlogCard from "../../../component/user/Introdution/blogCard";
 import Pagination from "../../../component/Shared/Pagination/pagination";
 
-function ListBlogPage() {
+function ListBlogPage({isIntroPage = false}) {
     const [blogs, setBlogs] = useState([]);
 
     useEffect(() => {
@@ -17,7 +17,10 @@ function ListBlogPage() {
         };
         
         fetchBlogs();
-        document.title = 'Bài viết | INQ'
+        if (!isIntroPage) {
+            document.title = 'Bài viết | INQ'
+        }
+        console.log('Chạy')
     }, []);
 
     return (
@@ -37,9 +40,13 @@ function ListBlogPage() {
                         
                     </div>
                     <div className="row g-4 justify-content-center">
-                        {blogs.map((blog, index) => (
-                            <BlogCard key={index} blog={blog} />
-                        ))}
+                        {blogs.length > 0 ? (
+                            blogs.map((blog, index) => (
+                                <BlogCard key={index} blog={blog} />
+                            ))
+                        ) : (
+                            <p>Không có bài viết nào để hiển thị.</p>
+                        )}
                         {/* <Pagination /> */}
                     </div>
                 </div>

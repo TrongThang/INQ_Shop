@@ -25,7 +25,6 @@ export default function DetailDevicePage() {
         };
         
         fetchData();
-        console.log('Tên sản phẩm: ', device)
 
     }, [slug]);
 

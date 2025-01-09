@@ -6,20 +6,21 @@ const DeviceCard = ({ device }) => {
     const { addToCart } = useCart();
 
     return (
-        <div className="device-items wow fadeInUp " data-wow-delay="0.2s" >
+        <div className="device-items wow fadeInUp me-3 mb-5" data-wow-delay="0.2s" style={{ padding: "0px"}}>
             <div
                 className="service-item"
             >
                 <div className="service-img">
-                    <div className="img-change" >
-                        <img src={`/resource/img/${device.image}`} className="img-fluid rounded-top w-100"
+                    <div className="img-change">
+                        <img src={`/img/device/${device.image}`} className="img-fluid rounded-top w-100"
                             style={{ height: "300px", objectFit: "cover" }}
-                            alt="Smart Lighting" />
+                            alt="Smart Lighting"
+                        />
                         {/* device.image thay vào nội dung của */}
                     </div>
                 </div>
                 <div className="service-content p-4">
-                    <div className="service-content-inner">
+                    <div className="service-content-inner" >
                         <Link
                             to={`/device/${device.slug}`}
                             className="line-clamp-title-device h4 text-decoration-none"

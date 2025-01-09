@@ -1,14 +1,11 @@
 import LoginPopup from '../../../component/user/Login/formLogin';
-import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import LoginSuccessToast from '../../../component/user/Notification/LoginSuccessToast';
+import { useState } from 'react';
 
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -25,8 +22,8 @@ export default function Login() {
       const result = await response.json();
 
       if (response.ok) {
-        if (result.data && result.data.token) {
-          const token = result.data.token;
+        if (result.token) {
+          const token = result.token;
           console.log('Token:', token); // Hiển thị token ra console
           localStorage.setItem('authToken', token); // Lưu token vào localStorage
           window.location.reload(); // Tải lại trang

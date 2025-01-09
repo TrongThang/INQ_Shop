@@ -16,7 +16,7 @@ const LogoutToast = ({ show }) => {
 
     return (
         <div
-            className="toast position-fixed top-3 mt-3  end-0 p-2 alert alert-success"
+            className="toast position-fixed top-3 mt-3 end-0 p-2 alert alert-success"
             ref={toastRef} // Attach ref to the toast element
             role="alert"
             aria-live="assertive"

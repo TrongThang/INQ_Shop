@@ -19,7 +19,6 @@ export default function Liked() {
     try {
       const response = await fetch(`http://localhost:8081/api/likedDevice/${idCustomer}`);
       const result = await response.json();
-      console.log('Data:', result.data);
       setDevices(result.data);
     } catch (err) {
       console.error(err);

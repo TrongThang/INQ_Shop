@@ -4,9 +4,6 @@ import { Link } from "react-router-dom";
 const Login = ({ username, setUsername, password, setPassword, handleLogin, errorMessage }) => {
   return (
     <>
-      {/* Trigger button for opening the modal */}
-   
-      {/* Modal for Login */}
       <div
         className="modal fade"
         id="loginModal"

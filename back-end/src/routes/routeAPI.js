@@ -19,6 +19,8 @@ const routerCart = require('./cartRoute');
 const routerDevice = require('./deviceRoute');
 const routerInfoWebsite = require('./infoWebsiteRoute');
 
+
+
 router.use('/device', routerDevice);
 router.use('/blog', routerBlog);
 router.use('/contact', routerContact);
@@ -35,6 +37,7 @@ router.use('/attribute', routerAttribute);
 router.use('/setting-web', routerInfoWebsite);
 
 // router.use('/attributeGroup', routerAttributeGroup);
+
 
 
 

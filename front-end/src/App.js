@@ -28,6 +28,11 @@ import AddressPage from "./pages/user/Profile/addressPage";
 import BlogPage from "./pages/user/Introdution/listBlogPage";
 import ProfileCustomer from "./pages/user/Profile/accountCustomerPage";
 import OrdersPage from "./pages/user/Profile/ordersPage";
+
+import ListBlogPage from "./pages/user/Introdution/listBlogPage";
+import DetailBlogPage from "./pages/user/Introdution/blogDetailsPage";
+import CompanyInfo from './component/user/Introdution/companyInfo';
+import Contact from "./pages/user/contact";
 import { CartProvider } from './context/CartContext';
 import { InfoWebsiteProvider } from './context/settingWebContext';
 import ContactPage from './pages/user/contact';
@@ -58,14 +63,11 @@ function App() {
               <Route path="login-in" element={<LoginPage />} />
               <Route path="profile" element={<ProfileCustomer />} />
               <Route path="contact" element={<ContactPage />} />
-              <Route path="blog" element={<BlogPage />} />
-              {/* <Route path="introdution" element={<BlogPage />} /> */}
-              {/* <Route path="/profile" element={<ProfileCustomer />} >
-                <Route path="address" element={<AddressPage />} />
-                <Route path="orders" element={<OrdersPage />} />
-                <Route path="changePassword" element={<ChangePassword />} />
-              </Route> */}
               <Route path="/profile/address" element={<AddressPage />} />
+              <Route path="/introdution" element={<CompanyInfo />} />
+              <Route path="/blog" element={<ListBlogPage />} />
+              <Route path="/blog/:id" element={<DetailBlogPage />} />
+              <Route path="/contact" element={<Contact />} />
               <Route path="/profile/orders" element={<OrdersPage />} />
               <Route path="/search/*" element={<SearchPage />} />
               <Route path="/device/:slug" element={<DetailDevicePage />} />

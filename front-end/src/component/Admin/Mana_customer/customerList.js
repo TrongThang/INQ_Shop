@@ -1,6 +1,6 @@
 import React from "react";
-
-const CustomerList = ({ data }) => {
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+const CustomerList = ({ Customers }) => {
   return (
     <div className="card">
       <div className="table-responsive">
@@ -16,26 +16,30 @@ const CustomerList = ({ data }) => {
               <th>Email</th>
               <th>Điện thoại</th>
               <th>Username</th>
-              <th>Địa chỉ</th>
+            
               <th>Ngày tạo</th>
+              <th>Ngày sửa</th>
+
               <th>Trạng thái TK</th>
               <th>Thao tác</th>
             </tr>
           </thead>
           <tbody>
-            {data.map((item, index) => (
+            {Customers.map((item, index) => (
               <tr key={index}>
                 <td>
                   <input type="checkbox" />
                 </td>
                 <td>{item.id}</td>
+                <td>{item.surname}</td>
                 <td>{item.lastName}</td>
-                <td>{item.firstName}</td>
                 <td>{item.email}</td>
                 <td>{item.phone}</td>
                 <td>{item.username}</td>
-                <td>{item.address}</td>
-                <td>{item.createdDate}</td>
+              
+                <td>{item.created_at}</td>
+                <td>{item.updated_at}</td>
+
                 <td>
                   <span className={`badge ${item.status === "Hoạt động" ? "bg-success" : "bg-danger"}`}>
                     {item.status}

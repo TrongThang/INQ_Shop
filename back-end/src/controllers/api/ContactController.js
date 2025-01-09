@@ -100,13 +100,7 @@ const postCreateContactAPI = async (req, res) => {
             });
         }
 
-        // Kiểm tra email đã tồn tại trong cơ sở dữ liệu
-        const existingContactByEmail = await checkContactByEmail(data.email);
-        if (existingContactByEmail) {
-            return res.status(400).json({
-                message: "Email already exists."
-            });
-        }
+       
 
         // Kiểm tra nếu data có đủ thông tin và hợp lệ, sau đó tạo mới liên hệ
         const result = await postCreateContact(data);

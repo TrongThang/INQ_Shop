@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
-import BlogDetails from '../../../component/user/Introdution/blogDetails'
+import React from 'react';
+import CompanyInfo from '../../../component/user/Introdution/companyInfo';
 import ListBlogPage from './listBlogPage';
 
-function BlogDetailsPage({ introPage = null }) {
-
+function BlogDetailsPage({}) {
     return (
         <>
+        <CompanyInfo />
             <BlogDetails />
 
             {/* {introPage = true && <ListBlogPage />} */}

@@ -1,6 +1,9 @@
+import { Link } from "react-router-dom";
 import { useCart } from "../../../context/CartContext";
 
 export default function OneDeviceInCart({ device }) {
+    console.log('Sản phẩm trong giỏ hàng:', device);
+    
     //TO DO Add and Minus
     const { addToCart, handleInputQuantity , removeFromCart} = useCart();
     return (
@@ -9,11 +12,11 @@ export default function OneDeviceInCart({ device }) {
                 <input className="form-check-input" type="checkbox" />
             </div>
             <div className="col-auto">
-                <img src={device.image} alt={device.name} width="80" height="80" className="img-thumbnail" />
+                <img src={`/img/device/${device.image}`} alt={device.name} width="80" height="80" className="img-thumbnail" />
             </div>
-            <div className="col" style={{maxWidth: "600px"}}>
+            <Link to={`/device/${device.slug}`} className="col" style={{maxWidth: "600px"}}>
                 <h5 className="mb-0">{device.name}</h5>
-            </div>
+            </Link>
             <div className="col-auto">
                 <div className="input-group input-group-sm" style={{ width: "120px" }}>
                     <button

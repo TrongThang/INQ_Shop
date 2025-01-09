@@ -35,7 +35,7 @@ export default function DetailDevicePage() {
         <div className="container-fluid faq-section bg-light py-5">
             <div className="container py-5">
                 <div class="row col-xl-12 g-5">
-                    <AreaImage />
+                    <AreaImage image={device.image} />
                     <InfoDevice device={device} />
                 </div>
                 <AreaTabOfDevice device={device}/>

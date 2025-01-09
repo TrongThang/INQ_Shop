@@ -44,21 +44,23 @@ const BlogDetails = () => {
                             <p className="m-0">{blog.author}</p>
                             <p className="m-0 fs-user-p">{new Date(blog.created_at).toLocaleDateString()} </p>
                         </div>
-                        {/* <div className="position-absolute menu-blog-user">...</div> */}
+                       
                     </div>
 
                     <h2 className="mb-4">{blog.title}</h2>
                    
                     <img
-                        src={blog.image || "https://via.placeholder.com/1000x600"}
+                        src={`/img/blogImg/${blog.image}` || "https://via.placeholder.com/1000x600"}
+                        style={{ width: "600px", height: "400px" }}
                         alt="Hình ảnh bài viết"
                         className="img-fluid rounded mb-4"
                     />
-                    <p className="fs-4 fw-normal mb-5">{blog.content}</p>
+                    {/* <p className="fs-4 fw-normal mb-5">{blog.content}</p> */}
+                    <p className="fs-4 fw-normal mb-5" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
                     
                 </div>
             </div>
-        </div>
+        </div> 
     );
 };
 

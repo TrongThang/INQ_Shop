@@ -22,7 +22,7 @@ function ListBlogPage() {
 
     return (
         <div>
-            <CompanyInfo />
+            {/* <CompanyInfo /> */}
             <div className="container-fluid blog py-5">
                 <div className="container py-5">
                     <div

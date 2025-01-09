@@ -31,7 +31,8 @@ import OrdersPage from "./pages/user/Profile/ordersPage";
 
 import ListBlogPage from "./pages/user/Introdution/listBlogPage";
 import DetailBlogPage from "./pages/user/Introdution/blogDetailsPage";
-
+import CompanyInfo from './component/user/Introdution/companyInfo';
+import Contact from "./pages/user/contact";
 import { CartProvider } from './context/CartContext';
 import { InfoWebsiteProvider } from './context/settingWebContext';
 
@@ -65,6 +66,11 @@ function App() {
                 <Route path="orders" element={<OrdersPage />} />
                 <Route path="changePassword" element={<ChangePassword />} />
               </Route> */}
+              <Route path="/introdution" element={<CompanyInfo />} />
+               <Route path="/blog" element={<ListBlogPage />} />
+               <Route path="/blog/:id" element={<DetailBlogPage />} />
+               
+                <Route path="/contact" element={<Contact />} />
               <Route path="/profile/orders" element={<OrdersPage />} />
               <Route path="/search/*" element={<SearchPage />} />
               <Route path="/device/:slug" element={<DetailDevicePage />} />

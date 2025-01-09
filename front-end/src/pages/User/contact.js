@@ -8,8 +8,10 @@ function ContactPage() {
     email: '',
     title: '',
     content: '',
-    status:true
+    status: true
   });
+  const [toastMessage, setToastMessage] = useState('');
+  const [showToast, setShowToast] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,6 +23,7 @@ function ContactPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const response = await fetch('http://localhost:8081/api/contact', {
         method: 'POST',
@@ -30,20 +33,25 @@ function ContactPage() {
         body: JSON.stringify(formData)
       });
       const data = await response.json();
+
       if (response.ok) {
-        alert('Contact created successfully');
+        setToastMessage('Thông tin đã được gửi thành công.');
+        setShowToast(true);
         setFormData({
           fullname: '',
           email: '',
           title: '',
           content: '',
-          status:true
+          status: true
         });
       } else {
-        alert(`Error: ${data.message}`);
+        setToastMessage(`Error: ${data.message}`);
+        setShowToast(true);
       }
     } catch (error) {
       console.error('Error submitting contact form:', error);
+      setToastMessage('Có lỗi xảy ra khi gửi form.');
+      setShowToast(true);
     }
   };
 
@@ -55,6 +63,27 @@ function ContactPage() {
         handleChange={handleChange}
         handleSubmit={handleSubmit}
       />
+
+      {/* Toast Notification */}
+      {showToast && (
+        <div className="toast-container position-fixed top-0 end-0 p-3 ">
+          <div className="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div className="toast-header bg-primary text-white">
+              <strong className="me-auto">Thông báo</strong>
+              <button 
+                type="button" 
+                className="btn-close btn-close-white" 
+                data-bs-dismiss="toast" 
+                aria-label="Close" 
+                onClick={() => setShowToast(false)}>
+              </button>
+            </div>
+            <div className="toast-body">
+              {toastMessage}
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

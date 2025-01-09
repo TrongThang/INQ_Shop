@@ -6,13 +6,14 @@ const BlogCart = ({ blog }) => {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Date(dateString).toLocaleDateString(undefined, options);
     };
-
+   
     return (
         <div className="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.1s">
             <div className="blog-item">
                 <div className="blog-img">
                     <img
-                        src={blog.image}
+                        src={`/img/blogImg/${blog.image}`}
+                        style={{ width: "600px", height: "300px" }}
                         className="img-fluid rounded-top w-100"
                         alt="Blog Post"
                     />

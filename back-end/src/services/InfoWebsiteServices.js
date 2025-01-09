@@ -5,6 +5,7 @@ const { where } = require('sequelize');
 // Lấy tất cả thông tin website
 const getAllInfoWebsite = async() => {
     return await InfoWebsite.findAll();
+    
 }
 
 // Thêm một thông tin website

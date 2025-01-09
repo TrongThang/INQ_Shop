@@ -24,7 +24,9 @@ export default function SearchPage() {
                 const sortBy = queryParam.get('sortBy');
 
                 if (keyword) {
-                    const apiUrl = `http://localhost:8081/api/device?keyword=${keyword}&orderBy=${orderBy}&sortBy=${sortBy}`;
+                    const urlSortOrder = (orderBy || sortBy) ? `&orderBy=${orderBy}&sortBy=${sortBy}` : '';
+                    
+                    const apiUrl = `http://localhost:8081/api/device?keyword=${keyword}` + urlSortOrder;
                     const response = await fetch(apiUrl);
                     
                     const result = await response.json();

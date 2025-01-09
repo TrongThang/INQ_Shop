@@ -20,7 +20,7 @@ const BlogDetails = () => {
         };
 
         fetchBlog();
-        document.title = blog.title;
+        document.title = "";
     }, [id]);
 
     if (loading) {
@@ -49,7 +49,7 @@ const BlogDetails = () => {
 
                     <h2 className="mb-4">{blog.title}</h2>
                     <img
-                        src={`/img/blogImg/${blog.image}` || "https://via.placeholder.com/1000x600"}
+                        src={`/img/blog/${blog.image}` || "https://via.placeholder.com/1000x600"}
                         style={{ width: "600px", height: "400px" }}
                         alt="Hình ảnh bài viết"
                         className="img-fluid rounded mb-4"

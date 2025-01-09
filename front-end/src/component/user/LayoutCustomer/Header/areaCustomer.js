@@ -39,6 +39,7 @@ export default function AreaCustomer({ isLogged }) {
     useEffect(() => {
         fetchDeviceInCart();
     }, []);
+    
     return (
         <>
             {/* <!-- Price & Cart --> */}

@@ -1,9 +1,11 @@
 import React from 'react';
 import { useSettingWeb } from "../../../context/settingWebContext";
+import ListBlogPage from '../../../pages/user/Introdution/listBlogPage';
 const CompanyInfo = () => {
     const { setting } = useSettingWeb();
     
     return (
+        <>
         <div className="company-info py-5">
             <div className="py-5">
                 <div className="text-center pb-5 wow fadeInUp" data-wow-delay="0.2s">
@@ -22,6 +24,9 @@ const CompanyInfo = () => {
                 </div>
             </div>
         </div>
+
+        <ListBlogPage isIntroPage={true} />
+    </>
     );
 };
 

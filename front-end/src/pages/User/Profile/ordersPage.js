@@ -30,7 +30,7 @@ function OrdersPage() {
                                 </li>
                                 <li className="nav-item">
                                     <a className="nav-link" href="#">
-                                        Vận chuyển
+                                        Chuẩn bị hàng
                                     </a>
                                 </li>
                                 <li className="nav-item">

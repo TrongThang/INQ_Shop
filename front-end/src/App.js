@@ -10,11 +10,9 @@ import './resource/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './resource/css/style.css';
 
+
 // <!-- Template Stylesheet -->
 import './resource/css/inq.css'
-
-
-import ButtonPage from './component/buttonPage';
 
 import User from './pages/user';
 import Admin from './pages/admin';
@@ -56,12 +54,13 @@ function App() {
             element={
               <CartProvider>
                 <User />
+                <LoginPage />
               </CartProvider>
               }
           >
               <Route path='/' element={<HomePage />} />
               <Route path="cart" element={<CartPage />} />
-              <Route path="login-in" element={<LoginPage />} />
+              {/* <Route path="login-in" element={<LoginPage />} /> */}
               <Route path="profile" element={<ProfileCustomer />} />
               <Route path="contact" element={<ContactPage />} />
               <Route path="/profile/address" element={<AddressPage />} />

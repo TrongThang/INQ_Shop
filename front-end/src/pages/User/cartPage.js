@@ -1,7 +1,6 @@
 import InfoAddress from "../../component/user/Cart/infoAddress";
 import AllDeviceInCart from "../../component/user/Cart/allDeviceInCart";
 import PayCart from "../../component/user/Cart/payCart";
-import { useCart } from "../../context/CartContext";
 import { useEffect } from "react";
 
 export default function CartPage() {

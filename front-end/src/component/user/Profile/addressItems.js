@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const AddressItems = ({ addressBook, isStatus, onUpdateClick, handleDeleteClick }) => {
     return (
         <div className="d-flex justify-content-between align-items-start border-bottom border-primary pb-3 mb-3">
@@ -13,13 +15,13 @@ const AddressItems = ({ addressBook, isStatus, onUpdateClick, handleDeleteClick 
                 {addressBook?.isDefault && <span className="badge bg-success">Mặc định</span>}
             </div>
             <div className="text-end">
-                <a href="#" className="text-decoration-none me-2" onClick={() => onUpdateClick(addressBook)}>
+                <Link to="" className="text-decoration-none me-2" onClick={() => onUpdateClick(addressBook)}>
                     Cập nhật
-                </a>
+                </Link>
                 <span className="icon-line-right"></span>
-                <a href="#" className="text-decoration-none" onClick={() => handleDeleteClick(addressBook?.id, addressBook?.idCustomer)}>
+                <Link to="" className="text-decoration-none" onClick={() => handleDeleteClick(addressBook?.id, addressBook?.idCustomer)}>
                     Xóa
-                </a>
+                </Link>
                 <br />
                 {/* Nút "Thiết lập mặc định" chỉ kích hoạt khi địa chỉ chưa phải mặc định */}
                 <button className="btn btn-outline-danger btn-sm mt-3" disabled={addressBook?.isDefault} 

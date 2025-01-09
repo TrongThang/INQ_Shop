@@ -3,27 +3,37 @@ import React from "react";
 const OrderItems = () => {
   return (
     <div className="bg-light p-4 rounded">
-      <table class="table table-bordered">
+      <table className="table table-bordered">
         <thead>
             <tr>
             <th scope="col">
-                Name
-                <span class="float-end badge badge-success bg-success text-white fs-6">  Đang giao  </span> 
+            Đơn hàng
             </th>
-            
             </tr>
         </thead>
         <tbody>
-            <tr class="parent-row collapsed" data-bs-toggle="collapse" data-bs-target="#child-1">
+            <tr className="parent-row collapsed" data-bs-toggle="collapse" data-bs-target="#child-1">
             <td>
-                <span>Dơn hàng 1</span>
-                <span class="float-end arrow-icon">&#9660;</span>
+              <div className="text-dark">
+                <span className="float-end badge badge-success bg-success text-white fs-6">
+                  Đang giao
+                  <span className="arrow-icon ms-2">&#9660;</span>
+                </span> 
+
+                <span>Phan Trọng Thắng</span>
+                <span> - Địa chỉ: </span>
+              </div>
+              <div>
+                <span>SĐT: </span>
+                <span> Tổng đơn hàng</span>
+              </div>
+
             </td>
             </tr>
 
-            <tr id="child-1" class="collapse">
+            <tr id="child-1" className="collapse">
             <td colspan="2">
-                <table class="table mb-0">
+                <table className="table mb-0">
                 <thead>
                     <tr>
                     <th scope="col">Hình Ảnh</th>

@@ -34,7 +34,7 @@ const getLoginAPI = async (req, res) => {
       req.session.isLogged = true;
       req.session.idPerson = account.idPerson;
 
-      return res.status(200).json({ ttoken });
+      return res.status(200).json({ token });
     }
 
     return res.status(404).json(false);

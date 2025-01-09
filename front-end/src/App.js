@@ -19,6 +19,7 @@ import Admin from './pages/admin';
 import HomePage from './pages/user/homePage'
 import DetailDevicePage from './pages/user/detailDevicePage';
 import LoginPage from './pages/user/Account/loginPage';
+import RegisterPage from './pages/user/Account/registerPage';
 
 import CartPage from './pages/user/cartPage';
 import SearchPage from "./pages/user/searchPage";
@@ -55,6 +56,8 @@ function App() {
               <CartProvider>
                 <User />
                 <LoginPage />
+                <RegisterPage />
+                
               </CartProvider>
               }
           >

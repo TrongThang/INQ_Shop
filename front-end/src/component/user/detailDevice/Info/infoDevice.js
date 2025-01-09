@@ -3,16 +3,26 @@ import { useCart } from "../../../../context/CartContext";
 import AreaInteraction from "./areaInteracion";
 import StarRating from "../../../Shared/starRating";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 export default function InfoDevice({ device }) {
     const [quantity, setQuantity] = useState(1);
     const [customerLiked, setCustomerLiked] = useState();
+    const [idCustomer, setIdCustomer] = useState(null);
 
+    useEffect(() => {
+        const token = localStorage.getItem('authToken');
+        if (token) {
+          const decoded = jwtDecode(token); // Decode the JWT token
+          setIdCustomer(decoded.idPerson); // Set idCustomer from decoded token
+        }
+    }, []);
+    
     const { addToCart } = useCart();
     useEffect(() => {
         const fetchLikedStatus = async () => {
             try {
-                const response = await axios.get(`http://localhost:8081/api/likedDevice/CUS000001/${device.idDevice}`);
+                const response = await axios.get(`http://localhost:8081/api/likedDevice/${idCustomer}/${device.idDevice}`);
                 setCustomerLiked(!!response.data.data); // Backend trả về trạng thái yêu thích(chuyển đổi về boolean)
             } catch (error) {
                 console.error("Lỗi khi kiểm tra trạng thái yêu thích:", error);
@@ -33,11 +43,11 @@ export default function InfoDevice({ device }) {
         try {
             if (!customerLiked) {
                 // Gọi API để thêm vào danh sách yêu thích
-                await axios.post("http://localhost:8081/api/likedDevice", { idDevice: device.idDevice, idCustomer: "CUS000001" });
+                await axios.post("http://localhost:8081/api/likedDevice", { idDevice: device.idDevice, idCustomer: idCustomer });
                 console.log("Đã thêm sản phẩm vào yêu thích:", device.name);
             } else {
                 // Gọi API để xóa khỏi danh sách yêu thích
-                await axios.delete(`http://localhost:8081/api/likedDevice/CUS000001/${device.idDevice}`);
+                await axios.delete(`http://localhost:8081/api/likedDevice/${idCustomer}/${device.idDevice}`);
                 console.log("Đã xóa sản phẩm khỏi yêu thích:", device.name);
             }
         } catch (error) {
@@ -50,11 +60,11 @@ export default function InfoDevice({ device }) {
         <div class="col-xl-7 mb-4">
             <span>{device.categoryDevice.nameCategory}
                 <span onClick={toggleLike} style={{ cursor: "pointer" }}>
-                    {customerLiked ? (
+                    {idCustomer && (customerLiked ? (
                         <i className="fa-solid fa-heart text-danger ms-2"></i>
                     ) : (
                         <i className="fa-regular fa-heart text-danger ms-2"></i>
-                    )}
+                    ))}
                 </span>
             </span>
             <h1>

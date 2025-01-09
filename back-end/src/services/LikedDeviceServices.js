@@ -5,20 +5,41 @@ const Sequelize = require('../config/database');
 const { where } = require('sequelize');
 
 // Lấy tất cả sản phẩm yêu thích
-const getAllLikedDevices = async(idCustomer) => {
+const getAllLikedDevices = async (idCustomer) => {
     try {
-    const devices = await Likeds.findAll({
-        where: { idCustomer: idCustomer },
-        attributes: ['idDevice'],
-        include: [
-            {
-                model: Devices,
-                as: 'device',
-                attributes: ['image', 'name', 'sellingPrice']
+        const devices = await Likeds.findAll({
+            where: { idCustomer: idCustomer },
+            attributes: ['idDevice'],
+            include: [
+                {
+                    model: Devices,
+                    as: 'device',
+                    attributes: ['image', 'name', 'sellingPrice']
+                }
+            ]
+        });
+        return devices;
+    } catch (error) {
+        console.error("Error fetching liked devices:", error);
+        throw error;
+    }
+}
+
+const getLikedDevices = async (data) => {
+    try {
+        console.log('Data:', data);
+        const devices = await Likeds.findAll({
+            where: {
+                idCustomer: data.idCustomer,
+                idDevice: data.idDevice
             }
-        ]
-    });
-    return devices;
+        });
+        if(devices.length > 0){
+            return true;
+        }
+        else{
+            return false;
+        }
     } catch (error) {
         console.error("Error fetching liked devices:", error);
         throw error;
@@ -73,6 +94,7 @@ const removeAllLikedDevice = async (data) => {
 
 module.exports = {
     getAllLikedDevices,
+    getLikedDevices,
     createLikedDevice,
     removeLikedDevice,
     removeAllLikedDevice,

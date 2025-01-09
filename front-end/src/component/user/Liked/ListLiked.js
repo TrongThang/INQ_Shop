@@ -1,4 +1,14 @@
+import { useEffect, useState } from 'react';
+
 const ListLiked = ({ idCustomer, devices }) => {
+  const [device, setDevice] = useState([]);
+
+  useEffect(() => {
+    // Cập nhật state khi props devices thay đổi
+    setDevice(devices);
+  }, [devices]);
+
+  console.log('abc:', device);
     // Hàm xóa sản phẩm yêu thích
   const handleRemoveLiked = async (idDevice) => {
     try {
@@ -6,6 +16,7 @@ const ListLiked = ({ idCustomer, devices }) => {
       await fetch(`http://localhost:8081/api/likedDevice/${idCustomer}/${idDevice}`, {
         method: 'DELETE',
       });
+      setDevice((prevDevices) => prevDevices.filter((item) => item.idDevice != idDevice));
     } catch (err) {
       console.error('Error removing device:', err);
     }
@@ -24,7 +35,7 @@ const ListLiked = ({ idCustomer, devices }) => {
           </tr>
         </thead>
         <tbody>
-          {devices.map((item, index) => (
+          {device.map((item, index) => (
             <tr key={index}>
               <td>
                 <img src={item.device.image} alt={item.device.name} className="img-fluid" />

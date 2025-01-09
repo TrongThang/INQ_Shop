@@ -8,9 +8,6 @@ export default function DetailDevicePage() {
     const [device, setDevice] = useState([]);
     const { slug } = useParams();
 
-    console.log('Slug value:', slug);
-    console.log(`Fetching: http://localhost:8081/api/device/detail/${slug}`);
-
     useEffect(() => {
         
         const fetchData = async () => {
@@ -40,7 +37,7 @@ export default function DetailDevicePage() {
             <div className="container py-5">
                 <div class="row col-xl-12 g-5">
                     <AreaImage />
-                    <InfoDevice device={device} customerLiked={true} />
+                    <InfoDevice device={device} />
                 </div>
                 <AreaTabOfDevice device={device}/>
             </div>

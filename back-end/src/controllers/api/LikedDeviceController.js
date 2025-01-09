@@ -1,8 +1,9 @@
 const connection = require('../../config/database');
 const Liked = require('../../models/Liked');
 
-const { 
+const {
     getAllLikedDevices,
+    getLikedDevices,
     createLikedDevice,
     removeLikedDevice,
     removeAllLikedDevice,
@@ -16,6 +17,24 @@ const getAllLikedDeviceAPI = async (req, res) => {
         res.status(200).json({
             success: true,
             data: allLikedDevices
+        });
+    }
+    catch(error){
+        res.status(500).json({
+            success: false,
+            message: 'Lỗi truy xuất sản phẩm yêu thích',
+            error: error.message,
+        });
+    }
+}
+
+const getLikedDeviceAPI = async (req, res) => {
+    //TO DO SOMETHING
+    try{
+        const LikedDevices = await getLikedDevices(req.params);
+        res.status(200).json({
+            success: true,
+            data: LikedDevices
         });
     }
     catch(error){
@@ -116,6 +135,7 @@ const removeAllOrSingleLikedDeviceAPI = async (req, res) => {
 
 module.exports = {
     getAllLikedDeviceAPI,
+    getLikedDeviceAPI,
     postAddToLikedDeviceAPI,
     removeLikedDeviceAPI,
     removeAllLikedDeviceAPI,

@@ -25,8 +25,9 @@ import LoginPage from './pages/user/Account/loginPage';
 import CartPage from './pages/user/cartPage';
 import SearchPage from "./pages/user/searchPage";
 import AddressPage from "./pages/user/Profile/addressPage";
-import BlogPage from "./pages/user/Introdution/listBlogPage";
 import ProfileCustomer from "./pages/user/Profile/accountCustomerPage";
+import LikedDevice from "./pages/user/likedDevice";
+
 import OrdersPage from "./pages/user/Profile/ordersPage";
 
 import ListBlogPage from "./pages/user/Introdution/listBlogPage";
@@ -71,6 +72,7 @@ function App() {
               <Route path="/profile/orders" element={<OrdersPage />} />
               <Route path="/search/*" element={<SearchPage />} />
               <Route path="/device/:slug" element={<DetailDevicePage />} />
+              <Route path="/likeDevice" element={<LikedDevice />} />
             </Route>
 
         </Routes>

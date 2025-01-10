@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-
+import { useNavigate  } from "react-router-dom";
 const CategoryDevice = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const navigate = useNavigate();
   const fetchDataCategories = async () => {
     try {
       const response = await fetch('http://localhost:8081/api/category/take-five');
@@ -20,7 +20,9 @@ const CategoryDevice = () => {
   useEffect(() => {
     fetchDataCategories()
   }, []);
-
+  const handleCategoryClick = (category) => {
+    navigate(`/category/${category.slug}`);
+  }
 
 
   return (
@@ -36,10 +38,11 @@ const CategoryDevice = () => {
                 key={category.id}
                 className="col-2 text-center d-flex flex-column align-items-center"
                 href={`/category/${category.slug}`}
+                onclick={() => handleCategoryClick(category)}
               >
                 <img
-                  src="https://placehold.co/100x100" // Hiển thị ảnh mặc định nếu không có ảnh
-                  className="card-img-top product-img rounded-circle mb-2 w-75"
+                  src={`/img/category/${category.image}`} // Hiển thị ảnh mặc định nếu không có ảnh
+                  className="card-img-top device-img rounded-md mb-2 w-50"
                   alt={category.nameCategory}
                 />
                 <h6 className="h4 mb-2">{category.nameCategory}</h6>

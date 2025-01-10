@@ -5,6 +5,7 @@ import OrderItems from "../../../component/user/Profile/orderItems";
 
 function OrdersPage() {
 
+    
     useEffect(() => {
         document.title = 'Đơn hàng | INQ'
     }, []);

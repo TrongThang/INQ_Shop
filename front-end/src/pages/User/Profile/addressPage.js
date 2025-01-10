@@ -3,8 +3,7 @@ import ProfileSidebar from '../../../component/user/Profile/navCustomer/profileS
 import AddressItems from '../../../component/user/Profile/addressItems';
 import PopupAddress from '../../../component/user/Profile/popupAddress';
 import { jwtDecode } from 'jwt-decode';
-
-
+import { useNavigate } from "react-router-dom";
 const AddressPage = () => {
     const [addressBook, setAddressBook] = useState([]); // Danh sách địa chỉ
     const [showModal, setShowModal] = useState(false); // Trạng thái hiển thị popup
@@ -17,9 +16,9 @@ const AddressPage = () => {
         street: '',
         isDefault: 0
     });
-
+    const navigate = useNavigate(); // Hàm điều hướng đến trang khác
     const [idCustomer, setIdCustomer] = useState(null); // State for idCustomer
-
+    const [loading, setLoading] = useState(true);
     const toggleModal = () => setShowModal(!showModal); // Hàm chuyển đổi trạng thái hiển thị modal
 
     // Get the idCustomer from the JWT token stored in localStorage
@@ -29,10 +28,22 @@ const AddressPage = () => {
             const decoded = jwtDecode(token); // Decode the JWT token
             setIdCustomer(decoded.idPerson); // Set idCustomer from decoded token
         }
-
+        setLoading(false);
         document.title = 'Địa chỉ | INQ';
 
     }, []);
+
+    // Lắng nghe sự thay đổi của idCustomer
+    // Lắng nghe sự thay đổi của idCustomer
+    useEffect(() => {
+        if (loading) return; // Nếu đang loading, không thực hiện gì
+        if (!idCustomer) {
+            console.log("Điều hướng về trang chủ vì idCustomer không hợp lệ");
+            navigate('/'); // Điều hướng về trang chủ nếu không có idCustomer
+        } else {
+            fetchDataAddressBook(); // Nếu có idCustomer, lấy danh sách địa chỉ
+        }
+    }, [idCustomer, navigate, loading]); // Lắng nghe sự thay đổi của idCustomer và điều hướng
 
     // Lấy danh sách địa chỉ cho khách hàng cụ thể
     const fetchDataAddressBook = async () => {
@@ -74,7 +85,7 @@ const AddressPage = () => {
         try {
             // Ensure isDefault is either 0 or 1 before sending
             const isDefaultValue = isDefault ? 1 : 0;
-    
+
             const response = await fetch(`http://localhost:8081/api/addressBook/${id}/${idCustomer}`, {
                 method: 'PUT',
                 headers: {
@@ -82,13 +93,13 @@ const AddressPage = () => {
                 },
                 body: JSON.stringify({ idCustomer, isDefault: isDefaultValue }), // Pass corrected isDefault
             });
-    
+
             const result = await response.json();
             if (response.ok) {
                 console.log('Cập nhật trạng thái thành công:', result.data.isDefault);
                 alert('Cập nhật trạng thái thành công!');
                 console.log('IsStatus', result.data);
-    
+
                 // Make sure the UI reflects the changes immediately
                 setAddressBook(prevState => prevState.map(address =>
                     address.id === id ? { ...address, isDefault: isDefaultValue } : address
@@ -102,7 +113,7 @@ const AddressPage = () => {
             alert('Không thể cập nhật trạng thái. Vui lòng thử lại.');
         }
     };
-    
+
     // Xử lý xóa địa chỉ
     const handleDeleteClick = async (id) => {
         if (window.confirm("Bạn có chắc chắn muốn xóa địa chỉ này?")) {
@@ -114,7 +125,7 @@ const AddressPage = () => {
                         'Content-Type': 'application/json',
                     },
                 });
-    
+
                 const result = await response.json();
                 if (response.ok) {
                     setAddressBook(prevState => prevState.filter(address => address.id !== id)); // Xóa địa chỉ trong danh sách
@@ -129,7 +140,7 @@ const AddressPage = () => {
             }
         }
     };
-    
+
     // Xử lý gửi form (thêm mới hoặc cập nhật địa chỉ)
     const handleSubmit = async (e) => {
         e.preventDefault(); // Prevent form from reloading the page
@@ -205,48 +216,46 @@ const AddressPage = () => {
         toggleModal(); // Mở modal để thêm mới địa chỉ
     };
 
-    // Lấy dữ liệu danh sách địa chỉ khi component được load
-    useEffect(() => {
-        if (idCustomer) {
-            fetchDataAddressBook();
-        }
-    }, [idCustomer]); // Fetch data when idCustomer changes
 
     return (
-        <div className='container-fluid'>
-            <div className='row ms-4'>
-                <ProfileSidebar />
-                <div className="form-container col-md-8 col-lg-6 me-auto py-4 mt-4 shadow-sm rounded">
-                    <div className="profile-address mb-3 d-flex justify-content-between align-items-center">
-                        <h1 className="mb-1 fs-4">Địa chỉ của tôi</h1>
-                        <button className="btn btn-primary" onClick={handleAddClick}>Thêm địa chỉ mới</button>
-                    </div>
+        <>
 
-                    <div className="container mt-4 border border-dark rounded p-3">
-                        <h5 className="fw-bold mb-2">Địa chỉ</h5>
-                        {addressBook.length > 0 ? addressBook.map((address, index) => (
-                            <AddressItems addressBook={address}
-                                onUpdateClick={handleUpdateClick}
-                                handleDeleteClick={handleDeleteClick}
-                                isStatus={isStatus} key={index} />
-                        )) : <p>Ko có địa chỉ.</p>}
+            <div className='container-fluid'>
+                <div className='row ms-4'>
+                    <ProfileSidebar />
+                    <div className="form-container col-md-8 col-lg-6 me-auto py-4 mt-4 shadow-sm rounded">
+                        <div className="profile-address mb-3 d-flex justify-content-between align-items-center">
+                            <h1 className="mb-1 fs-4">Địa chỉ của tôi</h1>
+                            <button className="btn btn-primary" onClick={handleAddClick}>Thêm địa chỉ mới</button>
+                        </div>
+
+                        <div className="container mt-4 border border-dark rounded p-3">
+                            <h5 className="fw-bold mb-2">Địa chỉ</h5>
+                            {addressBook.length > 0 ? addressBook.map((address, index) => (
+                                <AddressItems addressBook={address}
+                                    onUpdateClick={handleUpdateClick}
+                                    handleDeleteClick={handleDeleteClick}
+                                    isStatus={isStatus} key={index} />
+                            )) : <p>Ko có địa chỉ.</p>}
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Popup thêm mới địa chỉ */}
-            {showModal && (
-                <PopupAddress
-                    showModal={showModal}
-                    toggleModal={toggleModal}
-                    formData={formData}
-                    handleInputChange={handleInputChange}
-                    handleSubmit={handleSubmit}
-                    customerAddresses={addressBook}
-                    selectedAddress={selectedAddress}
-                />
-            )}
-        </div>
+                {/* Popup thêm mới địa chỉ */}
+                {showModal && (
+                    <PopupAddress
+                        showModal={showModal}
+                        toggleModal={toggleModal}
+                        formData={formData}
+                        handleInputChange={handleInputChange}
+                        handleSubmit={handleSubmit}
+                        customerAddresses={addressBook}
+                        selectedAddress={selectedAddress}
+                    />
+                )}
+            </div>
+        </>
+
     );
 };
 

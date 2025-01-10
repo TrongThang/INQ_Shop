@@ -1,16 +1,21 @@
 const { convertToSlug } = require('../helpers/stringHelper');
 const Category = require('../models/Category');
 const {
-    
+
 } = require('../services/BlogServices');
 const {
     updateStatusDeviceByCategory
 } = require('../services/DeviceServices');
 
+
 const groupCategoriesByListCategories = (categoriesList) => {
-    
+    // Loại bỏ trùng lặp dựa trên 'id'
+    const uniqueCategories = Array.from(
+        new Map(categoriesList.map((item) => [item.id, item])).values()
+    );
+
     const findChildren = (parentId) => {
-        return categoriesList
+        return uniqueCategories
             .filter((item) => item.parentId === parentId)
             .map((child) => ({
                 ...child, // Giữ thông tin danh mục hiện tại
@@ -18,14 +23,36 @@ const groupCategoriesByListCategories = (categoriesList) => {
             }));
     };
 
-    const result = categoriesList
-        .filter((item) => item.parentId === null)
+    const result = uniqueCategories
+        .filter((item) => item.parentId === null) // Lọc danh mục gốc
         .map((rootCategory) => ({
             ...rootCategory, // Giữ thông tin danh mục gốc
             children: findChildren(rootCategory.id), // Tìm các con của danh mục gốc
         }));
-        
-}
+
+    return result; // Trả về kết quả
+};
+
+
+const getAllCategory_User = async () => {
+    try {
+        const rawData = await Category.findAll({
+            where: { status: 1 },
+        });
+
+        // Chuyển đổi chỉ lấy dataValues
+        const data = rawData.map((item) => item.dataValues);
+
+        // Nhóm danh mục sau khi làm sạch dữ liệu
+        const results = groupCategoriesByListCategories(data);
+        return results; // Trả về kết quả đã nhóm
+    } catch (error) {
+        console.error('Error fetching categories:', error);
+        throw new Error('Failed to fetch categories');
+    }
+};
+
+
 
 const getCategoryByUser = async () => {
     try {
@@ -35,7 +62,7 @@ const getCategoryByUser = async () => {
                 status: 1      // Chỉ lấy danh mục có trạng thái hoạt động
             },
             order: [['created_at', 'ASC']], // Sắp xếp theo thời gian tạo tăng dần
-            limit: 5                        // Giới hạn 5 danh mục đầu tiên
+            limit: 6                       // Giới hạn 5 danh mục đầu tiên
         });
 
         return categories; // Trả về danh sách 5 danh mục
@@ -46,18 +73,9 @@ const getCategoryByUser = async () => {
 };
 
 
-const getAllCategory_User = async () => {
-    const data = await Category.findAll({
-        where: { status: 1},
-    });
-
-
-    return await data;
-}
 
 const getAllCategory_Admin = async () => {
     const data = await Category.findAll();
-
     return await data;
 }
 
@@ -93,15 +111,14 @@ const updateCategory = async ({ id, ...body }) => {
 
 const updateStatusCategory = async ({ id, status }) => {
 
-    if (status <= 0)
-    {
+    if (status <= 0) {
         //Off Category Child, Device, Blog
         const offCategoryChild = await Category.update(
             {
                 status: 0,
             },
             {
-                where: { 
+                where: {
                     parentId: id
                 }
             }
@@ -130,7 +147,7 @@ const updateStatusCategory = async ({ id, status }) => {
         {
             status: status,
             valueIsHide: valueIsHide
-        }, 
+        },
         {
             where: { id }
         }

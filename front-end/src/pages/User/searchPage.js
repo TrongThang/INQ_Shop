@@ -22,7 +22,12 @@ export default function SearchPage() {
                 const keyword = queryParam.get('keyword');
                 const orderBy = queryParam.get('orderBy');
                 const sortBy = queryParam.get('sortBy');
+                const category = queryParam.get('category');
+                if(category) {
+                    const apiUrl = `http://localhost:8081/api/device?category=${category}`;
+                    const response = await fetch(apiUrl);
 
+                }
                 if (keyword) {
                     const urlSortOrder = (orderBy || sortBy) ? `&orderBy=${orderBy}&sortBy=${sortBy}` : '';
                     

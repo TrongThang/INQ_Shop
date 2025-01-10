@@ -1,8 +1,8 @@
 const express = require('express')
 
 const {
-    getAllDeviceByUserAPI, getAllDeviceByAdminAPI, getAllDevice_NewAPI, getAllDevice_BestSellingAPI,
-    getAllDevice_FeaturedAPI,
+    getAllDeviceByUserAPI, getAllDeviceByAdminAPI, getAllDevice_NewAPI, getAllDevice_BestSellingAPI, 
+    getAllDevice_DiscountAPI,getAllDevice_FeaturedAPI,
     getDeviceBySlugAPI, getTOPDeviceLikedAPI,
     postCreateDeviceAPI, putUpdateDeviceAPI, updateStatusDeviceAPI,
 } = require('../controllers/api/DeviceController')
@@ -13,6 +13,8 @@ routerDevice.get('/admin', getAllDeviceByAdminAPI);
 routerDevice.get('/featured', getAllDevice_FeaturedAPI);
 routerDevice.get('/new', getAllDevice_NewAPI);
 routerDevice.get('/bestselling', getAllDevice_BestSellingAPI);
+routerDevice.get('/discount', getAllDevice_DiscountAPI);
+
 
 
 routerDevice.get('/', getAllDeviceByUserAPI);

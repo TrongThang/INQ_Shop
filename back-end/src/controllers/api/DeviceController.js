@@ -39,6 +39,24 @@ const getAllDeviceByUserAPI = async (req, res) => {
         });
     }
 }
+const getAllDevice_DiscountAPI = async (req, res) => {
+    try {
+        const { status = 2, limit = 10 } = req.body;
+
+        const results = await getAllDeviceByStatus(status, parseInt(limit));
+
+        return res.status(200).json({
+            errorCode: 0,
+            data: results
+        })
+    } catch (error) {
+        return res.status(500).json({
+            errorCode: 1,
+            msg: 'User: Có lỗi xảy ra trong quá trình lấy dữ liệu các Thiết bị',
+            details: error.message,
+        });
+    }
+}
 
 const getAllDevice_FeaturedAPI = async (req, res) => {
     try {
@@ -291,7 +309,7 @@ const updateStatusReviewForDeviceAPI = async (req, res) => {
 
 module.exports = {
     getAllDeviceByUserAPI,getAllDevice_FeaturedAPI, getAllDevice_NewAPI, getAllDevice_BestSellingAPI, getAllDeviceByAdminAPI,
-    getDeviceBySlugAPI, getTOPDeviceLikedAPI,
+    getDeviceBySlugAPI, getTOPDeviceLikedAPI, getAllDevice_DiscountAPI,
     postCreateDeviceAPI, putUpdateDeviceAPI,
     updateStatusDeviceAPI,
     //Review For Device

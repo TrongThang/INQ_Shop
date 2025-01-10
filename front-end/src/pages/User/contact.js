@@ -4,7 +4,7 @@ import ContactForm from '../../component/user/Contact/contactForm';
 
 function ContactPage() {
   useEffect(() => {
-    document.title = 'Liên hệ | INQ'
+    document.title = 'Liên hệ | INQ';
   }, []);
 
   const [formData, setFormData] = useState({
@@ -49,7 +49,7 @@ function ContactPage() {
           status: true
         });
       } else {
-        setToastMessage(`Error: ${data.message}`);
+        setToastMessage('Có lỗi xảy ra khi gửi form.');
         setShowToast(true);
       }
     } catch (error) {
@@ -58,6 +58,17 @@ function ContactPage() {
       setShowToast(true);
     }
   };
+
+ 
+  useEffect(() => {
+    if (showToast) {
+      const timer = setTimeout(() => {
+        setShowToast(false);
+      }, 2000); 
+
+      return () => clearTimeout(timer); 
+    }
+  }, [showToast]);
 
   return (
     <main>
@@ -70,17 +81,17 @@ function ContactPage() {
 
       {/* Toast Notification */}
       {showToast && (
-        <div className="toast-container position-fixed top-0 end-0 p-3 ">
+        <div className="toast-container position-fixed top-0 end-0 p-3">
           <div className="toast show" role="alert" aria-live="assertive" aria-atomic="true">
             <div className="toast-header bg-primary text-white">
               <strong className="me-auto">Thông báo</strong>
-              <button 
+              {/* <button 
                 type="button" 
                 className="btn-close btn-close-white" 
-                data-bs-dismiss="toast" 
                 aria-label="Close" 
-                onClick={() => setShowToast(false)}>
-              </button>
+                onClick={() => setShowToast(false)}
+              >
+              </button> */}
             </div>
             <div className="toast-body">
               {toastMessage}

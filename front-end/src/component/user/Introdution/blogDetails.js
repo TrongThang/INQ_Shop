@@ -35,15 +35,16 @@ const BlogDetails = () => {
         <div className="container d-flex justify-content-center align-items-center mt-3 mb-5">
             <div className="row">
                 <div className="col-md-12">
-                    <div className="d-flex align-items-center mb-4 position-relative">
-                        <img
+                    <div className="d-flex align-items-center mb-8 position-relative">
+                        {/* <img
                             src="https://placehold.co/60x60"
                             alt="Avatar"
                             className="rounded-circle mb-2"
-                        />
+                        /> */}
+                         <i className="fa-solid fa-user fa-2x text-primary mb-2" style={{ marginRight: "10px" }}></i>
                         <div className="ms-1">
-                            <p className="m-0">{blog.author}</p>
-                            <p className="m-0 fs-user-p">{new Date(blog.created_at).toLocaleDateString()} </p>
+                            <p className="m-0 fs-5  fw-bold">{`${blog.employee.surname} ${blog.employee.lastname}`}</p>
+                            <p className="m-0 fs-6 text-muted">{new Date(blog.created_at).toLocaleDateString()} </p>
                         </div>
                     </div>
 

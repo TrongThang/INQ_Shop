@@ -63,7 +63,7 @@ const getAllBlogAPI = async (req, res) => {
 const getBlogAPI = async (req, res) => {
     
     const { id } = req.params;
-
+    
     try {
         
         const blog = await getBlog({ id });
@@ -82,7 +82,7 @@ const getBlogAPI = async (req, res) => {
       
         console.error("Error fetching blog:", error);
      
-        res.status(500).json({ message: "An error occurred while fetching the blog" });
+        res.status(500).json({ message: "An error occurred while fetching the blog" , detail: error.message});
     }
 };
 const getAllOrOneBlogAPI_user = async (req, res) => {

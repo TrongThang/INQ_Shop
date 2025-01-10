@@ -1,7 +1,7 @@
 import React from 'react';
 import CompanyInfo from '../../../component/user/Introdution/companyInfo';
 
-function BlogDetailsPage() {
+function CompanyInfoPage() {
     return (
         <>
             <CompanyInfo />
@@ -9,4 +9,4 @@ function BlogDetailsPage() {
     )
 }
 
-export default BlogDetailsPage;
+export default CompanyInfoPage;

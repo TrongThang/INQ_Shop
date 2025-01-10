@@ -1,5 +1,6 @@
 const sequelize = require('../config/database');
 const { DataTypes } = require('sequelize');
+const Account = require('./Account');
 
 const Customer = sequelize.define('customer', {
   id: {
@@ -65,5 +66,5 @@ const Customer = sequelize.define('customer', {
   ]
 });
 
-
+Customer.belongsTo(Account, { foreignKey: 'id', as: 'account' });
 module.exports = Customer;

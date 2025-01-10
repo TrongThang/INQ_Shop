@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 
 const ListLiked = ({ idCustomer, devices }) => {
   const [device, setDevice] = useState([]);
+  console.log('device:', devices);
 
   useEffect(() => {
     // Cập nhật state khi props devices thay đổi
     setDevice(devices);
   }, [devices]);
 
-  console.log('abc:', device);
     // Hàm xóa sản phẩm yêu thích
   const handleRemoveLiked = async (idDevice) => {
     try {
@@ -38,11 +38,11 @@ const ListLiked = ({ idCustomer, devices }) => {
           {device.map((item, index) => (
             <tr key={index}>
               <td>
-                <img src={item.device.image} alt={item.device.name} className="img-fluid" />
+                <img src={`/img/device/${item.device.image}`} alt={item.device.name} className="img-fluid" style={{height: "100px", width: "100px"}}/>
               </td>
               <td className="text-center align-middle">{item.device.name}</td>
               <td className="text-center align-middle">{item.device.sellingPrice}</td>
-              <td className="text-center align-middle"><span onClick={() => handleRemoveLiked(item.idDevice)}><i class="fa-solid fa-heart text-danger ms-2"></i></span></td>
+              <td className="text-center align-middle"><span onClick={() => handleRemoveLiked(item.idDevice)}><i class="fa-solid fa-heart text-danger ms-2" style={{cursor: "pointer", fontSize: "25px"}}></i></span></td>
               <td className="text-center align-middle">
                 <button className="btn btn-outline-danger">
                   Thêm vào giỏ hàng

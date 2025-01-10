@@ -20,12 +20,15 @@ export default function Liked() {
       const response = await fetch(`http://localhost:8081/api/likedDevice/${idCustomer}`);
       const result = await response.json();
       setDevices(result.data);
+      console.log("result data: ", result.data);
     } catch (err) {
       console.error(err);
     }
   };
   useEffect(() => {
-    fetchDataDevices();
+    if(idCustomer) {
+      fetchDataDevices();
+    }
   }, [idCustomer]);
   return (
     <ListLiked idCustomer={idCustomer} devices={devices} />

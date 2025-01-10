@@ -11,7 +11,6 @@ export default function DetailDevicePage() {
     const isViewIncreased = useRef(false);
 
     useEffect(() => {
-        
         const fetchData = async () => {
             try {
                 const response = await fetch(`http://localhost:8081/api/device/detail/${slug}`);
@@ -31,7 +30,7 @@ export default function DetailDevicePage() {
                 console.error('Lỗi:', error);
             }
         };
-        
+
         fetchData();
 
     }, [slug]);
@@ -40,7 +39,7 @@ export default function DetailDevicePage() {
         if (device?.name) {
             document.title = `${device.name} | INQ`;
         }
-    }, [device])
+    }, [device]);
     return (
         <div className="container-fluid faq-section bg-light py-5">
             <div className="container py-5">
@@ -48,7 +47,7 @@ export default function DetailDevicePage() {
                     <AreaImage image={device.image} />
                     <InfoDevice device={device} />
                 </div>
-                <AreaTabOfDevice device={device}/>
+                <AreaTabOfDevice device={device} />
             </div>
         </div>
     );

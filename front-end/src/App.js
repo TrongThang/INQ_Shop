@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
+import { AuthProvider, useAuth } from '../src/pages/user/Account/authContext';
 // <!-- Libraries Stylesheet -->
 import './resource/lib/animate/animate.min.css'
 import './resource/lib/lightbox/css/lightbox.min.css'
@@ -38,6 +38,8 @@ import Contact from "./pages/user/contact";
 import { CartProvider } from './context/CartContext';
 import { InfoWebsiteProvider } from './context/settingWebContext';
 import ContactPage from './pages/user/contact';
+import RegisterPage from './pages/user/Account/registerPage';
+import LikedPage from './pages/user/likedDevice';
 
 
 
@@ -59,14 +61,11 @@ function App() {
                 <User />
                 <RegisterPage/>
                 <LoginPage />
-                <RegisterPage />
-                
               </CartProvider>
-              }
+            }
           >
               <Route path='/' element={<HomePage />} />
               <Route path="cart" element={<CartPage />} />
-              {/* <Route path="login-in" element={<LoginPage />} /> */}
               <Route path="profile" element={<ProfileCustomer />} />
               <Route path="contact" element={<ContactPage />} />
               <Route path="/profile/address" element={<AddressPage />} />
@@ -84,8 +83,6 @@ function App() {
         </Routes>
       </Router>
     </InfoWebsiteProvider>
-      
-
   );
 }
 

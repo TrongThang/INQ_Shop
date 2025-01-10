@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../../../context/CartContext";
+import { ToastContainer, toast } from 'react-toastify';
 export default function AreaCustomer({ isLogged }) {
     const { getTotalItem, getTotalPrice } = useCart();
     const navigate = useNavigate();
@@ -13,11 +14,10 @@ export default function AreaCustomer({ isLogged }) {
         navigate('/');
         setTimeout(() => {
             window.location.reload();
-        }, 1500);
+        }, 500);
         // Redirect to login page after a short de  lay
-
+        toast.success("Đăng xuất thành công!");
         // Hide the toast after 3 seconds
-        
     };
 
     const fetchDeviceInCart = async () => {
@@ -34,9 +34,19 @@ export default function AreaCustomer({ isLogged }) {
     useEffect(() => {
         fetchDeviceInCart();
     }, []);
-    
+
     return (
         <>
+            <ToastContainer
+                position="top-right"
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
             {/* <!-- Price & Cart --> */}
             <div className="d-flex align-items-center text-nowrap">
                 <span className="me-2 fw-bold">{getTotalPrice().toLocaleString()} VNĐ</span>
@@ -91,7 +101,7 @@ export default function AreaCustomer({ isLogged }) {
                                     className="dropdown-item"
                                     data-bs-toggle="modal"
                                     data-bs-target="#loginModal"
-                                    style={{ cursor: "pointer" }}   
+                                    style={{ cursor: "pointer" }}
                                 >
                                     Đăng nhập
                                 </Link>
@@ -100,7 +110,7 @@ export default function AreaCustomer({ isLogged }) {
                                     className="dropdown-item"
                                     data-bs-toggle="modal"
                                     data-bs-target="#registerModal"
-                                    style={{ cursor: "pointer" }} 
+                                    style={{ cursor: "pointer" }}
                                 >
                                     Đăng Ký
                                 </Link>

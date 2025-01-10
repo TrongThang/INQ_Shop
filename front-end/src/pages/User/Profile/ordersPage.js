@@ -10,6 +10,7 @@ function OrdersPage() {
     const [idCustomer, setIdCustomer] = useState(null);
     const [order, setOrder] = useState([]);
 
+    
     useEffect(() => {
         document.title = "Đơn hàng | INQ";
         const token = localStorage.getItem('authToken');

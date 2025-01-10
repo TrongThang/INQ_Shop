@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import StarRating from "../../../component/Shared/starRating";
-const NewDevice = ({ ref }) => {
+const DisCountDevice = () => {
     const [device, setDevice] = useState([]);
 
     const fetchDataCategories = async () => {
         try {
-            const response = await fetch('http://localhost:8081/api/device/new');
+            const response = await fetch('http://localhost:8081/api/device/discount');
             const result = await response.json();
             console.log(result.data);
             setDevice(result.data);
@@ -39,9 +39,9 @@ const NewDevice = ({ ref }) => {
     const visibleProducts = device.slice(currentIndex, currentIndex + productsPerPage);
 
     return (
-        <div className="container py-2" ref={ref}>
+        <div className="container py-5">
             <div className="text-center mx-auto pb-5" style={{ maxWidth: '800px' }}>
-                <h1 className="display-4 fw-bold">Sản Phẩm Mới</h1>
+                <h1 className="display-4 fw-bold">Sản Phẩm Khuyến mãi</h1>
             </div>
             <div className="row justify-content-center">
                 <div className="position-relative">
@@ -79,7 +79,7 @@ const NewDevice = ({ ref }) => {
                                                 style={{ maxHeight: "55px", minHeight: "55px" }}
                                             >{device.name}</Link>
                                             <p className="mb-1 text-primary fw-bold">
-                                                {Number(device.sellingPrice).toLocaleString()} VNĐ
+                                                {Number(device.discountPrice).toLocaleString()} VNĐ
                                             </p>
                                             <p className="mb-1">
                                                 {console.log('Số sao', device.name, ':', (device.reviews?.[0]?.averageRating ?? "No rating available"))}
@@ -96,19 +96,19 @@ const NewDevice = ({ ref }) => {
                         ))}
                     </div>
 
-                    {
-                        currentIndex + productsPerPage < device.length && (
-                            <button
-                                className="btn slider-btn next-btn position-absolute top-50 end-0 translate-middle-y"
-                                onClick={handleNext}
-                            >
-                                <i className="fa fa-chevron-right"></i>
-                            </button>
-                        )}
+                 {
+                    currentIndex + productsPerPage < device.length && (
+                        <button
+                            className="btn slider-btn next-btn position-absolute top-50 end-0 translate-middle-y"
+                            onClick={handleNext}
+                        >
+                            <i className="fa fa-chevron-right"></i>
+                        </button>
+                    )}
                 </div>
             </div>
         </div>
     );
 };
 
-export default NewDevice;
+export default DisCountDevice;

@@ -69,14 +69,30 @@ const getAllDeviceByStatus = async (status = 1, limit = {}) => {
                 model: ReviewDevice,
                 as: 'reviews',
                 attributes: [
-                    [Sequelize.fn('AVG', Sequelize.col('rating')), 'averageRating']
+                    [Sequelize.fn('AVG', Sequelize.col('rating')), 'averageRating'],
                 ],
                 required: false
             }
         ],
-        group: ['Device.idDevice']
-    });
+        group: ['Device.idDevice'],
+        attributes: {
+            include: [
+                [
+                    Sequelize.literal('sellingPrice * 0.95'), // Calculate discount price directly
+                    'discountPrice'
+                ]
+            ]
+        }
 
+    });
+    // const devicesWithDiscount = data.map(device => {
+    //     const sellingPrice = Number(device.sellingPrice);
+    //     const discountPrice = sellingPrice * 0.95; // Calculate 5% discount
+    //     return {
+    //         ...device.toJSON(),
+    //         discountPrice
+    //     };
+    // });
     return data; // Trả về danh sách sản phẩm
 };
 
@@ -234,17 +250,17 @@ const getDeviceBySlug = async (slug) => {
                     {
                         model: Attribute_group,
                         as: 'attributeGroup',
-                        attributes: ['id','name']
+                        attributes: ['id', 'name']
                     }
                 ],
                 attributes: ['nameAttribute', 'required']
-                
+
             }
         ],
         attributes: ['value', 'status']
     })
 
-    device = device.toJSON(); 
+    device = device.toJSON();
 
     device.reviews = review;
 
@@ -392,7 +408,7 @@ const updateStatusReviewForDevice = async ({ id, status }) => {
 
 module.exports = {
     getAllDevice_User, getAllDeviceByStatus, getAllDevice_Admin, 
-    getDeviceBySlug, getTOPDeviceLiked, 
+    getDeviceBySlug, getTOPDeviceLiked,
     createDevice, updateDevice, updateStatusDevice,
     updateStatusDeviceByCategory, increaseViewDevice,
 

@@ -1,5 +1,6 @@
 import LoginPopup from '../../../component/user/Login/formLogin';
 import { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -26,23 +27,35 @@ export default function Login() {
         if (result.token) {
           const token = result.token;
           console.log('Token:', token); // Hiển thị token ra console
-          localStorage.setItem('authToken', token); // Lưu token vào localStorage
-         
-          window.location.reload(); // Tải lại trang
+          localStorage.setItem('authToken', token); 
+          setTimeout(() => {
+            window.location.reload(); // Tải lại trang
+          },  500);
+          toast.success("Đăng nhập thành công!");
         } else {
           setErrorMessage('Token không được trả về từ server');
         }
       } else {
-        setErrorMessage(result.message || 'Đăng nhập thất bại');
+        toast.error(result.message || 'Đăng nhập thất bại');
       }
     } catch (err) {
       console.error(err);
-      setErrorMessage('Đã xảy ra lỗi trong quá trình đăng nhập');
+      toast.error('Đã xảy ra lỗi trong quá trình đăng nhập');
     }
   };
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <LoginPopup
         username={username}
         setUsername={setUsername}

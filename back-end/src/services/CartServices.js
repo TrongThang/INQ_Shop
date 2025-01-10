@@ -38,6 +38,7 @@ const postAddDeviceToCart = async (idCustomer, idDevice, quantity) => {
     return cart;
 }
 
+
 const putUpdateDeviceInCart = async (idCustomer, idDevice, quantity, type) => {
     const cartItem  = await Cart.findOne({
         where: {

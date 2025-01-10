@@ -1,6 +1,9 @@
 const { Op, where } = require('sequelize');
 const Blog = require('../models/Blog');
 const Category = require('../models/Category');
+const Employee = require('../models/Employee');
+
+
 
 const getAllBlog_user = async () => {
     return await Blog.findAll({
@@ -29,11 +32,31 @@ const getAllBlog = async () => {
         ]
     });
 };
+// // Lấy thông tin một slide theo ID
+// const getSlideById = async (id) => {
+//     return await SlideShow.findOne({
+//       where: { id },
+//       include: [
+//         { model: Employee, as: 'employee', attributes: ['surname', 'lastname'] }
+//       ]
+//     });
+//   };
+  
 
 const getBlog = async (data) => {
     const id = data.id;
-    return await Blog.findByPk(id);
-}
+    return await Blog.findOne({
+        where: { id }, // Điều kiện tìm kiếm
+        include: [
+            {
+                model: Employee,
+                as: 'employee', // Tên alias trong quan hệ
+                attributes: ['surname', 'lastname'], // Chỉ lấy các trường cần thiết
+            },
+            
+        ],
+    });
+};
 
 const postCreateBlog = async (data) => {
     return await Blog.create(data)

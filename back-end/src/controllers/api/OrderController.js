@@ -1,10 +1,22 @@
-const connection = required('../config/database');
-const Order = require('../models/Order.js');
+const connection = require('../../config/database.js');
+const Order = require('../../models/Order.js');
 
-const { } = reqire('../service/OrderCRUD_Services');
+const { checkCustomerOrderForDevice } = require('../../services/OrdersServices.js');
 
 const getAllOrderAPI = async (req, res) => {
     //TO DO SOMETHING
+}
+
+const checkCustomerOrderForDeviceAPI = async (req, res) => {
+    try {
+        const { idCustomer, idDevice } = req.params;
+        const isOrder = await checkCustomerOrderForDevice(idCustomer, idDevice);
+        console.log('Kết quả:', isOrder)
+        return res.status(200).json(isOrder);
+
+    } catch (error) {
+        res.status(500).json({ detail: error.message })
+    }
 }
 
 const getOrderAPI = async (req, res) => {
@@ -24,5 +36,5 @@ const deteleOrderAPI = async (req, res) => {
 }
     
 module.exports = {
-    
+    checkCustomerOrderForDeviceAPI
 }

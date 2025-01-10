@@ -1,7 +1,8 @@
 const sequelize = require('../config/database');
 const { DataTypes } = require('sequelize');
+const OrderDetail = require('./Order_detail');
 
-const Order =sequelize.define('order', {
+const Order = sequelize.define('order', {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -47,7 +48,7 @@ const Order =sequelize.define('order', {
     type: DataTypes.DATE,
     allowNull: true
   },
-  idAdmin: {
+  idEmployee: {
     type: DataTypes.STRING(12),
     allowNull: true,
     references: {
@@ -63,6 +64,8 @@ const Order =sequelize.define('order', {
   sequelize,
   tableName: 'order',
   timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
   indexes: [
     {
       name: "PRIMARY",
@@ -88,5 +91,8 @@ const Order =sequelize.define('order', {
     },
   ]
 });
+
+Order.hasMany(OrderDetail, {foreignKey: 'id', as: 'details'})
+OrderDetail.belongsTo(Order, {foreignKey: 'id', as: 'order'})
 
 module.exports = Order 

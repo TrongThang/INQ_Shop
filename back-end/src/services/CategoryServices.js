@@ -1,5 +1,9 @@
+const { Sequelize, Op } = require('sequelize');
 const { convertToSlug } = require('../helpers/stringHelper');
 const Category = require('../models/Category');
+const Device = require('../models/Device');
+const ReviewDevice = require('../models/Review_device');
+const Warehouse = require('../models/Warehouse');
 const {
     
 } = require('../services/BlogServices');
@@ -65,10 +69,93 @@ const getCategoryById = async (id) => {
     return await Category.findByPK(id);
 }
 
-const getChildrenCategory = async (parenId) => {
-    return await Category.findAll({
-        where: { parenId: parenId },
+const getChildrenCategory = async (parentId) => {
+    const categories = await Category.findAll({
+        where: { parentId: parentId },
     });
+
+    if (categories.length === 0) {
+        return [];
+    }
+
+    const children = await Promise.all(
+        categories.map(async (category) => {
+            const subCategories = await getChildrenCategory(category.id);
+            return {
+                ...category.toJSON(),
+                children: subCategories,
+            };
+        })
+    );
+
+    return children;
+}
+
+const getAllCategoryIds = async (category) => {
+    let categoryIds = [category.id];
+
+    if (category.children && category.children.length > 0) {
+        for (const child of category.children) {
+            const childIds = await getAllCategoryIds(child);
+            categoryIds = categoryIds.concat(childIds);
+        }
+    }
+
+    return categoryIds;
+};
+
+const getDeviceByCategorySlug = async (slug) => {
+    const category = await Category.findOne({
+        where: { slug: slug },
+    });
+
+    if (!category) {
+        throw new Error('Không tìm thấy danh mục được yêu cầu');
+    }
+
+    const categoryTree = await getChildrenCategory(category.id);
+    const fullCategoryTree = {
+        ...category.toJSON(),
+        children: categoryTree,
+    };
+
+    const categoryIds = await getAllCategoryIds(fullCategoryTree);
+
+    let device = await Device.findAll({
+        subQuery: false,
+        include: [
+            {
+                model: ReviewDevice,
+                as: 'reviews',
+                attributes: [
+                    [Sequelize.fn('AVG', Sequelize.col('rating')), 'averageRating']
+                ],
+                required: false
+            },
+            {
+                model: Category,
+                as: 'categoryDevice',
+                attributes: ['id', 'nameCategory', 'parentId'],
+                where: {
+                    id: {
+                        [Op.in]: categoryIds, 
+                    },
+                },
+            },
+            {
+                model: Warehouse,
+                as: 'warehouse',
+                attributes: [] 
+            }
+        ],
+        attributes: [
+            'idDevice', 'name', 'slug', 'sellingPrice', 'image', 'descriptionNormal', 'status',
+            [Sequelize.col('warehouse.stock'), 'stock']
+        ],
+        group: ['Device.idDevice'],
+    });
+
+    return device;
 }
 
 const createCategory = async ({ body }) => {
@@ -141,6 +228,6 @@ const updateStatusCategory = async ({ id, status }) => {
 
 module.exports = {
     getAllCategory_User, getAllCategory_Admin, getCategoryByUser,
-    getCategoryById, getChildrenCategory,
+    getCategoryById, getChildrenCategory, getAllCategoryIds, getDeviceByCategorySlug,
     createCategory, updateCategory, updateStatusCategory
 }

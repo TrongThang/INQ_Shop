@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import AreaSearch from "../../component/user/SearchPage/AreaSearch/areaSearch";
 import AreaSort from "../../component/user/SearchPage/areaSort";
 import ListDeviceSearch from "../../component/user/SearchPage/listDeviceSearch";
-import { useLocation, useNavigate  } from "react-router-dom";
+import { useLocation, useNavigate, useParams  } from "react-router-dom";
 
 export default function SearchPage() {
     useEffect(() => {
@@ -17,24 +17,6 @@ export default function SearchPage() {
         category: [],
         price: { min: 0, max: 100000000 }
     });
-    
-    // const filterData = () => {
-    //     let filteredData = searchResult;
-
-    //     // Lọc theo danh mục
-    //     // if (conditionSearch.category.length > 0) {
-    //     //     filteredData = filteredData.filter(item =>
-    //     //         conditionSearch.category.includes(item.categoryDevice.id)
-    //     //     );
-    //     // }
-
-    //     filteredData = filteredData.filter(item =>
-    //         item.sellingPrice >= conditionSearch.price.min && item.sellingPrice <= conditionSearch.price.max
-    //     );
-
-    //     setDataToShow(filteredData);
-    //     console.log('Search key:', location.search);
-    // };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -59,6 +41,22 @@ export default function SearchPage() {
                         setSearchResult([]); 
                     }
                 }
+
+                // else if (slugCate) {
+                //     const apiUrl = `http://localhost:8081/api/category?slugCate=${slugCate}`;
+                //     const response = await fetch(apiUrl);
+                    
+                //     const result = await response.json();
+
+                //     await console.log('Category tìm kiếm:', result.data);
+
+                //     if (result.errorCode === 0) {
+                //         setSearchResult(result.data);
+                //     } else {
+                //         console.error("Lỗi từ API:", result.msg);
+                //         setSearchResult([]); 
+                //     }
+                // }
             } catch (err) {
                 console.error(err);
             } finally {
@@ -75,7 +73,7 @@ export default function SearchPage() {
         // Lọc theo danh mục
         if (conditionSearch.category.length > 0) {
             filteredData = filteredData.filter(item =>
-                conditionSearch.category.includes(item.categoryDevice.id)
+                conditionSearch.category.includes(item.categoryDevice?.id)
             );
         }
 

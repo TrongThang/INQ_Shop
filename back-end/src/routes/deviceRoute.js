@@ -1,10 +1,16 @@
 const express = require('express')
 
 const {
+    getReviewForCustomerAPI,
     getAllDeviceByUserAPI, getAllDeviceByAdminAPI, getAllDevice_NewAPI, getAllDevice_BestSellingAPI,
-    getAllDevice_FeaturedAPI,
+    getAllDevice_FeaturedAPI, 
     getDeviceBySlugAPI, getTOPDeviceLikedAPI,
     postCreateDeviceAPI, putUpdateDeviceAPI, updateStatusDeviceAPI,
+    putIncreaseViewDeviceAPI,
+    
+    postCreateReviewForDeviceAPI,
+    putUpdateReviewForDeviceAPI,
+    getAllReviewForDeviceAPI,
 } = require('../controllers/api/DeviceController')
 
 const routerDevice = express.Router();
@@ -20,12 +26,16 @@ routerDevice.get('/:keyword', getAllDeviceByUserAPI);
 
 routerDevice.get('/detail/:slug', getDeviceBySlugAPI);
 routerDevice.get('/top-device', getTOPDeviceLikedAPI);
-// router.get('/', getBlogAPI);
-// router.get('/', getAllBlogAPI);
+
 routerDevice.post('/', postCreateDeviceAPI)
 routerDevice.put('/', putUpdateDeviceAPI)
 routerDevice.delete('/', putUpdateDeviceAPI)
 
+routerDevice.put('/views/:idDevice', putIncreaseViewDeviceAPI)
 
+routerDevice.get('/review/:idDevice/:idCustomer', getReviewForCustomerAPI)
+routerDevice.get('/reviews/:idDevice', getAllReviewForDeviceAPI)
+routerDevice.post('/review/',postCreateReviewForDeviceAPI)
+routerDevice.put('/review/',putUpdateReviewForDeviceAPI)
 
 module.exports = routerDevice;

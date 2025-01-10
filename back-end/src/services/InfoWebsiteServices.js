@@ -6,16 +6,8 @@ const { where } = require('sequelize');
 const getAllInfoWebsite = async() => {
     const data = await InfoWebsite.findAll();
     const settings = data.reduce((acc, item) => {
-        if (item.STATUS === 2) {
-            if (!acc.LOGO) {
-                acc.LOGO = [];
-            }
-
-            acc.LOGO[item.KEY_NAME] = item.VALUE;
-
-        } else {
             acc[item.KEY_NAME] = item.VALUE;    
-        }
+        
 
         return acc;
     }, {});

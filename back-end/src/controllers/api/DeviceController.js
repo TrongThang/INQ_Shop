@@ -3,16 +3,21 @@ const Device = require('../../models/Device.js');
 
 const {
     getAllDevice_User, getAllDevice_Admin, getAllDeviceByStatus,
-    getDeviceBySlug,
+    getDeviceBySlug, 
     createDevice, updateDevice, updateStatusDevice,
     //Review For Device
+    getReviewForCustomer,
     getAllReviewForDevice, createReviewForDevice, updateReviewForDevice, updateStatusReviewForDevice,
-    getTOPDeviceLiked, 
+    getTOPDeviceLiked,
+    increaseViewDevice, 
 } = require('../../services/DeviceServices.js');
 
+const {
+    getChildrenCategory, getAllCategoryIds
+} = require('../../services/CategoryServices.js')
 const getAllDeviceByUserAPI = async (req, res) => {
     try {
-        const { page = 0, status = 1, limit = 10, priceMin, priceMax, idCategory } = req.body;
+        const { page = 0, status = 1, limit = 90, priceMin, priceMax, idCategory } = req.body;
 
         const { keyword, orderBy, sortBy } = req.query;
         
@@ -113,6 +118,7 @@ const getTOPDeviceLikedAPI = async (req, res) => {
         });
     }
 }
+
 const getAllDeviceByStatusAPI = async (req, res) => {
     try {
         const results = await getDeviceByTypeStatus();
@@ -164,6 +170,7 @@ const getDeviceBySlugAPI = async (req, res) => {
     }
 };
 
+
 const postCreateDeviceAPI = async (req, res) => {
     try {
         const results = await createDevice(req.body);
@@ -198,6 +205,22 @@ const putUpdateDeviceAPI = async (req, res) => {
     }
 }
 
+const putIncreaseViewDeviceAPI = async (req, res) => {
+    try {
+        const idDevice = req.params.idDevice;
+
+        const results = await increaseViewDevice({idDevice});
+
+        return res.status(200).json(results)
+    } catch (error) {
+        return res.status(500).json({
+            errorCode: 1,
+            msg: 'Cập nhập dữ liệu Thiết bị thất bại',
+            details: error.message,
+        });
+    }
+}
+
 const updateStatusDeviceAPI = async (req, res) => {
     try {
         const id = req.body.idDevice;
@@ -220,12 +243,10 @@ const updateStatusDeviceAPI = async (req, res) => {
 
 const getAllReviewForDeviceAPI = async (req, res) => {
     try {
+        console.log(req.params)
         const results = await getAllReviewForDevice(req.params.idDevice);
 
-        return res.status(200).json({
-            errorCode: 0,
-            data: results
-        })
+        return res.status(200).json(results)
     } catch (error) {
         return res.status(500).json({
             errorCode: 1,
@@ -235,14 +256,25 @@ const getAllReviewForDeviceAPI = async (req, res) => {
     }
 };
 
+const getReviewForCustomerAPI = async (req, res) => {
+    try {
+        const results = await getReviewForCustomer(req.params.idDevice, req.params.idCustomer);
+
+        return res.status(200).json(results)
+    } catch (error) {
+        return res.status(500).json({
+            errorCode: 1,
+            msg: 'Có lỗi xảy ra trong quá trình lấy dữ liệu Thiết bị',
+            details: error.message,
+        });
+    }
+}
+
 const postCreateReviewForDeviceAPI = async (req, res) => {
     try {
         const results = await createReviewForDevice(req.body);
 
-        return res.status(200).json({
-            errorCode: 0,
-            data: results
-        })
+        return res.status(200).json(results)
     } catch (error) {
         return res.status(500).json({
             errorCode: 1,
@@ -254,16 +286,14 @@ const postCreateReviewForDeviceAPI = async (req, res) => {
 
 const putUpdateReviewForDeviceAPI = async (req, res) => {
     try {
-        const results = await updateReviewForDevice(req.body);
+        const { idReview } = req.body.comment;
+        const results = await updateReviewForDevice(idReview, req.body);
 
-        return res.status(200).json({
-            errorCode: 0,
-            data: results
-        })
+        return res.status(200).json(true)
     } catch (error) {
         return res.status(500).json({
             errorCode: 1,
-            msg: 'Cập nhập dữ liệu Thiết bị thất bại',
+            msg: 'Cập nhập dữ liệu Đánh giá của sản phẩm thất bại',
             details: error.message,
         });
     }
@@ -293,8 +323,9 @@ module.exports = {
     getAllDeviceByUserAPI,getAllDevice_FeaturedAPI, getAllDevice_NewAPI, getAllDevice_BestSellingAPI, getAllDeviceByAdminAPI,
     getDeviceBySlugAPI, getTOPDeviceLikedAPI,
     postCreateDeviceAPI, putUpdateDeviceAPI,
-    updateStatusDeviceAPI,
+    updateStatusDeviceAPI, putIncreaseViewDeviceAPI,
     //Review For Device
+    getReviewForCustomerAPI,
     getAllReviewForDeviceAPI, postCreateReviewForDeviceAPI,
     putUpdateReviewForDeviceAPI, updateStatusReviewForDeviceAPI
 }

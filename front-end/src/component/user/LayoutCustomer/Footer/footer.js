@@ -12,6 +12,7 @@ export default function Footer({ categories }) {
         setIsCategoryVisible(!isCategoryVisible); // Thay đổi trạng thái hiển thị
     };
 
+    console.log(setting)
     return (
         <div className="container-fluid footer py-5 wow fadeIn mt-5" data-wow-delay="0.2s">
             <div className="container py-5">
@@ -21,23 +22,23 @@ export default function Footer({ categories }) {
                             <div className="row g-4">
                                 <div className="col-md-6 col-lg-6 col-xl-5">
                                     <div className="footer-item">
-                                        <a href="index.html" className="p-0">
+                                        <Link to="/" className="p-0">
                                             <h3 className="text-white"><i className="fab fa-slack me-3" /> INQ Shop</h3>
-                                        </a>
-                                        <p className="text-white mb-4">Dolor amet sit justo amet elitr clita ipsum elitr est.Lorem ipsum dolor sit amet, consectetur adipiscing...</p>
+                                        </Link>
+                                        <p className="text-white mb-4">
+                                            {
+                                                setting.LAYOUT_FOOTER_SLOGAN
+                                            }
+                                        </p>
                                         <div className="footer-btn d-flex">
-                                            
-                                            {/* {setting.LOGO[0].map(([key, value], index) => (
-                                                <Link key={index} className="btn btn-md-square rounded-circle me-3">
-                                                    <i className="fab fa-facebook-f" />
-                                                </Link>
-                                            ))} */}
-                                            
-                                            <Link className="btn btn-md-square rounded-circle me-3" href="#">
-                                                <i className="fab fa-instagram" />
+                                            <Link to="https://www.facebook.com/thongtinchinhphu" className="btn btn-md-square rounded-circle me-3">
+                                                <i className={setting.LOGO_FACEBOOK} />
                                             </Link>
-                                            <Link className="btn btn-md-square rounded-circle me-0" href="#">
-                                                <i className="fab fa-linkedin-in" />
+                                            <Link to="https://www.instagram.com/" className="btn btn-md-square rounded-circle me-3">
+                                                <i className={setting.LOGO_INSTAGRAM} />
+                                            </Link>
+                                            <Link to="https://www.linkedin.com/" className="btn btn-md-square rounded-circle me-0">
+                                                <i className={setting.LOGO_LINKEDIN} />
                                             </Link>
                                         </div>
                                     </div>
@@ -47,10 +48,12 @@ export default function Footer({ categories }) {
                                 <div className="col-md-6 col-lg-6 col-xl-3">
                                     <div className="footer-item">
                                         <h4 className="text-white mb-4">Liên kết</h4>
-                                        <a ><i className="fas fa-angle-right me-2"></i> Trang chủ</a>
-                                        <a  onClick={handleCategoryClick}>
+                                        <Link to={setting.LINK_NAVBAR_INDEX} ><i className="fas fa-angle-right me-2"></ i>
+                                            {setting.LAYOUT_NAVBAR_INDEX}
+                                        </Link>
+                                        <Link  onClick={handleCategoryClick}>
                                             <i className="fas fa-angle-right me-2"></i> Danh mục
-                                        </a>
+                                        </Link>
                                         {isCategoryVisible && (
                                             <div className="mt-2">
                                                 {categories.length > 0 ? (
@@ -64,8 +67,14 @@ export default function Footer({ categories }) {
                                                 )}
                                             </div>
                                         )}
-                                        <a href="#"><i className="fas fa-angle-right me-2"></i> Giới thiệu</a>
-                                        <a href="#"><i className="fas fa-angle-right me-2"></i> Liên hệ</a>
+                                        <Link to={setting.LINK_NAVBAR_INTRODUTION}><i className="fas fa-angle-right me-2"></i>
+                                            {setting.LAYOUT_NAVBAR_INTRODUTION}
+                                        </Link>
+                                        <Link to={setting.LINK_NAVBAR_BLOG}><i className="fas fa-angle-right me-2"></i>
+                                            {setting.LAYOUT_NAVBAR_BLOG}
+                                        </Link>
+                                        <Link to={setting.LINK_NAVBAR_CONTACT}><i className="fas fa-angle-right me-2"></i> {setting.LAYOUT_NAVBAR_CONTACT}</Link>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -80,8 +89,8 @@ export default function Footer({ categories }) {
                                                     <i className="fas fa-map-marker-alt fa-2x"></i>
                                                 </div>
                                                 <div>
-                                                    <h4 className="text-white">Địa chỉ</h4>
-                                                    <p className="mb-0">272Đt743, TP.Dĩ An, Tỉnh Bình Dương</p>
+                                                    <h4 className="text-warning">Địa chỉ</h4>
+                                                    <p className="mb-0 text-white"> {setting.COMPANY_ADDRESS} </p>
                                                 </div>
                                             </div>
                                         </div>
@@ -91,8 +100,8 @@ export default function Footer({ categories }) {
                                                     <i className="fas fa-envelope fa-2x"></i>
                                                 </div>
                                                 <div>
-                                                    <h4 className="text-white">Email</h4>
-                                                    <p className="mb-0">contact.inq@gmail.com</p>
+                                                    <h4 className="text-warning">Email</h4>
+                                                    <p className="mb-0 text-white">{setting.EMAIL}</p>
                                                 </div>
                                             </div>
                                         </div>

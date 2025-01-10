@@ -1,10 +1,7 @@
 import Rating from "./rating";
 
 export default function ListRating({ reviews }) {
-    if (!reviews) {
-        return <div>Đang tải...</div>;
-    }
-    console.log('List rating', reviews)
+    
     return (
         <section>
             <div className="container my-3 py-5 text-body">

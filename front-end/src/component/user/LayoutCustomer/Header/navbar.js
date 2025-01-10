@@ -8,12 +8,12 @@ export default function Navbar({categories, isLogged}) {
     const { setting } = useSettingWeb();
     
     return (
-        <nav className="navbar navbar-expand-lg navbar-light d-flex justify-content-between align-items-center">
+        <nav className="navbar navbar-expand-lg navbar-light d-flex justify-content-between align-items-center text-nowrap">
             {/* <!-- Logo --> */}
             <Link to="/" className="navbar-brand p-0 me-auto">
                 <h1 className="text-primary mb-0">
                     {/* {}<i className="fab fa-slack me-2"></i>INQ Shop */}
-                    {DOMParser} {<div dangerouslySetInnerHTML={{ __html: setting.LOGO }} /> }
+                    {<div dangerouslySetInnerHTML={{ __html: setting.LOGO }} /> }
                 </h1>
             </Link>
             {/* <!-- Toggler for Mobile View --> */}

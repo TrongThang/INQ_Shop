@@ -35,7 +35,7 @@ const getDetailOrder = async (idOrder, idCustomer = null) => {
         include: [
             {
                 model: OrderDetail,
-                as: 'orderDetail'
+                as: 'details'
             }
         ]
     });
@@ -43,8 +43,25 @@ const getDetailOrder = async (idOrder, idCustomer = null) => {
     return order;
 }
 
+const checkCustomerOrderForDevice  = async (idCustomer, idDevice) => {
+    const orders = await Order.findAll({
+        where: {
+            idCustomer: idCustomer
+        },
+        include: [
+            {
+                model: OrderDetail,
+                as: 'details',
+                where: {
+                    idDevice: idDevice
+                }
+            }
+        ]
+    });
+
+    return orders.length > 0
+}
+
 module.exports = {
-    getCartInCookie, saveCartInCookie, 
-    addToCartInCookie, updateQuantityDeviceInCartCookie,
-    removeDeviceCartInCookie
+    checkCustomerOrderForDevice,
 }

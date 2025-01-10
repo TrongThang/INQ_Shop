@@ -19,10 +19,12 @@ const routerCart = require('./cartRoute');
 const routerDevice = require('./deviceRoute');
 const routerImport = require('./importRoute');
 const routerInfoWebsite = require('./infoWebsiteRoute');
+const routerOrder = require('./orderRoute');
 
 
 
 router.use('/device', routerDevice);
+router.use('/order', routerOrder);
 router.use('/blog', routerBlog);
 router.use('/contact', routerContact);
 router.use('/cart', routerCart);

@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { useCart } from "../../../context/CartContext";
 
 export default function OneDeviceInCart({ device }) {
-    console.log('Sản phẩm trong giỏ hàng:', device);
     
     //TO DO Add and Minus
     const { addToCart, handleInputQuantity , removeFromCart} = useCart();

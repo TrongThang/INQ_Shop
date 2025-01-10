@@ -6,7 +6,6 @@ export default function ContentTab({ device }) {
     if (!device) {
         return <div>Đang tải...</div>;
     }
-    console.log('Content Tab: ', device)
     
     return (
         <div className="tab-content" id="productTabsContent">

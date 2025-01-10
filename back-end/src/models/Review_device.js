@@ -5,7 +5,8 @@ const ReviewDevice = sequelize.define('review_device', {
   idReview: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    primaryKey: true
+    primaryKey: true,
+    autoIncrement: true,
   },
   idCustomer: {
     type: DataTypes.STRING(12),
@@ -79,7 +80,7 @@ const Device = require('../models/Device');
 const Customer = require('./Customer');
 // ReviewDevice.belongsTo(Device, { foreignKey: 'idDevice', as: 'device' });
 ReviewDevice.belongsTo(Customer, { foreignKey: 'idCustomer', as: 'customerReview' })
-Customer.hasMany(ReviewDevice, { foreignKey: 'id', as: 'customerReview' })
+Customer.hasMany(ReviewDevice, { foreignKey: 'idCustomer', as: 'customerReview' })
 // ReviewDevice.belongsTo(Device, { foreignKey: 'idDevice', as: 'device' });
 
 module.exports = ReviewDevice;

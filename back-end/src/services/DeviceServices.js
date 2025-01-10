@@ -10,6 +10,7 @@ const Warehouse = require('../models/Warehouse');
 const Attribute = require('../models/Attribute');
 const AttributeDevice = require('../models/Attribute_device');
 const Attribute_group = require('../models/Attribute_group');
+const { getChildrenCategory, getAllCategoryIds } = require('./CategoryServices');
 
 // HÀM XỬ LÝ
 function groupAttributesByGroup(attributeDeviceList) {
@@ -187,7 +188,12 @@ const getDeviceBySlug = async (slug) => {
                     attributes: ['surname', 'lastName', 'image']
                 }],
                 required: false
-            }
+            },
+            {
+                model: Warehouse,
+                as: 'warehouse',
+                attributes: []
+            },
         ],
         attributes: {
             include: [
@@ -195,7 +201,8 @@ const getDeviceBySlug = async (slug) => {
                     SELECT AVG(rating)
                     FROM review_device AS review
                     WHERE review.idDevice = Device.idDevice
-                )`), 'averageRating']
+                )`), 'averageRating'],
+                [Sequelize.col('warehouse.stock'), 'stock']
             ]
         },
     });
@@ -263,7 +270,7 @@ const updateDevice = async (body) => {
     return updatedCount;
 }
 
-const updateStatusDevice = async ({ id, status }) => {
+const updateStatusDevice = async ({ idDevice, status }) => {
     const valueIsHide = status <= 0 ? true : false;
 
     const [updatedCount] = await Device.update(
@@ -271,11 +278,29 @@ const updateStatusDevice = async ({ id, status }) => {
             status: status,
             isHide: valueIsHide
         },
-        { where: { id } }
+        { where: { idDevice } }
     );
 
     return updatedCount;
 }
+
+const increaseViewDevice = async ({ idDevice }) => {
+    const device = await Device.findOne({ where: { idDevice } });
+
+    if (!device) {
+        throw new Error('Không tìm thấy thiết bị'); 
+    }
+
+    const newViewCount = device.views + 1;
+
+    const [updatedCount] = await Device.update(
+        { views: newViewCount }, 
+        { where: { idDevice } } 
+    );
+
+    return updatedCount;
+}
+
 
 const updateStatusDeviceByCategory = async ({ idCategory, status }) => {
     //Nếu như trạng thái > 0 thì isHide phải bằng false
@@ -298,27 +323,52 @@ const updateStatusDeviceByCategory = async ({ idCategory, status }) => {
     return updateCount
 }
 
-const getAllReviewForDevice = async (id, status = {}) => {
+const getAllReviewForDevice = async (idDevice) => {
     const comments = await ReviewDevice.findAll({
         where: {
-            idDevice: id,
-            status: status
-        }
+            idDevice: idDevice
+        },
+        include: [
+            {
+                model: Customer,
+                as: 'customerReview'
+            }
+        ],
+        order: [['updated_at', 'DESC']]
     });
 
     return comments;
 }
 
+const getReviewForCustomer = async (idDevice, idCustomer) => {
+    const comments = await ReviewDevice.findOne({
+        where: {
+            idDevice: idDevice,
+            idCustomer: idCustomer
+        }
+    });
+    
+    return comments;
+}
+
 const createReviewForDevice = async (body) => {
-    const reviewForDevice = await ReviewDevice.create({ body });
+    const { idCustomer, idDevice, comment, rating } = body.comment;
+    console.log('Data trc create:', idCustomer, idDevice, comment, rating)
+
+    const reviewForDevice = await ReviewDevice.create({ idCustomer, idDevice, comment, rating });
 
     return reviewForDevice;
 }
 
-const updateReviewForDevice = async ({ id, ...body }) => {
-    const [updatedCount] = await ReviewDevice.update(body, {
-        where: { id }
-    });
+const updateReviewForDevice = async ( idReview, body ) => {
+    const {idCustomer, idDevice, comment, rating } = body.comment;
+    
+    const [updatedCount] = await ReviewDevice.update(
+        { idCustomer, idDevice, comment, rating },
+        {
+        where: { idReview }
+        }
+    );
 
     return updatedCount;
 }
@@ -342,11 +392,12 @@ const updateStatusReviewForDevice = async ({ id, status }) => {
 
 module.exports = {
     getAllDevice_User, getAllDeviceByStatus, getAllDevice_Admin, 
-    getDeviceBySlug, getTOPDeviceLiked,
+    getDeviceBySlug, getTOPDeviceLiked, 
     createDevice, updateDevice, updateStatusDevice,
-    updateStatusDeviceByCategory,
+    updateStatusDeviceByCategory, increaseViewDevice,
 
     //Review For Device
+    getReviewForCustomer,
     getAllReviewForDevice, createReviewForDevice,
     updateReviewForDevice, updateStatusReviewForDevice,
 }

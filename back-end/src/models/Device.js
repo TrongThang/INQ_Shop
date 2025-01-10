@@ -33,6 +33,11 @@ const Device = sequelize.define('device', {
     type: DataTypes.DECIMAL(19,4),
     allowNull: true
   },
+  views: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    defaultValue: 0,
+  },
   idCategory: {
     type: DataTypes.INTEGER,
     allowNull: true,

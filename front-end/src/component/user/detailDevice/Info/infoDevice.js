@@ -23,6 +23,7 @@ export default function InfoDevice({ device }) {
         const fetchLikedStatus = async () => {
             try {
                 const response = await axios.get(`http://localhost:8081/api/likedDevice/${idCustomer}/${device.idDevice}`);
+
                 setCustomerLiked(!!response.data.data); // Backend trả về trạng thái yêu thích(chuyển đổi về boolean)
             } catch (error) {
                 console.error("Lỗi khi kiểm tra trạng thái yêu thích:", error);
@@ -32,6 +33,7 @@ export default function InfoDevice({ device }) {
         if (device && device.idDevice) {
             fetchLikedStatus();
         }
+
     }, [device]);
 
     if (!device || !device.categoryDevice) {
@@ -39,7 +41,6 @@ export default function InfoDevice({ device }) {
     }
 
     const toggleLike = async () => {
-        console.log(customerLiked)
         try {
             if (!customerLiked) {
                 // Gọi API để thêm vào danh sách yêu thích
@@ -55,10 +56,14 @@ export default function InfoDevice({ device }) {
         }
         setCustomerLiked(!customerLiked); // Đảo trạng thái yêu thích
     };
-
+    console.log('Info device:', device)
     return (
         <div class="col-xl-7 mb-4">
-            <span>{device.categoryDevice.nameCategory}
+            <span>
+                <i className="fa-solid fa-eye me-3"> 
+                    <span> { device.views }</span>
+                </i>
+                {device.categoryDevice.nameCategory}
                 <span onClick={toggleLike} style={{ cursor: "pointer" }}>
                     {idCustomer && (customerLiked ? (
                         <i className="fa-solid fa-heart text-danger ms-2"></i>
@@ -73,6 +78,15 @@ export default function InfoDevice({ device }) {
             <div className="rating d-flex align-items-center">
                 <div>
                     <StarRating rating={device.averageRating} />
+                    {
+                        (device.stock <= 0 || device.status <= 0)
+                            ?   <div className="col-auto fw-bold badge badge-danger bg-danger fs-6 mb-2">
+                                    Hết hàng
+                                </div>
+                            :   <div className="col-auto fw-bold badge badge-success bg-success fs-6 mb-2">
+                                    Còn hàng
+                                </div>
+                    }
                 </div>
             </div>
             <h4><strong>Giá:</strong> <span className="text-primary fw-bold">{Number(device.sellingPrice).toLocaleString()}</span> VNĐ</h4>

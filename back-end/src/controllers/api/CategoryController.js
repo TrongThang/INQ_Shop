@@ -2,7 +2,7 @@ const Category = require('../../models/Category.js');
 
 const {
     getAllCategory_User, getCategoryByUser, getAllCategory_Admin,
-    getCategoryById, getChildrenCategory,
+    getCategoryById, getChildrenCategory, getDeviceByCategorySlug,
     createCategory, updateCategory, updateStatusCategory
 } = require('../../services/CategoryServices.js');
 
@@ -43,6 +43,22 @@ const getCategoryByUserAPI = async (req, res) => {
 
 }
 
+const getDeviceByCategorySlugAPI = async (req, res) => {
+    try {
+        console.log(req.params.slug);
+        const results = await getDeviceByCategorySlug(req.params.slug);
+
+        return res.status(200).json(results)
+    } catch (error) {
+        return res.status(500).json({
+            errorCode: 1,
+            msg: 'Có lỗi xảy ra trong quá trình lấy dữ liệu Thiết bị',
+            details: error.message,
+        });
+    }
+};
+
+
 const getAllCategory_AdminAPI = async (req, res) => {
     const results = await getAllCategory_Admin();
 
@@ -61,7 +77,6 @@ const getCategoryByIdAPI = async (req, res) => {
     })
 };
 
-//FIX
 const getChildrenCategoryAPI = async (req, res) => {
     const results = await getChildrenCategory(req.body.id);
 
@@ -117,7 +132,7 @@ const updateStatusCategoryAPI = async (req, res) => {
     
 module.exports = {
     getAllCategory_UserAPI, getAllCategory_AdminAPI, getCategoryByUserAPI,
-    getCategoryByIdAPI, getChildrenCategoryAPI,
+    getCategoryByIdAPI, getChildrenCategoryAPI, getDeviceByCategorySlugAPI,
     postCreateCategoryAPI, putUpdateCategoryAPI,
     updateStatusCategoryAPI
 }

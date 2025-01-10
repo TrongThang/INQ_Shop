@@ -2,17 +2,14 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../../../context/CartContext";
-import LogoutToast from "../../Notification/logoutToast";
 export default function AreaCustomer({ isLogged }) {
     const { getTotalItem, getTotalPrice } = useCart();
-    const [showToast, setShowToast] = useState(false);
     const navigate = useNavigate();
     const handleLogout = () => {
         localStorage.removeItem("authToken");
         isLogged = false;
 
         // Show the toast notification
-        setShowToast(true);
         navigate('/');
         setTimeout(() => {
             window.location.reload();
@@ -20,9 +17,7 @@ export default function AreaCustomer({ isLogged }) {
         // Redirect to login page after a short de  lay
 
         // Hide the toast after 3 seconds
-        setTimeout(() => {
-            setShowToast(false);
-        }, 1500);
+        
     };
 
     const fetchDeviceInCart = async () => {
@@ -115,7 +110,6 @@ export default function AreaCustomer({ isLogged }) {
                 </div>
                 {/* <!-- END PROFILE --> */}
             </div>
-            <LogoutToast show={showToast} />
         </>
     );
 }

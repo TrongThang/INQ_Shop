@@ -13,7 +13,7 @@ const routerOrder = express.Router();
 // routerOrder.post('/', postAddOrderAPI);
 
 routerOrder.get('/checkOrder/:idCustomer/:idDevice', checkCustomerOrderForDeviceAPI);
-
+routerOrder.get('/:id', getAllOrderByIdCustomerAPI );
 // routerOrder.put('/', putUpdateOrderAPI);
 // routerOrder.put('/status', putUpdateStatusOrderAPI);
 

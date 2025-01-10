@@ -1,10 +1,26 @@
 const connection = require('../../config/database.js');
 const Order = require('../../models/Order.js');
+const { or } = require('sequelize');
 
-const { checkCustomerOrderForDevice } = require('../../services/OrdersServices.js');
+const {
+    checkCustomerOrderForDevice,
+    getAllOrder
+} = require('../../services/OrdersServices.js');
 
-const getAllOrderAPI = async (req, res) => {
+const getAllOrderByIdCustomerAPI = async (req, res) => {
     //TO DO SOMETHING
+    try{
+        const orders = await getAllOrder(req.params.id);
+        res.status(200).json({
+            success: true,
+            data: orders
+        });
+    }
+    catch(error){
+        return res.status(500).json({ 
+            message: 'Đã xảy ra lỗi khi xử lý yêu cầu:',
+            error: error.message });
+    }
 }
 
 const checkCustomerOrderForDeviceAPI = async (req, res) => {
@@ -36,5 +52,6 @@ const deteleOrderAPI = async (req, res) => {
 }
     
 module.exports = {
-    checkCustomerOrderForDeviceAPI
+    checkCustomerOrderForDeviceAPI,
+    getAllOrderByIdCustomerAPI,
 }

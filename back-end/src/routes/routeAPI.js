@@ -24,7 +24,6 @@ const routerOrder = require('./orderRoute');
 
 
 router.use('/device', routerDevice);
-router.use('/order', routerOrder);
 router.use('/blog', routerBlog);
 router.use('/contact', routerContact);
 router.use('/cart', routerCart);
@@ -39,6 +38,7 @@ router.use('/likedDevice', routerLikeDevice);
 router.use('/attribute', routerAttribute);
 router.use('/setting-web', routerInfoWebsite);
 router.use('/import', routerImport);
+router.use('/order', routerOrder);
 
 // router.use('/attributeGroup', routerAttributeGroup);
 

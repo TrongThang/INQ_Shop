@@ -57,6 +57,7 @@ function App() {
             element={
               <CartProvider>
                 <User />
+                <RegisterPage/>
                 <LoginPage />
                 <RegisterPage />
                 

@@ -1,46 +1,26 @@
-const { where } = require('sequelize');
+const { where, Model } = require('sequelize');
 const Order = require('../models/Order');
-const OrderDetail = require('../models/Order_detail');
+const Customer = require('../models/Customer');
+const Order_detail = require('../models/Order_detail');
+const Device = require('../models/Device');
 
-const getAllOrder = async (idCustomer = null, status = null) => {
-    const whereCondition = {}
-
-    if (idCustomer) {
-        whereCondition.idCustomer = idCustomer;
-    }
-
-    if (status)
-    {
-        whereCondition.status = status;
-    }
-
+const getAllOrder = async (idCustomer) => {
     const orders = await Order.findAll({
-        where: whereCondition
-    });
-
-    return orders;
-}
-
-const getDetailOrder = async (idOrder, idCustomer = null) => {
-    const whereCondition = {
-        id: idOrder
-    }
-
-    if (idCustomer) {
-        whereCondition.idCustomer = idCustomer;
-    }
-
-    const order = await Order.findAll({
-        where: whereCondition,
+        where: { idCustomer },
         include: [
             {
-                model: OrderDetail,
-                as: 'details'
+                model: Order_detail,
+                as: 'order_detail',
+                attribute: [ 'price', 'stock', 'amount',],
+                include: [{
+                    model: Device,
+                    as: 'device',
+                    attribute: ['image']
+                }]
             }
         ]
     });
-
-    return order;
+    return orders;
 }
 
 const checkCustomerOrderForDevice  = async (idCustomer, idDevice) => {
@@ -63,5 +43,6 @@ const checkCustomerOrderForDevice  = async (idCustomer, idDevice) => {
 }
 
 module.exports = {
+    getAllOrder,
     checkCustomerOrderForDevice,
 }

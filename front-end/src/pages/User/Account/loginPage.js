@@ -5,7 +5,7 @@ export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [showToast, setShowToast] = useState(false);
+
 
   
   const handleLogin = async (e) => {
@@ -27,7 +27,7 @@ export default function Login() {
           const token = result.token;
           console.log('Token:', token); // Hiển thị token ra console
           localStorage.setItem('authToken', token); // Lưu token vào localStorage
-          setShowToast(true); // Hiển thị thông báo đăng nhập thành công
+         
           window.location.reload(); // Tải lại trang
         } else {
           setErrorMessage('Token không được trả về từ server');

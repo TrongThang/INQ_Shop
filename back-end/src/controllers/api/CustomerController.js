@@ -19,7 +19,7 @@ const getAllCustomersAPI = async (req, res) => {
 };
 
 const getCustomerByIdAPI = async (req, res) => {
-    const id = req.params.id;
+    const {id} = req.params;
 
     try {
         console.log('ID: ', id)
@@ -118,7 +118,6 @@ const putUpdateCustomerAPI = async (req, res) => {
     try {
         const { id } = req.params;
         const { surname, lastName, phone, identityNumber, email, birthdate } = req.body;
-
         // Kiểm tra các điều kiện đầu vào
         if (surname && surname.trim() === "") {
             return res.status(400).json({ success: false, message: "Surname không được để trống." });

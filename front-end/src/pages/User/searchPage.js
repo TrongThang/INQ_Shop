@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import AreaSearch from "../../component/user/SearchPage/AreaSearch/areaSearch";
 import AreaSort from "../../component/user/SearchPage/areaSort";
 import ListDeviceSearch from "../../component/user/SearchPage/listDeviceSearch";
@@ -12,8 +12,29 @@ export default function SearchPage() {
     const location = useLocation();
     const navigate = useNavigate(); 
     const [searchResult, setSearchResult] = useState([]); 
-    const [dataToShow, setDataToShow] = useState([]); 
     const [loading, setLoading] = useState(true);
+    const [conditionSearch, setConditionSearch] = useState({
+        category: [],
+        price: { min: 0, max: 100000000 }
+    });
+    
+    // const filterData = () => {
+    //     let filteredData = searchResult;
+
+    //     // Lọc theo danh mục
+    //     // if (conditionSearch.category.length > 0) {
+    //     //     filteredData = filteredData.filter(item =>
+    //     //         conditionSearch.category.includes(item.categoryDevice.id)
+    //     //     );
+    //     // }
+
+    //     filteredData = filteredData.filter(item =>
+    //         item.sellingPrice >= conditionSearch.price.min && item.sellingPrice <= conditionSearch.price.max
+    //     );
+
+    //     setDataToShow(filteredData);
+    //     console.log('Search key:', location.search);
+    // };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -33,11 +54,9 @@ export default function SearchPage() {
 
                     if (result.errorCode === 0) {
                         setSearchResult(result.data);
-                        setDataToShow(result.data)
                     } else {
                         console.error("Lỗi từ API:", result.msg);
                         setSearchResult([]); 
-                        setDataToShow([])
                     }
                 }
             } catch (err) {
@@ -47,8 +66,27 @@ export default function SearchPage() {
             }
         };
         fetchData();
-        console.log(searchResult);
     }, [location.search]);
+
+
+    const dataToShow = useMemo(() => {
+        let filteredData = searchResult;
+
+        // Lọc theo danh mục
+        if (conditionSearch.category.length > 0) {
+            filteredData = filteredData.filter(item =>
+                conditionSearch.category.includes(item.categoryDevice.id)
+            );
+        }
+
+        // Lọc theo giá
+        filteredData = filteredData.filter(item =>
+            item.sellingPrice >= conditionSearch.price.min && item.sellingPrice <= conditionSearch.price.max
+        );
+
+        return filteredData;
+    }, [searchResult, conditionSearch]);
+
 
     const handleSortChange = (selectedSort) => {
         const [orderBy, sortBy] = selectedSort.split('_'); // Tách --> orderBy và sortBy
@@ -63,15 +101,29 @@ export default function SearchPage() {
         return <div>Đang tải...</div>;
     }
 
+    const handleCategoryChange = (selectedCategories) => {
+        setConditionSearch(prev => ({ ...prev, category: selectedCategories }));
+    };
+
+    const handlePriceChange = (min, max) => {
+        setConditionSearch(prev => ({ ...prev, price: { min, max } }));
+    };
+
+
     return (
         <div className="mt-5 col-12 row">
-            <AreaSearch searchResult={searchResult} setDataToShow={setDataToShow} />
+            <AreaSearch
+                searchResult={searchResult}
+                dataToShow={dataToShow}
+                onCategoryChange={handleCategoryChange}
+                onPriceChange={handlePriceChange}
+            />
             <div className="row col-xl-10">
 
                 <AreaSort onSortChange={handleSortChange} />
-                <h3>Có tổng { searchResult.length } thiết bị được tìm thấy</h3>
+                <h3>Có tổng { dataToShow.length } thiết bị được tìm thấy</h3>
 
-                <ListDeviceSearch data={searchResult} />
+                <ListDeviceSearch data={dataToShow} />
             </div>
         </div>
     );

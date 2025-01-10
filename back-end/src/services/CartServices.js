@@ -2,22 +2,6 @@ const { Op } = require('sequelize');
 const Cart = require('../models/Cart');
 const Device = require('../models/Device');
 
-function convertToArray(input) {
-    if (Array.isArray(input)) {
-        return input;
-    }
-    try {
-        const parsed = JSON.parse(input);
-        if (Array.isArray(parsed)) {
-            return parsed;
-        }
-        throw new Error("Dữ liệu không phải là mảng sau khi parse");
-    } catch (error) {
-        console.error("Lỗi khi chuyển đổi input thành mảng:", error);
-        return [];
-    }
-}
-
 const getCart = async (idCustomer) => {
     let carts =  await Cart.findAll({
         where: {
@@ -30,7 +14,7 @@ const getCart = async (idCustomer) => {
         },
         attributes: ['idDevice', 'quantity']
     })
-    
+
     const formattedCart = carts.map(cart => {
         return {
             idDevice: cart.idDevice,

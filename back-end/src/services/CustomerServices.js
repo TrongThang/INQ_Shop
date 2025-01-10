@@ -1,4 +1,5 @@
 const Customer = require('../models/Customer');
+const Address_book = require('../models/Address_book');
 const Account = require('../models/Account');
 // Lấy danh sách tất cả khách hàng
 const getAllCustomers = async () => {
@@ -17,7 +18,7 @@ const getCustomerById = async (id) => {
                 as: 'account',        // Alias for the Account relationship (adjust if needed)
                 attributes: ['username']  // Specify only the 'username' attribute
             }
-        ]
+        ],
     });
 
     return customer;

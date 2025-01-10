@@ -1,7 +1,7 @@
 import { useCart } from "../../../context/CartContext";
 
 export default function PayCart() {
-    const { cart, handleCheckout,getTotalPrice } = useCart();
+    const { cart, checkCheckout,getTotalPrice } = useCart();
     return (
         <div className="card mb-4 fixed-bottom m-5 position-sticky border border-secondary">
             <div className="card-body">
@@ -15,7 +15,7 @@ export default function PayCart() {
                 </div>
                 <button
                     className="btn btn-primary float-end fs-4 w-100"
-                    onClick={handleCheckout}
+                    onClick={() => checkCheckout()}
                 >Thanh toán</button>
             </div>
         </div>

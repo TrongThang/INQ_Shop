@@ -91,16 +91,16 @@ export default function AreaCustomer({ isLogged }) {
                             </>
                             :
                             <>
-                                <a
-                                    herf="#"
+                                <Link
+                                    to="/login-in"
                                     className="dropdown-item"
                                     data-bs-toggle="modal"
                                     data-bs-target="#loginModal"
                                     style={{ cursor: "pointer" }}   
                                 >
                                     Đăng nhập
-                                </a>
-                                <a
+                                </Link>
+                                <Link
                                     to="/resgister"
                                     className="dropdown-item"
                                     data-bs-toggle="modal"
@@ -108,7 +108,7 @@ export default function AreaCustomer({ isLogged }) {
                                     style={{ cursor: "pointer" }} 
                                 >
                                     Đăng Ký
-                                </a>
+                                </Link>
                             </>
                         }
                     </div>

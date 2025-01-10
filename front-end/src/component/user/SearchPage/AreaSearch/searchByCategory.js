@@ -1,22 +1,27 @@
 import { useEffect, useState } from "react";
 
-export default function SearchByCategory({ searchResult }) {
+export default function SearchByCategory({ dataToShow, onCategoryChange, searchResult }) {
     const [categories, setCategories] = useState([]);
 
     const handleCheckCategory = (categoryId, isChecked) => {
-        setCategories((prevCategories) =>
-            prevCategories.map((category) =>
-                category.id === categoryId
-                    ? { ...category, checked: isChecked }
-                    : category
-            )
+        const updatedCategories = categories.map((category) =>
+            category.id === categoryId
+                ? { ...category, checked: isChecked }
+                : category
         );
+        setCategories(updatedCategories);
+
+        const selectedCategories = updatedCategories
+            .filter(category => category.checked)
+            .map(category => category.id);
+
+        onCategoryChange(selectedCategories);
     };
     // Lọc danh mục duy nhất từ searchResult
     useEffect(() => {
         const uniqueCategories = [];
-        const categoryIds = new Set(); // Sử dụng Set để lưu trữ các ID duy nhất
-
+        const categoryIds = new Set();
+        
         searchResult.forEach((item) => {
             if (!categoryIds.has(item.categoryDevice.id)) {
                 categoryIds.add(item.categoryDevice.id);

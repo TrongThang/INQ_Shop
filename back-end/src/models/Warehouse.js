@@ -1,5 +1,6 @@
 const sequelize = require('../config/database');
 const { DataTypes } = require('sequelize');
+const Device = require('./Device');
 
 const Warehouse = sequelize.define('warehouse', {
   idDevice: {
@@ -24,6 +25,8 @@ const Warehouse = sequelize.define('warehouse', {
     allowNull: true
   }
 }, {
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
   sequelize,
   tableName: 'warehouse',
   timestamps: true,
@@ -38,5 +41,8 @@ const Warehouse = sequelize.define('warehouse', {
     },
   ]
 });
+
+Warehouse.hasOne(Device, {foreignKey: 'idDevice', as: 'device'})
+Device.belongsTo(Warehouse, { foreignKey: 'idDevice', as: 'warehouse' })
 
 module.exports = Warehouse;

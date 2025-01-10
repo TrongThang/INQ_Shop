@@ -30,6 +30,8 @@ import OrdersPage from "./pages/user/Profile/ordersPage";
 
 import ListBlogPage from "./pages/user/Introdution/listBlogPage";
 import DetailBlogPage from "./pages/user/Introdution/blogDetailsPage";
+import CheckoutPage from "./pages/user/checkoutPage";
+
 import CompanyInfo from './component/user/Introdution/companyInfo';
 import Contact from "./pages/user/contact";
 import { CartProvider } from './context/CartContext';
@@ -72,6 +74,7 @@ function App() {
               <Route path="/search/*" element={<SearchPage />} />
               <Route path="/device/:slug" element={<DetailDevicePage />} />
               <Route path="/likeDevice" element={<LikedDevice />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
             </Route>
 
         </Routes>

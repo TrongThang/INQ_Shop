@@ -9,15 +9,14 @@ export default function OneDeviceInCart({ device }) {
     return (
         <div className="row align-items-center mb-3">
             <div className="col-auto">
-                <input className="form-check-input" type="checkbox" />
-            </div>
-            <div className="col-auto">
                 <img src={`/img/device/${device.image}`} alt={device.name} width="80" height="80" className="img-thumbnail" />
             </div>
             <Link to={`/device/${device.slug}`} className="col" style={{maxWidth: "600px"}}>
                 <h5 className="mb-0">{device.name}</h5>
             </Link>
-            <div className="col-auto">
+            <div className="col-auto d-flex align-items-center">
+                {device.quantity >= device.stock && <p className="text-danger mb-0 me-2 fw-bold">Còn { device.stock } thiết bị</p>}
+
                 <div className="input-group input-group-sm" style={{ width: "120px" }}>
                     <button
                         className="btn btn-outline-primary"
@@ -35,7 +34,7 @@ export default function OneDeviceInCart({ device }) {
                         className="btn btn-outline-primary"
                         type="button"
                         onClick={() => addToCart(device, 1)}
-                        // {...device.quantity >= device.quantityInStock && { disabled: true }}
+                        {...device.quantity >= device.stock && { disabled: true }}
                     >+</button>
                 </div>
             </div>
@@ -51,6 +50,12 @@ export default function OneDeviceInCart({ device }) {
                     onClick={() => removeFromCart(device.idDevice)}
                 >Xóa</button>
             </div>
+            {device.status <= 0 && 
+                <div className="col-auto fw-bold badge badge-danger bg-danger">
+                    Hết hàng
+                </div>
+            }
+            
         </div>
     )
 }

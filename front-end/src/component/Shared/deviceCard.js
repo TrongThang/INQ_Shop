@@ -11,7 +11,10 @@ const DeviceCard = ({ device }) => {
                 className="service-item"
             >
                 <div className="service-img">
-                    <div className="img-change">
+                    <div
+                        className="img-change"
+                        onClick={() => addToCart(device, 1)}
+                    >
                         <img src={`/img/device/${device.image}`} className="img-fluid rounded-top w-100"
                             style={{ height: "300px", objectFit: "cover" }}
                             alt="Smart Lighting"
@@ -30,7 +33,6 @@ const DeviceCard = ({ device }) => {
                             {Number(device.sellingPrice).toLocaleString()} VNĐ
                         </p>
                         <p className="mb-1">
-                            {console.log('Số sao', device.name, ':', (device.reviews?.[0]?.averageRating ?? "No rating available"))}
                             <StarRating rating={device.reviews?.[0]?.averageRating ?? 0} />
                         </p>
                         <p className="mb-1 line-clamp-p">

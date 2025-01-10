@@ -1,56 +1,39 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function RecursiveDropdown({  }) {
+export default function RecursiveDropdown({ items }) {
     const [submenuOpen, setSubmenuOpen] = useState(false);
 
-    const handleMouseEnter = () => {
-        setSubmenuOpen(true);
+    const handleMouseEnter = (index) => {
+        setSubmenuOpen((prev) => ({ ...prev, [index]: true }));
     };
 
-    const handleMouseLeave = () => {
-        setSubmenuOpen(false);
+    const handleMouseLeave = (index) => {
+        setSubmenuOpen((prev) => ({ ...prev, [index]: false }));
     };
 
-    return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <div className="container-fluid">
-            <div className="nav-link" data-bs-toggle="dropdown">
-                <span className="dropdown-toggle">Danh mục</span>
-            </div>
-            <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <li>
-                    <a className="dropdown-item" href="#">Mục 1.1</a>
-                </li>
-                <li
-                    className="dropdown-submenu"
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
-                >
-                    <a className="dropdown-item dropdown-toggle" href="#">
-                    Mục 1.2
-                    </a>
-                    <ul className={`dropdown-menu ${submenuOpen ? 'show' : ''}`}>
-                        <li>
-                            <ul className={`dropdown-menu ${submenuOpen ? 'show' : ''}`}>
-                                <li>
-                                    <a className="dropdown-item" href="#">Mục 1.2.1</a>
-                                </li>
-                                <li>
-                                    <a className="dropdown-item" href="#">Mục 1.2.2</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a className="dropdown-item" href="#">Mục 1.2.2</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a className="dropdown-item" href="#">Mục 1.3</a>
-                </li>
+    const renderDropdown = (items, level = 0) => {
+        return (
+            <ul className={`dropdown-menu ${level > 0 ? 'dropdown-submenu' : ''}`}>
+                {items.map((item, index) => (
+                    <li
+                        key={index}
+                        onMouseEnter={() => handleMouseEnter(index)}
+                        onMouseLeave={() => handleMouseLeave(index)}
+                    >
+                        <a className="dropdown-item" href={item.link}>
+                            {item.label}
+                        </a>
+                        {item.children && (
+                            <div className={`dropdown-menu ${submenuOpen[index] ? 'show' : ''}`}>
+                                {renderDropdown(item.children, level + 1)}
+                            </div>
+                        )}
+                    </li>
+                ))}
             </ul>
-        </div>
-        </nav>
-    );
+        );
+    };
+
+    return renderDropdown(items);
 }

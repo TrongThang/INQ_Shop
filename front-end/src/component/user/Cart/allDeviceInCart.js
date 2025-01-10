@@ -15,10 +15,12 @@ export default function AllDeviceInCart() {
             <div className="card-body">
                 <div className="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
                     <div className="form-check">
-                        <input className="form-check-input" type="checkbox" id="selectAll" />
-                        <label className="form-check-label" for="selectAll">Chọn tất cả</label>
+                        {/* <input className="form-check-input" type="checkbox" id="selectAll" /> */}
                     </div>
-                    <button className="btn btn-link text-danger p-0" onClick={removeAllCart}>Xóa hết</button>
+                    <button className="btn btn-sm btn-outline-danger" onClick={removeAllCart}>
+                        <i class="fa-solid fa-trash"></i>
+                        <span> Xóa hết</span>
+                    </button>
                 </div>
                 
                 {cart.map((device, index) => (

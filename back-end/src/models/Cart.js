@@ -1,6 +1,7 @@
 const sequelize = require('../config/database');
 const { DataTypes } = require('sequelize');
 const Device = require('./Device');
+const Customer = require('./Customer');
 
 const Cart = sequelize.define('cart', {
   idCustomer: {
@@ -51,5 +52,6 @@ const Cart = sequelize.define('cart', {
 
 Device.hasMany(Cart, { foreignKey: 'idDevice', as: 'carts' })
 Cart.belongsTo(Device, { foreignKey: 'idDevice', as: 'device' });
+Cart.belongsTo(Customer, { foreignKey: 'idCustomer', as: 'customer' });
 
 module.exports = Cart;

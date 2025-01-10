@@ -6,6 +6,7 @@ const Device = require('../models/Device');
 // const { Device, ReviewDevice } = require('../models/Init-models');
 const ReviewDevice = require('../models/Review_device');
 const Customer = require('../models/Customer');
+const Warehouse = require('../models/Warehouse');
 const Attribute = require('../models/Attribute');
 const AttributeDevice = require('../models/Attribute_device');
 const Attribute_group = require('../models/Attribute_group');
@@ -43,8 +44,6 @@ function groupAttributesByGroup(attributeDeviceList) {
     return Object.values(result);
 }
 
-
-
 // 0: Sản phẩm ngừng bán
 // >= 1: Sản phẩm đang bán
 // 1: Sản phẩm bán
@@ -79,7 +78,6 @@ const getAllDeviceByStatus = async (status = 1, limit = {}) => {
 
     return data; // Trả về danh sách sản phẩm
 };
-
 
 const getAllDevice_User = async (page = 0, status = 1, limit = {}, filters = {}, order = {}) => {
     const { priceMin, priceMax, idCategory, keyword } = filters;
@@ -127,10 +125,16 @@ const getAllDevice_User = async (page = 0, status = 1, limit = {}, filters = {},
                 model: Category,
                 as: 'categoryDevice',
                 attributes: ['id', 'nameCategory']
+            },
+            {
+                model: Warehouse,
+                as: 'warehouse',
+                attributes: [] // Không cần trả về riêng biệt, vì sẽ đưa vào attributes của Device
             }
         ],
         attributes: [
-            'idDevice', 'name', 'slug', 'sellingPrice', 'image', 'descriptionNormal',
+            'idDevice', 'name', 'slug', 'sellingPrice', 'image', 'descriptionNormal', 'status',
+            [Sequelize.col('warehouse.stock'), 'stock']
         ],
         group: ['Device.idDevice'],
         order: order,

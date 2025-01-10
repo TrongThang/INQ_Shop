@@ -1,8 +1,9 @@
+const sequelize = require("../config/database");
+const { DataTypes } = require('sequelize');
+const Device = require("./Device");
 
-
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('detail_import', {
-    id_import: {
+const DetailImport =  sequelize.define('detail_import', {
+    idImport: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
@@ -58,5 +59,9 @@ module.exports = function(sequelize, DataTypes) {
         ]
       },
     ]
-  });
-};
+});
+  
+DetailImport.hasOne(Device, {foreignKey: 'idDevice', as: 'device'})
+Device.hasMany(DetailImport, {foreignKey: 'idDevice', as: 'warehouse'})
+
+module.exports = DetailImport;

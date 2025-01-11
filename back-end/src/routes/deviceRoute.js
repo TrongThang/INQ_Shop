@@ -2,7 +2,7 @@ const express = require('express')
 
 const {
     getReviewForCustomerAPI,
-    getAllDeviceByUserAPI, getAllDeviceByAdminAPI, getAllDevice_NewAPI, getAllDevice_BestSellingAPI,
+    getAllDeviceByUserAPI, getAllDeviceByAdminAPI, getAllDevice_NewAPI, getTopSellingDeviceAPI,
     getAllDevice_FeaturedAPI, getAllDevice_DiscountAPI,
     
     getDeviceBySlugAPI, getTOPDeviceLikedAPI,
@@ -19,7 +19,7 @@ const routerDevice = express.Router();
 routerDevice.get('/admin', getAllDeviceByAdminAPI);
 routerDevice.get('/featured', getAllDevice_FeaturedAPI);
 routerDevice.get('/new', getAllDevice_NewAPI);
-routerDevice.get('/bestselling', getAllDevice_BestSellingAPI);
+routerDevice.get('/bestselling', getTopSellingDeviceAPI);
 routerDevice.get('/discount', getAllDevice_DiscountAPI);
 
 

@@ -11,6 +11,7 @@ const Attribute = require('../models/Attribute');
 const AttributeDevice = require('../models/Attribute_device');
 const Attribute_group = require('../models/Attribute_group');
 const { getChildrenCategory, getAllCategoryIds } = require('./CategoryServices');
+const OrderDetail = require('../models/Order_detail');
 
 // HÀM XỬ LÝ
 function groupAttributesByGroup(attributeDeviceList) {
@@ -95,6 +96,43 @@ const getAllDeviceByStatus = async (status = 1, limit = {}) => {
     // });
     return data; // Trả về danh sách sản phẩm
 };
+
+const getTopSellingDevice = async () => {
+    const data = await Device.findAll({
+        where: {
+            status: {
+                [Op.gte]: 1
+            }
+        },
+        subQuery: false,
+        include: [
+            {
+                model: ReviewDevice,
+                as: 'reviews',
+                attributes: [
+                    [Sequelize.fn('AVG', Sequelize.col('rating')), 'averageRating'],
+                ],
+                required: false
+            },
+            {
+                model: OrderDetail,
+                as: 'order_device',
+                attributes: [], 
+                required: false
+            }
+        ],
+        group: ['Device.idDevice'],
+        attributes: {
+            include: [
+                [Sequelize.fn('SUM', Sequelize.col('order_device.stock')), 'totalSold'],
+            ]
+        },
+        order: [[Sequelize.literal('totalSold'), 'DESC']],
+        limit: 10,
+    })
+
+    return data;
+}
 
 const getAllDevice_User = async (page = 0, status = 1, limit = {}, filters = {}, order = {}) => {
     const { priceMin, priceMax, idCategory, keyword } = filters;
@@ -408,7 +446,7 @@ const updateStatusReviewForDevice = async ({ id, status }) => {
 
 module.exports = {
     getAllDevice_User, getAllDeviceByStatus, getAllDevice_Admin, 
-    getDeviceBySlug, getTOPDeviceLiked,
+    getDeviceBySlug, getTOPDeviceLiked, getTopSellingDevice,
     createDevice, updateDevice, updateStatusDevice,
     updateStatusDeviceByCategory, increaseViewDevice,
 

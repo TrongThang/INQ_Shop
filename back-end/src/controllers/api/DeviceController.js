@@ -3,10 +3,10 @@ const Device = require('../../models/Device.js');
 
 const {
     getAllDevice_User, getAllDevice_Admin, getAllDeviceByStatus,
-    getDeviceBySlug, 
+    getDeviceBySlug, getTopSellingDevice,
     createDevice, updateDevice, updateStatusDevice,
     //Review For Device
-    getReviewForCustomer,
+    getReviewForCustomer, 
     getAllReviewForDevice, createReviewForDevice, updateReviewForDevice, updateStatusReviewForDevice,
     getTOPDeviceLiked,
     increaseViewDevice, 
@@ -101,11 +101,10 @@ const getAllDevice_NewAPI = async (req, res) => {
     }
 }
 
-const getAllDevice_BestSellingAPI = async (req, res) => {
+const getTopSellingDeviceAPI = async (req, res) => {
     try {
-        const { status = 5, limit = 10 } = req.body;
 
-        const results = await getAllDeviceByStatus(status, parseInt(limit));
+        const results = await getTopSellingDevice();
 
         return res.status(200).json({
             errorCode: 0,
@@ -338,7 +337,7 @@ const updateStatusReviewForDeviceAPI = async (req, res) => {
 }
 
 module.exports = {
-    getAllDeviceByUserAPI,getAllDevice_FeaturedAPI, getAllDevice_NewAPI, getAllDevice_BestSellingAPI, getAllDeviceByAdminAPI,
+    getAllDeviceByUserAPI,getAllDevice_FeaturedAPI, getAllDevice_NewAPI, getTopSellingDeviceAPI, getAllDeviceByAdminAPI,
     getDeviceBySlugAPI, getTOPDeviceLikedAPI, getAllDevice_DiscountAPI,
     postCreateDeviceAPI, putUpdateDeviceAPI,
     updateStatusDeviceAPI, putIncreaseViewDeviceAPI,

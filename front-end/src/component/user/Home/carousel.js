@@ -74,7 +74,7 @@ const Carousel = ({ scrollToNew,scrollToFeature, scrollToBestSelling }) => {
                 {
                   currentSlide === 1 && (
                     <button
-                      className="btn btn-warning py-3 px-5 text-center btn-slide-show"
+                      className="btn btn-primary py-3 px-5 text-center btn-slide-show"
                       onClick={scrollToNew}
                       style={{
                         position: "absolute",
@@ -86,7 +86,7 @@ const Carousel = ({ scrollToNew,scrollToFeature, scrollToBestSelling }) => {
                         zIndex: 10, // Ensure button is above image
                       }}
                     >
-                      {carousel[currentSlide]?.textButton}
+                      {carousel[currentSlide]?.textButton} <i class="fa-solid fa-arrow-down"></i>
                     </button>
                   )
                 }
@@ -94,7 +94,7 @@ const Carousel = ({ scrollToNew,scrollToFeature, scrollToBestSelling }) => {
                 {
                   currentSlide === 2 && (
                     <button
-                      className="btn btn-warning py-3 px-5 text-center btn-slide-show"
+                      className="btn btn-primary py-3 px-5 text-center btn-slide-show"
                       onClick={scrollToFeature}
                       style={{
                         position: "absolute",
@@ -106,14 +106,14 @@ const Carousel = ({ scrollToNew,scrollToFeature, scrollToBestSelling }) => {
                         zIndex: 10, // Ensure button is above image
                       }}
                     >
-                      {carousel[currentSlide]?.textButton}
+                      {carousel[currentSlide]?.textButton} <i class="fa-solid fa-arrow-down"></i>
                     </button>
                   )
                 }
                   {
                   currentSlide === 0 && (
                     <button
-                      className="btn btn-warning py-3 px-5 text-center btn-slide-show"
+                      className="btn btn-primary py-3 px-5 text-center btn-slide-show"
                       onClick={scrollToBestSelling}
                       style={{
                         position: "absolute",
@@ -125,7 +125,7 @@ const Carousel = ({ scrollToNew,scrollToFeature, scrollToBestSelling }) => {
                         zIndex: 10, // Ensure button is above image
                       }}
                     >
-                      {carousel[currentSlide]?.textButton}
+                      {carousel[currentSlide]?.textButton} <i class="fa-solid fa-arrow-down"></i>
                     </button>
                   )
                 }

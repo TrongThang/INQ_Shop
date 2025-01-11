@@ -38,9 +38,6 @@ import ContactPage from './pages/user/contact';
 import RegisterPage from './pages/user/Account/registerPage';
 import LikedPage from './pages/user/likedDevice';
 
-
-
-
 function App() {
 
   return (

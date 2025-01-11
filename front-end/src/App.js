@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { AuthProvider, useAuth } from '../src/pages/user/Account/authContext';
 // <!-- Libraries Stylesheet -->
 import './resource/lib/animate/animate.min.css'
 import './resource/lib/lightbox/css/lightbox.min.css'
@@ -19,13 +18,11 @@ import Admin from './pages/admin';
 import HomePage from './pages/user/homePage'
 import DetailDevicePage from './pages/user/detailDevicePage';
 import LoginPage from './pages/user/Account/loginPage';
-import RegisterPage from './pages/user/Account/registerPage';
 
 import CartPage from './pages/user/cartPage';
 import SearchPage from "./pages/user/searchPage";
 import AddressPage from "./pages/user/Profile/addressPage";
 import ProfileCustomer from "./pages/user/Profile/accountCustomerPage";
-import LikedDevice from "./pages/user/likedDevice";
 
 import OrdersPage from "./pages/user/Profile/ordersPage";
 
@@ -76,7 +73,7 @@ function App() {
               <Route path="/profile/orders" element={<OrdersPage />} />
               <Route path="/search/*" element={<SearchPage />} />
               <Route path="/device/:slug" element={<DetailDevicePage />} />
-              <Route path="/likeDevice" element={<LikedDevice />} />
+              <Route path="/likeDevice" element={<LikedPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
             </Route>
 

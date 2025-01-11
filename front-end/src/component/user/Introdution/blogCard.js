@@ -26,7 +26,7 @@ const BlogCart = ({ blog }) => {
     return (
         <div className="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.1s">
             <div className="blog-item">
-                <div className="blog-img">
+                <Link to={`/blog/${blog.id}`} className="blog-img">
                     <img
                         src={`/img/blog/${blog.image}`}
                         style={{ width: "600px", height: "300px" }}
@@ -36,7 +36,7 @@ const BlogCart = ({ blog }) => {
                     <div className="blog-category py-2 px-4">
                         <span>{blog.category.nameCategory}</span>
                     </div>
-                </div>
+                </Link>
                 <div className="blog-content p-4">
                     <div className="blog-comment d-flex justify-content-between mb-3">
                         <div className="small">
@@ -45,22 +45,12 @@ const BlogCart = ({ blog }) => {
                         <div className="small">
                             <span className="fa fa-calendar text-primary"></span> {formatDate(blog.created_at)}
                         </div>
-                        {/* <div className="small">
-                            <span className="bi bi-heart-fill text-primary"></span> {blog.score}
-                        </div> */}
                     </div>
-                    {/* <a href="#" className="h4 d-inline-block mb-3">
-                        {blog.title}
-                    </a>
-                    <p className="mb-3">{blog.contentNormal}</p>
-                    <a href="#" className="btn p-0">
-                        Xem thêm <i className="fa fa-arrow-right"></i>
-                    </a> */}
                     <Link to={`/blog/${blog.id}`} className="h4 d-inline-block mb-3">
                         {blog.title}
                     </Link> 
                     <p className="mb-3">{blog.contentNormal}</p>
-                    <Link to={`/blog/${blog.id}`} className="btn p-0">
+                    <Link to={`/blog/${blog.id}`} className="btn btn-outline-warning">
                         Xem thêm <i className="fa fa-arrow-right"></i>
                     </Link>
                 </div>

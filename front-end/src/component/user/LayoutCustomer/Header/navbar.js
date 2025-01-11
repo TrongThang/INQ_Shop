@@ -24,39 +24,7 @@ export default function Navbar({categories, isLogged}) {
             <div className="collapse navbar-collapse" id="navbarCollapse">
                 <div className="navbar-nav mx-auto">
                     <Link to={ setting.LINK_NAVBAR_INDEX } className="nav-item nav-link active">{ setting.LAYOUT_NAVBAR_INDEX }</Link>
-                    <div className="nav-item dropdown">
-                        <div className="nav-link" data-bs-toggle="dropdown">
-                            <span className="dropdown-toggle">Danh mục</span>
-                        </div>
-                        <div className="dropdown-menu">
-                            <RecursiveDropdown items={[
-                                    {
-                                        label: "Mục 1.1",
-                                        link: "#"
-                                    },
-                                    {
-                                        label: "Mục 1.2",
-                                        link: "#",
-                                        children: [
-                                            {
-                                                label: "Mục 1.2.1",
-                                                link: "#"
-                                            },
-                                            {
-                                                label: "Mục 1.2.2",
-                                                link: "#"
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        label: "Mục 1.3",
-                                        link: "#"
-                                    }
-                                ]}
-                            />
-                        </div>
-                    </div>
-                    
+                    <RecursiveDropdown />
 
                     <Link to={setting.LINK_NAVBAR_INTRODUTION} className="nav-item nav-link">{ setting.LAYOUT_NAVBAR_INTRODUTION || "Giới thiệu" }</Link>
                     <Link to={setting.LINK_NAVBAR_BLOG} className="nav-item nav-link">{setting.LAYOUT_NAVBAR_BLOG || "Bài viết"}</Link>

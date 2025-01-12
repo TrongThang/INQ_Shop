@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../../../context/CartContext";
 import { ToastContainer, toast } from 'react-toastify';
+import Cookies from 'js-cookie';
+
 export default function AreaCustomer({ isLogged }) {
     const { getTotalItem, getTotalPrice } = useCart();
     const navigate = useNavigate();
@@ -14,7 +16,7 @@ export default function AreaCustomer({ isLogged }) {
         navigate('/');
         setTimeout(() => {
             window.location.reload();
-        }, 500);
+        }, 500);   
         // Redirect to login page after a short de  lay
         toast.success("Đăng xuất thành công!");
         // Hide the toast after 3 seconds

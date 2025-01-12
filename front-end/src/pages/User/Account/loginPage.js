@@ -1,6 +1,7 @@
 import LoginPopup from '../../../component/user/Login/formLogin';
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
+import Cookies from 'js-cookie';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -28,6 +29,7 @@ export default function Login() {
           const token = result.token;
           console.log('Token:', token); // Hiển thị token ra console
           localStorage.setItem('authToken', token); 
+          Cookies.remove('cart');
           setTimeout(() => {
             window.location.reload(); // Tải lại trang
           },  500);

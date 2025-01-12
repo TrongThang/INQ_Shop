@@ -27,7 +27,14 @@ function ContactPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const emailPattern = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/; 
 
+    if (!emailPattern.test(formData.email)) {
+      setToastMessage('Email không hợp lệ. Vui lòng kiểm tra lại.');
+      setShowToast(true);
+      return;
+    }
+    
     try {
       const response = await fetch('http://localhost:8081/api/contact', {
         method: 'POST',

@@ -19,17 +19,18 @@ export const CartProvider = ({ children }) => {
             const decoded = jwtDecode(token);
             setIdCustomer(decoded.idPerson);
         }
+
     }, []);
 
     const fetchDataCart = async () => {
         try {
-            console.log('ID Customer: ', idCustomer)
+            console.log(`http://localhost:8081/api/cart/${idCustomer}`)
             const response = await fetch(`http://localhost:8081/api/cart/${idCustomer}`)
             if (!response.ok) {
                 throw new Error("Lỗi lấy dữ liệu từ giỏ hàng");
             }
-            const result = await response.json()
 
+            const result = await response.json()
             setCart(result.data)
         } catch (error) {
             
@@ -70,17 +71,20 @@ export const CartProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        if (idCustomer) {
-            fetchDataCart();
-            fetchDataCustomer();
-        }
-        else {
-            const cartFromCookie = Cookies.get('cart') ? JSON.parse(Cookies.get('cart')) : [];
-            if (cartFromCookie.length > 0) {
-                fetchDeviceData(cartFromCookie);
+        const fetchData = async () => {
+            if (idCustomer) {
+                await fetchDataCart();
+                await fetchDataCustomer();
+            } else {
+                const cartFromCookie = Cookies.get('cart') ? JSON.parse(Cookies.get('cart')) : [];
+                if (cartFromCookie.length > 0) {
+                    await fetchDeviceData(cartFromCookie);
+                }
+                setCart(cartFromCookie);
             }
-            setCart(cartFromCookie);
-        }
+        };
+
+        fetchData();
     }, [idCustomer]);
 
     const handleInputQuantity = (device, quantity) => {

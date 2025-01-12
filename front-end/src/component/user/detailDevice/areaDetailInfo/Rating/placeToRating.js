@@ -25,7 +25,7 @@ export default function PlaceToRating({ idDevice, onCommentSubmitted }) {
             const responseOrder = await axios.get(`http://localhost:8081/api/order/checkOrder/${idCustomer}/${idDevice}`)
             
             const data = await response.data;
-            
+            // await console.log('Dữ liệu lấy đánh giá',responseOrder.data)
             setReview(data);
             setIsBuy(responseOrder.data)
             setStar(data.rating);
@@ -38,6 +38,7 @@ export default function PlaceToRating({ idDevice, onCommentSubmitted }) {
     
     useEffect(() => {
         fetchData()
+        console.log('12321312', isBuy)
     }, [idDevice, changeComment])
 
     const handleComment = (text) => {

@@ -53,7 +53,11 @@ const OrderDetail = sequelize.define('order_detail', {
     },
   ]
 });
+
 Device.hasMany(OrderDetail, {foreignKey: 'idDevice', as: 'order_device'})
 OrderDetail.belongsTo(Device, {foreignKey: 'idDevice', as: 'device'})
+// OrderDetail.belongsTo(Order, { foreignKey: 'id', as: 'order' })
+OrderDetail.belongsTo(Order, {foreignKey: 'id', as: 'order_detail'})
+Order.hasMany(OrderDetail, {foreignKey: 'id', as: 'order_device'})
 
 module.exports = OrderDetail; 

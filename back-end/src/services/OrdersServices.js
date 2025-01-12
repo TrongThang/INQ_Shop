@@ -5,22 +5,22 @@ const Order_detail = require('../models/Order_detail');
 const Device = require('../models/Device');
 
 const getAllOrder = async (idCustomer) => {
-    const orders = await Order.findAll({
-        where: { idCustomer },
-        include: [
-            {
-                model: Order_detail,
-                as: 'order_detail',
-                attribute: [ 'price', 'stock', 'amount',],
-                include: [{
-                    model: Device,
-                    as: 'device',
-                    attribute: ['image']
-                }]
-            }
-        ]
-    });
-    return orders;
+    // const orders = await Order.findAll({
+    //     where: { idCustomer },
+    //     include: [
+    //         {
+    //             model: Order_detail,
+    //             as: 'details',
+    //             attribute: [ 'price', 'stock', 'amount',],
+    //             include: [{
+    //                 model: Device,
+    //                 as: 'device',
+    //                 attribute: ['image']
+    //             }]
+    //         }
+    //     ]
+    // });
+    // return orders;
 }
 
 const checkCustomerOrderForDevice  = async (idCustomer, idDevice) => {
@@ -30,8 +30,8 @@ const checkCustomerOrderForDevice  = async (idCustomer, idDevice) => {
         },
         include: [
             {
-                model: OrderDetail,
-                as: 'details',
+                model: Order_detail,
+                as: 'order_device',
                 where: {
                     idDevice: idDevice
                 }

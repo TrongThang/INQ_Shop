@@ -20,8 +20,8 @@ export default function AreaRating({ device }) {
         fetchReviews(); 
     }, [device.idDevice]);
 
-    const handleCommentSubmitted = () => {
-        fetchReviews(); // Load lại danh sách bình luận
+    const handleCommentSubmitted = async () => {
+        await fetchReviews(); // Load lại danh sách bình luận
     };
 
     if (!device) {

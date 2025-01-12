@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import StarRating from "../../../component/Shared/starRating";
+import { useCart } from '../../../context/CartContext';
 const FeaturedDevices = ({ ref }) => {
     const [device, setDevice] = useState([]);
-
+    const {addToCart} = useCart()
     const fetchDataCategories = async () => {
         try {
             const response = await fetch('http://localhost:8081/api/device/featured');
@@ -63,7 +64,10 @@ const FeaturedDevices = ({ ref }) => {
                                     className="service-item"
                                 >
                                     <div className="service-img">
-                                        <div className="img-change">
+                                        <div
+                                            className="img-change"
+                                            onClick={() => addToCart(device, 1)}
+                                        >
                                             <img src={`/img/device/${device.image}`} className="img-fluid rounded-top w-100"
                                                 style={{ height: "300px", objectFit: "cover" }}
                                                 alt="Smart Lighting"

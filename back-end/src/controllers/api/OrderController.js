@@ -4,7 +4,8 @@ const { or } = require('sequelize');
 
 const {
     checkCustomerOrderForDevice,
-    getAllOrder
+    getAllOrder,
+    createOrder
 } = require('../../services/OrdersServices.js');
 
 const getAllOrderByIdCustomerAPI = async (req, res) => {
@@ -35,12 +36,11 @@ const checkCustomerOrderForDeviceAPI = async (req, res) => {
     }
 }
 
-const getOrderAPI = async (req, res) => {
-    //TO DO SOMETHING
-};
-
 const postCreateOrderAPI = async (req, res) => {
-    //TO DO SOMETHING
+    const { infoOrder, products } = req.body;
+    const result = createOrder(infoOrder, products);
+    
+    return res.status(result.errorCode === ERROR_CODES.SUCCESS ? 200 : 401).json(result)
 }
 
 const putUpdateOrderAPI = async (req, res) => {
@@ -54,4 +54,5 @@ const deteleOrderAPI = async (req, res) => {
 module.exports = {
     checkCustomerOrderForDeviceAPI,
     getAllOrderByIdCustomerAPI,
+    postCreateOrderAPI,
 }

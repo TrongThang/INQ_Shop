@@ -12,6 +12,59 @@ const AttributeDevice = require('../models/Attribute_device');
 const Attribute_group = require('../models/Attribute_group');
 const { getChildrenCategory, getAllCategoryIds } = require('./CategoryServices');
 const OrderDetail = require('../models/Order_detail');
+const { ERROR_MESSAGES, ERROR_CODES } = require('../config/contants');
+
+const checkDevice = async (deviceReceive) => {
+    try {
+        const deviceCheck = Device.findByPk(deviceReceive.idDevice, {
+            include: [
+                {
+                    model: Warehouse,
+                    as: 'warehouse',
+                    attributes: ['stock']
+                }
+            ]
+        });
+
+        const isDifferentSellingPrice = deviceCheck.sellingPrice !== deviceReceive.sellingPrice;
+        const noDeviceInStock = deviceReceive.quantity > deviceCheck.warehouse.stock;
+
+        if (!deviceCheck) {
+            return {
+                errorCode: ERROR_CODES.DEVICE.DEVICE_NOT_FOUND,
+                detail: ERROR_MESSAGES[ERROR_CODES.DEVICE.PRICE_CHANGED],
+                sellingPriceNew: deviceCheck.sellingPrice
+            };
+        }
+        if (isDifferentSellingPrice) {
+            return {
+                errorCode: ERROR_CODES.DEVICE.PRICE_CHANGED,
+                detail: ERROR_MESSAGES[ERROR_CODES.DEVICE.PRICE_CHANGED],
+                sellingPriceNew: deviceCheck.sellingPrice
+            };
+        }
+
+        if (noDeviceInStock) {
+            return {
+                errorCode: ERROR_CODES.DEVICE.OUT_OF_STOCK,
+                detail: ERROR_MESSAGES[ERROR_CODES.DEVICE.OUT_OF_STOCK],
+                stockDeviceRemaining: deviceCheck.warehouse.stock
+            };
+        }
+
+        return {
+            errorCode: ERROR_CODES.DEVICE.SUCCESS,
+            detail: ERROR_MESSAGES[ERROR_CODES.DEVICE.SUCCESS]
+        };
+
+    } catch (error) {
+        return {
+            errorCode: ERROR_CODES.DEVICE.INTERNAL_ERROR,
+            detail: error.message || ERROR_MESSAGES.DEVICE[ERROR_CODES.INTERNAL_ERROR]
+        }
+    }
+} 
+
 
 // HÀM XỬ LÝ
 function groupAttributesByGroup(attributeDeviceList) {
@@ -445,8 +498,9 @@ const updateStatusReviewForDevice = async ({ id, status }) => {
 }
 
 module.exports = {
+    checkDevice,
     getAllDevice_User, getAllDeviceByStatus, getAllDevice_Admin, 
-    getDeviceBySlug, getTOPDeviceLiked, getTopSellingDevice,
+    getDeviceBySlug, getTOPDeviceLiked, getTopSellingDevice, 
     createDevice, updateDevice, updateStatusDevice,
     updateStatusDeviceByCategory, increaseViewDevice,
 

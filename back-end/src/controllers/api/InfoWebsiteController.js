@@ -5,7 +5,7 @@ const {
     createInfoWebsite,
     updateInfoWebsite,
     updateStatusInfoWebsite,
- } = require('../../services/InfoWebsiteServices');
+} = require('../../services/InfoWebsiteServices');
 
 const getAllInfoWebsiteAPI = async (req, res) => {
     //TO DO SOMETHING

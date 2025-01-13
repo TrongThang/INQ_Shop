@@ -10,11 +10,22 @@ const {
     getAllReviewForDevice, createReviewForDevice, updateReviewForDevice, updateStatusReviewForDevice,
     getTOPDeviceLiked,
     increaseViewDevice, 
+    checkDevice
 } = require('../../services/DeviceServices.js');
 
 const {
     getChildrenCategory, getAllCategoryIds
-} = require('../../services/CategoryServices.js')
+} = require('../../services/CategoryServices.js');
+const { ERROR_CODES } = require('../../config/contants.js');
+
+const postCheckDeviceModificationAPI = async (req, res) => {
+    //idDevice, sellingPrice, quantity
+    const { deviceReceive } = req.body;
+    const result = await checkDevice(deviceReceive);
+
+    return res.status(result.errorCode === ERROR_CODES.SUCCESS ? 200 : 401).json(result)
+}
+
 const getAllDeviceByUserAPI = async (req, res) => {
     try {
         const { page = 0, status = 1, limit = 90, priceMin, priceMax, idCategory } = req.body;
@@ -337,6 +348,7 @@ const updateStatusReviewForDeviceAPI = async (req, res) => {
 }
 
 module.exports = {
+    postCheckDeviceModificationAPI,
     getAllDeviceByUserAPI,getAllDevice_FeaturedAPI, getAllDevice_NewAPI, getTopSellingDeviceAPI, getAllDeviceByAdminAPI,
     getDeviceBySlugAPI, getTOPDeviceLikedAPI, getAllDevice_DiscountAPI,
     postCreateDeviceAPI, putUpdateDeviceAPI,

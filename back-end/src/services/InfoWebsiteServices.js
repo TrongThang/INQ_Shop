@@ -6,10 +6,10 @@ const { where } = require('sequelize');
 const getAllInfoWebsite = async() => {
     const data = await InfoWebsite.findAll();
     const settings = data.reduce((acc, item) => {
+        if (item.STATUS >= 0) {
             acc[item.KEY_NAME] = item.VALUE;    
-        
-
-        return acc;
+            return acc;
+        }   
     }, {});
 
     return settings;

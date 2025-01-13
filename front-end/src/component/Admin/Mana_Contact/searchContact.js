@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import * as XLSX from "xlsx";
 
-const SearchContact = ({ onAdd, onExport ,contacts}) => {
+const SearchContact = ({ onAdd, onExport ,contacts,onSearchChange }) => {
+    const [searchTerm, setSearchTerm] = useState("");
+
     const handleExport = () => {
   
         
@@ -9,6 +11,13 @@ const SearchContact = ({ onAdd, onExport ,contacts}) => {
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Contacts");
         XLSX.writeFile(workbook, "contacts_data.xlsx");
+    };
+    
+    
+    const handleSearchChange = (event) => {
+        const value = event.target.value;
+        setSearchTerm(value);
+        onSearchChange(value); // Gọi hàm onSearchChange để cập nhật giá trị tìm kiếm ở component cha
     };
 
     return (
@@ -29,10 +38,16 @@ const SearchContact = ({ onAdd, onExport ,contacts}) => {
                         <span className="input-group-text">
                             <i className="bi bi-search"></i>
                         </span>
-                        <input type="text" className="form-control" placeholder="Tìm kiếm liên hệ" />
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Tìm kiếm liên hệ"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                        />
                     </div>
                 </div>
-                <div className="col-md-2">
+                {/* <div className="col-md-2">
                     <select className="form-select status">
                         <option>Trạng thái</option>
                         <option value="pending">Đang xử lý</option>
@@ -44,10 +59,10 @@ const SearchContact = ({ onAdd, onExport ,contacts}) => {
                     <button className="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#filterModal">
                         <i className="bi bi-funnel"></i> Lọc liên hệ
                     </button>
-                </div>
+                </div> */}
             </div>
 
-            <div className="modal fade" id="filterModal" tabIndex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+            {/* <div className="modal fade" id="filterModal" tabIndex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -80,7 +95,7 @@ const SearchContact = ({ onAdd, onExport ,contacts}) => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };

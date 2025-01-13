@@ -2,6 +2,7 @@ import FooterAdmin from "./Footer/footer";
 import HeaderAdmin from "./Header/headerAdmin";
 import ManaBlog from "../../../pages/admin/Blog/manageBlogPage";
 import InfoWeb from "../../../pages/admin/Dashboard/manaInfoWebsite";
+import ManaContact from "../../../pages/admin/Contact/manaContact" ;
 
 export default function ContentAdmin() {
     return (
@@ -11,7 +12,8 @@ export default function ContentAdmin() {
             {/* <ManaSlideshow /> */}
             {/* <ManaAttribute /> */}
             {/* <ManaBlog /> */}
-            <InfoWeb />
+            {/* <InfoWeb /> */}
+            <ManaContact />
             <FooterAdmin />
         </div>
     )

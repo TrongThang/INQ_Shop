@@ -10,7 +10,7 @@ export default function ContentAdmin() {
             {/* <SiteAdmin /> */}
             {/* <ManaSlideshow /> */}
             {/* <ManaAttribute /> */}
-            <ManaBlog />
+            {/* <ManaBlog /> */}
             <FooterAdmin />
         </div>
     )

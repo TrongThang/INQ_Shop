@@ -5,6 +5,7 @@ const Device = require('../models/Device');
 const { checkDevice } = require('./DeviceServices');
 const { ERROR_CODES, ERROR_MESSAGES } = require('../config/contants');
 const OrderDetail = require('../models/Order_detail');
+const { STATUS_CODES } = require('../config/statusContaints');
 
 const getAllOrder = async (idCustomer) => {
     // const orders = await Order.findAll({
@@ -100,8 +101,42 @@ const createOrder = async (infoOrder, products) => {
     }
 }
 
+const cancelOrder = async (idOrder, status) => {
+    try {
+        const order = await Order.findByPk(idOrder);
+
+        if (status === STATUS_CODES.ORDER.CANCELLED && order.status === STATUS_CODES.ORDER.PENDING ) {
+            const [affectedCount, affectedRows] = await Order.update(
+                {status: status},
+                { where: { id: idOrder }, returning: true }
+            );
+
+            return {
+                errorCode: ERROR_CODES.SUCCESS,
+                affectedCount: affectedCount,
+                affectedRows: affectedRows
+            }
+        }
+
+        return {
+            errorCode: ERROR_CODES.ORDER.CANNOT_CANCEL,
+            messages: ERROR_MESSAGES.ORDER[ERROR_CODES.ORDER.CANNOT_CANCEL]
+        }
+    } catch (error) {
+        return {
+            errorCode: ERROR_CODES.ORDER.INTERNAL_ERROR,
+            messages: error.message || ERROR_MESSAGES.ORDER[ERROR_CODES.ORDER.CANNOT_CANCEL]
+        }
+    }
+}
+
+const updateStatusOrder = async (idOrder, status) => {
+    
+}
+
 module.exports = {
     getAllOrder,
     checkCustomerOrderForDevice,
-    createOrder
+    createOrder, updateStatusOrder,
+    cancelOrder,
 }

@@ -36,6 +36,7 @@ const ProfileSidebar = () => {
                             className={`list-group-item list-group-item-action ps-5 ${isActive('/profile') ? 'active' : ''}`}
                         >Hồ sơ</Link>
                         <Link to="/profile/likeDevice" className={`list-group-item list-group-item-action ps-5 ${isActive('/profile/likeDevice') ? 'active' : ''}`}>Thiết bị yêu thích</Link>
+                        <Link to="/profile/review" className={`list-group-item list-group-item-action ps-5 ${isActive('/profile/review') ? 'active' : ''}`}>Thiết bị đã đánh giá</Link>
                         <Link
                             to="/profile/address"
                             className={`list-group-item list-group-item-action ps-5 ${isActive('/profile/address') ? 'active' : ''}`}

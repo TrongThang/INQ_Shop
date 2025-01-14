@@ -86,7 +86,7 @@ const UpdateOrderForm = ({ onback, orderId }) => {
                             <input
                                 type="date"
                                 className="form-control"
-                                value={new Date(orderData.accept_at)}
+                                value={orderData.accept_at ? (orderData.accept_at).split("T")[0] : ""}
                                 readOnly
                             />
                         </div>

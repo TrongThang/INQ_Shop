@@ -8,9 +8,6 @@ const OrdersList = ({ orders, onEdit }) => {
                 <table className="table table-hover align-middle">
                     <thead>
                         <tr>
-                            <th width="40">
-                                <input type="checkbox" />
-                            </th>
                             <th>ID</th>
                             <th>ID Khách hàng</th>
                             <th>Tên người nhận</th>
@@ -28,9 +25,6 @@ const OrdersList = ({ orders, onEdit }) => {
                     <tbody>
                         {orders.map((item, index) => (
                             <tr key={index}>
-                                <td>
-                                    <input type="checkbox" />
-                                </td>
                                 <td>{item.id}</td>
                                 <td>{item.idCustomer}</td>
                                 <td>{item.nameRecipient}</td>

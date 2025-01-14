@@ -31,7 +31,6 @@ const ListLiked = ({ idCustomer, devices }) => {
             <th scope="col" className="text-center align-middle text-primary fs-3">Thiết bị</th>
             <th scope="col" className="text-center align-middle text-primary fs-3">Giá</th>
             <th scope="col" className="text-center align-middle"></th>
-            <th scope="col" className="text-center align-middle"></th>
           </tr>
         </thead>
         <tbody>
@@ -43,11 +42,6 @@ const ListLiked = ({ idCustomer, devices }) => {
               <td className="text-center align-middle fs-5">{item.device.name}</td>
               <td className="text-center align-middle fs-5">{Math.floor(item.device.sellingPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " VNĐ"}</td>
               <td className="text-center align-middle"><span onClick={() => handleRemoveLiked(item.idDevice)}><i class="fa-solid fa-heart text-danger ms-2" style={{cursor: "pointer", fontSize: "25px"}}></i></span></td>
-              <td className="text-center align-middle">
-                <button className="btn btn-outline-danger">
-                  Thêm vào giỏ hàng
-                </button>
-              </td>
             </tr>
           ))}
         </tbody>

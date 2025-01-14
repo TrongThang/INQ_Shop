@@ -38,6 +38,7 @@ import { InfoWebsiteProvider } from './context/settingWebContext';
 import ContactPage from './pages/user/contact';
 import RegisterPage from './pages/user/Account/registerPage';
 import LikedPage from './pages/user/likedDevice';
+import ReviewDevice from './pages/user/reviewDevice'
 
 //ADMIN
 import ManaOrder from './pages/admin/Order/manaOrders';
@@ -74,6 +75,7 @@ function App() {
               <Route path="/search/*" element={<SearchPage />} />
               <Route path="/device/:slug" element={<DetailDevicePage />} />
               <Route path="/profile/likeDevice" element={<LikedPage />} />
+              <Route path="/profile/review" element={<ReviewDevice />} />
               <Route path="/checkout" element={<CheckoutPage />} />
             </Route>
 

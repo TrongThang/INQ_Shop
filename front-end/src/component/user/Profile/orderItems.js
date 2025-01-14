@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 
-const OrderItems = ({ orders }) => {
-  console.log("orders: ", orders)
+const OrderItems = ({ orders = [] }) => {
+  if (!orders || orders.length === 0) {
+    return <div>Không có đơn hàng nào để hiển thị.</div>;
+  }
   return (
     <div className="bg-light p-4 rounded">
       <table className="table table-bordered">
@@ -51,7 +53,7 @@ const OrderItems = ({ orders }) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {order.order_detail.map((detail, idx) => (
+                      {order.order_device.map((detail, idx) => (
                         <tr key={idx}>
                           <td><img src={`/img/device/${detail.device.image}`} alt="Product" style={{height: "100px", width: "100px"}}/></td>
                           <td>{detail.stock}</td>

@@ -57,6 +57,7 @@ const UpdateAttributeForm = ({ categories, groupAtrrs, attribute }) => {
             updatedAt,
         };
         console.log("data: ",data);
+        // Lấy dữ liệu thuộc tính bằng id
         try {
             const response = await fetch(`http://localhost:8081/api/attribute/${attribute.id}`, {
                 method: "PUT",

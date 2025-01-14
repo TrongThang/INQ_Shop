@@ -1,48 +1,50 @@
-import React, { useState } from "react";
-import Header from "../../component/Shared/headerManage";
-import SearchFilter from "../../component/admin/Mana_orders/searchOrders";
-import Table from "../../component/admin/Mana_orders/ordersList";
+import React, { useState, useEffect } from "react";
+
+import SearchOrders from "../../../component/admin/Mana_orders/searchOrders";
+import OrdersList from "../../../component/admin/Mana_orders/ordersList";
+import UpdateOrder from "../../../component/admin/Mana_orders/CRUD_orders/updateOrderForm";
 
 const ManaOrders = () => {
-    const [data, setData] = useState([
-        {
-            orderId: "DH001",
-            customerName: "Trọng Thắng",
-            totalAmount: "1.000.000đ",
-            paymentMethod: "COD",
-            phone: "0387000123",
-            orderDate: "20/11/2023",
-            address: "Đt743, Dĩ An, Bình Dương",
-            status: "Đang vận chuyển",
-        },
-        {
-            orderId: "DH002",
-            customerName: "Nguyễn Anh Quân",
-            totalAmount: "500.000đ",
-            paymentMethod: "Chuyển khoản",
-            phone: "0123456789",
-            orderDate: "18/11/2023",
-            address: "123 Đường ABC, Quận 1, TP.HCM",
-            status: "Đã giao",
-        },
-    ]);
+    const [order, setOrder] = useState([]);
+    const [formState, setFormState] = useState(0);
+    const [selectedOrderId, setSelectedOrderId] = useState([]);
 
-    const handleAdd = () => {
-        alert("Thêm đơn hàng!");
+    const handleFormUpdateClick = (id) => {
+        setFormState(1); // Hiển thị form "Cập nhật"
+        setSelectedOrderId(id);
     };
 
-    const handleExport = () => {
-        alert("Xuất file!");
+    const handleBackClick = () => {
+        setFormState(0); // Quay lại trang chính
     };
+
+    const fetchDataOrder = async () => {
+        try {
+            // Gửi yêu cầu lấy dữ liệu đến API
+            const response = await fetch(`http://localhost:8081/api/order`);
+            const result = await response.json();
+            setOrder(result.data);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+    useEffect(() => {
+        fetchDataOrder();
+    }, []);
 
     return (
-        <div className="main-content-inner">
-            <div className="container-fluid py-4">
-                <Header onAdd={handleAdd} onExport={handleExport} />
-                <SearchFilter />
-                <Table data={data} />
-            </div>
-        </div>
+        <>
+            {formState === 1 && <UpdateOrder onback={handleBackClick} orderId={selectedOrderId} />} {/* Form Cập nhật */}
+
+            {formState === 0 && (
+                <div className="main-content-inner">
+                    <div className="container-fluid py-4">
+                        <SearchOrders orders={order} />
+                        <OrdersList orders={order} onEdit={handleFormUpdateClick} />
+                    </div>
+                </div>
+            )}
+        </>
     );
 };
 

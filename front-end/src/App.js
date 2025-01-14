@@ -13,6 +13,7 @@ import './resource/css/style.css';
 // <!-- Template Stylesheet -->
 import './resource/css/inq.css'
 
+//USER
 import User from './pages/user';
 import Admin from './pages/admin';
 import HomePage from './pages/user/homePage'
@@ -38,6 +39,9 @@ import ContactPage from './pages/user/contact';
 import RegisterPage from './pages/user/Account/registerPage';
 import LikedPage from './pages/user/likedDevice';
 
+//ADMIN
+import ManaOrder from './pages/admin/Order/manaOrders';
+
 function App() {
 
   return (
@@ -45,8 +49,7 @@ function App() {
       <Router>
         <Routes>
           {/* ADMIN */}
-          <Route path="/admin" element={<Admin />}>
-          </Route>
+          <Route path="/admin" element={<Admin />}/>
 
           {/* USER */}
           <Route path="/"
@@ -70,7 +73,7 @@ function App() {
               <Route path="/profile/orders" element={<OrdersPage />} />
               <Route path="/search/*" element={<SearchPage />} />
               <Route path="/device/:slug" element={<DetailDevicePage />} />
-              <Route path="/likeDevice" element={<LikedPage />} />
+              <Route path="/profile/likeDevice" element={<LikedPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
             </Route>
 

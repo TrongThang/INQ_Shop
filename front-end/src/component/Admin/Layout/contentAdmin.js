@@ -1,6 +1,8 @@
 import FooterAdmin from "./Footer/footer";
 import HeaderAdmin from "./Header/headerAdmin";
 import ManaBlog from "../../../pages/admin/Blog/manageBlogPage";
+import ManaAttribute from "../../../pages/admin/Attribute/manaAttribute";
+import ManaOrder from "../../../pages/admin/Order/manaOrders";
 
 
 export default function ContentAdmin() {
@@ -10,7 +12,8 @@ export default function ContentAdmin() {
             {/* <SiteAdmin /> */}
             {/* <ManaSlideshow /> */}
             {/* <ManaAttribute /> */}
-            <ManaBlog />
+            {/* <ManaBlog /> */}
+            <ManaOrder />
             <FooterAdmin />
         </div>
     )

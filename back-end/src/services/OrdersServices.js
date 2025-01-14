@@ -5,22 +5,45 @@ const Order_detail = require('../models/Order_detail');
 const Device = require('../models/Device');
 
 const getAllOrder = async (idCustomer) => {
-    // const orders = await Order.findAll({
-    //     where: { idCustomer },
-    //     include: [
-    //         {
-    //             model: Order_detail,
-    //             as: 'details',
-    //             attribute: [ 'price', 'stock', 'amount',],
-    //             include: [{
-    //                 model: Device,
-    //                 as: 'device',
-    //                 attribute: ['image']
-    //             }]
-    //         }
-    //     ]
-    // });
-    // return orders;
+    const orders = await Order.findAll();
+    return orders;
+}
+
+const getAllOrderByIdCustomer = async (idCustomer) => {
+    const orders = await Order.findAll({
+        where: { idCustomer },
+        include: [
+            {
+                model: Order_detail,
+                as: 'order_device',
+                attribute: [ 'price', 'stock', 'amount',],
+                include: [{
+                    model: Device,
+                    as: 'device',
+                    attribute: ['image']
+                }]
+            }
+        ]
+    });
+    return orders;
+}
+
+const getByIdOrder = async (idOrder) => {
+    const orders = await Order.findByPk(idOrder,
+        {include: [
+            {
+                model: Order_detail,
+                as: 'order_device',
+                attribute: [ 'price', 'stock', 'amount',],
+                include: [{
+                    model: Device,
+                    as: 'device',
+                    attribute: ['image']
+                }]
+            }
+        ]}
+    );
+    return orders;
 }
 
 const checkCustomerOrderForDevice  = async (idCustomer, idDevice) => {
@@ -43,6 +66,8 @@ const checkCustomerOrderForDevice  = async (idCustomer, idDevice) => {
 }
 
 module.exports = {
-    getAllOrder,
+    getAllOrderByIdCustomer,
     checkCustomerOrderForDevice,
+    getAllOrder,
+    getByIdOrder,
 }

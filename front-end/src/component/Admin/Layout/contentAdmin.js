@@ -4,6 +4,8 @@ import ManaBlog from "../../../pages/admin/Blog/manageBlogPage";
 import ManaAttribute from "../../../pages/admin/Attribute/manaAttribute";
 import ManaOrder from "../../../pages/admin/Order/manaOrders";
 
+import InfoWeb from "../../../pages/admin/Dashboard/manaInfoWebsite";
+import ManaContact from "../../../pages/admin/Contact/manaContact" ;
 
 export default function ContentAdmin() {
     return (
@@ -14,6 +16,8 @@ export default function ContentAdmin() {
             {/* <ManaAttribute /> */}
             {/* <ManaBlog /> */}
             <ManaOrder />
+            {/* <InfoWeb /> */}
+            {/* <ManaContact /> */}
             <FooterAdmin />
         </div>
     )

@@ -7,7 +7,6 @@ const SlideShow = sequelize.define('slideshow', {
     allowNull: false,
     primaryKey: true,
     autoIncrement: true
-
   },
   idEmployee: {
     type: DataTypes.STRING(12),

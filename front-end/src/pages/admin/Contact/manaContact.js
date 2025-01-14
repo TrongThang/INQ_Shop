@@ -10,6 +10,10 @@ const ManaContact = () => {
     const [contact, setContact] = useState([]);
     const [formState, setFormState] = useState(0);
     const [selectedContactId, setSelectedContactId] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [toastMessage, setToastMessage] = useState('');
+  const [showToast, setShowToast] = useState(false);
+
     
     const handleFormUpdateClick = (id) => {
 
@@ -40,7 +44,16 @@ const ManaContact = () => {
           useEffect(() => {
             fetchDataContact();
            }, []);   
-    
+           useEffect(() => {
+            if (showToast) {
+              const timer = setTimeout(() => {
+                setShowToast(false);
+              }, 2000); 
+        
+              return () => clearTimeout(timer); 
+            }
+          }, [showToast]);
+        
 
            const handleDeleteContact = async (id) => {
             try {
@@ -48,8 +61,11 @@ const ManaContact = () => {
                     method: 'DELETE',
                 });
                 if (response.ok) {
+                  setToastMessage('Xóa contact thành công.');
+        setShowToast(true);
+
                     setContact(contact.filter((item) => item.id !== id));
-                    alert("Contact deleted successfully!");
+                    
                 } else {
                     const result = await response.json();
                     alert(`Error: ${result.message}`);
@@ -58,6 +74,14 @@ const ManaContact = () => {
                 console.error("Error deleting contact:", err);
             }
         };       
+        const handleSearchChange = (value) => {
+          setSearchTerm(value);
+      };
+  
+      const filteredContacts = contact.filter(contact =>
+          contact.fullname.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+  
     return (
    
       <>
@@ -66,11 +90,32 @@ const ManaContact = () => {
         {formState === 0 && (
         <div className="main-content-inner">
           <div className="container-fluid py-4">
-            <SearchContact   contacts={contact}  onExport={handleExport}  />
-            <ContactTable contacts={contact}  onEdit={handleFormUpdateClick} onDelete={handleDeleteContact}   />
+            <SearchContact   contacts={contact}  onExport={handleExport} onSearchChange={handleSearchChange}  />
+            <ContactTable contacts={filteredContacts}  onEdit={handleFormUpdateClick} onDelete={handleDeleteContact}   />
           </div>
         </div>
         )}
+              {/* Toast Notification */}
+      {showToast && (
+        <div className="toast-container position-fixed top-0 end-70 p-3">
+          <div className="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div className="toast-header bg-primary text-white">
+              <strong className="me-auto">Thông báo</strong>
+              {/* <button 
+                type="button" 
+                className="btn-close btn-close-white" 
+                aria-label="Close" 
+                onClick={() => setShowToast(false)}
+              >
+              </button> */}
+            </div>
+            <div className="toast-body">
+              {toastMessage}
+            </div>
+          </div>
+        </div>
+      )}
+
       </>
         
     );

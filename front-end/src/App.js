@@ -43,6 +43,10 @@ import ReviewDevice from './pages/user/reviewDevice'
 //ADMIN
 import ManaOrder from './pages/admin/Order/manaOrders';
 
+
+import ManaCategory from './pages/admin/Categories/manaCategory';
+import AddOrEditCategory from './component/admin/Mana_Category/addOrEditCategory';
+
 function App() {
 
   return (
@@ -50,14 +54,21 @@ function App() {
       <Router>
         <Routes>
           {/* ADMIN */}
-          <Route path="/admin" element={<Admin />}/>
+          <Route path='/admin' element={<Admin />} > 
+          
+          </Route>
+
+          <Route path="/manage-category" element={<ManaCategory />} />
+          <Route path="/add-category" element={<AddOrEditCategory />} />
+          <Route path="/edit-category/:id" element={<AddOrEditCategory />} />
+
 
           {/* USER */}
           <Route path="/"
             element={
               <CartProvider>
                 <User />
-                <RegisterPage/>
+                <RegisterPage />
                 <LoginPage />
               </CartProvider>
             }

@@ -156,14 +156,14 @@ const getDeviceByCategorySlug = async (slug) => {
                 attributes: ['id', 'nameCategory', 'parentId'],
                 where: {
                     id: {
-                        [Op.in]: categoryIds, 
+                        [Op.in]: categoryIds,
                     },
                 },
             },
             {
                 model: Warehouse,
                 as: 'warehouse',
-                attributes: [] 
+                attributes: []
             }
         ],
         attributes: [
@@ -175,27 +175,91 @@ const getDeviceByCategorySlug = async (slug) => {
 
     return device;
 }
+const checkCategoryExists = async (nameCategory) => {
+    try {
+        // Giả sử bạn có một hàm truy vấn cơ sở dữ liệu để tìm danh mục theo tên
+        const category = await Category.findOne({ where: { nameCategory } });
+        return category !== null; // Trả về true nếu tìm thấy danh mục, ngược lại trả về false
+    } catch (error) {
+        console.error("Error in checkCategoryExists:", error);
+        throw error;
+    }
+};
+const checkCategoryHasChildren = async (id) => {
+    try {
+        // Tìm tất cả danh mục con trực tiếp của danh mục hiện tại
+        const children = await Category.findAll({
+            where: { parentId: id }
+        });
 
+        // Nếu có danh mục con trực tiếp, trả về true
+        if (children.length > 0) {
+            return true;
+        }
+
+        // Kiểm tra đệ quy từng danh mục con
+        for (const child of children) {
+            const hasChildren = await checkCategoryHasChildren(child.id); // Kiểm tra danh mục con của danh mục con
+            if (hasChildren) {
+                return true; // Nếu có danh mục con ở bất kỳ cấp độ nào, trả về true
+            }
+        }
+
+        // Nếu không có danh mục con ở bất kỳ cấp độ nào, trả về false
+        return false;
+    } catch (error) {
+        console.error("Error checking category children:", error);
+        throw error;
+    }
+};
 const createCategory = async ({ body }) => {
-    const slug = convertToSlug(body.nameCategory);
-    body.slug = slug;
+    // Kiểm tra nếu body là undefined hoặc null
+    if (!body) {
+        throw new Error("Body is required!");
+    }
 
+    // Kiểm tra nếu body.nameCategory tồn tại
+    if (body.nameCategory) {
+        const slug = convertToSlug(body.nameCategory);
+        body.slug = slug;
+    }
+
+    // Tạo danh mục mới
     const category = await Category.create(body);
 
     return category;
-}
+};
 
 const updateCategory = async ({ id, ...body }) => {
-    const slug = convertToSlug(body.nameCategory);
-    body.slug = slug;
+    try {
+        // Kiểm tra xem body.nameCategory có tồn tại không
+        if (body.nameCategory) {
+            const slug = convertToSlug(body.nameCategory);
+            body.slug = slug;
+        }
 
-    const [updatedCount] = await Category.update(body, {
-        where: { id }
-    });
+        const [updatedCount] = await Category.update(body, {
+            where: { id }
+        });
 
-    return updatedCount;
+        return updatedCount; // Trả về số lượng bản ghi được cập nhật
+    } catch (error) {
+        console.error("Error updating category:", error);
+        throw error; // Ném lỗi để xử lý ở tầng cao hơn
+    }
+};
+const removeCategoryById = async (id) => {
+    try {
+        const deletedCount = await Category.destroy({
+            where: { id }
+        });
+
+        return deletedCount; // Trả về số lượng bản ghi bị xóa
+    }catch ( error) {
+        console.error("Error deleting category:", error);
+        throw error;
+    }
 }
-
 const updateStatusCategory = async ({ id, status }) => {
 
     if (status <= 0) {
@@ -244,7 +308,7 @@ const updateStatusCategory = async ({ id, status }) => {
 }
 
 module.exports = {
-    getAllCategory_User, getAllCategory_Admin, getCategoryByUser,
+    getAllCategory_User, getAllCategory_Admin, getCategoryByUser, checkCategoryExists, checkCategoryHasChildren, removeCategoryById,
     getCategoryById, getChildrenCategory, getAllCategoryIds, getDeviceByCategorySlug,
     createCategory, updateCategory, updateStatusCategory
 }

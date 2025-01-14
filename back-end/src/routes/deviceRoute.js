@@ -12,6 +12,7 @@ const {
     postCreateReviewForDeviceAPI,
     putUpdateReviewForDeviceAPI,
     getAllReviewForDeviceAPI,
+    postCheckDeviceModificationAPI,
 } = require('../controllers/api/DeviceController')
 
 const routerDevice = express.Router();
@@ -26,6 +27,8 @@ routerDevice.get('/discount', getAllDevice_DiscountAPI);
 
 routerDevice.get('/', getAllDeviceByUserAPI);
 routerDevice.get('/:keyword', getAllDeviceByUserAPI);
+
+routerDevice.post('/check/', postCheckDeviceModificationAPI);
 
 routerDevice.get('/detail/:slug', getDeviceBySlugAPI);
 routerDevice.get('/top-device', getTOPDeviceLikedAPI);

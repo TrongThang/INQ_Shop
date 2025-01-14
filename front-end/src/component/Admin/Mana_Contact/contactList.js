@@ -36,7 +36,7 @@ const ContactList = ({ contacts, onEdit,onDelete}) => {
                                 <td>{new Date(contact.created_at).toLocaleDateString('vi-VN')}</td>
                                 <td>{new Date(contact.updated_at).toLocaleDateString('vi-VN')}</td>
                                 <td>
-                                    <span 
+                                    {/* <span 
                                         className={`badge ${contact.status === 1 ? "bg-success" : contact.status === 2 ? "bg-warning text-dark" : "bg-danger"}`}
                                     >
                                         {contact.status === 1 
@@ -44,6 +44,25 @@ const ContactList = ({ contacts, onEdit,onDelete}) => {
                                             : contact.status === 2 
                                             ? "Đang xử lý" 
                                             : "Đã đóng"}
+                                    </span> */}
+                                    <span
+                                        className={`badge ${
+                                            contact.status === 0
+                                                ? "bg-danger" // Huỷ liên hệ
+                                                : contact.status === 1
+                                                ? "bg-info" // Đang xem xét
+                                                : contact.status === 2
+                                                ? "bg-warning text-dark" // Gửi hợp đồng
+                                                : "bg-success" // Đã ký hợp đồng
+                                        }`}
+                                    >
+                                        {contact.status === 0
+                                            ? "Huỷ liên hệ"
+                                            : contact.status === 1
+                                            ? "Đang xem xét"
+                                            : contact.status === 2
+                                            ? "Gửi hợp đồng"
+                                            : "Đã ký hợp đồng"}
                                     </span>
                                 </td>
 

@@ -54,13 +54,12 @@ const checkListProduct = async (products) => {
         for (const product of products) {
             const result = await checkDevice(product);
 
-            if (result.errorCode !== ERROR_CODES.DEVICE.SUCCESS) {
+            if (result.errorCode !== ERROR_CODES.SUCCESS) {
                 return result;
             }
         }
         return {
             errorCode: ERROR_CODES.SUCCESS,
-            
         }
     } catch (error) {
         return {
@@ -71,26 +70,35 @@ const checkListProduct = async (products) => {
 }
 
 const createOrder = async (infoOrder, products) => {
+    // nếu như có 2 sản phấm giống nhau thì sao
+
     const result = await checkListProduct(products);
 
     if (result.errorCode !== ERROR_CODES.SUCCESS) {
         return result;
     }
 
-    const newOrder = await Order(infoOrder);
+    //Nên + trước hay tạo xong chi tiết hoá đơn r mới tính total Amount?
+    // Đã có checkListProduct đảm bảo sản phẩm có tồn tại   
+    const totalAmount = products.reduce((acc, item) => acc + (item.quantity * item.sellingPrice), 0)
+    infoOrder.totalAmount = totalAmount;
+
+    const newOrder = await Order.create(infoOrder);
+
     if (!newOrder) {
         return {
             errorCode: ERROR_CODES.ORDER.ERROR_CREATE,
             messages: ERROR_MESSAGES.ORDER[ERROR_CODES.ORDER.ERROR_CREATE] 
         }
     }
+
     for (const product of products) {
         const detail_order = await OrderDetail.create({
             id: newOrder.id,
-            idProduct: product.idDevice,
-            price: product.sellingDetail,
+            idDevice: product.idDevice,
+            price: product.sellingPrice,
             stock: product.quantity,
-            amount: product.sellingDetail * product.quantity,
+            amount: product.sellingPrice * product.quantity,
             status: 1,
         });
     }

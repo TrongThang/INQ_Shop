@@ -5,7 +5,8 @@ const ImageDevice = sequelize.define('image_device', {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    primaryKey: true
+    primaryKey: true,
+    autoIncrement: true,
   },
   idDevice: {
     type: DataTypes.INTEGER,

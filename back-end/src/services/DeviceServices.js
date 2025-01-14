@@ -16,7 +16,12 @@ const { ERROR_MESSAGES, ERROR_CODES } = require('../config/contants');
 
 const checkDevice = async (deviceReceive) => {
     try {
-        const deviceCheck = Device.findByPk(deviceReceive.idDevice, {
+        console.log('deviceReceive:', deviceReceive)
+        console.log('ID - deviceReceive:', deviceReceive.idDevice)
+        const deviceCheck = await Device.findOne({
+            where: {
+                idDevice: deviceReceive.idDevice
+            },
             include: [
                 {
                     model: Warehouse,
@@ -26,20 +31,26 @@ const checkDevice = async (deviceReceive) => {
             ]
         });
 
-        const isDifferentSellingPrice = deviceCheck.sellingPrice !== deviceReceive.sellingPrice;
+        console.log('deviceCheck:', deviceCheck)
+
+        const isDifferentSellingPrice = Number(deviceCheck.sellingPrice) !== Number(deviceReceive.sellingPrice);
         const noDeviceInStock = deviceReceive.quantity > deviceCheck.warehouse.stock;
+        console.log('isDifferentSellingPrice:', isDifferentSellingPrice)
+        console.log('noDeviceInStock:', noDeviceInStock)
 
         if (!deviceCheck) {
             return {
                 errorCode: ERROR_CODES.DEVICE.DEVICE_NOT_FOUND,
                 detail: ERROR_MESSAGES[ERROR_CODES.DEVICE.PRICE_CHANGED],
-                sellingPriceNew: deviceCheck.sellingPrice
+                idDevice: deviceCheck.idDevice,
             };
         }
+
         if (isDifferentSellingPrice) {
             return {
                 errorCode: ERROR_CODES.DEVICE.PRICE_CHANGED,
                 detail: ERROR_MESSAGES[ERROR_CODES.DEVICE.PRICE_CHANGED],
+                idDevice: deviceCheck.idDevice,
                 sellingPriceNew: deviceCheck.sellingPrice
             };
         }
@@ -48,19 +59,20 @@ const checkDevice = async (deviceReceive) => {
             return {
                 errorCode: ERROR_CODES.DEVICE.OUT_OF_STOCK,
                 detail: ERROR_MESSAGES[ERROR_CODES.DEVICE.OUT_OF_STOCK],
+                idDevice: deviceCheck.idDevice,
                 stockDeviceRemaining: deviceCheck.warehouse.stock
             };
         }
 
         return {
-            errorCode: ERROR_CODES.DEVICE.SUCCESS,
+            errorCode: ERROR_CODES.SUCCESS,
             detail: ERROR_MESSAGES[ERROR_CODES.DEVICE.SUCCESS]
         };
 
     } catch (error) {
         return {
             errorCode: ERROR_CODES.DEVICE.INTERNAL_ERROR,
-            detail: error.message || ERROR_MESSAGES.DEVICE[ERROR_CODES.INTERNAL_ERROR]
+            detail: error || ERROR_MESSAGES.DEVICE[ERROR_CODES.DEVICE.INTERNAL_ERROR]
         }
     }
 } 

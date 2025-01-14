@@ -41,6 +41,7 @@ const checkCustomerOrderForDeviceAPI = async (req, res) => {
 
 const postCreateOrderAPI = async (req, res) => {
     const { infoOrder, products } = req.body;
+    //Mã KH
     const result = await createOrder(infoOrder, products);
     
     return res.status(result.errorCode === ERROR_CODES.SUCCESS ? 200 : 401).json(result)

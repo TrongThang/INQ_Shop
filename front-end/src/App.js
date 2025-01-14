@@ -38,6 +38,10 @@ import ContactPage from './pages/user/contact';
 import RegisterPage from './pages/user/Account/registerPage';
 import LikedPage from './pages/user/likedDevice';
 
+
+import ManaCategory from './pages/admin/Categories/manaCategory';
+import AddOrEditCategory from './component/admin/Mana_Category/addOrEditCategory';
+
 function App() {
 
   return (
@@ -45,34 +49,40 @@ function App() {
       <Router>
         <Routes>
           {/* ADMIN */}
-          <Route path="/admin" element={<Admin />}>
+          <Route path='/admin' element={<Admin />} > 
+          
           </Route>
+
+          <Route path="/manage-category" element={<ManaCategory />} />
+          <Route path="/add-category" element={<AddOrEditCategory />} />
+          <Route path="/edit-category/:id" element={<AddOrEditCategory />} />
+
 
           {/* USER */}
           <Route path="/"
             element={
               <CartProvider>
                 <User />
-                <RegisterPage/>
+                <RegisterPage />
                 <LoginPage />
               </CartProvider>
             }
           >
-              <Route path='/' element={<HomePage />} />
-              <Route path="cart" element={<CartPage />} />
-              <Route path="profile" element={<ProfileCustomer />} />
-              <Route path="contact" element={<ContactPage />} />
-              <Route path="/profile/address" element={<AddressPage />} />
-              <Route path="/introdution" element={<CompanyInfo />} />
-              <Route path="/blog" element={<ListBlogPage />} />
-              <Route path="/blog/:id" element={<DetailBlogPage />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/profile/orders" element={<OrdersPage />} />
-              <Route path="/search/*" element={<SearchPage />} />
-              <Route path="/device/:slug" element={<DetailDevicePage />} />
-              <Route path="/likeDevice" element={<LikedPage />} />
-              <Route path="/checkout" element={<CheckoutPage />} />
-            </Route>
+            <Route path='/' element={<HomePage />} />
+            <Route path="cart" element={<CartPage />} />
+            <Route path="profile" element={<ProfileCustomer />} />
+            <Route path="contact" element={<ContactPage />} />
+            <Route path="/profile/address" element={<AddressPage />} />
+            <Route path="/introdution" element={<CompanyInfo />} />
+            <Route path="/blog" element={<ListBlogPage />} />
+            <Route path="/blog/:id" element={<DetailBlogPage />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/profile/orders" element={<OrdersPage />} />
+            <Route path="/search/*" element={<SearchPage />} />
+            <Route path="/device/:slug" element={<DetailDevicePage />} />
+            <Route path="/likeDevice" element={<LikedPage />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
+          </Route>
 
         </Routes>
       </Router>

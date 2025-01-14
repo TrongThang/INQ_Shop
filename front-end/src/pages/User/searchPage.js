@@ -41,22 +41,6 @@ export default function SearchPage() {
                         setSearchResult([]); 
                     }
                 }
-
-                // else if (slugCate) {
-                //     const apiUrl = `http://localhost:8081/api/category?slugCate=${slugCate}`;
-                //     const response = await fetch(apiUrl);
-                    
-                //     const result = await response.json();
-
-                //     await console.log('Category tìm kiếm:', result.data);
-
-                //     if (result.errorCode === 0) {
-                //         setSearchResult(result.data);
-                //     } else {
-                //         console.error("Lỗi từ API:", result.msg);
-                //         setSearchResult([]); 
-                //     }
-                // }
             } catch (err) {
                 console.error(err);
             } finally {
@@ -69,6 +53,7 @@ export default function SearchPage() {
 
     const dataToShow = useMemo(() => {
         let filteredData = searchResult;
+        //Xử lý lấy các sản phẩm từ trang nào tới trang nào của searchResult
 
         // Lọc theo danh mục
         if (conditionSearch.category.length > 0) {

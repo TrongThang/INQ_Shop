@@ -7,6 +7,13 @@ const STATUS_CODES = {
         FINISH: 4,
         PAID: 5,
         REFUNDED: 6,
+    },
+    DEVICE: {
+        NON_ACTIVE: 0,
+        ACTIVE: 1,
+    },
+    CONTACT: {
+        
     }
 }
 

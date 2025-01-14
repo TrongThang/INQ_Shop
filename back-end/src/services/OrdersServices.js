@@ -3,9 +3,9 @@ const Order = require('../models/Order');
 const Customer = require('../models/Customer');
 const Device = require('../models/Device');
 const { checkDevice } = require('./DeviceServices');
-const { ERROR_CODES, ERROR_MESSAGES } = require('../config/contants');
+const { ERROR_CODES, ERROR_MESSAGES } = require('../../../contants');
 const OrderDetail = require('../models/Order_detail');
-const { STATUS_CODES } = require('../config/statusContaints');
+const { STATUS_CODES } = require('../../../statusContaints');
 
 const getAllOrder = async (idCustomer) => {
     // const orders = await Order.findAll({
@@ -113,7 +113,11 @@ const cancelOrder = async (idOrder, status) => {
     try {
         const order = await Order.findByPk(idOrder);
 
-        if (status === STATUS_CODES.ORDER.CANCELLED && order.status === STATUS_CODES.ORDER.PENDING ) {
+        if (
+            status === STATUS_CODES.ORDER.CANCELLED &&
+            (order.status === STATUS_CODES.ORDER.PENDING || order.status === STATUS_CODES.ORDER.PREPARING)
+        )
+        {
             const [affectedCount, affectedRows] = await Order.update(
                 {status: status},
                 { where: { id: idOrder }, returning: true }

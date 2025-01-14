@@ -8,8 +8,8 @@ const {
     createOrder, updateStatusOrder,
     cancelOrder,
 } = require('../../services/OrdersServices.js');
-const { ERROR_CODES } = require('../../config/contants.js');
-const { STATUS_CODES } = require('../../config/statusContaints.js');
+const { ERROR_CODES } = require('../../../../contants.js');
+const { STATUS_CODES } = require('../../../../statusContaints.js');
 
 const getAllOrderByIdCustomerAPI = async (req, res) => {
     //TO DO SOMETHING
@@ -62,6 +62,10 @@ const putUpdateStatusOrderAPI = async (req, res) => {
     return res.status(result.errorCode === ERROR_CODES.SUCCESS ? 200 : 401).json(result)
 }
     
+const deleteCancelOrderAPI = async (req, res) => {
+    const { idOrder } = req.body;
+
+} 
 module.exports = {
     checkCustomerOrderForDeviceAPI,
     getAllOrderByIdCustomerAPI,

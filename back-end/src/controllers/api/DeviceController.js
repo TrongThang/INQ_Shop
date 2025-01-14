@@ -16,7 +16,7 @@ const {
 const {
     getChildrenCategory, getAllCategoryIds
 } = require('../../services/CategoryServices.js');
-const { ERROR_CODES } = require('../../config/contants.js');
+const { ERROR_CODES } = require('../../../../contants.js');
 
 const postCheckDeviceModificationAPI = async (req, res) => {
     //idDevice, sellingPrice, quantity

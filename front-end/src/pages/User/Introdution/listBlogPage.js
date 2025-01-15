@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import BlogCard from "../../../component/user/Introdution/blogCard";
 import Pagination from "../../../component/user/Introdution/pagination";
 
 function ListBlogPage({ isIntroPage = false }) {
     const [blogs, setBlogs] = useState([]); // Danh sách bài viết gốc
     const [filteredBlogs, setFilteredBlogs] = useState([]); // Danh sách bài viết sau khi lọc
-    const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
     const [blogsPerPage] = useState(6); // Số lượng bài viết trên mỗi trang
     const [searchKeyword, setSearchKeyword] = useState(""); // Từ khóa tìm kiếm
+
+    // Sử dụng useSearchParams để quản lý tham số URL
+    const [searchParams, setSearchParams] = useSearchParams();
+    const currentPage = Number(searchParams.get("page")) || 1; // Lấy giá trị page từ URL, mặc định là 1
 
     // Hàm loại bỏ dấu tiếng Việt
     const removeAccents = (str) => {
@@ -27,7 +31,7 @@ function ListBlogPage({ isIntroPage = false }) {
         });
 
         setFilteredBlogs(filtered);
-        setCurrentPage(1); // Reset về trang đầu tiên sau khi tìm kiếm
+        setSearchParams({ page: 1 }); // Reset về trang đầu tiên sau khi tìm kiếm
     };
 
     // Fetch dữ liệu bài viết từ API
@@ -61,6 +65,11 @@ function ListBlogPage({ isIntroPage = false }) {
 
     // Tính tổng số trang
     const totalPages = Math.ceil(filteredBlogs.length / blogsPerPage);
+
+    // Hàm xử lý thay đổi trang
+    const handlePageChange = (page) => {
+        setSearchParams({ page }); // Cập nhật tham số page trong URL
+    };
 
     return (
         <div>
@@ -103,7 +112,7 @@ function ListBlogPage({ isIntroPage = false }) {
                     <Pagination
                         currentPage={currentPage}
                         totalPages={totalPages}
-                        onPageChange={setCurrentPage}
+                        onPageChange={handlePageChange}
                     />
                 </div>
             </div>

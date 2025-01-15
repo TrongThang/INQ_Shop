@@ -5,7 +5,8 @@ import ContactTable from "../../../component/admin/Mana_Contact/contactList";
 import SearchContact from "../../../component/admin/Mana_Contact/searchContact";
 
 const ManaContact = () => {
-    const [contact, setContact] = useState([]);
+    const [contact, setContact] = useState([]); // Dữ liệu gốc từ API
+    const [filteredContacts, setFilteredContacts] = useState([]); // Dữ liệu đã lọc
     const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
     const [toastMessage, setToastMessage] = useState('');
@@ -19,7 +20,7 @@ const ManaContact = () => {
     };
 
     const handleExport = () => {
-        const worksheet = XLSX.utils.json_to_sheet(contact);
+        const worksheet = XLSX.utils.json_to_sheet(filteredContacts);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Contact");
         XLSX.writeFile(workbook, "contact_data.xlsx");
@@ -29,7 +30,8 @@ const ManaContact = () => {
         try {
             const response = await fetch('http://localhost:8081/api/contact');
             const result = await response.json();
-            setContact(result.data);
+            setContact(result.data); // Lưu dữ liệu gốc vào state
+            setFilteredContacts(result.data); // Ban đầu, filteredContacts sẽ bằng dữ liệu gốc
         } catch (err) {
             console.error("Error fetching contacts:", err);
         }
@@ -65,6 +67,7 @@ const ManaContact = () => {
                 setToastMessage('Xóa contact thành công.');
                 setShowToast(true);
                 setContact(prevContacts => prevContacts.filter((item) => item.id !== contactToDelete.id));
+                setFilteredContacts(prevContacts => prevContacts.filter((item) => item.id !== contactToDelete.id));
             } else {
                 const result = await response.json();
                 alert(`Error: ${result.message}`);
@@ -90,18 +93,28 @@ const ManaContact = () => {
         setStatusFilter(value);
     };
 
-    const filteredContacts = contact.filter((contact) => {
-        const matchesSearchTerm =
-            contact.fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            contact.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            contact.content.toLowerCase().includes(searchTerm.toLowerCase());
+    // Hàm lọc dữ liệu
+    const filterContacts = () => {
+        const filtered = contact.filter((contact) => {
+            const matchesSearchTerm =
+                contact.fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                contact.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                contact.content.toLowerCase().includes(searchTerm.toLowerCase());
 
-        const matchesStatusFilter =
-            statusFilter === "all" || contact.status.toString() === statusFilter;
+            const matchesStatusFilter =
+                statusFilter === "all" || contact.status.toString() === statusFilter;
 
-        return matchesSearchTerm && matchesStatusFilter;
-    });
+            return matchesSearchTerm && matchesStatusFilter;
+        });
+
+        setFilteredContacts(filtered); // Cập nhật dữ liệu đã lọc vào state
+    };
+
+    // Lọc dữ liệu mỗi khi searchTerm hoặc statusFilter thay đổi
+    useEffect(() => {
+        filterContacts();
+    }, [searchTerm, statusFilter, contact]);
 
     return (
         <div className="main-content-inner">

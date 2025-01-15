@@ -40,6 +40,10 @@ import LikedPage from './pages/user/likedDevice';
 
 import ManaConatct from './pages/admin/Contact/manaContact';
 import UpdateContact from './pages/admin/Contact/updateContact';
+
+import ManaReviewDevice from './pages/admin/ReviewDevice/manaReviewDevice';
+import UpdateReviewDevice from './component/admin/Mana_ReviewDevice/CRUD_ReviewDevice/UpdateReviewDevice';
+import DeleteReviewDevice from './component/admin/Mana_ReviewDevice/CRUD_ReviewDevice/DeleteReviewDevice';
 function App() {
 
   return (
@@ -50,6 +54,11 @@ function App() {
           <Route path="/admin" element={<Admin />}>
            <Route path="contacts" element={<ManaConatct />} />
           <Route path="contacts/update/:id" element={<UpdateContact />} />
+
+
+          <Route path="review-device" element={<ManaReviewDevice />} />
+          <Route path="review-device/update/:id" element={<UpdateReviewDevice />} />
+          <Route path="review-device/delete/:id" element={<DeleteReviewDevice />} />
 
           </Route>
           

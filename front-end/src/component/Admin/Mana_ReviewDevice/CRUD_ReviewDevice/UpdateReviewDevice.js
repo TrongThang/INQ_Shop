@@ -1,28 +1,24 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
-function UpdateReviewDevice({ onBack, IdReview }) {
+function UpdateReviewDevice() {
+    const { id } = useParams();
+    const navigate = useNavigate();
     const [toastMessage, setToastMessage] = useState('');
     const [showToast, setShowToast] = useState(false);
-
     const [ReviewDevice, setReviewDevice] = useState({
         note: "",
         status: "",
-        created_at: "", // Thêm trường ngày tạo
-        updated_at: "", // Thêm trường ngày cập nhật
+        created_at: "",
+        updated_at: "",
     });
 
-    // Fetch bài viết từ API để gán vào form
     const fetchDataReview = async () => {
         try {
-            const response = await fetch(`http://localhost:8081/api/device/reviews_admin/${IdReview}`);
+            const response = await fetch(`http://localhost:8081/api/device/reviews_admin/${id}`);
             const result = await response.json();
-
             if (result.errorCode === 0 && result.data) {
-                console.log("Data from API:", result.data);
-                setReviewDevice((prevData) => ({
-                    ...prevData,
-                    ...result.data, // Cập nhật dữ liệu từ API vào state
-                }));
+                setReviewDevice(result.data);
             } else {
                 console.error("Không tìm thấy review hoặc có lỗi từ API:", result.msg);
             }
@@ -31,7 +27,10 @@ function UpdateReviewDevice({ onBack, IdReview }) {
         }
     };
 
-    // Cập nhật dữ liệu form
+    useEffect(() => {
+        fetchDataReview();
+    }, [id]);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setReviewDevice((prevData) => ({
@@ -40,29 +39,26 @@ function UpdateReviewDevice({ onBack, IdReview }) {
         }));
     };
 
-    // Gửi dữ liệu bài viết để cập nhật
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Cập nhật trường updated_at với thời gian hiện tại
             const updatedReviewDevice = {
                 ...ReviewDevice,
-                updated_at: new Date().toISOString(), // Cập nhật ngày cập nhật
+                updated_at: new Date().toISOString(),
             };
 
-            const response = await fetch(`http://localhost:8081/api/device/reviews_admin/${IdReview}`, {
+            const response = await fetch(`http://localhost:8081/api/device/reviews_admin/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(updatedReviewDevice), // Gửi dữ liệu đã cập nhật
+                body: JSON.stringify(updatedReviewDevice),
             });
             const result = await response.json();
 
             if (response.ok) {
                 setToastMessage('Đã chỉnh sửa thông tin thành công.');
                 setShowToast(true);
-
                 setTimeout(() => {
-                    window.location.reload(); // Làm mới trang
+                    navigate('/admin/review-device');
                 }, 1000);
             } else {
                 console.error("Form submission error:", result);
@@ -77,34 +73,26 @@ function UpdateReviewDevice({ onBack, IdReview }) {
     };
 
     useEffect(() => {
-        fetchDataReview();
-    }, []);
-
-    useEffect(() => {
         if (showToast) {
             const timer = setTimeout(() => {
                 setShowToast(false);
             }, 2000);
-
             return () => clearTimeout(timer);
         }
     }, [showToast]);
 
     return (
         <div className="main-content-inner">
-            {/* Back button */}
-            <div className="my-3" onClick={onBack}>
+            <div className="my-3" onClick={() => navigate('/admin/review-device')}>
                 <a href="#">
                     <i className="bi bi-arrow-left pe-2"></i>Trở về
                 </a>
             </div>
-            {/* Main form */}
             <div className="bg-white p-4 rounded shadow-sm">
                 <h5 className="mb-4">Chỉnh sửa chi tiết thông tin Đánh giá Thiết bị</h5>
                 <form onSubmit={handleSubmit}>
                     <div className="row">
                         <div className="col-md-8">
-                            {/* Customer */}
                             <div className="mb-3">
                                 <label className="form-label">Customer</label>
                                 <input
@@ -115,7 +103,6 @@ function UpdateReviewDevice({ onBack, IdReview }) {
                                     readOnly
                                 />
                             </div>
-                            {/* Device Name */}
                             <div className="mb-3">
                                 <label className="form-label">Tên thiết bị</label>
                                 <input
@@ -126,7 +113,6 @@ function UpdateReviewDevice({ onBack, IdReview }) {
                                     readOnly
                                 />
                             </div>
-                            {/* Comment */}
                             <div className="mb-3">
                                 <label className="form-label">Comment - Bình luận</label>
                                 <input
@@ -137,7 +123,6 @@ function UpdateReviewDevice({ onBack, IdReview }) {
                                     readOnly
                                 />
                             </div>
-                            {/* Rating */}
                             <div className="mb-3">
                                 <label className="form-label">Rating - Số sao</label>
                                 <input
@@ -148,7 +133,6 @@ function UpdateReviewDevice({ onBack, IdReview }) {
                                     readOnly
                                 />
                             </div>
-                            {/* Ngày tạo */}
                             <div className="mb-3">
                                 <label className="form-label">Ngày tạo</label>
                                 <input
@@ -159,7 +143,6 @@ function UpdateReviewDevice({ onBack, IdReview }) {
                                     readOnly
                                 />
                             </div>
-                            {/* Ngày cập nhật */}
                             <div className="mb-3">
                                 <label className="form-label">Ngày cập nhật</label>
                                 <input
@@ -170,7 +153,6 @@ function UpdateReviewDevice({ onBack, IdReview }) {
                                     readOnly
                                 />
                             </div>
-                            {/* Note */}
                             <div className="mb-3">
                                 <label className="form-label">Ghi chú</label>
                                 <input
@@ -182,7 +164,6 @@ function UpdateReviewDevice({ onBack, IdReview }) {
                                     required
                                 />
                             </div>
-                            {/* Status */}
                             <div className="mb-3">
                                 <label className="form-label">Trạng thái:</label>
                                 <select
@@ -198,15 +179,11 @@ function UpdateReviewDevice({ onBack, IdReview }) {
                             </div>
                         </div>
                     </div>
-
-                    {/* Submit button */}
                     <div className="text-right">
                         <button type="submit" className="btn btn-info text-white">
                             Lưu
                         </button>
                     </div>
-
-                    {/* Toast message */}
                     {showToast && (
                         <div className="toast-container position-fixed top-0 end-70 p-3">
                             <div className="toast show" role="alert" aria-live="assertive" aria-atomic="true">

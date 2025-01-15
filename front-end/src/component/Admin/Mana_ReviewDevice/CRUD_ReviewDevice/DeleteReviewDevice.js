@@ -1,15 +1,16 @@
 import React, { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
-function DeleteReviewDevice({ IdReview, onBack }) {
+function DeleteReviewDevice() {
+    const { id } = useParams();
+    const navigate = useNavigate();
     const [toastMessage, setToastMessage] = useState('');
     const [showToast, setShowToast] = useState(false);
-    const [showPopup, setShowPopup] = useState(true); // Hiển thị popup
-    const [note, setNote] = useState(""); // Lưu giá trị note từ popup
-    const [error, setError] = useState(""); // Lưu thông báo lỗi
+    const [showPopup, setShowPopup] = useState(true);
+    const [note, setNote] = useState("");
+    const [error, setError] = useState("");
 
-    // Xử lý khi người dùng ấn Xác nhận trong popup
     const handleConfirmDelete = async () => {
-        // Kiểm tra validation
         if (!note.trim()) {
             setError("Vui lòng nhập lý do xóa.");
             return;
@@ -20,13 +21,12 @@ function DeleteReviewDevice({ IdReview, onBack }) {
         }
 
         try {
-            // Gửi yêu cầu PUT để cập nhật note và status
-            const response = await fetch(`http://localhost:8081/api/device/reviews_admin/${IdReview}`, {
+            const response = await fetch(`http://localhost:8081/api/device/reviews_admin/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     note: note,
-                    status: 0, // Đổi status thành 0
+                    status: 0,
                 }),
             });
 
@@ -35,13 +35,9 @@ function DeleteReviewDevice({ IdReview, onBack }) {
             if (response.ok) {
                 setToastMessage('Đã xóa review thành công.');
                 setShowToast(true);
-
-                // Đóng popup sau khi xóa thành công
                 setShowPopup(false);
-
-                // Làm mới trang sau 1 giây
                 setTimeout(() => {
-                    window.location.reload();
+                    navigate('/admin/review-device');
                 }, 1000);
             } else {
                 console.error("Error deleting review:", result);
@@ -55,16 +51,14 @@ function DeleteReviewDevice({ IdReview, onBack }) {
         }
     };
 
-    // Xử lý khi người dùng ấn Hủy trong popup
     const handleCancelDelete = () => {
-        setShowPopup(false); // Đóng popup
-        setError(""); // Xóa thông báo lỗi
-        onBack(); // Quay lại trang trước
+        setShowPopup(false);
+        setError("");
+        navigate('/admin/review-device');
     };
 
     return (
         <div className="main-content-inner">
-            {/* Popup nhập note */}
             {showPopup && (
                 <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                     <div className="modal-dialog">
@@ -81,7 +75,7 @@ function DeleteReviewDevice({ IdReview, onBack }) {
                                     value={note}
                                     onChange={(e) => {
                                         setNote(e.target.value);
-                                        setError(""); // Xóa thông báo lỗi khi người dùng nhập
+                                        setError("");
                                     }}
                                     required
                                 />
@@ -108,7 +102,6 @@ function DeleteReviewDevice({ IdReview, onBack }) {
                 </div>
             )}
 
-            {/* Toast message */}
             {showToast && (
                 <div className="toast-container position-fixed top-0 end-70 p-3">
                     <div className="toast show" role="alert" aria-live="assertive" aria-atomic="true">

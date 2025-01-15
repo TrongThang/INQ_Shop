@@ -1,7 +1,7 @@
 import React from "react";
 import * as XLSX from "xlsx";
 
-const SearchInfoWeb = ({ ReviewDevice, searchTerm, setSearchTerm, statusFilter, setStatusFilter, handleExport }) => {
+const SearchInfoWeb = ({ searchTerm, setSearchTerm, statusFilter, setStatusFilter, handleExport }) => {
     return (
         <div>
             <div className="d-flex justify-content-between mb-3">

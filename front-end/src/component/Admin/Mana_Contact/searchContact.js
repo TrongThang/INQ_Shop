@@ -1,15 +1,12 @@
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
 
-const SearchContact = ({ onExport, contacts, onSearchChange, onStatusFilterChange }) => {
+const SearchContact = ({ onExport, onSearchChange, onStatusFilterChange }) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
 
     const handleExport = () => {
-        const worksheet = XLSX.utils.json_to_sheet(contacts);
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Contacts");
-        XLSX.writeFile(workbook, "contacts_data.xlsx");
+        onExport();
     };
 
     const handleSearchChange = (event) => {

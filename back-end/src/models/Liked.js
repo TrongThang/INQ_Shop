@@ -43,6 +43,7 @@ const Liked = sequelize.define('liked', {
 });
 
 const Device = require('../models/Device');
+Device.belongsTo(Liked, { foreignKey: 'idDevice', as: 'liked' });
 Liked.belongsTo(Device, { foreignKey: 'idDevice', as: 'device' });
 
 module.exports = Liked;

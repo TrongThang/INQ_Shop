@@ -9,6 +9,7 @@ export default function InfoDevice({ device }) {
     const [quantity, setQuantity] = useState(1);
     const [customerLiked, setCustomerLiked] = useState();
     const [idCustomer, setIdCustomer] = useState(null);
+    const [likeCount, setLikeCount] = useState();
 
     useEffect(() => {
         const token = localStorage.getItem('authToken');
@@ -25,6 +26,7 @@ export default function InfoDevice({ device }) {
                 const response = await axios.get(`http://localhost:8081/api/likedDevice/${idCustomer}/${device.idDevice}`);
 
                 setCustomerLiked(!!response.data.data); // Backend trả về trạng thái yêu thích(chuyển đổi về boolean)
+                setLikeCount(device.likeCount)
             } catch (error) {
                 console.error("Lỗi khi kiểm tra trạng thái yêu thích:", error);
             }
@@ -45,18 +47,18 @@ export default function InfoDevice({ device }) {
             if (!customerLiked) {
                 // Gọi API để thêm vào danh sách yêu thích
                 await axios.post("http://localhost:8081/api/likedDevice", { idDevice: device.idDevice, idCustomer: idCustomer });
-                console.log("Đã thêm sản phẩm vào yêu thích:", device.name);
+                setLikeCount(likeCount => likeCount + 1);
             } else {
                 // Gọi API để xóa khỏi danh sách yêu thích
                 await axios.delete(`http://localhost:8081/api/likedDevice/${idCustomer}/${device.idDevice}`);
-                console.log("Đã xóa sản phẩm khỏi yêu thích:", device.name);
+                setLikeCount(likeCount => likeCount - 1);
             }
         } catch (error) {
             console.error("Lỗi khi cập nhật trạng thái yêu thích:", error);
         }
         setCustomerLiked(!customerLiked); // Đảo trạng thái yêu thích
     };
-    console.log('Info device:', device)
+
     return (
         <div class="col-xl-7 mb-4">
             <span>
@@ -78,25 +80,27 @@ export default function InfoDevice({ device }) {
             <div className="rating d-flex align-items-center">
                 <div>
                     <StarRating rating={device.averageRating} />
+                    <div>Yêu thích: <span className="text-danger fw-bold">{likeCount}</span></div>
                     {
                         (device.stock <= 0 || device.status <= 0)
                             ?   <div className="col-auto fw-bold badge badge-danger bg-danger fs-6 mb-2">
                                     Hết hàng
                                 </div>
-                            :   <div className="col-auto fw-bold badge badge-success bg-success fs-6 mb-2">
-                                    Còn hàng
+                            :   <><div className="col-auto fw-bold badge badge-success bg-success fs-6 mb-2 pe-1">
+                                    Còn hàng:
                                 </div>
-                    }
+                                    <span className="ms-2 text-success fw-bold">{device.stock}</span>
+                                </>
+                    } 
                 </div>
             </div>
             <h4><strong>Giá:</strong> <span className="text-primary fw-bold">{Number(device.sellingPrice).toLocaleString()}</span> VNĐ</h4>
 
             <AreaInteraction setQuantity={setQuantity} />
-
+            
             <button
                 className="btn btn-outline-primary btn-lg me-2"
                 onClick={() => {
-                    console.log('Số lượng sản phẩm thêm vào giỏ: ',quantity)
                     return addToCart(device, quantity)
                 }}
             >

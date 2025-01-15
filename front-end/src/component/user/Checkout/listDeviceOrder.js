@@ -1,45 +1,70 @@
-export default function ListDeviceOrder() {
+import { useCart } from "../../../context/CartContext"
+import { ToastContainer } from 'react-toastify';
+
+export default function ListDeviceOrder({ phone, shippingMethod, notes, choiceAddress, deviceCheckout }) {
+    const { cart, getTotalPrice, checkoutCart } = useCart();
     return (
-        <div className="col-md-6">
+    <>
+        <div className="col-md-7">
             <div className="row mb-5">
                 <div className="col-md-12">
-                    <div className="p-3 p-lg-5 border border-secondary rounded me-4">
-                        <h2 className="h3 mb-3 text-black">Đơn hàng của bạn </h2>
+                    <div className="p-3 border border-secondary rounded me-4">
                         <table className="table site-block-order-table mb-5">
                             <thead className="border-bottom border-dark">
-                                <th>Ảnh</th>
+                                <th style={{width: "100px"}}>Ảnh</th>
                                 <th>Sản phẩm</th>
-                                <th>Tổng tiền</th>
+                                <th>Đơn giá</th>
+                                <th>Thành tiền</th>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        <img src="https://placehold.co/100x100" />
-                                    </td>
-                                    <td>Đèn thông minh <strong className="mx-2">x</strong> 1</td>
-                                    <td>250.000đ</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <img src="https://placehold.co/100x100" />
-                                    </td>
-                                    <td>Camera chống trộm <strong className="mx-2">x</strong> 2</td>
-                                    <td>550.000đ</td>
-                                </tr>                                
+                                {cart
+                                    ? deviceCheckout.map((device, index) => {
+                                        if (device.status <= 0) {
+                                            return <></>
+                                        }
+                                        return (
+                                            <tr className="border-bottom border-dark">
+                                                <td>
+                                                    <img
+                                                        src={`img/device/${device.image}`}
+                                                        className="img-fluid"
+                                                        style={{ maxWidth: "100px", height: "100px" }}
+                                                        alt={device.name}
+                                                    />
+                                                </td>
+                                                <td>
+                                                    {device.name} <div className="text-danger fw-bold mt-3">x {device.quantity} </div>
+                                                </td>
+                                                <td className="text-nowrap">{Number(device.sellingPrice).toLocaleString()} VNĐ</td>
+                                                <td className="text-nowrap">{(Number(device.sellingPrice) * Number(device.quantity)).toLocaleString()} VNĐ</td>
+                                            </tr>
+                                        )
+                                    })
+                                    : <span className="text-dark fw-bold">
+                                        Không có sản phẩm trong giỏ hàng
+                                    </span>
+                                }
                             </tbody>
-                            <div style={{fontSize: "30px"}}>
-                                <td className="text-black font-weight-bold"><strong>Tổng đơn hàng:</strong></td>
-                                <td className="text-danger font-weight-bold"><strong>1.000.000đ</strong></td>
-                            </div>
                         </table>
-                        <div className="form-group">
-                            <button className="btn btn-black btn-primary w-100 py-3 btn-block fs-4" onclick="window.location='thankyou.html'">
-                                <i className="fa-solid fa-cart-shopping"></i> Đặt hàng
-                            </button>
+                        <div style={{fontSize: "25px"}} className="text-nowrap">
+                            <td className="text-black font-weight-bold"><strong>Tổng đơn hàng:</strong></td>
+                            <td className="text-danger font-weight-bold">
+                                <strong>{ getTotalPrice().toLocaleString() } VNĐ</strong>
+                            </td>
                         </div>
+                        
                     </div>
+                </div>
+                <div className="form-group mt-5 mb-0">
+                    <button
+                        className="btn btn-black btn-primary w-100 py-3 btn-block fs-4"
+                        onClick={() => checkoutCart(shippingMethod, notes, choiceAddress, deviceCheckout)}
+                    >
+                        <i className="fa-solid fa-cart-shopping"></i> Đặt hàng
+                    </button>
                 </div>
             </div>
         </div>
+    </>
     )
 }

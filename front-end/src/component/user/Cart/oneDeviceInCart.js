@@ -11,7 +11,15 @@ export default function OneDeviceInCart({ device }) {
                 <img src={`/img/device/${device.image}`} alt={device.name} width="80" height="80" className="img-thumbnail" />
             </div>
             <Link to={`/device/${device.slug}`} className="col" style={{maxWidth: "600px"}}>
-                <h5 className="mb-0">{device.name}</h5>
+                <h5 className="mb-0">
+                    <p>
+                        {device.name}
+                    </p>
+                    {
+                        device.status <= 0 && <span className="bg-danger badge badge-danger">Ngừng bán</span>
+                    }
+                    
+                </h5>
             </Link>
             <div className="col-auto d-flex align-items-center">
                 {device.quantity >= device.stock && <p className="text-danger mb-0 me-2 fw-bold">Còn { device.stock } thiết bị</p>}
@@ -49,11 +57,6 @@ export default function OneDeviceInCart({ device }) {
                     onClick={() => removeFromCart(device.idDevice)}
                 >Xóa</button>
             </div>
-            {device.status <= 0 && 
-                <div className="col-auto fw-bold badge badge-danger bg-danger">
-                    Hết hàng
-                </div>
-            }
             
         </div>
     )

@@ -10,7 +10,7 @@ const {
     getAllReviewForDevice, createReviewForDevice, updateReviewForDevice, updateStatusReviewForDevice,
     getTOPDeviceLiked,
     increaseViewDevice, 
-    checkDevice
+    checkDevice, checkListDevice,
 } = require('../../services/DeviceServices.js');
 
 const {
@@ -24,6 +24,15 @@ const postCheckDeviceModificationAPI = async (req, res) => {
     const result = await checkDevice(deviceReceive);
 
     return res.status(result.errorCode === ERROR_CODES.SUCCESS ? 200 : 401).json(result)
+}
+
+const postCheckListDeviceAPI = async (req, res) => {
+    const { products } = req.body;
+
+    const result = await checkListDevice(products)
+
+    console.log(result)
+    return res.status(200).json(result)
 }
 
 const getAllDeviceByUserAPI = async (req, res) => {
@@ -182,7 +191,6 @@ const getAllDeviceByAdminAPI = async (req, res) => {
 
 const getDeviceBySlugAPI = async (req, res) => {
     try {
-        console.log(req.params.slug);
         const results = await getDeviceBySlug(req.params.slug);
 
         return res.status(200).json({
@@ -348,7 +356,7 @@ const updateStatusReviewForDeviceAPI = async (req, res) => {
 }
 
 module.exports = {
-    postCheckDeviceModificationAPI,
+    postCheckDeviceModificationAPI, postCheckListDeviceAPI,
     getAllDeviceByUserAPI,getAllDevice_FeaturedAPI, getAllDevice_NewAPI, getTopSellingDeviceAPI, getAllDeviceByAdminAPI,
     getDeviceBySlugAPI, getTOPDeviceLikedAPI, getAllDevice_DiscountAPI,
     postCreateDeviceAPI, putUpdateDeviceAPI,

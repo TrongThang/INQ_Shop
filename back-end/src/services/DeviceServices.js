@@ -13,11 +13,11 @@ const Attribute_group = require('../models/Attribute_group');
 const { getChildrenCategory, getAllCategoryIds } = require('./CategoryServices');
 const OrderDetail = require('../models/Order_detail');
 const { ERROR_MESSAGES, ERROR_CODES } = require('../../../contants');
+const { STATUS_CODES } = require('../../../statusContaints');
+const Liked = require('../models/Liked');
 
 const checkDevice = async (deviceReceive) => {
     try {
-        console.log('deviceReceive:', deviceReceive)
-        console.log('ID - deviceReceive:', deviceReceive.idDevice)
         const deviceCheck = await Device.findOne({
             where: {
                 idDevice: deviceReceive.idDevice
@@ -31,28 +31,29 @@ const checkDevice = async (deviceReceive) => {
             ]
         });
 
-        console.log('deviceCheck:', deviceCheck)
-
         const isDifferentSellingPrice = Number(deviceCheck.sellingPrice) !== Number(deviceReceive.sellingPrice);
         const noDeviceInStock = deviceReceive.quantity > deviceCheck.warehouse.stock;
-        console.log('isDifferentSellingPrice:', isDifferentSellingPrice)
-        console.log('noDeviceInStock:', noDeviceInStock)
+        
         // Sản phẩm bị tắt thì sao
         if (!deviceCheck) {
             return {
                 errorCode: ERROR_CODES.DEVICE.DEVICE_NOT_FOUND,
-                detail: ERROR_MESSAGES[ERROR_CODES.DEVICE.PRICE_CHANGED],
+                detail: ERROR_MESSAGES.DEVICE[ERROR_CODES.DEVICE.DEVICE_NOT_FOUND],
                 idDevice: deviceCheck.idDevice,
             };
         }
-        if (deviceCheck.status >= 0) {
-            
+
+        if (deviceCheck.status <= STATUS_CODES.DEVICE.NON_ACTIVE) {
+            return {
+                errorCode: ERROR_CODES.DEVICE.DEVICE_NON_ACTIVE,
+                detail: ERROR_MESSAGES.DEVICE[ERROR_CODES.DEVICE.DEVICE_NON_ACTIVE],
+            };
         }
 
         if (isDifferentSellingPrice) {
             return {
                 errorCode: ERROR_CODES.DEVICE.PRICE_CHANGED,
-                detail: ERROR_MESSAGES[ERROR_CODES.DEVICE.PRICE_CHANGED],
+                detail: ERROR_MESSAGES.DEVICE[ERROR_CODES.DEVICE.PRICE_CHANGED],
                 idDevice: deviceCheck.idDevice,
                 sellingPriceNew: deviceCheck.sellingPrice
             };
@@ -61,7 +62,7 @@ const checkDevice = async (deviceReceive) => {
         if (noDeviceInStock) {
             return {
                 errorCode: ERROR_CODES.DEVICE.OUT_OF_STOCK,
-                detail: ERROR_MESSAGES[ERROR_CODES.DEVICE.OUT_OF_STOCK],
+                detail: ERROR_MESSAGES.DEVICE[ERROR_CODES.DEVICE.OUT_OF_STOCK],
                 idDevice: deviceCheck.idDevice,
                 stockDeviceRemaining: deviceCheck.warehouse.stock
             };
@@ -69,7 +70,7 @@ const checkDevice = async (deviceReceive) => {
 
         return {
             errorCode: ERROR_CODES.SUCCESS,
-            detail: ERROR_MESSAGES[ERROR_CODES.DEVICE.SUCCESS]
+            detail: ERROR_MESSAGES.DEVICE[ERROR_CODES.SUCCESS]
         };
 
     } catch (error) {
@@ -79,6 +80,25 @@ const checkDevice = async (deviceReceive) => {
         }
     }
 } 
+
+const checkListDevice = async (products) => {
+    try {
+        for (const product of products) {
+            const result = await checkDevice(product);
+            if (result.errorCode !== ERROR_CODES.SUCCESS) {
+                return result;
+            }
+        }
+        return {
+            errorCode: ERROR_CODES.SUCCESS,
+        }
+    } catch (error) {
+        return {
+            errorCode: ERROR_CODES.ORDER.INTERNAL_ERROR,
+            detail: error.message || ERROR_MESSAGES.ORDER[ERROR_CODES.ORDER.INTERNAL_ERROR]
+        }
+    }
+}
 
 
 // HÀM XỬ LÝ
@@ -316,6 +336,11 @@ const getDeviceBySlug = async (slug) => {
                 as: 'warehouse',
                 attributes: []
             },
+            {
+                model: Liked,
+                as: 'liked',
+                attributes: []
+            }
         ],
         attributes: {
             include: [
@@ -324,9 +349,15 @@ const getDeviceBySlug = async (slug) => {
                     FROM review_device AS review
                     WHERE review.idDevice = Device.idDevice
                 )`), 'averageRating'],
-                [Sequelize.col('warehouse.stock'), 'stock']
+                [Sequelize.col('warehouse.stock'), 'stock'],
+                [Sequelize.literal(`(
+                    SELECT COUNT(idDevice)
+                    FROM liked AS liked
+                    WHERE liked.idDevice = Device.idDevice
+                )`), 'likeCount'],
             ]
         },
+        group: ['Device.idDevice'],
     });
 
     const review = await ReviewDevice.findAll({
@@ -513,7 +544,7 @@ const updateStatusReviewForDevice = async ({ id, status }) => {
 }
 
 module.exports = {
-    checkDevice,
+    checkDevice, checkListDevice,
     getAllDevice_User, getAllDeviceByStatus, getAllDevice_Admin, 
     getDeviceBySlug, getTOPDeviceLiked, getTopSellingDevice, 
     createDevice, updateDevice, updateStatusDevice,

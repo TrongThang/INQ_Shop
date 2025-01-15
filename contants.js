@@ -2,8 +2,9 @@ const ERROR_CODES = {
     SUCCESS: 0,
     DEVICE: {
         DEVICE_NOT_FOUND: 1,
-        PRICE_CHANGED: 2,
-        OUT_OF_STOCK: 3,
+        DEVICE_NON_ACTIVE: 2,
+        PRICE_CHANGED: 3,
+        OUT_OF_STOCK: 4,
         INTERNAL_ERROR: 500,
     },
     ORDER: {
@@ -23,6 +24,7 @@ const ERROR_MESSAGES = {
     DEVICE: {
         [ERROR_CODES.SUCCESS]: 'Kiểm tra thành công, không có sự thay đổi nào của thiết bị',
         [ERROR_CODES.DEVICE.DEVICE_NOT_FOUND]: 'Không tồn tại thiết bị',
+        [ERROR_CODES.DEVICE.DEVICE_NON_ACTIVE]: 'Thiết bị không còn được bán',
         [ERROR_CODES.DEVICE.PRICE_CHANGED]: 'Thiết bị có sự thay đổi về giá tiền',
         [ERROR_CODES.DEVICE.OUT_OF_STOCK]: 'Thiết bị không đủ số lượng để mua hàng',
         [ERROR_CODES.DEVICE.INTERNAL_ERROR]: 'Lỗi nội bộ của máy chủ'

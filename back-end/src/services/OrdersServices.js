@@ -70,8 +70,10 @@ const checkListProduct = async (products) => {
 }
 
 const createOrder = async (infoOrder, products) => {
+    console.log('Create Order')
+    console.log('infoOrder:', infoOrder)
+    console.log('Products:', products)
     // nếu như có 2 sản phấm giống nhau thì sao
-
     const result = await checkListProduct(products);
 
     if (result.errorCode !== ERROR_CODES.SUCCESS) {

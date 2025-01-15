@@ -1,17 +1,27 @@
 const { Op } = require('sequelize');
 const Cart = require('../models/Cart');
 const Device = require('../models/Device');
+const Warehouse = require('../models/Warehouse');
 
 const getCart = async (idCustomer) => {
     let carts =  await Cart.findAll({
         where: {
             idCustomer: idCustomer,
         },
-        include: {
-            model: Device,
-            as: 'device',
-            attributes: ['sellingPrice', 'name', 'image', 'slug'],
-        },
+        include: [
+            {
+                model: Device,
+                as: 'device',
+                attributes: ['sellingPrice', 'name', 'image', 'slug', 'status'],
+                include: [
+                    {
+                        model: Warehouse,
+                        as: 'warehouse',
+                        attributes: ['stock']
+                    }
+                ]
+            }
+        ],
         attributes: ['idDevice', 'quantity']
     })
 
@@ -23,6 +33,8 @@ const getCart = async (idCustomer) => {
             name: cart.device.name,
             image: cart.device.image,
             slug: cart.device.slug,
+            status: cart.device.status,
+            stock: cart.device?.warehouse?.stock || 0,
         }
     });
 
@@ -40,6 +52,7 @@ const postAddDeviceToCart = async (idCustomer, idDevice, quantity) => {
 
 
 const putUpdateDeviceInCart = async (idCustomer, idDevice, quantity, type) => {
+    
     const cartItem  = await Cart.findOne({
         where: {
             idDevice: idDevice,
@@ -50,8 +63,10 @@ const putUpdateDeviceInCart = async (idCustomer, idDevice, quantity, type) => {
     if (!cartItem) {
         throw new Error('Thiết bị không tồn tại trong giỏ hàng!');
     }
-
-    const updatedQuantity = type === 'input' ? quantity : ( Number(cartItem.quantity) + Number(quantity) ) ;
+    
+    const updatedQuantity = type === 'input' ? Number(quantity) : (Number(cartItem.quantity) + Number(quantity));
+    
+    console.log('cartItem:', type)
 
     await cartItem.update(
         { quantity: updatedQuantity },

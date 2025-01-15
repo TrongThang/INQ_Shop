@@ -1,84 +1,129 @@
 import React, { useState, useEffect } from "react";
-
+import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import SearchInfoWeb from "../../../component/admin/Mana_InfoWebsite/searchInfoWeb";
 import InfoWebList from "../../../component/admin/Mana_InfoWebsite/InfoWebList";
 
-import UpdateInfoWeb from "../../../component/admin/Mana_InfoWebsite/CRUD_InfoWeb/UpdateInfoWeb";
-import AddInfoWeb from "../../../component/admin/Mana_InfoWebsite/CRUD_InfoWeb/AddInfoWeb";
-
 const ManaInfoWeb = () => {
+    const [InfoWeb, setInfoWeb] = useState([]); // Dữ liệu gốc từ API
+    const [filteredInfoWeb, setFilteredInfoWeb] = useState([]); // Dữ liệu đã lọc
+    const [searchTerm, setSearchTerm] = useState("");
+    const [statusFilter, setStatusFilter] = useState("all"); // Thêm state cho bộ lọc trạng thái
+    const [toastMessage, setToastMessage] = useState('');
+    const [showToast, setShowToast] = useState(false);
+    const navigate = useNavigate();
 
-    const [InfoWeb, setInfoWeb] = useState([]);
-    const [formState, setFormState] = useState(0);
-    const [selectedInfoWeb, setSelectedInfoWeb] = useState([]);
-
-    const handleFormAddClick = () => {
-        setFormState(1);
-     };
+    // const handleFormAddClick = () => {
+    //     navigate("/admin/info-web/add");
+    // };
 
     const handleFormUpdateClick = (KEY_NAME) => {
-    setFormState(2);
-    setSelectedInfoWeb(KEY_NAME);
-    
-    };    
+        navigate(`/admin/info-web/update/${KEY_NAME}`);
+    };
 
-    const handleBackClick = () => {
-       setFormState(0);
-       
-     };
-     const handleExport = () => {
-      const worksheet = XLSX.utils.json_to_sheet(InfoWeb);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "InfoWeb");
-      XLSX.writeFile(workbook, "InfoWeb_data.xlsx");
+    const handleExport = () => {
+        const worksheet = XLSX.utils.json_to_sheet(filteredInfoWeb);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "InfoWeb");
+        XLSX.writeFile(workbook, "InfoWeb_data.xlsx");
+    };
+
+    const fetchDataInfoWeb = async () => {
+        try {
+            const response = await fetch('http://localhost:8081/api/setting-web/admin');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const result = await response.json();
+            console.log(result);
+            if (!result.data || !Array.isArray(result.data)) {
+                throw new Error("Invalid data format from API");
+            }
+            setInfoWeb(result.data);
+            setFilteredInfoWeb(result.data); // Ban đầu, filteredInfoWeb sẽ bằng dữ liệu gốc
+        } catch (err) {
+            console.error("Error fetching InfoWeb:", err);
+        }
+    };
+
+    useEffect(() => {
+        fetchDataInfoWeb();
+    }, []);
+
+    useEffect(() => {
+        if (showToast) {
+            const timer = setTimeout(() => {
+                setShowToast(false);
+            }, 2000);
+            return () => clearTimeout(timer);
+        }
+    }, [showToast]);
+    const removeAccents = (str) => {
+      return str
+          .normalize("NFD") // Chuẩn hóa Unicode (tách dấu ra khỏi ký tự)
+          .replace(/[\u0300-\u036f]/g, "") // Loại bỏ dấu
+          .toLowerCase(); // Chuyển đổi thành chữ thường
   };
+  const filterInfoWeb = () => {
+    // Chuẩn hóa từ khóa tìm kiếm
+    const normalizedSearchTerm = removeAccents(searchTerm);
 
- 
-  const fetchDataInfoWeb = async () => {
-    try {
-        // Gọi API để lấy dữ liệu
-        const response = await fetch('http://localhost:8081/api/setting-web/admin');
-        
-        // Kiểm tra phản hồi từ API
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+    const filtered = InfoWeb.filter((item) => {
+        // Chuẩn hóa KEY_NAME và VALUE
+        const normalizedKeyName = removeAccents(item.KEY_NAME);
+        const normalizedValue = removeAccents(item.VALUE);
 
-        // Chuyển đổi phản hồi thành JSON
-        const result = await response.json();
+        // So sánh từ khóa với KEY_NAME và VALUE (không phân biệt dấu và hoa thường)
+        const matchesSearchTerm =
+            normalizedKeyName.includes(normalizedSearchTerm) ||
+            normalizedValue.includes(normalizedSearchTerm);
 
-        // Kiểm tra xem result.data có tồn tại và là một mảng không
-        if (!result.data || !Array.isArray(result.data)) {
-            throw new Error("Invalid data format from API");
-        }
+        // Kiểm tra nếu STATUS là null hoặc undefined
+        const itemStatus = item.STATUS !== null && item.STATUS !== undefined ? item.STATUS.toString() : "";
 
-        // Cập nhật state với dữ liệu từ API
-        setInfoWeb(result.data);
-    } catch (err) {
-        console.error("Error fetching InfoWeb:", err);
-    }
+        // Lọc theo trạng thái
+        const matchesStatusFilter =
+            statusFilter === "all" || itemStatus === statusFilter;
+
+        return matchesSearchTerm && matchesStatusFilter;
+    });
+
+    setFilteredInfoWeb(filtered); // Cập nhật dữ liệu đã lọc vào state
 };
+    // Lọc dữ liệu mỗi khi searchTerm hoặc statusFilter thay đổi
+    useEffect(() => {
+        filterInfoWeb();
+    }, [searchTerm, statusFilter, InfoWeb]);
 
-useEffect(() => {
-    fetchDataInfoWeb();
-}, []);
-
-          
     return (
-        
-      <>
-      {formState === 1 && <AddInfoWeb onBack={handleBackClick} InfoWebs={InfoWeb} />} {/* Form Thêm */}
-      {formState === 2 && <UpdateInfoWeb onBack={handleBackClick} InfoWebKey={selectedInfoWeb}/>}
-      {formState === 0 && (
-      <div className="main-content-inner">
-        <div className="container-fluid py-4">
-          <SearchInfoWeb InfoWebs={InfoWeb} onAdd={handleFormAddClick}  />
-          <InfoWebList InfoWebs={InfoWeb} onUpdate={handleFormUpdateClick}/>
+        <div className="main-content-inner">
+            <div className="container-fluid py-4">
+                <SearchInfoWeb
+                    onExport={handleExport}
+                    // onAdd={handleFormAddClick}
+                    onSearchChange={(value) => setSearchTerm(value)}
+                    onStatusFilterChange={(value) => setStatusFilter(value)}
+                />
+                <InfoWebList
+                    InfoWebs={filteredInfoWeb}
+                    onUpdate={handleFormUpdateClick}
+                />
+            </div>
+            {/* Toast Notification */}
+            {showToast && (
+                <div className="toast-container position-fixed top-0 end-70 p-3">
+                    <div className="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div className="toast-header bg-primary text-white">
+                            <strong className="me-auto">Thông báo</strong>
+                        </div>
+                        <div className="toast-body">
+                            {toastMessage}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
-      </div>
-      )}
-    </>
     );
 };
 

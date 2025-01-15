@@ -44,6 +44,9 @@ import UpdateContact from './pages/admin/Contact/updateContact';
 import ManaReviewDevice from './pages/admin/ReviewDevice/manaReviewDevice';
 import UpdateReviewDevice from './component/admin/Mana_ReviewDevice/CRUD_ReviewDevice/UpdateReviewDevice';
 import DeleteReviewDevice from './component/admin/Mana_ReviewDevice/CRUD_ReviewDevice/DeleteReviewDevice';
+import ManaInfoWeb from './pages/admin/Dashboard/manaInfoWebsite';
+import UpdateInfoWeb from './component/admin/Mana_InfoWebsite/CRUD_InfoWeb/UpdateInfoWeb';
+import AddInfoWeb from './component/admin/Mana_InfoWebsite/CRUD_InfoWeb/AddInfoWeb';
 function App() {
 
   return (
@@ -59,6 +62,10 @@ function App() {
           <Route path="review-device" element={<ManaReviewDevice />} />
           <Route path="review-device/update/:id" element={<UpdateReviewDevice />} />
           <Route path="review-device/delete/:id" element={<DeleteReviewDevice />} />
+
+          <Route path="info-web" element={<ManaInfoWeb />} />
+          <Route path="info-web/update/:keyName" element={<UpdateInfoWeb />} />
+          <Route path="info-web/add" element={<AddInfoWeb />} />
 
           </Route>
           

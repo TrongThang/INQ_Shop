@@ -31,38 +31,39 @@ const ManaReviewDevice = () => {
         }
     };
 
-    // Hàm loại bỏ dấu tiếng Việt
-    const removeAccents = (str) => {
-        return str
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .toLowerCase();
-    };
+ 
 
-    // Hàm lọc dữ liệu
-    const filterReviews = () => {
-        const normalizedSearchTerm = removeAccents(searchTerm);
+// Hàm loại bỏ dấu tiếng Việt
+const removeAccents = (str) => {
+    return str
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+};
 
-        const filtered = ReviewDevice.filter((item) => {
-            const fullName = `${item.customerReview.surname} ${item.customerReview.lastName}`;
-            const normalizedComment = removeAccents(item.comment);
-            const normalizedFullName = removeAccents(fullName);
-            const normalizedDeviceName = removeAccents(item.device.name);
+// Hàm lọc dữ liệu
+const filterReviews = () => {
+    const normalizedSearchTerm = removeAccents(searchTerm);
 
-            const matchesSearchTerm =
-                normalizedComment.includes(normalizedSearchTerm) ||
-                normalizedFullName.includes(normalizedSearchTerm) ||
-                normalizedDeviceName.includes(normalizedSearchTerm);
+    const filtered = ReviewDevice.filter((item) => {
+        const fullName = `${item.customerReview.surname} ${item.customerReview.lastName}`;
+        const normalizedComment = removeAccents(item.comment);
+        const normalizedFullName = removeAccents(fullName);
+        const normalizedDeviceName = removeAccents(item.device.name);
 
-            const matchesStatusFilter =
-                statusFilter === "all" || item.status === (statusFilter === "active" ? 1 : 0);
+        const matchesSearchTerm =
+            normalizedComment.includes(normalizedSearchTerm) ||
+            normalizedFullName.includes(normalizedSearchTerm) ||
+            normalizedDeviceName.includes(normalizedSearchTerm);
 
-            return matchesSearchTerm && matchesStatusFilter;
-        });
+        const matchesStatusFilter =
+            statusFilter === "all" || item.status === (statusFilter === "active" ? 1 : 0);
 
-        setFilteredReviews(filtered); // Cập nhật dữ liệu đã lọc vào state
-    };
+        return matchesSearchTerm && matchesStatusFilter;
+    });
 
+    setFilteredReviews(filtered); // Cập nhật dữ liệu đã lọc vào state
+};
     // Gọi API lần đầu khi component được mount
     useEffect(() => {
         fetchDataReviews();

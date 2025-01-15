@@ -93,23 +93,38 @@ const ManaContact = () => {
         setStatusFilter(value);
     };
 
-    // Hàm lọc dữ liệu
-    const filterContacts = () => {
-        const filtered = contact.filter((contact) => {
-            const matchesSearchTerm =
-                contact.fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                contact.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                contact.content.toLowerCase().includes(searchTerm.toLowerCase());
+  // Hàm loại bỏ dấu tiếng Việt
+const removeAccents = (str) => {
+    return str
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+};
 
-            const matchesStatusFilter =
-                statusFilter === "all" || contact.status.toString() === statusFilter;
+// Hàm lọc dữ liệu
+const filterContacts = () => {
+    const normalizedSearchTerm = removeAccents(searchTerm);
 
-            return matchesSearchTerm && matchesStatusFilter;
-        });
+    const filtered = contact.filter((contact) => {
+        const normalizedFullName = removeAccents(contact.fullname);
+        const normalizedTitle = removeAccents(contact.title);
+        const normalizedEmail = removeAccents(contact.email);
+        const normalizedContent = removeAccents(contact.content);
 
-        setFilteredContacts(filtered); // Cập nhật dữ liệu đã lọc vào state
-    };
+        const matchesSearchTerm =
+            normalizedFullName.includes(normalizedSearchTerm) ||
+            normalizedTitle.includes(normalizedSearchTerm) ||
+            normalizedEmail.includes(normalizedSearchTerm) ||
+            normalizedContent.includes(normalizedSearchTerm);
+
+        const matchesStatusFilter =
+            statusFilter === "all" || contact.status.toString() === statusFilter;
+
+        return matchesSearchTerm && matchesStatusFilter;
+    });
+
+    setFilteredContacts(filtered); // Cập nhật dữ liệu đã lọc vào state
+};
 
     // Lọc dữ liệu mỗi khi searchTerm hoặc statusFilter thay đổi
     useEffect(() => {

@@ -38,6 +38,8 @@ import ContactPage from './pages/user/contact';
 import RegisterPage from './pages/user/Account/registerPage';
 import LikedPage from './pages/user/likedDevice';
 
+import ManaConatct from './pages/admin/Contact/manaContact';
+import UpdateContact from './pages/admin/Contact/updateContact';
 function App() {
 
   return (
@@ -46,7 +48,11 @@ function App() {
         <Routes>
           {/* ADMIN */}
           <Route path="/admin" element={<Admin />}>
+           <Route path="contacts" element={<ManaConatct />} />
+          <Route path="contacts/update/:id" element={<UpdateContact />} />
+
           </Route>
+          
 
           {/* USER */}
           <Route path="/"

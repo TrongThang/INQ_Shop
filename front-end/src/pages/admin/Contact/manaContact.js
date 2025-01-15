@@ -1,26 +1,21 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import ContactTable from "../../../component/admin/Mana_Contact/contactList";
 import SearchContact from "../../../component/admin/Mana_Contact/searchContact";
-import UpdateContact from "./updateContact";
 
 const ManaContact = () => {
     const [contact, setContact] = useState([]);
-    const [formState, setFormState] = useState(0);
-    const [selectedContactId, setSelectedContactId] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+    const [statusFilter, setStatusFilter] = useState("all");
     const [toastMessage, setToastMessage] = useState('');
     const [showToast, setShowToast] = useState(false);
-    const [showDeleteModal, setShowDeleteModal] = useState(false); // State để hiển thị modal xóa
-    const [contactToDelete, setContactToDelete] = useState(null); // Lưu thông tin contact cần xóa
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [contactToDelete, setContactToDelete] = useState(null);
+    const navigate = useNavigate();
 
     const handleFormUpdateClick = (id) => {
-        setFormState(2);
-        setSelectedContactId(id);
-    };
-
-    const handleBackClick = () => {
-        setFormState(0);
+        navigate(`/admin/contacts/update/${id}`);
     };
 
     const handleExport = () => {
@@ -36,7 +31,7 @@ const ManaContact = () => {
             const result = await response.json();
             setContact(result.data);
         } catch (err) {
-            console.error("Error fetching slideshows:", err);
+            console.error("Error fetching contacts:", err);
         }
     };
 
@@ -54,13 +49,11 @@ const ManaContact = () => {
         }
     }, [showToast]);
 
-    // Hàm hiển thị modal xóa và lưu thông tin contact cần xóa
     const handleDeleteClick = (contact) => {
-        setContactToDelete(contact); // Lưu thông tin contact cần xóa
-        setShowDeleteModal(true); // Hiển thị modal
+        setContactToDelete(contact);
+        setShowDeleteModal(true);
     };
 
-    // Hàm xác nhận xóa
     const handleDeleteConfirm = async () => {
         if (!contactToDelete) return;
 
@@ -79,36 +72,52 @@ const ManaContact = () => {
         } catch (err) {
             console.error("Error deleting contact:", err);
         } finally {
-            setShowDeleteModal(false); // Đóng modal
-            setContactToDelete(null); // Reset thông tin contact
+            setShowDeleteModal(false);
+            setContactToDelete(null);
         }
     };
 
-    // Hàm hủy xóa
     const handleDeleteCancel = () => {
-        setShowDeleteModal(false); // Đóng modal
-        setContactToDelete(null); // Reset thông tin contact
+        setShowDeleteModal(false);
+        setContactToDelete(null);
     };
 
     const handleSearchChange = (value) => {
         setSearchTerm(value);
     };
 
-    const filteredContacts = contact.filter(contact =>
-        contact.fullname.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const handleStatusFilterChange = (value) => {
+        setStatusFilter(value);
+    };
+
+    const filteredContacts = contact.filter((contact) => {
+        const matchesSearchTerm =
+            contact.fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            contact.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            contact.content.toLowerCase().includes(searchTerm.toLowerCase());
+
+        const matchesStatusFilter =
+            statusFilter === "all" || contact.status.toString() === statusFilter;
+
+        return matchesSearchTerm && matchesStatusFilter;
+    });
 
     return (
-        <>
-            {formState === 2 && <UpdateContact onback={handleBackClick} contactId={selectedContactId} />}
-            {formState === 0 && (
-                <div className="main-content-inner">
-                    <div className="container-fluid py-4">
-                        <SearchContact contacts={contact} onExport={handleExport} onSearchChange={handleSearchChange} />
-                        <ContactTable contacts={filteredContacts} onEdit={handleFormUpdateClick} onDelete={handleDeleteClick} />
-                    </div>
-                </div>
-            )}
+        <div className="main-content-inner">
+            <div className="container-fluid py-4">
+                <SearchContact
+                    onExport={handleExport}
+                    contacts={contact}
+                    onSearchChange={handleSearchChange}
+                    onStatusFilterChange={handleStatusFilterChange}
+                />
+                <ContactTable
+                    contacts={filteredContacts}
+                    onEdit={handleFormUpdateClick}
+                    onDelete={handleDeleteClick}
+                />
+            </div>
             {/* Toast Notification */}
             {showToast && (
                 <div className="toast-container position-fixed top-0 end-70 p-3">
@@ -133,20 +142,20 @@ const ManaContact = () => {
                             </div>
                             <div className="modal-body">
                                 <p>Bạn có chắc chắn muốn xóa contact này không?</p>
-                              <div className="overflow-auto" style={{ maxHeight: '200px' }}>
-                                <div>
-                                    <strong>Họ và tên:</strong> {contactToDelete.fullname}
+                                <div className="overflow-auto" style={{ maxHeight: '200px' }}>
+                                    <div>
+                                        <strong>Họ và tên:</strong> {contactToDelete.fullname}
+                                    </div>
+                                    <div>
+                                        <strong>Email:</strong> {contactToDelete.email}
+                                    </div>
+                                    <div>
+                                        <strong>Tiêu đề:</strong> {contactToDelete.title}
+                                    </div>
+                                    <div>
+                                        <strong>Nội dung:</strong> {contactToDelete.content}
+                                    </div>
                                 </div>
-                                <div>
-                                    <strong>Email:</strong> {contactToDelete.email}
-                                </div>
-                                <div>
-                                    <strong>Tiêu đề:</strong> {contactToDelete.title}
-                                </div>
-                                <div >
-                                    <strong>Nội dung:</strong> {contactToDelete.content}
-                                </div>
-                              </div>  
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary" onClick={handleDeleteCancel}>Hủy</button>
@@ -156,7 +165,7 @@ const ManaContact = () => {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 };
 

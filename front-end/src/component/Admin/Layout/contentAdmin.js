@@ -4,7 +4,7 @@ import ManaBlog from "../../../pages/admin/Blog/manageBlogPage";
 import InfoWeb from "../../../pages/admin/Dashboard/manaInfoWebsite";
 import ManaContact from "../../../pages/admin/Contact/manaContact" ;
 import ManageReviewDevice from "../../../pages/admin/ReviewDevice/manaReviewDevice";
-
+import { Outlet } from "react-router-dom";
 export default function ContentAdmin() {
     return (
         <div className="main-content">
@@ -15,7 +15,9 @@ export default function ContentAdmin() {
             {/* <ManaBlog /> */}
             {/* <InfoWeb /> */}
             {/* <ManaContact /> */}
-            <ManageReviewDevice />
+            {/* <ManageReviewDevice /> */}
+            <Outlet />
+            
             <FooterAdmin />
         </div>
     )

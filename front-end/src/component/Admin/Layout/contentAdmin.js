@@ -3,6 +3,7 @@ import HeaderAdmin from "./Header/headerAdmin";
 import ManaBlog from "../../../pages/admin/Blog/manageBlogPage";
 import InfoWeb from "../../../pages/admin/Dashboard/manaInfoWebsite";
 import ManaContact from "../../../pages/admin/Contact/manaContact" ;
+import ManageReviewDevice from "../../../pages/admin/ReviewDevice/manaReviewDevice";
 
 export default function ContentAdmin() {
     return (
@@ -13,7 +14,8 @@ export default function ContentAdmin() {
             {/* <ManaAttribute /> */}
             {/* <ManaBlog /> */}
             {/* <InfoWeb /> */}
-            <ManaContact />
+            {/* <ManaContact /> */}
+            <ManageReviewDevice />
             <FooterAdmin />
         </div>
     )

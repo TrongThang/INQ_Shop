@@ -60,6 +60,9 @@ import UpdateInfoWeb from './component/admin/Mana_InfoWebsite/CRUD_InfoWeb/Updat
 
 import Dashboard  from "./pages/admin/Dashboard/dashboard"
 import Statistics from "./component/admin/Mana_Statistics/StatisticsTab";
+import LayoutChat from './pages/user/Chat/layoutChat';
+import RevenueStatisticsPage from './pages/admin/statisticalPage/revenueStatisticsPage'
+import PurchaseStatisticsPage from './pages/admin/statisticalPage/purchaseStatisticsPage'
 
 function App() {
 
@@ -89,6 +92,8 @@ function App() {
                   <Route path="info-web/update/:keyName" element={<UpdateInfoWeb />} />
                   
               </Route>
+              <Route path="revenueStatistics" element={<RevenueStatisticsPage />} />
+              <Route path="purchaseStatistics" element={<PurchaseStatisticsPage />} />
           </Route>
           
 
@@ -102,6 +107,7 @@ function App() {
                 <User />
                 <RegisterPage />
                 <LoginPage />
+                <LayoutChat />
               </CartProvider>
             }
           >

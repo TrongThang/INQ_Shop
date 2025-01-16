@@ -4,7 +4,7 @@ const { or } = require('sequelize');
 
 const {
     checkCustomerOrderForDevice, getAllOrderByIdCustomer,
-    getAllOrder,
+    getAllOrder, getAllOrder_RevenueStatistics,
     getByIdOrder,
     createOrder, updateOrder,
     cancelOrderAdmin,
@@ -54,13 +54,31 @@ const getOrderByIdOrderAPI = async (req, res) => {
             data: orders
         });
     }
-    catch(error){
-        return res.status(500).json({ 
+    catch (error) {
+        return res.status(500).json({
             message: 'Đã xảy ra lỗi khi xử lý yêu cầu:',
-            error: error.message });
+            error: error.message
+        });
     }
 }
+//Thống kê - doanh thu theo trạng thái là hoàn thành, thống kế - theo lượt mua trạng thái là hoàn thành nhưng điếm số lượng đơn hoàn thành
+const getAllOrder_RevenueStatisticsAPI = async (req, res) => {
+    const status = 4;
+    try {
+        const orders = await getAllOrder_RevenueStatistics(status);
+        res.status(200).json({
+            success: "Thành công",
+            data: orders
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Đã xảy ra lỗi khi xử lý yêu cầu:',
+            error: error.message
+        });
+    }
 
+
+}
 const checkCustomerOrderForDeviceAPI = async (req, res) => {
     try {
         const { idCustomer, idDevice } = req.params;
@@ -113,7 +131,7 @@ const deleteCancelOrderAPI = async (req, res) => {
 
 } 
 module.exports = {
-    checkCustomerOrderForDeviceAPI,
+    checkCustomerOrderForDeviceAPI, getAllOrder_RevenueStatisticsAPI,
     getAllOrderByIdCustomerAPI,
     getAllOrderAPI,
     getOrderByIdOrderAPI,

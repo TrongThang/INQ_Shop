@@ -6,44 +6,54 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 export default function DetailDevicePage() {
-    const [device, setDevice] = useState([]);
+    const [device, setDevice] = useState(null);
     const { slug } = useParams();
     const isViewIncreased = useRef(false);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`http://localhost:8081/api/device/detail/${slug}`);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const result = await response.json();
-                setDevice(result.data);
-
-                if (!isViewIncreased.current) {
-                    await axios.put(`http://localhost:8081/api/device/views/${result.data.idDevice}`);
-                    isViewIncreased.current = true; 
-                }
-
-            } catch (error) {
-                console.error('Lỗi:', error);
+    // Định nghĩa fetchData bên ngoài useEffect
+    const fetchData = async () => {
+        try {
+            const response = await fetch(`http://localhost:8081/api/device/detail/${slug}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-        };
 
+            const result = await response.json();
+            setDevice(result.data);
+            console.log(result.data);
+
+            if (!isViewIncreased.current) {
+                await axios.put(`http://localhost:8081/api/device/views/${result.data.idDevice}`);
+                isViewIncreased.current = true;
+            }
+        } catch (error) {
+            console.error('Lỗi:', error);
+        }
+    };
+
+    // Gọi fetchData khi slug thay đổi
+    useEffect(() => {
         fetchData();
-
     }, [slug]);
 
+    // Cập nhật tiêu đề trang và gọi fetchData liên quan khi device thay đổi
     useEffect(() => {
         if (device?.name) {
             document.title = `${device.name} | INQ`;
         }
+        if (device?.idCategory) {
+            // Gọi hàm fetchData liên quan ở đây (nếu cần)
+        }
     }, [device]);
+
+    if (!device) {
+        return <div>Đang tải thông tin sản phẩm...</div>;
+    }
+
     return (
         <div className="container-fluid faq-section bg-light py-5">
             <div className="container py-5">
-                <div class="row col-xl-12 g-5">
+                <div className="row col-xl-12 g-5">
                     <AreaImage image={device.image} />
                     <InfoDevice device={device} />
                 </div>

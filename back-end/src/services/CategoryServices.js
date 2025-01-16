@@ -1,7 +1,8 @@
-const { Sequelize, Op } = require('sequelize');
+const { Sequelize, Op, where } = require('sequelize');
 const { convertToSlug } = require('../helpers/stringHelper');
 const Category = require('../models/Category');
 const Device = require('../models/Device');
+const Blog = require('../models/Blog')
 const ReviewDevice = require('../models/Review_device');
 const Warehouse = require('../models/Warehouse');
 const {
@@ -79,8 +80,18 @@ const getCategoryByUser = async () => {
 
 
 const getAllCategory_Admin = async () => {
-    const data = await Category.findAll();
-    return await data;
+    try {
+        const rawData = await Category.findAll();
+        // Chuyển đổi chỉ lấy dataValues
+        const data = rawData.map((item) => item.dataValues);
+
+        // Nhóm danh mục sau khi làm sạch dữ liệu
+        const results = groupCategoriesByListCategories(data);
+        return results; // Trả về kết quả đã nhóm
+    } catch (error) {
+        console.error('Error fetching categories:', error);
+        throw new Error('Failed to fetch categories');
+    }
 }
 
 const getCategoryById = async (id) => {
@@ -185,33 +196,9 @@ const checkCategoryExists = async (nameCategory) => {
         throw error;
     }
 };
-const checkCategoryHasChildren = async (id) => {
-    try {
-        // Tìm tất cả danh mục con trực tiếp của danh mục hiện tại
-        const children = await Category.findAll({
-            where: { parentId: id }
-        });
 
-        // Nếu có danh mục con trực tiếp, trả về true
-        if (children.length > 0) {
-            return true;
-        }
 
-        // Kiểm tra đệ quy từng danh mục con
-        for (const child of children) {
-            const hasChildren = await checkCategoryHasChildren(child.id); // Kiểm tra danh mục con của danh mục con
-            if (hasChildren) {
-                return true; // Nếu có danh mục con ở bất kỳ cấp độ nào, trả về true
-            }
-        }
-
-        // Nếu không có danh mục con ở bất kỳ cấp độ nào, trả về false
-        return false;
-    } catch (error) {
-        console.error("Error checking category children:", error);
-        throw error;
-    }
-};
+//xử lý thêm danh mục - services
 const createCategory = async ({ body }) => {
     // Kiểm tra nếu body là undefined hoặc null
     if (!body) {
@@ -229,86 +216,161 @@ const createCategory = async ({ body }) => {
 
     return category;
 };
-
-const updateCategory = async ({ id, ...body }) => {
+//xử lý cập nhật danh mục - services
+const updateCategory = async ({ id, ...data }) => {
     try {
-        // Kiểm tra xem body.nameCategory có tồn tại không
-        if (body.nameCategory) {
-            const slug = convertToSlug(body.nameCategory);
-            body.slug = slug;
+        // Nếu có nameCategory, tạo slug
+        if (data.nameCategory) {
+            const slug = convertToSlug(data.nameCategory);
+            data.slug = slug;
         }
 
-        const [updatedCount] = await Category.update(body, {
+        // Lấy thông tin danh mục hiện tại
+        const currentCategory = await Category.findOne({
             where: { id }
         });
+
+        if (!currentCategory) {
+            console.log("Không tìm thấy danh mục!");
+            return 0; // Dừng cập nhật nếu không tìm thấy danh mục
+        }
+
+        // Kiểm tra danh mục cha lớn nhất nếu danh mục hiện tại có parentId
+        let rootParent = currentCategory; // Mặc định là chính nó nếu không có parentId
+        if (currentCategory.parentId) {
+            rootParent = await findRootParent(currentCategory);
+        }
+
+        // Kiểm tra logic cập nhật danh mục con
+        if (currentCategory.parentId && rootParent.status === 0 && Number(data.status) === 1) {
+            console.log("Danh mục cha lớn nhất bị vô hiệu hóa, không thể cập nhật trạng thái của danh mục con!");
+            return 0; // Ngừng cập nhật nếu danh mục cha lớn nhất bị vô hiệu hóa
+        }
+
+        // Thực hiện cập nhật trạng thái chỉ cho danh mục hiện tại
+        const [updatedCount] = await Category.update(data, {
+            where: { id }
+        });
+
+        if (updatedCount === 0) {
+            console.log("Không có thay đổi nào được thực hiện!");
+            return 0;
+        }
+
+
+        await Device.update(
+            { status: data.status },
+            { where: { idCategory: id } }
+        );
+
+        // Vô hiệu hóa hoặc kích hoạt blog liên quan
+        await Blog.update(
+            { status: data.status },
+            { where: { idCategory: id } }
+        );
+        console.log("Cập nhật thành công!");
+        return updatedCount;
+    } catch (error) {
+        console.error("Error updating category:", error);
+        throw error;
+    }
+};
+
+// Hàm tìm danh mục cha lớn nhất
+const findRootParent = async (category) => {
+    if (!category.parentId) {
+        return category; // Đây là danh mục cha lớn nhất
+    }
+    const parentCategory = await Category.findOne({
+        where: { id: category.parentId }
+    });
+    return findRootParent(parentCategory);
+};
+//xử lý cập nhật trạng thái - services
+const updateStatusCategory = async ({ id, status }) => {
+    try {
+        // Xác định giá trị của `isHide`
+        const isHide = status === 0 ? true : false;
+
+        // Lấy thông tin danh mục cha
+        const parentCategory = await Category.findOne({ where: { id } });
+        if (!parentCategory) {
+            console.log("Không tìm thấy danh mục!");
+            return 0; // Trả về 0 nếu không tìm thấy danh mục
+        }
+
+        // Kiểm tra xem danh mục có con hay không
+        const hasChildren = await Category.findAll({ where: { parentId: id } });
+        console.log("Data", hasChildren)
+        // Nếu danh mục có con và danh mục cha đang bị vô hiệu hóa (status = 0)
+        if (hasChildren.length > 0 && parentCategory.status === 0 && status === 0) {
+            console.log("Danh mục cha đang bị vô hiệu hóa và có con, không thể cập nhật trạng thái về 0!");
+            return 0; // Trả về 0 nếu cố gắng vô hiệu hóa danh mục cha đang bị vô hiệu hóa
+        }
+
+        // Cập nhật trạng thái và `isHide` của danh mục cha
+        const [updatedCount] = await Category.update(
+            {
+                status: status,
+                isHide: isHide,
+            },
+            {
+                where: { id },
+            }
+        );
+        // Nếu danh mục cha được cập nhật thành công
+        if (updatedCount > 0) {
+            console.log("Status nhận được:", status);
+            // Nếu danh mục cha bị vô hiệu hóa (status = 0), cập nhật trạng thái của các danh mục con
+            if (status == 0 && hasChildren.length > 0) {
+
+                // Hàm đệ quy để cập nhật trạng thái của tất cả các danh mục con
+                const updateChildrenStatus = async (parentId) => {
+                    // Lấy tất cả các danh mục con của danh mục hiện tại
+                    const children = await Category.findAll({
+                        where: { parentId: parentId },
+                    });
+
+                    // Duyệt qua từng danh mục con và cập nhật trạng thái
+                    for (const child of children) {
+                        await Category.update(
+                            { status: status, isHide: isHide },
+                            { where: { id: child.id } }
+                        );
+
+                        console.log(`Đã cập nhật trạng thái và isHide của danh mục con có id = ${child.id}`);
+
+                        // Gọi đệ quy để cập nhật trạng thái của các danh mục con của danh mục con hiện tại
+                        await updateChildrenStatus(child.id);
+                    }
+                };
+
+                // Bắt đầu đệ quy từ danh mục cha
+                await updateChildrenStatus(id);
+            }
+
+            // Vô hiệu hóa hoặc kích hoạt thiết bị liên quan
+            await Device.update(
+                { status: status },
+                { where: { idCategory: id } }
+            );
+
+            // Vô hiệu hóa hoặc kích hoạt blog liên quan
+            await Blog.update(
+                { status: status },
+                { where: { idCategory: id } }
+            );
+        }
+        console.log("update sau", updatedCount);
 
         return updatedCount; // Trả về số lượng bản ghi được cập nhật
     } catch (error) {
-        console.error("Error updating category:", error);
-        throw error; // Ném lỗi để xử lý ở tầng cao hơn
+        console.error("Lỗi khi cập nhật trạng thái danh mục:", error);
+        throw error; // Ném lỗi để xử lý ở tầng trên
     }
 };
-const removeCategoryById = async (id) => {
-    try {
-        const deletedCount = await Category.destroy({
-            where: { id }
-        });
-
-        return deletedCount; // Trả về số lượng bản ghi bị xóa
-    }catch ( error) {
-        console.error("Error deleting category:", error);
-        throw error;
-    }
-}
-const updateStatusCategory = async ({ id, status }) => {
-
-    if (status <= 0) {
-        //Off Category Child, Device, Blog
-        const offCategoryChild = await Category.update(
-            {
-                status: 0,
-            },
-            {
-                where: {
-                    parentId: id
-                }
-            }
-        )
-
-        const offDevice = await updateStatusDeviceByCategory(id)
-
-        // const offBlog = await Blog.update(
-        //     {
-        //         status: 0,
-        //     },
-        //     {
-        //         where: {
-        //             idCategory: id
-        //         }
-        //     }
-        // )
-    }
-
-    //Nếu status <== 0 &&
-    //Is Hide = True
-    //Condition for isHide is False => Status >== 0
-    const valueIsHide = status === 0 ? true : false;
-
-    const [updatedCount] = await Category.update(
-        {
-            status: status,
-            valueIsHide: valueIsHide
-        },
-        {
-            where: { id }
-        }
-    );
-
-    return updatedCount;
-}
-
 module.exports = {
-    getAllCategory_User, getAllCategory_Admin, getCategoryByUser, checkCategoryExists, checkCategoryHasChildren, removeCategoryById,
+    getAllCategory_User, getAllCategory_Admin, getCategoryByUser, checkCategoryExists,
     getCategoryById, getChildrenCategory, getAllCategoryIds, getDeviceByCategorySlug,
     createCategory, updateCategory, updateStatusCategory
 }

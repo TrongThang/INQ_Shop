@@ -1,4 +1,5 @@
 const { where, Model } = require('sequelize');
+const { Op, Sequelize } = require('sequelize');
 const Order = require('../models/Order');
 const Employee = require('../models/Employee');
 const Customer = require('../models/Customer');
@@ -15,6 +16,16 @@ const getAllOrder = async () => {
             as: 'customer',
             attributes: ['surname', 'lastname']
         }]
+    });
+    return orders;
+}
+const getAllOrder_RevenueStatistics = async (status) => {
+    const orders = await Order.findAll({
+        where: {
+          status: {
+            [Op.eq]: status
+          }
+        }
     });
     return orders;
 }
@@ -246,4 +257,5 @@ module.exports = {
     createOrder, updateOrder,
     cancelOrderAdmin,
     cancelOrder,
+    getAllOrder_RevenueStatistics
 }

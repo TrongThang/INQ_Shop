@@ -9,19 +9,19 @@ const Dashboard = () => {
     const activeTab = location.pathname.includes('info-web') ? 'info' : 'statistics';
 
     return (
-        <div className="main-content">
+        <div className="main-content m-5">
             {/* Thanh chuyển đổi tab */}
             <ul className="nav nav-pills mb-3 ml-3" id="pills-tab" role="tablist">
                 <li className="nav-item">
                     <button
-                        className={`nav-link ${activeTab === 'statistics' ? 'active' : ''}`}
+                        className={`nav-link ${activeTab === 'statistics' ? 'active' : ''} btn btn-outline-primary` }
                         onClick={() => navigate('/admin/dashboard/statistics')}>
                         Dashboard
                     </button>
                 </li>
                 <li className="nav-item">
                     <button
-                        className={`nav-link ${activeTab === 'info' ? 'active' : ''}`}
+                        className={`nav-link ${activeTab === 'info' ? 'active' : ''} btn btn-outline-primary`}
                         onClick={() => navigate('/admin/dashboard/info-web')}>
                         Quản lý thông tin website
                     </button>
@@ -30,7 +30,6 @@ const Dashboard = () => {
 
             {/* Nội dung của từng tab */}
             <div className="tab-content" id="pills-tabContent">
-             
                 <Outlet />
             </div>
         </div>

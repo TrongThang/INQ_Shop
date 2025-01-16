@@ -2,7 +2,10 @@ const { getObjectCounts } = require('../../services/StatisticsServices');
 
 const getObjectCountsAPI = async (req, res) => {
     try {
-        const counts = await getObjectCounts();
+        const { period } = req.query;
+        console.log(period)
+        const counts = await getObjectCounts(period);
+
         res.status(200).json({
             success: true,
             data: counts

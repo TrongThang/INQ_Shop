@@ -1,23 +1,32 @@
 import React, { useEffect, useState } from 'react';
+import CardData from './cardData';
+import axios from 'axios';
 
 const StatisticsTab = () => {
     const [counts, setCounts] = useState({
-        deviceCount: 0,
-        customerCount: 0,
-        orderCount: 0
+        Revenue: 0,
+        TotalDeviceSold: 0,
+        CountCustomerSold: 0,
+        RevenuePercentageChange: 0, 
+        TotalDeviceSoldPercentageChange: 0,
+        CountCustomerSoldPercentageChange: 0
     });
 
     const [loading, setLoading] = useState(true);
+    const [timeFilter, setTimeFilter] = useState("day"); // Mặc định chọn "Ngày"
+    const handleFilterChange = async (e) => {
+        const value = e.target.value;
+        setTimeFilter(value)
+    };
 
     useEffect(() => {
         const fetchStatistics = async () => {
             try {
-                const response = await fetch('http://localhost:8081/api/statistics/object-counts');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                setCounts(data.data);
+                const response = await axios.get(`http://localhost:8081/api/statistics/object-counts?period=${timeFilter}`);
+
+                const result = response.data
+
+                setCounts(result.data);
             } catch (error) {
                 console.error("Error fetching statistics:", error);
             } finally {
@@ -26,63 +35,41 @@ const StatisticsTab = () => {
         };
 
         fetchStatistics();
-    }, []);
+    }, [timeFilter]);
 
     if (loading) {
         return <div>Đang tải dữ liệu thống kê...</div>;
     }
 
     return (
-        <div className="row">
-            <div className="col-md-4">
-                <div className="single-report mb-xs-30">
-                    <div className="s-report-inner pr--20 pt--30 mb-3">
-                        <div className="icon">
-                            <i className="fa-solid fa-basket-shopping"></i>
-                        </div>
-                        <div className="s-report-title d-flex justify-content-between">
-                            <h4 className="header-title mb-0"># Thiết bị</h4>
-                            <p>24 H</p>
-                        </div>
-                        <div className="d-flex justify-content-between pb-2">
-                            <h2>{counts.deviceCount}</h2>
-                        </div>
-                    </div>
-                </div>
+        <>
+            <div className="mb-3 col-4">
+                <label htmlFor="dateFilter" className="form-label">
+                    Chọn khoảng thời gian:
+                </label>
+                <select
+                    id="dateFilter"
+                    className="form-select border border-secondary rounded"
+                    value={timeFilter}
+                    onChange={handleFilterChange}
+                >
+                    <option value="day">Ngày</option>
+                    <option value="month">Tháng</option>
+                    <option value="year">Năm</option>
+                </select>
             </div>
-            <div className="col-md-4">
-                <div className="single-report mb-xs-30">
-                    <div className="s-report-inner pr--20 pt--30 mb-3">
-                        <div className="icon">
-                            <i className="fa-solid fa-users"></i>
-                        </div>
-                        <div className="s-report-title d-flex justify-content-between">
-                            <h4 className="header-title mb-0"># Khách hàng</h4>
-                            <p>24 H</p>
-                        </div>
-                        <div className="d-flex justify-content-between pb-2">
-                            <h2>{counts.customerCount}</h2>
-                        </div>
-                    </div>
-                </div>
+            <div className="row">
+                <CardData data={counts.Revenue} title="Doanh thu" growValue={counts.RevenuePercentageChange}
+                    type="money" icon="fa-solid fa-sack-dollar" period={timeFilter}
+                />
+                <CardData data={counts.TotalDeviceSold} title="Thiết bị đã bán" growValue={counts.TotalDeviceSoldPercentageChange}
+                    icon="fa-solid fa-basket-shopping" period={timeFilter}
+                />
+                <CardData data={counts.CountCustomerSold} title="Khách hàng đã mua" growValue={counts.CountCustomerSoldPercentageChange}
+                    icon="fa-solid fa-users" period={timeFilter}
+                />
             </div>
-            <div className="col-md-4">
-                <div className="single-report">
-                    <div className="s-report-inner pr--20 pt--30 mb-3">
-                        <div className="icon">
-                            <i className="fa-solid fa-cart-shopping"></i>
-                        </div>
-                        <div className="s-report-title d-flex justify-content-between">
-                            <h4 className="header-title mb-0"># Đơn hàng</h4>
-                            <p>24 H</p>
-                        </div>
-                        <div className="d-flex justify-content-between pb-2">
-                            <h2>{counts.orderCount}</h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </>
     );
 };
 

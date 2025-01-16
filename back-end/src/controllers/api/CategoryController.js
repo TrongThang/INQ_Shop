@@ -1,7 +1,7 @@
 const Category = require('../../models/Category.js');
 
 const {
-    getAllCategory_User, getCategoryByUser, getAllCategory_Admin, checkCategoryExists, checkCategoryHasChildren, removeCategoryById,
+    getAllCategory_User, getCategoryByUser, getAllCategory_Admin, checkCategoryExists,
     getCategoryById, getChildrenCategory, getDeviceByCategorySlug,
     createCategory, updateCategory, updateStatusCategory
 } = require('../../services/CategoryServices.js');
@@ -86,6 +86,7 @@ const getChildrenCategoryAPI = async (req, res) => {
     })
 };
 
+//xử lý thêm danh mục - controllers
 const postCreateCategoryAPI = async (req, res) => {
     try {
         const { nameCategory } = req.body; // Lấy tên danh mục từ request body
@@ -98,11 +99,7 @@ const postCreateCategoryAPI = async (req, res) => {
                 msg: "Tên danh mục đã tồn tại!"
             });
         }
-
-
-        // Nếu tên danh mục chưa tồn tại, tạo danh mục mới
         const category = await createCategory({ body: req.body });
-
         return res.status(201).json({
             errorCode: 0,
             data: category
@@ -116,35 +113,36 @@ const postCreateCategoryAPI = async (req, res) => {
     }
 };
 
-
+//xử lý cập nhật danh mục - controllers
 const putUpdateCategoryAPI = async (req, res) => {
     try {
         const { id } = req.params; // Lấy id từ route parameter
+        const data = req.body;
+
         if (!id) {
             return res.status(400).json({
                 errorCode: 1,
                 msg: "Thiếu thông tin id danh mục!"
             });
         }
-        // Kiểm tra xem danh mục có danh mục con không (đệ quy)
-        const hasChildren = await checkCategoryHasChildren(id);
-        if (hasChildren && req.body.parentId) {
-            return res.status(400).json({
-                errorCode: 1,
-                msg: "Không thể cập nhật vì danh mục này có danh mục con!"
-            });
-        }
 
         // Cập nhật danh mục
-        const updatedCount = await updateCategory({ id, ...req.body });
+        const updatedCount = await updateCategory({ id, ...data });
+        console.log("Update", updatedCount === 0)
         if (updatedCount > 0) {
             return res.status(200).json({
                 errorCode: 0,
                 msg: "Cập nhật thông tin thành công!"
             });
-        } else {
+        } else if (updatedCount === 0) {
             return res.status(404).json({
                 errorCode: 1,
+                msg: "Danh mục cha lớn nhất bị vô hiệu hóa, không thể cập nhật trạng thái của danh mục con!"
+            });
+
+        } else {
+            return res.status(404).json({
+                errorCode: 2,
                 msg: "Không tìm thấy danh mục để cập nhật!"
             });
         }
@@ -156,65 +154,41 @@ const putUpdateCategoryAPI = async (req, res) => {
         });
     }
 };
-const removeCategoryByIdAPI = async (req, res) => {
+
+//xử lý cập nhật trạng thái - controllers
+const updateStatusCategoryAPI = async (req, res) => {
     try {
-        const { id } = req.params;
-        if (!id) {
-            return res.status(400).json({
-                errorCode: 1,
-                msg: "Thiếu thông tin id danh mục!"
-            });
-        }
-        const hasChildren = await checkCategoryHasChildren(id);
-        if (hasChildren) {
-            return res.status(400).json({
-                errorCode: 1,
-                msg: "Không thể xóa vì danh mục này có danh mục con!"
-            });
-        }
-        const countDelete = await removeCategoryById(id);
-        if (countDelete > 0) {
+        const { id } = req.params; // Lấy id từ params
+        const { status } = req.body; // Lấy status từ body
+
+        // Gọi hàm cập nhật trạng thái
+        const updatedCount = await updateStatusCategory({ id, status });
+
+        if (updatedCount > 0) {
+            console.log("API - Cập nhật trạng thái thành công!");
             return res.status(200).json({
                 errorCode: 0,
-                msg: "Xóa danh mục thành công!"
+                msg: "Cập nhật trạng thái thành công!",
             });
         } else {
-            return res.status(404).json({
+            console.log("API - Không thể cập nhật trạng thái!");
+            return res.status(400).json({
                 errorCode: 1,
-                msg: "Không tìm thấy danh mục để xóa!"
+                msg: "Không thể cập nhật trạng thái vì danh mục cha đang bị vô hiệu hóa hoặc không tìm thấy danh mục!",
             });
         }
     } catch (error) {
-        console.error("Error in removeCategoryByIdAPI:", error);
+        console.error("Lỗi khi cập nhật trạng thái danh mục:", error);
         return res.status(500).json({
             errorCode: 1,
-            msg: "Xóa danh mục thất bại!"
+            msg: "Cập nhật trạng thái thất bại!",
         });
     }
-}
-const updateStatusCategoryAPI = async (req, res) => {
-    const countUpdateCategory = await updateStatusCategory(req.body);
-    const countUpdateAttribute = await updateStatusCategory(req.body);
-
-    if (updatedCount) {
-        return res.status(201).json({
-            errorCode: 0,
-            msg: "Cập nhật trạng thái thành công!"
-        })
-    }
-
-    return res.status(500).json({
-        errorCode: 1,
-        msg: "Cập nhật trạng thái thất bại!"
-    })
-}
-
-
+};
 module.exports = {
     getAllCategory_UserAPI, getAllCategory_AdminAPI, getCategoryByUserAPI,
     getCategoryByIdAPI, getChildrenCategoryAPI, getDeviceByCategorySlugAPI,
     postCreateCategoryAPI, putUpdateCategoryAPI,
     updateStatusCategoryAPI,
-    removeCategoryByIdAPI,
 
 }

@@ -1,7 +1,6 @@
 const express = require('express');
 const {
     getAllCategory_UserAPI, getAllCategory_AdminAPI, getCategoryByUserAPI,
-    removeCategoryByIdAPI,
     getCategoryByIdAPI, getChildrenCategoryAPI, getDeviceByCategorySlugAPI,
     postCreateCategoryAPI, putUpdateCategoryAPI,
     updateStatusCategoryAPI
@@ -15,6 +14,7 @@ routerCategory.get('/admin', getAllCategory_AdminAPI);
 routerCategory.get('/:slug', getDeviceByCategorySlugAPI);
 routerCategory.post('/', postCreateCategoryAPI);
 routerCategory.put('/:id', putUpdateCategoryAPI);
-routerCategory.delete('/:id', removeCategoryByIdAPI);
+routerCategory.put('/status/:id', updateStatusCategoryAPI);
+
 
 module.exports = routerCategory;

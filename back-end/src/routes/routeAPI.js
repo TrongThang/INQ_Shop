@@ -12,7 +12,7 @@ const routerAddressBook = require('./addressBookAPI');
 const routerLikeDevice = require('./likedDeviceAPI');
 
 const routerBlog = require('./blogRoute')
-const routerAttribute= require('./attributeRoute')
+const routerAttribute = require('./attributeRoute')
 const routerContact = require('./contactRoute')
 const routerCart = require('./cartRoute');
 

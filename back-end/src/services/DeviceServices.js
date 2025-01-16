@@ -96,7 +96,26 @@ const getAllDeviceByStatus = async (status = 1, limit = {}) => {
     // });
     return data; // Trả về danh sách sản phẩm
 };
-
+const getDeviceByCategory = async ({idCategory, limit = 5 }) => {
+    try {
+        const data = await Device.findAll({
+            where: {
+                idCategory
+            },
+            include: [
+                {
+                    model: Category, // Kết hợp với model Category
+                    as:'categoryDevice',
+                    attributes: ['id', 'nameCategory'] // Chỉ lấy các trường cần thiết từ Category
+                }
+            ],
+            limit: limit // Giới hạn số lượng kết quả
+        });
+        return data;
+    } catch (error) {
+        throw new Error("Error fetching devices: " + error.message);
+    }
+};
 const getTopSellingDevice = async () => {
     const data = await Device.findAll({
         where: {
@@ -446,7 +465,7 @@ const updateStatusReviewForDevice = async ({ id, status }) => {
 
 module.exports = {
     getAllDevice_User, getAllDeviceByStatus, getAllDevice_Admin, 
-    getDeviceBySlug, getTOPDeviceLiked, getTopSellingDevice,
+    getDeviceBySlug, getTOPDeviceLiked, getTopSellingDevice,getDeviceByCategory,
     createDevice, updateDevice, updateStatusDevice,
     updateStatusDeviceByCategory, increaseViewDevice,
 

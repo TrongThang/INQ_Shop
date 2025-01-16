@@ -3,13 +3,13 @@ const Device = require('../../models/Device.js');
 
 const {
     getAllDevice_User, getAllDevice_Admin, getAllDeviceByStatus,
-    getDeviceBySlug, getTopSellingDevice,
+    getDeviceBySlug, getTopSellingDevice,getDeviceByCategory,
     createDevice, updateDevice, updateStatusDevice,
     //Review For Device
-    getReviewForCustomer, 
+    getReviewForCustomer,
     getAllReviewForDevice, createReviewForDevice, updateReviewForDevice, updateStatusReviewForDevice,
     getTOPDeviceLiked,
-    increaseViewDevice, 
+    increaseViewDevice,
 } = require('../../services/DeviceServices.js');
 
 const {
@@ -20,12 +20,12 @@ const getAllDeviceByUserAPI = async (req, res) => {
         const { page = 0, status = 1, limit = 90, priceMin, priceMax, idCategory } = req.body;
 
         const { keyword, orderBy, sortBy } = req.query;
-        
+
         let order = [];
         if (orderBy && sortBy) {
             order = [[orderBy, sortBy.toUpperCase()]];
         } else {
-            order = [['name', 'ASC']]; 
+            order = [['name', 'ASC']];
         }
 
         const filters = { priceMin, priceMax, idCategory, keyword };
@@ -81,7 +81,28 @@ const getAllDevice_FeaturedAPI = async (req, res) => {
         });
     }
 }
+const getDevice_byCategoryAPI = async (req, res) => {
+    try {
+        
+        // Extracting idCategory and limit from the request body or query
+        const limit = 5 ; // or req.query if you're using query parameters
+        const {idCategory} = req.params
+        // Call the getDeviceByCategory function with idCategory and limit
+        const result = await getDeviceByCategory({idCategory, limit });
 
+        return res.status(200).json({
+            errorCode: 0,
+            data: result
+        });
+    } catch (error) {
+        console.error('Error in getDevice_byCategoryAPI:', error.message);
+        return res.status(500).json({
+            errorCode: 1,
+            msg: 'Có lỗi xảy ra trong quá trình lấy dữ liệu các Thiết bị',
+            details: error.message,
+        });
+    }
+};
 const getAllDevice_NewAPI = async (req, res) => {
     try {
         const { status = 4, limit = 10 } = req.body;
@@ -226,7 +247,7 @@ const putIncreaseViewDeviceAPI = async (req, res) => {
     try {
         const idDevice = req.params.idDevice;
 
-        const results = await increaseViewDevice({idDevice});
+        const results = await increaseViewDevice({ idDevice });
 
         return res.status(200).json(results)
     } catch (error) {
@@ -243,7 +264,7 @@ const updateStatusDeviceAPI = async (req, res) => {
         const id = req.body.idDevice;
         const status = req.body.status;
 
-        const results = await updateStatusDevice({id, status});
+        const results = await updateStatusDevice({ id, status });
 
         return res.status(200).json({
             errorCode: 0,
@@ -321,7 +342,7 @@ const updateStatusReviewForDeviceAPI = async (req, res) => {
         const id = req.body.idDevice;
         const status = req.body.status;
 
-        const results = await updateStatusReviewForDevice({id, status});
+        const results = await updateStatusReviewForDevice({ id, status });
 
         return res.status(200).json({
             errorCode: 0,
@@ -337,8 +358,8 @@ const updateStatusReviewForDeviceAPI = async (req, res) => {
 }
 
 module.exports = {
-    getAllDeviceByUserAPI,getAllDevice_FeaturedAPI, getAllDevice_NewAPI, getTopSellingDeviceAPI, getAllDeviceByAdminAPI,
-    getDeviceBySlugAPI, getTOPDeviceLikedAPI, getAllDevice_DiscountAPI,
+    getAllDeviceByUserAPI, getAllDevice_FeaturedAPI, getAllDevice_NewAPI, getTopSellingDeviceAPI, getAllDeviceByAdminAPI,
+    getDeviceBySlugAPI, getTOPDeviceLikedAPI, getAllDevice_DiscountAPI,getDevice_byCategoryAPI,
     postCreateDeviceAPI, putUpdateDeviceAPI,
     updateStatusDeviceAPI, putIncreaseViewDeviceAPI,
     //Review For Device

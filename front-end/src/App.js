@@ -41,6 +41,9 @@ import LikedPage from './pages/user/likedDevice';
 
 import ManaCategory from './pages/admin/Categories/manaCategory';
 import AddOrEditCategory from './component/admin/Mana_Category/addOrEditCategory';
+import LayoutChat from './pages/user/Chat/layoutChat';
+import RevenueStatisticsPage from './pages/admin/statisticalPage/revenueStatisticsPage'
+import PurchaseStatisticsPage from './pages/admin/statisticalPage/purchaseStatisticsPage'
 
 function App() {
 
@@ -49,15 +52,13 @@ function App() {
       <Router>
         <Routes>
           {/* ADMIN */}
-          <Route path='/admin' element={<Admin />} > 
-          
+          <Route path='/admin/' element={<Admin />} >
+            <Route path="manage-category" element={<ManaCategory />} />
+            <Route path="add-category" element={<AddOrEditCategory />} />
+            <Route path="edit-category/:id" element={<AddOrEditCategory />} />
+            <Route path="revenueStatistics" element={<RevenueStatisticsPage />} />
+            <Route path="purchaseStatistics" element={<PurchaseStatisticsPage />} />
           </Route>
-
-          <Route path="/manage-category" element={<ManaCategory />} />
-          <Route path="/add-category" element={<AddOrEditCategory />} />
-          <Route path="/edit-category/:id" element={<AddOrEditCategory />} />
-
-
           {/* USER */}
           <Route path="/"
             element={
@@ -65,6 +66,7 @@ function App() {
                 <User />
                 <RegisterPage />
                 <LoginPage />
+                <LayoutChat />
               </CartProvider>
             }
           >

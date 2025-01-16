@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'; // Import SweetAlert2
 
 function UpdateInfoWeb() {
     const { keyName } = useParams();
     const navigate = useNavigate();
-    const [toastMessage, setToastMessage] = useState('');
-    const [showToast, setShowToast] = useState(false);
     const [InfoWeb, setInfoWeb] = useState({
         VALUE: "",
         STATUS: "",
@@ -48,39 +47,56 @@ function UpdateInfoWeb() {
             return;
         }
 
-        try {
-            const response = await fetch("http://localhost:8081/api/setting-web", {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(InfoWeb),
-            });
-            const result = await response.json();
-            if (response.ok) {
-                setToastMessage('Đã chỉnh sửa thông tin thành công.');
-                setShowToast(true);
-                setTimeout(() => {
+        // Hiển thị hộp thoại xác nhận chỉnh sửa
+        const confirmResult = await Swal.fire({
+            title: 'Bạn có chắc chắn?',
+            text: 'Bạn có chắc muốn cập nhật thông tin này không?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: 'Hủy',
+        });
+
+        // Nếu người dùng xác nhận
+        if (confirmResult.isConfirmed) {
+            try {
+                const response = await fetch("http://localhost:8081/api/setting-web", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(InfoWeb),
+                });
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Thông báo thành công
+                    await Swal.fire({
+                        title: 'Thành công!',
+                        text: 'Đã chỉnh sửa thông tin thành công.',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                    });
                     navigate("/admin/dashboard/info-web");
-                }, 1000);
-            } else {
-                console.error("Form submission error:", result);
-                setToastMessage('Đã chỉnh sửa thông tin thất bại.');
-                setShowToast(true);
+                } else {
+                    // Thông báo lỗi
+                    await Swal.fire({
+                        title: 'Lỗi!',
+                        text: result.msg || 'Đã chỉnh sửa thông tin thất bại.',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                    });
+                }
+            } catch (error) {
+                console.error("Error submitting InfoWeb:", error);
+                // Thông báo lỗi
+                await Swal.fire({
+                    title: 'Lỗi!',
+                    text: 'Có lỗi xảy ra trong quá trình cập nhật.',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                });
             }
-        } catch (error) {
-            console.error("Error submitting InfoWeb:", error);
-            setToastMessage('Đã chỉnh sửa thông tin thất bại.');
-            setShowToast(true);
         }
     };
-
-    useEffect(() => {
-        if (showToast) {
-            const timer = setTimeout(() => {
-                setShowToast(false);
-            }, 2000);
-            return () => clearTimeout(timer);
-        }
-    }, [showToast]);
 
     return (
         <div className="main-content-inner">
@@ -136,18 +152,6 @@ function UpdateInfoWeb() {
                             Lưu
                         </button>
                     </div>
-                    {showToast && (
-                        <div className="toast-container position-fixed top-0 end-70 p-3">
-                            <div className="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-                                <div className="toast-header bg-primary text-white">
-                                    <strong className="me-auto">Thông báo</strong>
-                                </div>
-                                <div className="toast-body">
-                                    {toastMessage}
-                                </div>
-                            </div>
-                        </div>
-                    )}
                 </form>
             </div>
         </div>

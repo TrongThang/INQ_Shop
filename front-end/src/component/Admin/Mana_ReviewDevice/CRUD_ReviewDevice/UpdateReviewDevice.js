@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'; // Import SweetAlert2
 
 function UpdateReviewDevice() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [toastMessage, setToastMessage] = useState('');
-    const [showToast, setShowToast] = useState(false);
     const [ReviewDevice, setReviewDevice] = useState({
         note: "",
         status: "",
@@ -53,45 +52,61 @@ function UpdateReviewDevice() {
             return;
         }
 
-        try {
-            const updatedReviewDevice = {
-                ...ReviewDevice,
-                updated_at: new Date().toISOString(),
-            };
+        // Hiển thị hộp thoại xác nhận chỉnh sửa
+        const confirmResult = await Swal.fire({
+            title: 'Bạn có chắc chắn?',
+            text: 'Bạn có chắc muốn cập nhật thông tin đánh giá này không?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: 'Hủy',
+        });
 
-            const response = await fetch(`http://localhost:8081/api/device/reviews_admin/${id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(updatedReviewDevice),
-            });
-            const result = await response.json();
+        // Nếu người dùng xác nhận
+        if (confirmResult.isConfirmed) {
+            try {
+                const updatedReviewDevice = {
+                    ...ReviewDevice,
+                    updated_at: new Date().toISOString(),
+                };
 
-            if (response.ok) {
-                setToastMessage('Đã chỉnh sửa thông tin thành công.');
-                setShowToast(true);
-                setTimeout(() => {
+                const response = await fetch(`http://localhost:8081/api/device/reviews_admin/${id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(updatedReviewDevice),
+                });
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Thông báo thành công (không tự động đóng)
+                    await Swal.fire({
+                        title: 'Thành công!',
+                        text: 'Đã chỉnh sửa thông tin thành công.',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                    });
                     navigate('/admin/review-device');
-                }, 1000);
-            } else {
-                console.error("Form submission error:", result);
-                setToastMessage('Đã chỉnh sửa thông tin thất bại.');
-                setShowToast(true);
+                } else {
+                    // Thông báo lỗi (không tự động đóng)
+                    await Swal.fire({
+                        title: 'Lỗi!',
+                        text: result.msg || 'Đã chỉnh sửa thông tin thất bại.',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                    });
+                }
+            } catch (error) {
+                console.error("Error submitting review:", error);
+                // Thông báo lỗi (không tự động đóng)
+                await Swal.fire({
+                    title: 'Lỗi!',
+                    text: 'Có lỗi xảy ra trong quá trình cập nhật.',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                });
             }
-        } catch (error) {
-            console.error("Error submitting review:", error);
-            setToastMessage('Đã chỉnh sửa thông tin thất bại.');
-            setShowToast(true);
         }
     };
-
-    useEffect(() => {
-        if (showToast) {
-            const timer = setTimeout(() => {
-                setShowToast(false);
-            }, 2000);
-            return () => clearTimeout(timer);
-        }
-    }, [showToast]);
 
     return (
         <div className="main-content-inner">
@@ -197,18 +212,6 @@ function UpdateReviewDevice() {
                             Lưu
                         </button>
                     </div>
-                    {showToast && (
-                        <div className="toast-container position-fixed top-0 end-70 p-3">
-                            <div className="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-                                <div className="toast-header bg-primary text-white">
-                                    <strong className="me-auto">Thông báo</strong>
-                                </div>
-                                <div className="toast-body">
-                                    {toastMessage}
-                                </div>
-                            </div>
-                        </div>
-                    )}
                 </form>
             </div>
         </div>

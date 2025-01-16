@@ -102,27 +102,41 @@ const ManaContact = () => {
     };
 
     const filterContacts = () => {
+        // Kiểm tra nếu contact không tồn tại hoặc là mảng rỗng
+        if (!contact || contact.length === 0) {
+            setFilteredContacts([]); // Đặt filteredContacts thành mảng rỗng
+            return;
+        }
+    
         const normalizedSearchTerm = removeAccents(searchTerm);
-
+    
         const filtered = contact.filter((contact) => {
-            const normalizedFullName = removeAccents(contact.fullname);
-            const normalizedTitle = removeAccents(contact.title);
-            const normalizedEmail = removeAccents(contact.email);
-            const normalizedContent = removeAccents(contact.content);
-
+            // Kiểm tra nếu contact không tồn tại hoặc thiếu các thuộc tính cần thiết
+            if (!contact || !contact.fullname || !contact.title || !contact.email || !contact.content) {
+                return false; // Bỏ qua contact này
+            }
+    
+            // Chuẩn hóa các trường dữ liệu
+            const normalizedFullName = removeAccents(contact.fullname || '');
+            const normalizedTitle = removeAccents(contact.title || '');
+            const normalizedEmail = removeAccents(contact.email || '');
+            const normalizedContent = removeAccents(contact.content || '');
+    
+            // Kiểm tra từ khóa tìm kiếm
             const matchesSearchTerm =
                 normalizedFullName.includes(normalizedSearchTerm) ||
                 normalizedTitle.includes(normalizedSearchTerm) ||
                 normalizedEmail.includes(normalizedSearchTerm) ||
                 normalizedContent.includes(normalizedSearchTerm);
-
+    
+            // Kiểm tra trạng thái
             const matchesStatusFilter =
-                statusFilter === "all" || contact.status.toString() === statusFilter;
-
+                statusFilter === "all" || (contact.status && contact.status.toString() === statusFilter);
+    
             return matchesSearchTerm && matchesStatusFilter;
         });
-
-        setFilteredContacts(filtered);
+    
+        setFilteredContacts(filtered); // Cập nhật dữ liệu đã lọc vào state
     };
 
     useEffect(() => {

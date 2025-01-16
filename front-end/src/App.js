@@ -41,6 +41,8 @@ import LikedPage from './pages/user/likedDevice';
 
 import ManaCategory from './pages/admin/Categories/manaCategory';
 import AddOrEditCategory from './component/admin/Mana_Category/addOrEditCategory';
+import AddOrEditProduct from './component/admin/Mana_product/addOrEditProduct';
+import ManaProduct from './pages/admin/Product/manaProduct';
 
 function App() {
 
@@ -50,12 +52,15 @@ function App() {
         <Routes>
           {/* ADMIN */}
           <Route path='/admin' element={<Admin />} > 
-          
+              <Route path="device" element={<ManaProduct />} />
+              <Route path="device/add" element={<AddOrEditProduct />} />
+              <Route path="device/edit/:slug" element={<AddOrEditProduct />} />
           </Route>
 
           <Route path="/manage-category" element={<ManaCategory />} />
           <Route path="/add-category" element={<AddOrEditCategory />} />
           <Route path="/edit-category/:id" element={<AddOrEditCategory />} />
+          
 
 
           {/* USER */}

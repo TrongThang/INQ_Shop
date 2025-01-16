@@ -100,7 +100,6 @@ const checkListDevice = async (products) => {
     }
 }
 
-
 // HÀM XỬ LÝ
 function groupAttributesByGroup(attributeDeviceList) {
     const result = {};
@@ -222,68 +221,65 @@ const getTopSellingDevice = async () => {
     return data;
 }
 
-const getAllDevice_User = async (page = 0, status = 1, limit = {}, filters = {}, order = {}) => {
-    const { priceMin, priceMax, idCategory, keyword } = filters;
+const getAllDevice_User = async (page = 0, status = 1, limit = 15, filters = {}, order = {}) => {
+    const { priceMin, priceMax, keyword } = filters;
 
     const whereConditions = {
-        status: {
-            [Op.gte]: status
-        }
+        status: { [Op.gte]: status },
+        ...(priceMin != undefined && { sellingPrice: { [Op.gte]: priceMin } }),
+        ...(priceMax != undefined && { sellingPrice: { [Op.lte]: priceMax } }),
+        ...(keyword && {
+            [Op.or]: [
+                { name: { [Op.like]: `%${keyword}%` } },
+                { descriptionNormal: { [Op.like]: `%${keyword}%` } }
+            ]
+        })
     };
 
-    if (priceMin != undefined || priceMax != undefined) {
-        whereConditions.price = {};
-        if (priceMin != undefined) {
-            whereConditions.sellingPrice[Op.gte] = priceMin;
+    const includeConfig = [
+        {
+            model: ReviewDevice,
+            as: 'reviews',
+            attributes: [[Sequelize.fn('AVG', Sequelize.col('rating')), 'averageRating']],
+            required: false
+        },
+        {
+            model: Category,
+            as: 'categoryDevice',
+            attributes: ['id', 'nameCategory']
+        },
+        {
+            model: Warehouse,
+            as: 'warehouse',
+            attributes: []
         }
-        if (priceMax != undefined) {
-            whereConditions.sellingPrice[Op.lte] = priceMax;
-        }
-    }
-
-    if (keyword) {
-        whereConditions[Op.or] = [
-            { name: { [Op.like]: `%${keyword}%` } },
-            { descriptionNormal: { [Op.like]: `%${keyword}%` } }
-        ];
-    }
+    ];
 
     const offset = page * limit;
 
+    const totalCount = await Device.count({
+        where: whereConditions,
+        include: includeConfig,
+        distinct: true
+    });
+
     const data = await Device.findAll({
         where: whereConditions,
-        limit: limit,
-        offset: offset,
-        subQuery: false,
-        include: [
-            {
-                model: ReviewDevice,
-                as: 'reviews',
-                attributes: [
-                    [Sequelize.fn('AVG', Sequelize.col('rating')), 'averageRating']
-                ],
-                required: false
-            },
-            {
-                model: Category,
-                as: 'categoryDevice',
-                attributes: ['id', 'nameCategory']
-            },
-            {
-                model: Warehouse,
-                as: 'warehouse',
-                attributes: [] // Không cần trả về riêng biệt, vì sẽ đưa vào attributes của Device
-            }
-        ],
+        limit,
+        offset,
+        include: includeConfig,
         attributes: [
             'idDevice', 'name', 'slug', 'sellingPrice', 'image', 'descriptionNormal', 'status',
             [Sequelize.col('warehouse.stock'), 'stock']
         ],
         group: ['Device.idDevice'],
-        order: order,
+        order,
+        subQuery: false
     });
 
-    return await data;
+    const totalPages = Math.ceil(totalCount / limit);
+
+    return { data, totalPages, totalCount };
 }
 
 const getTOPDeviceLiked = async () => {
@@ -406,18 +402,113 @@ const getDeviceBySlug = async (slug) => {
     return device;
 }
 
-const createDevice = async (body) => {
-    const slug = convertToSlug(body.name);
-    body.slug = slug;
+const getCheckNameDevice = async (name) => {
+    console.log(name)
+    let device = await Device.findOne({
+        where: {
+            name: name
+        },
+    });
 
-    const deviceCreate = await Device.create(body);
+    if (device) {
+        return true;
+    }
+
+    return false;
+}
+
+const getDeviceBySlugForAdmin = async (slug) => {
+    let device = await Device.findOne({
+        where: {
+            slug: slug
+        },
+        subQuery: false,
+        include: [
+            {
+                model: Category,
+                as: 'categoryDevice',
+                attributes: ['id', 'nameCategory']
+            },
+            {
+                model: Warehouse,
+                as: 'warehouse',
+                attributes: []
+            },
+            {
+                model: Liked,
+                as: 'liked',
+                attributes: []
+            }
+        ],
+        attributes: {
+            include: [
+                [Sequelize.literal(`(
+                    SELECT AVG(rating)
+                    FROM review_device AS review
+                    WHERE review.idDevice = Device.idDevice
+                )`), 'averageRating'],
+                [Sequelize.col('warehouse.stock'), 'stock'],
+                [Sequelize.literal(`(
+                    SELECT COUNT(idDevice)
+                    FROM liked AS liked
+                    WHERE liked.idDevice = Device.idDevice
+                )`), 'likeCount'],
+            ]
+        },
+        group: ['Device.idDevice'],
+    });
+
+    const attributeDevice = await AttributeDevice.findAll({
+        where: {
+            idDevice: device.idDevice
+        },
+        include: [
+            {
+                model: Attribute,
+                as: 'attributes',
+                include: [
+                    {
+                        model: Attribute_group,
+                        as: 'attributeGroup',
+                        attributes: ['id', 'name']
+                    }
+                ],
+                attributes: ['nameAttribute', 'required']
+
+            }
+        ],
+        attributes: ['value', 'status']
+    })
+
+    device = device.toJSON();
+
+    device.attributes = groupAttributesByGroup(attributeDevice);
+
+    return device;
+}
+
+const createDevice = async (deviceSend, stock) => {
+    const slug = convertToSlug(deviceSend.name);
+    deviceSend.slug = slug;
+
+    console.log(deviceSend)
+
+    const deviceCreate = await Device.create(deviceSend);
+
+    const warehouse = await Warehouse.update(
+            { stock: stock },
+            {where: {idDevice: deviceCreate.idDevice}}
+    )
 
     return deviceCreate;
 }
 
-const updateDevice = async (body) => {
-    const [updatedCount] = await Device.update(body, {
-        where: { id }
+const updateDevice = async (deviceSend, stock) => {
+    const slug = convertToSlug(deviceSend.name)
+    deviceSend.slug = slug
+
+    const [updatedCount] = await Device.update(deviceSend, {
+        where: { idDevice: deviceSend.idDevice }
     });
 
     return updatedCount;
@@ -549,6 +640,8 @@ module.exports = {
     getDeviceBySlug, getTOPDeviceLiked, getTopSellingDevice, 
     createDevice, updateDevice, updateStatusDevice,
     updateStatusDeviceByCategory, increaseViewDevice,
+
+    getDeviceBySlugForAdmin, getCheckNameDevice,
 
     //Review For Device
     getReviewForCustomer,

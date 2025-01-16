@@ -3,6 +3,7 @@ import AreaSearch from "../../component/user/SearchPage/AreaSearch/areaSearch";
 import AreaSort from "../../component/user/SearchPage/areaSort";
 import ListDeviceSearch from "../../component/user/SearchPage/listDeviceSearch";
 import { useLocation, useNavigate, useParams  } from "react-router-dom";
+import Pagination from "../../component/Shared/Pagination/pagination";
 
 export default function SearchPage() {
     useEffect(() => {
@@ -18,6 +19,10 @@ export default function SearchPage() {
         price: { min: 0, max: 100000000 }
     });
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalCount, setTotalCount] = useState(0);
+    
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -25,17 +30,21 @@ export default function SearchPage() {
                 const keyword = queryParam.get('keyword');
                 const orderBy = queryParam.get('orderBy');
                 const sortBy = queryParam.get('sortBy');
+                const page = queryParam.get('page') || 0
 
                 if (keyword) {
                     const urlSortOrder = (orderBy || sortBy) ? `&orderBy=${orderBy}&sortBy=${sortBy}` : '';
-                    
-                    const apiUrl = `http://localhost:8081/api/device?keyword=${keyword}` + urlSortOrder;
+                    const urlPage = page ? `&page=${page}` : '';
+                    const apiUrl = `http://localhost:8081/api/device/search?keyword=${encodeURIComponent(keyword)}${urlPage}${urlSortOrder}`;
                     const response = await fetch(apiUrl);
                     
                     const result = await response.json();
 
                     if (result.errorCode === 0) {
                         setSearchResult(result.data);
+                        setTotalPages(result.totalPages);
+                        setCurrentPage(parseInt(page) + 1)
+                        setTotalCount(result.totalCount)
                     } else {
                         console.error("Lỗi từ API:", result.msg);
                         setSearchResult([]); 
@@ -70,7 +79,6 @@ export default function SearchPage() {
         return filteredData;
     }, [searchResult, conditionSearch]);
 
-
     const handleSortChange = (selectedSort) => {
         const [orderBy, sortBy] = selectedSort.split('_'); // Tách --> orderBy và sortBy
         
@@ -92,6 +100,11 @@ export default function SearchPage() {
         setConditionSearch(prev => ({ ...prev, price: { min, max } }));
     };
 
+    const handlePageChange = (newPage) => {
+        const queryParam = new URLSearchParams(location.search);
+        queryParam.set('page', newPage - 1);
+        navigate(`?${queryParam.toString()}`);
+    };
 
     return (
         <div className="mt-5 col-12 row">
@@ -104,10 +117,19 @@ export default function SearchPage() {
             <div className="row col-xl-10">
 
                 <AreaSort onSortChange={handleSortChange} />
-                <h3>Có tổng { dataToShow.length } thiết bị được tìm thấy</h3>
+                <h3>Có tổng { totalCount } thiết bị được tìm thấy</h3>
 
                 <ListDeviceSearch data={dataToShow} />
             </div>
+
+            {
+                totalPages > 1
+                && <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                    />
+            }
         </div>
     );
 }

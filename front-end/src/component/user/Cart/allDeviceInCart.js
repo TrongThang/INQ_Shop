@@ -44,11 +44,13 @@ export default function AllDeviceInCart() {
         ))}
 
         {/* Phân trang */}
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
+        {totalPages > 1
+          && <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+        }
       </div>
     </div>
   );

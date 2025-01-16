@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import Header from "../../component/Shared/headerManage";
-import SearchFilter from "../../component/admin/Mana_product/searchProduct";
-import Table from "../../component/admin/Mana_product/productList";
-import AddOrEditProduct from "../../component/admin/Mana_product/addOrEditProduct";
+import Header from "../../../component/Shared/headerManage";
+import SearchFilter from "../../../component/admin/Mana_product/searchProduct";
+import Table from "../../../component/admin/Mana_product/productList";
+import AddOrEditProduct from "../../../component/admin/Mana_product/addOrEditProduct";
+import { ToastContainer } from "react-toastify";
 
 const ManaProduct = () => {
     const [data, setData] = useState([
@@ -41,15 +42,27 @@ const ManaProduct = () => {
     };
 
     return (
+        <>
+        <ToastContainer
+            position="top-right"
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+        />
         <div className="main-content-inner">
             <div className="container-fluid py-4">
-                {/* <Header onAdd={handleAdd} onExport={handleExport} />
+                <Header onAdd={handleAdd} onExport={handleExport} />
                 <SearchFilter />
-                <Table data={data} /> */}
-                <AddOrEditProduct />
-                
+                <Table data={data} />
+    
             </div>
         </div>
+        
+        </>
     );
 };
 

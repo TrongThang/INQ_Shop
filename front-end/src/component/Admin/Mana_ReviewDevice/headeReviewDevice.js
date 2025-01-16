@@ -1,16 +1,13 @@
 import React from "react";
 import * as XLSX from "xlsx";
 
-const SearchInfoWeb = ({ onExport, onSearchChange, onStatusFilterChange }) => {
+const SearchInfoWeb = ({ searchTerm, setSearchTerm, statusFilter, setStatusFilter, handleExport }) => {
     return (
         <div>
             <div className="d-flex justify-content-between mb-3">
-                <h5>Danh sách thông tin Website</h5>
+                <h5>Danh sách bình luận sản phẩm</h5>
                 <div>
-                    {/* <button className="btn btn-primary me-2" onClick={onAdd}>
-                        <i className="bi bi-plus"></i> Thêm
-                    </button> */}
-                    <button className="btn btn-success" onClick={onExport}>
+                    <button className="btn btn-success" onClick={handleExport}>
                         <i className="bi bi-download"></i> Xuất file
                     </button>
                 </div>
@@ -26,18 +23,20 @@ const SearchInfoWeb = ({ onExport, onSearchChange, onStatusFilterChange }) => {
                             type="text"
                             className="form-control"
                             placeholder="Tìm kiếm"
-                            onChange={(e) => onSearchChange(e.target.value)}
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
                 </div>
                 <div className="col-md-3">
                     <select
                         className="form-select"
-                        onChange={(e) => onStatusFilterChange(e.target.value)}
+                        value={statusFilter}
+                        onChange={(e) => setStatusFilter(e.target.value)}
                     >
                         <option value="all">Tất cả trạng thái</option>
-                        <option value="1">Hoạt động</option>
-                        <option value="0">Ngừng hoạt động</option>
+                        <option value="active">Hiển thị</option>
+                        <option value="inactive">Ẩn</option>
                     </select>
                 </div>
             </div>

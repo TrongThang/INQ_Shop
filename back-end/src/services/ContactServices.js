@@ -1,7 +1,8 @@
 const Contact = require('../models/Contact');
 const Sequelize = require('sequelize');
+
 const getAllContact = async () => {
-    return await Contact.findAll();
+    return await Contact.findAll({order: [['created_at', 'DESC']]});
 
 };
 const getContact = async (data) => {

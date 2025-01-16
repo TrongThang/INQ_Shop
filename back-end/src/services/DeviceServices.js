@@ -583,6 +583,49 @@ const getAllReviewForDevice = async (idDevice) => {
 
     return comments;
 }
+const getAllReviewForDevice_admin = async () => {
+    console.log('Get all review for admin')
+    const comments = await ReviewDevice.findAll({
+        include: [
+            {
+                model: Customer,
+                as: 'customerReview'
+            },
+             {
+             model: Device,
+                as: 'device', // Thêm thông tin về thiết bị nếu cần
+                 attributes: ['idDevice', 'name'] // Chỉ lấy một số trường cần thiết
+          }
+        ],
+        order: [['created_at', 'DESC']] // Sắp xếp theo thời gian cập nhật mới nhất
+    });
+   
+
+    return comments;
+}
+const getReviewById = async (idReview) => {
+    try {
+        const review = await ReviewDevice.findOne({
+            where: { idReview },
+            include: [
+                {
+                    model: Customer,
+                    as: 'customerReview',
+            
+                },
+                {
+                    model: Device,
+                    as: 'device',
+                    attributes: ['idDevice', 'name']
+                }
+            ]
+        });
+
+        return review;
+    } catch (error) {
+        throw new Error(`Error fetching review by id: ${error.message}`);
+    }
+};
 
 const getReviewForCustomer = async (idDevice, idCustomer) => {
     const comments = await ReviewDevice.findOne({
@@ -617,6 +660,22 @@ const updateReviewForDevice = async ( idReview, body ) => {
     return updatedCount;
 }
 
+const updateReviewById = async (idReview, updateData) => {
+    try {
+        const [updatedCount] = await ReviewDevice.update(updateData, {
+            where: { idReview },
+        });
+
+        if (updatedCount === 0) {
+            throw new Error("Không tìm thấy review với idReview này.");
+        }
+
+        return updatedCount;
+    } catch (error) {
+        throw new Error(`Lỗi khi cập nhật review: ${error.message}`);
+    }
+};
+
 const updateStatusReviewForDevice = async ({ id, status }) => {
     //Nếu status <== 0 &&
     //Is Hide = True
@@ -645,6 +704,6 @@ module.exports = {
 
     //Review For Device
     getReviewForCustomer,
-    getAllReviewForDevice, createReviewForDevice,
-    updateReviewForDevice, updateStatusReviewForDevice,
+    getAllReviewForDevice, getAllReviewForDevice_admin,   createReviewForDevice,
+    updateReviewForDevice, updateStatusReviewForDevice,getReviewById,updateReviewById
 }

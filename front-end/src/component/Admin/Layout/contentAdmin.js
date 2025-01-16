@@ -10,7 +10,6 @@ import { Outlet } from "react-router-dom";
 export default function ContentAdmin() {
     return (
         <div className="main-content">
-            
             <HeaderAdmin />
             <Outlet />
             <FooterAdmin />

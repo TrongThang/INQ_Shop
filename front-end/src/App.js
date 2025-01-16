@@ -43,6 +43,17 @@ import ManaCategory from './pages/admin/Categories/manaCategory';
 import AddOrEditCategory from './component/admin/Mana_Category/addOrEditCategory';
 import AddOrEditProduct from './component/admin/Mana_product/addOrEditProduct';
 import ManaProduct from './pages/admin/Product/manaProduct';
+import ManaConatct from './pages/admin/Contact/manaContact';
+import UpdateContact from './pages/admin/Contact/updateContact';
+
+import ManaReviewDevice from './pages/admin/ReviewDevice/manaReviewDevice';
+import UpdateReviewDevice from './component/admin/Mana_ReviewDevice/CRUD_ReviewDevice/UpdateReviewDevice';
+import DeleteReviewDevice from './component/admin/Mana_ReviewDevice/CRUD_ReviewDevice/DeleteReviewDevice';
+import ManaInfoWeb from './pages/admin/Dashboard/manaInfoWebsite';
+import UpdateInfoWeb from './component/admin/Mana_InfoWebsite/CRUD_InfoWeb/UpdateInfoWeb';
+
+import Dashboard  from "./pages/admin/Dashboard/dashboard"
+import Statistics from "./component/admin/Mana_Statistics/StatisticsTab";
 
 function App() {
 
@@ -55,7 +66,21 @@ function App() {
               <Route path="device" element={<ManaProduct />} />
               <Route path="device/add" element={<AddOrEditProduct />} />
               <Route path="device/edit/:slug" element={<AddOrEditProduct />} />
+              <Route path="contacts" element={<ManaConatct />} />
+              <Route path="contacts/update/:id" element={<UpdateContact />} />
+              <Route path="review-device" element={<ManaReviewDevice />} />
+              <Route path="review-device/update/:id" element={<UpdateReviewDevice />} />
+              <Route path="review-device/delete/:id" element={<DeleteReviewDevice />} />
+            
+              <Route path="dashboard" element={<Dashboard />}>
+                  <Route path="statistics" element={<Statistics />} />
+
+                  <Route path="info-web" element={<ManaInfoWeb />} />
+                  <Route path="info-web/update/:keyName" element={<UpdateInfoWeb />} />
+                  
+              </Route>
           </Route>
+          
 
           <Route path="/manage-category" element={<ManaCategory />} />
           <Route path="/add-category" element={<AddOrEditCategory />} />

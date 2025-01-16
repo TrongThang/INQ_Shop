@@ -7,13 +7,14 @@ const {
     createDevice, updateDevice, updateStatusDevice,
 
     getDeviceBySlugForAdmin, getCheckNameDevice,
-
+    checkDevice, checkListDevice,
     //Review For Device
     getReviewForCustomer, 
     getAllReviewForDevice, createReviewForDevice, updateReviewForDevice, updateStatusReviewForDevice,
     getTOPDeviceLiked,
-    increaseViewDevice, 
-    checkDevice, checkListDevice,
+    increaseViewDevice,
+    
+    getAllReviewForDevice_admin, getReviewById, updateReviewById
 } = require('../../services/DeviceServices.js');
 
 const {
@@ -339,6 +340,74 @@ const getAllReviewForDeviceAPI = async (req, res) => {
     }
 };
 
+const getAllReviewForDeviceAPI_Admin = async (req, res) => {
+    try {
+        // Gọi service để lấy tất cả bình luận
+        const results = await getAllReviewForDevice_admin();
+            
+        // Trả về kết quả cho client
+        return res.status(200).json({
+            
+            errorCode: 0,
+            data: results
+        });
+    } catch (error) {
+        // Xử lý lỗi nếu có
+        return res.status(500).json({
+            errorCode: 1,
+            msg: 'Có lỗi xảy ra trong quá trình lấy dữ liệu bình luận',
+            details: error.message,
+        });
+    }
+};
+const getReviewByIdAPI = async (req, res) => {
+    try {
+        const { idReview } = req.params; // Lấy idReview từ request params
+
+        // Gọi service để lấy review
+        const review = await getReviewById(idReview);
+
+        if (!review) {
+            return res.status(404).json({
+                errorCode: 1,
+                msg: 'Không tìm thấy review với idReview này.',
+            });
+        }
+
+        // Trả về kết quả cho client
+        return res.status(200).json({
+            errorCode: 0,
+            data: review,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            errorCode: 1,
+            msg: 'Có lỗi xảy ra trong quá trình lấy dữ liệu review.',
+            details: error.message,
+        });
+    }
+};
+const updateReviewByIdAPI = async (req, res) => {
+    try {
+        const { idReview } = req.params; // Lấy idReview từ request params
+        const updateData = req.body; // Lấy dữ liệu cần cập nhật từ request body
+
+        // Gọi service để cập nhật review
+        const updatedCount = await updateReviewById(idReview, updateData);
+
+        // Trả về kết quả cho client
+        return res.status(200).json({
+            errorCode: 0,
+            msg: `Cập nhật thành công ${updatedCount} review.`,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            errorCode: 1,
+            msg: 'Có lỗi xảy ra trong quá trình cập nhật review.',
+            details: error.message,
+        });
+    }
+};
 const getReviewForCustomerAPI = async (req, res) => {
     try {
         const results = await getReviewForCustomer(req.params.idDevice, req.params.idCustomer);
@@ -412,5 +481,6 @@ module.exports = {
     //Review For Device
     getReviewForCustomerAPI,
     getAllReviewForDeviceAPI, postCreateReviewForDeviceAPI,
-    putUpdateReviewForDeviceAPI, updateStatusReviewForDeviceAPI
+    putUpdateReviewForDeviceAPI, updateStatusReviewForDeviceAPI,getAllReviewForDeviceAPI_Admin,
+    getReviewByIdAPI,updateReviewByIdAPI
 }

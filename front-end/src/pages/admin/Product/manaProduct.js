@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import SearchDevice from "../../../component/admin/Mana_product/searchProduct";
 import DeviceList from "../../../component/admin/Mana_product/productList";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const ManaProduct = () => {
     const [devices, setDevices] = useState([]);
@@ -18,21 +19,35 @@ const ManaProduct = () => {
     };
 
     const CannelDeviceClick = async (id, status) => {
-        const isConfirmed = window.confirm("Bạn có chắc chắn muốn xóa thiết bị này?");
+        const result = await Swal.fire({
+            title: 'Bạn có chắc chắn?',
+            text: `Xác nhận xóa thiết bị này?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: 'Hủy',
+          });
         if (id) {
-          if (isConfirmed) {
+          if (result.isConfirmed) {
             try {
               // Gửi yêu cầu hủy đơn hàng
               await axios.put("http://localhost:8081/api/device/admin", { idDevice: id, status: status });
 
-              alert("Xóa thiết bị thành công!");
+              await Swal.fire({
+                title: 'Thành công!',
+                text: 'Xóa thiết bị thành công!',
+                icon: 'success',
+              });
+              //Lấy lại dữ liệu khi xóa thiết bị(vì cập nhật trạng thái nên không re-render)
               filterDevice();
             } catch (error) {
               console.error("Lỗi khi xóa thiết bị:", error);
-              alert("Xóa thiết bị thất bại!");
+              await Swal.fire({
+                title: 'Lỗi!',
+                text: 'Có lỗi xảy ra khi xóa thiết bị!',
+                icon: 'error',
+              });
             }
-          } else {
-            alert("Hủy hành động xóa đơn hàng!");
           }
         }
       };

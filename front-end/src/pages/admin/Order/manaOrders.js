@@ -3,6 +3,7 @@ import SearchOrders from "../../../component/admin/Mana_orders/searchOrders";
 import OrdersList from "../../../component/admin/Mana_orders/ordersList";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const ManaOrders = () => {
     const [order, setOrder] = useState([]);
@@ -24,21 +25,34 @@ const ManaOrders = () => {
     };
 
     const CannelOrderClick = async (id, status) => {
-        const isConfirmed = window.confirm("Bạn có chắc chắn muốn hủy đơn hàng này?");
+        const result = await Swal.fire({
+            title: 'Bạn có chắc chắn?',
+            text: `Xác nhận hủy đơn hàng này?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: 'Hủy',
+          });
         if (id) {
-          if (isConfirmed) {
+          if (result.isConfirmed) {
             try {
               // Gửi yêu cầu hủy đơn hàng
               await axios.put("http://localhost:8081/api/order/admin", { idOrder: id, status: status });
     
-              alert("Đơn hàng đã được hủy thành công!");
+              await Swal.fire({
+                title: 'Thành công!',
+                text: 'Hủy đơn hàng thành công!',
+                icon: 'success',
+              });
               filterOrder();
             } catch (error) {
               console.error("Lỗi khi hủy đơn hàng:", error);
-              alert("Hủy đơn hàng thất bại!");
+              await Swal.fire({
+                title: 'Lỗi!',
+                text: 'Có lỗi xảy ra khi hủy đơn hàng!',
+                icon: 'error',
+              });
             }
-          } else {
-            alert("Hủy hành động hủy đơn hàng!");
           }
         }
       };

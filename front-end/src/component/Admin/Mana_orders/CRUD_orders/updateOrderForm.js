@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 const UpdateOrderForm = () => {
     const orderId = useParams();
@@ -50,10 +51,19 @@ const UpdateOrderForm = () => {
             console.log(orderData)
             const result = await response.json();
             if (response.ok) {
-                alert("Cập nhật đơn hàng thành công");
+                await Swal.fire({
+                    title: 'Thành công!',
+                    text: 'Cập nhật đơn hàng thành công!',
+                    icon: 'success',
+                  });
                 navigate('/admin/manage-order');
                 console.log("Order updated successfully:", result);
             } else {
+                await Swal.fire({
+                    title: 'Lỗi!',
+                    text: 'Có lỗi xảy ra khi cập nhật đơn hàng!',
+                    icon: 'error',
+                  });
                 console.error("Error updating order:", result.message);
             }
         } catch (error) {

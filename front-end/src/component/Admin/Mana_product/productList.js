@@ -1,5 +1,5 @@
 const ProductTable = ({ devices, onDelete }) => {
-    console.log("product table",devices)
+    console.log("product table", devices)
     return (
         <div className="card">
             <div className="table-responsive">
@@ -41,11 +41,13 @@ const ProductTable = ({ devices, onDelete }) => {
                                                     <i className="bi bi-pencil"></i> Sửa
                                                 </a>
                                             </li>
-                                            <li>
-                                                <a className="dropdown-item text-danger" href="#" onClick={() => onDelete(item.idDevice, 0)}>
-                                                    <i className="bi bi-trash"></i> Xóa
-                                                </a>
-                                            </li>
+                                            {item.status !== 0 &&
+                                                <li>
+                                                    <a className="dropdown-item text-danger" href="#" onClick={() => onDelete(item.idDevice, 0)}>
+                                                        <i className="bi bi-trash"></i> Xóa
+                                                    </a>
+                                                </li>
+                                            }
                                         </ul>
                                     </div>
                                 </td>

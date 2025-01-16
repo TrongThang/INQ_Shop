@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import SearchCategory from "../../../component/admin/Mana_Category/searchCategory";
+import SearchCategory from "../../../component/admin/Mana_Category/searchCategory_v1";
 import CategoryList from "../../../component/admin/Mana_Category/categoryList";
 import Swal from 'sweetalert2';
 

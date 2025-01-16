@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 const ListLiked = ({ idCustomer, devices }) => {
   const [device, setDevice] = useState([]);
+  const navigate = useNavigate();
   console.log('device:', devices);
 
   useEffect(() => {
@@ -35,11 +38,11 @@ const ListLiked = ({ idCustomer, devices }) => {
         </thead>
         <tbody>
           {device.map((item, index) => (
-            <tr key={index}>
+            <tr key={index} >
               <td>
                 <img src={`/img/device/${item.device.image}`} alt={item.device.name} className="img-fluid" style={{height: "100px", width: "100px"}}/>
               </td>
-              <td className="text-center align-middle fs-5">{item.device.name}</td>
+              <td className="text-center align-middle fs-5" onClick={() => navigate(`/device/${item.device.slug}`)} style={{cursor: "pointer"}}>{item.device.name}</td>
               <td className="text-center align-middle fs-5">{Math.floor(item.device.sellingPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " VNĐ"}</td>
               <td className="text-center align-middle"><span onClick={() => handleRemoveLiked(item.idDevice)}><i class="fa-solid fa-heart text-danger ms-2" style={{cursor: "pointer", fontSize: "25px"}}></i></span></td>
             </tr>

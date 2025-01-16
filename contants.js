@@ -9,7 +9,8 @@ const ERROR_CODES = {
     ORDER: {
         INTERNAL_ERROR: 500,
         ERROR_CREATE: 1,
-        CANNOT_CANCEL: 2 
+        CANNOT_CANCEL: 2,
+        ERROR_UPDATE: 3,
     },
     PAYMENT: {
         FAILED: 7,
@@ -30,7 +31,8 @@ const ERROR_MESSAGES = {
     ORDER: {
         [ERROR_CODES.SUCCESS]: 'Kiểm tra thành công, đơn hàng được tạo thành công',
         [ERROR_CODES.ORDER.ERROR_CREATE]: 'Lỗi không thể tạo được đơn hàng',
-        [ERROR_CODES.ORDER.CANNOT_CANCEL]: 'Lỗi không thể tạo được đơn hàng',
+        [ERROR_CODES.ORDER.ERROR_UPDATE]: 'Lỗi không thể cập nhật được đơn hàng',
+        [ERROR_CODES.ORDER.CANNOT_CANCEL]: 'Lỗi không thể hủy được đơn hàng',
         [ERROR_CODES.ORDER.INTERNAL_ERROR]: 'Lỗi nội bộ máy chủ khi xử lý thanh toán đơn hàng'
     },
     PAYMENT: {

@@ -29,13 +29,13 @@ function OrdersPage() {
                     if (activeTab === "all") {
                         setOrder(allOrders);
                     } else if (activeTab === "pending") {
-                        setOrder(allOrders.filter(item => item.status === 4));
-                    } else if (activeTab === "preparing") {
-                        setOrder(allOrders.filter(item => item.status === 3));
-                    } else if (activeTab === "shipping") {
-                        setOrder(allOrders.filter(item => item.status === 2));
-                    } else if (activeTab === "completed") {
                         setOrder(allOrders.filter(item => item.status === 1));
+                    } else if (activeTab === "preparing") {
+                        setOrder(allOrders.filter(item => item.status === 2));
+                    } else if (activeTab === "shipping") {
+                        setOrder(allOrders.filter(item => item.status === 3));
+                    } else if (activeTab === "completed") {
+                        setOrder(allOrders.filter(item => item.status === 4));
                     } else {
                         setOrder(allOrders.filter(item => item.status === 0));
                     }
@@ -125,7 +125,7 @@ function OrdersPage() {
                                     </a>
                                 </li>
                             </ul>
-                            <OrderItems orders={order} />
+                            <OrderItems initialOrders={order} />
                         </div>
                     </div>
                 </div>

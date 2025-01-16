@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
-const UpdateOrderForm = ({ onback, orderId }) => {
+const UpdateOrderForm = () => {
+    const orderId = useParams();
+    const navigate = useNavigate();
     const [orderData, setOrderData] = useState({
         id: "",
         creator: "",
         customerName: "",
-        platform: "",
+        platformOrder: "",
         status: "",
         order_device: [],
         totalPrice: 0,
     });
-    const [platforms] = useState(["Website", "App", "Cửa hàng"]);
-    const [statuses] = useState(["Hoạt động", "Ngừng hoạt động", "Đang cập nhật"]);
 
     const fetchOrderData = async () => {
         try {
-            const response = await fetch(`http://localhost:8081/api/order/admin/${orderId}`);
+            const response = await fetch(`http://localhost:8081/api/order/admin/${orderId.id}`);
             const result = await response.json();
             if (response.ok) {
                 setOrderData(result.data);
@@ -25,7 +26,7 @@ const UpdateOrderForm = ({ onback, orderId }) => {
         } catch (error) {
             console.error("Error fetching order data:", error);
         }
-        finally{
+        finally {
         }
     };
 
@@ -35,18 +36,22 @@ const UpdateOrderForm = ({ onback, orderId }) => {
             ...prevData,
             [name]: value,
         }));
+        console.log("thay đổi giá trị")
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:8081/api/order/${orderId}`, {
+            const response = await fetch(`http://localhost:8081/api/order/${orderId.id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(orderData),
             });
+            console.log(orderData)
             const result = await response.json();
             if (response.ok) {
+                alert("Cập nhật đơn hàng thành công");
+                navigate('/admin/manage-order');
                 console.log("Order updated successfully:", result);
             } else {
                 console.error("Error updating order:", result.message);
@@ -63,7 +68,7 @@ const UpdateOrderForm = ({ onback, orderId }) => {
     return (
         <div className="main-content-inner">
             <div className="my-3">
-                <a href="#" onClick={onback}>
+                <a href="#" onClick={() => navigate('/admin/manage-order')}>
                     <i className="bi bi-arrow-left pe-2"></i>Trở về
                 </a>
             </div>
@@ -71,17 +76,15 @@ const UpdateOrderForm = ({ onback, orderId }) => {
                 <h5 className="mb-4">Thông tin chi tiết Đơn hàng</h5>
                 <form onSubmit={handleSubmit}>
                     <div className="row">
-                        <div className="col-md-6 mb-3">
+                        <div className="col-md-4 mb-3">
                             <label className="form-label">Mã đơn hàng:</label>
                             <input type="text" className="form-control" value={orderData.id} readOnly />
                         </div>
-                        <div className="col-md-6 mb-3">
+                        <div className="col-md-4 mb-3">
                             <label className="form-label">Nhân viên xác nhận:</label>
-                            <input type="text" className="form-control" value={orderData.idEmployee} readOnly />
+                            <input type="text" className="form-control" value={`${orderData.employee?.surname} ${orderData.employee?.lastname}`} readOnly />
                         </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-md-6 mb-3">
+                        <div className="col-md-4 mb-3">
                             <label className="form-label">Ngày đặt:</label>
                             <input
                                 type="date"
@@ -90,7 +93,35 @@ const UpdateOrderForm = ({ onback, orderId }) => {
                                 readOnly
                             />
                         </div>
-                        
+                    </div>
+                    <div className="row">
+                        <div className="col-md-4 mb-3">
+                            <label className="form-label">Địa chỉ nhận hàng:</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={orderData.address}
+                                readOnly
+                            />
+                        </div>
+                        <div className="col-md-4 mb-3">
+                            <label className="form-label">Số điện thoại:</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={orderData.phone}
+                                readOnly
+                            />
+                        </div>
+                        <div className="col-md-4 mb-3">
+                            <label className="form-label">Ghi chú:</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={orderData.note}
+                                readOnly
+                            />
+                        </div>
                     </div>
                     <div className="row">
                         <div className="col-md-4 mb-3">
@@ -100,23 +131,18 @@ const UpdateOrderForm = ({ onback, orderId }) => {
                                 className="form-control"
                                 name="customerName"
                                 value={orderData.nameRecipient}
-                                onChange={handleChange}
+                                readOnly
                             />
                         </div>
                         <div className="col-md-4 mb-3">
                             <label className="form-label">Nền tảng đặt hàng:</label>
-                            <select
-                                className="form-select"
-                                name="platform"
+                            <input
+                                type="text"
+                                className="form-control"
+                                name="platformOrder"
                                 value={orderData.platformOrder}
-                                onChange={handleChange}
-                            >
-                                {platforms.map((platform, index) => (
-                                    <option key={index} value={platform}>
-                                        {platform}
-                                    </option>
-                                ))}
-                            </select>
+                                readOnly
+                            ></input>
                         </div>
                         <div className="col-md-4 mb-3">
                             <label className="form-label">Trạng thái:</label>
@@ -126,11 +152,10 @@ const UpdateOrderForm = ({ onback, orderId }) => {
                                 value={orderData.status}
                                 onChange={handleChange}
                             >
-                                {statuses.map((status, index) => (
-                                    <option key={index} value={status}>
-                                        {status}
-                                    </option>
-                                ))}
+                                <option value="1">Chờ xác nhận</option>
+                                <option value="2">Chuẩn bị hàng</option>
+                                <option value="3">Chờ giao hàng</option>
+                                <option value="4">Hoàn thành</option>
                             </select>
                         </div>
                     </div>
@@ -148,12 +173,12 @@ const UpdateOrderForm = ({ onback, orderId }) => {
                                 {orderData.order_device.map((device, index) => (
                                     <tr key={index}>
                                         <td>
-                                            <img src={`img/device/${device.device.image}`} alt={device.name} style={{width: "70px", height: "70px"}}/>
+                                            <img src={`/img/device/${device.device.image}`} alt={device.device.name} style={{ width: "70px", height: "70px" }} />
                                         </td>
                                         <td>
                                             {device.device.name} <strong>x {device.stock}</strong>
                                         </td>
-                                        <td>{device.amount}</td>
+                                        <td>{Number(device.amount).toLocaleString()}đ</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -163,7 +188,7 @@ const UpdateOrderForm = ({ onback, orderId }) => {
                                         <strong>Tổng đơn hàng: </strong>
                                     </td>
                                     <td>
-                                        <strong>{orderData.totalAmount}đ</strong>
+                                        <strong>{Number(orderData.totalAmount).toLocaleString()}đ</strong>
                                     </td>
                                 </tr>
                             </tfoot>

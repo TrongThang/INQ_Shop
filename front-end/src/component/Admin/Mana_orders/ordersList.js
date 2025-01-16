@@ -1,7 +1,7 @@
 import React from "react";
 
-const OrdersList = ({ orders, onEdit }) => {
-    console.log(orders);
+const OrdersList = ({ orders, onEdit, onDelete}) => {
+    console.log("Danh sách đơn hàng: ",orders);
     return (
         <div className="card">
             <div className="table-responsive">
@@ -9,7 +9,7 @@ const OrdersList = ({ orders, onEdit }) => {
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>ID Khách hàng</th>
+                            <th>Tên khách hàng</th>
                             <th>Tên người nhận</th>
                             <th>Tổng tiền</th>
                             <th>Phương thức Thanh toán</th>
@@ -26,7 +26,7 @@ const OrdersList = ({ orders, onEdit }) => {
                         {orders.map((item, index) => (
                             <tr key={index}>
                                 <td>{item.id}</td>
-                                <td>{item.idCustomer}</td>
+                                <td>{item.customer.surname} {item.customer.lastname}</td>
                                 <td>{item.nameRecipient}</td>
                                 <td>{item.totalAmount}</td>
                                 <td>{item.paymentMethod}</td>
@@ -36,28 +36,31 @@ const OrdersList = ({ orders, onEdit }) => {
                                 <td>{new Date(item.accept_at).toLocaleDateString('vi-VN')}</td>
                                 <td>{item.address}</td>
                                 <td>
-                                    <span className={`badge ${item.status === 0 ? "bg-danger" : (item.status == 1 ? "bg-success" : (item.status === 2 ? "bg-warning" : (item.status === 3 ? "bg-secondary" : "bg-info")))}`}>
-                                        {item.status === 0 ? "Đã hủy" : item.status === 1 ? "Hoàn thành" : item.status === 2 ? "Chờ giao hàng" : item.status === 3 ? "Chuẩn bị hàng" : "Chờ thanh toán"}
+                                    <span className={`badge ${item.status === 0 ? "bg-danger" : (item.status == 4 ? "bg-success" : (item.status === 3 ? "bg-warning" : (item.status === 2 ? "bg-secondary" : "bg-info")))}`}>
+                                        {item.status === 0 ? "Đã hủy" : item.status === 4 ? "Hoàn thành" : item.status === 3 ? "Chờ giao hàng" : item.status === 2 ? "Chuẩn bị hàng" : "Chờ xác nhận"}
                                     </span>
                                 </td>
                                 <td>
-                                    <div className="dropdown">
-                                        <button className="btn btn-light btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i className="bi bi-three-dots-vertical"></i>
-                                        </button>
-                                        <ul className="dropdown-menu">
-                                            <li>
-                                                <a className="dropdown-item" href="#" onClick={() => onEdit(item.id)}>
-                                                    <i className="bi bi-pencil"></i> Sửa
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a className="dropdown-item text-danger" href="#">
-                                                    <i className="bi bi-trash"></i> Hủy đơn
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    {(item.status !== 0 && item.status !== 4) && (
+                                        <div className="dropdown">
+                                            <button className="btn btn-light btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i className="bi bi-three-dots-vertical"></i>
+                                            </button>
+                                            <ul className="dropdown-menu">
+                                                <li>
+                                                    <a className="dropdown-item" href="#" onClick={() => onEdit(item.id)}>
+                                                        <i className="bi bi-pencil"></i> Sửa
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a className="dropdown-item text-danger" href="#" onClick={() => onDelete(item.id, 0)}>
+                                                        <i className="bi bi-trash"></i> Hủy đơn
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    )}
                                 </td>
                             </tr>
                         ))}

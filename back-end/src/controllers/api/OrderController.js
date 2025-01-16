@@ -3,9 +3,11 @@ const Order = require('../../models/Order.js');
 const { or } = require('sequelize');
 
 const {
-    checkCustomerOrderForDevice,
+    checkCustomerOrderForDevice, getAllOrderByIdCustomer,
     getAllOrder,
-    createOrder, updateStatusOrder,
+    getByIdOrder,
+    createOrder, updateOrder,
+    cancelOrderAdmin,
     cancelOrder,
 } = require('../../services/OrdersServices.js');
 const { ERROR_CODES } = require('../../../../contants.js');
@@ -81,15 +83,26 @@ const postCreateOrderAPI = async (req, res) => {
 
 const putUpdateOrderAPI = async (req, res) => {
     //TO DO SOMETHING
+    const data = req.body;
+    console.log(data)
+    const result = await updateOrder(data);
+
+    return res.status(result.errorCode === ERROR_CODES.SUCCESS ? 200 : 401).json(result)
 }
 
 
 const putUpdateStatusOrderAPI = async (req, res) => {
     const { idOrder, status } = req.body;
-    
-    if (status === STATUS_CODES.ORDER.CANCELLED) {
-        const result = cancelOrder(idOrder, status);
-    }
+    var result = null;
+    result = await cancelOrder(idOrder, status);
+
+    return res.status(result.errorCode === ERROR_CODES.SUCCESS ? 200 : 401).json(result)
+}
+
+const putUpdateStatusOrderAdminAPI = async (req, res) => {
+    const { idOrder, status } = req.body;
+    var result = null;
+    result = await cancelOrderAdmin(idOrder, status);
 
     return res.status(result.errorCode === ERROR_CODES.SUCCESS ? 200 : 401).json(result)
 }
@@ -103,5 +116,7 @@ module.exports = {
     getAllOrderByIdCustomerAPI,
     getAllOrderAPI,
     getOrderByIdOrderAPI,
-    postCreateOrderAPI, putUpdateStatusOrderAPI
+    postCreateOrderAPI, putUpdateStatusOrderAPI,
+    putUpdateStatusOrderAdminAPI,
+    putUpdateOrderAPI
 }

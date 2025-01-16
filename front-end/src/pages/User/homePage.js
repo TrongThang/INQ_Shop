@@ -22,11 +22,10 @@ function HomePage() {
                 scrollToBestSelling={() => scrollToBestSelling.current.scrollIntoView({ behavior: "smooth" })}
             />
             <CategoryDevice />
-            {/* <FeaturedDevice ref={scrollToFeatured} />
+            <FeaturedDevice ref={scrollToFeatured} />
             <BestSeelingDeivce ref={scrollToBestSelling} />
             <NewDevice ref={scrollToNew} />
-            <DisCountDevice /> */}
-            <Services />
+            <DisCountDevice />
         </>
     )
 }

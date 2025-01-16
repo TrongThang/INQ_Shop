@@ -4,6 +4,7 @@ import '../resource/assets/css/default-css.css'
 import '../resource/assets/css/styles.css'
 import '../resource/assets/css/responsive.css'
 
+
 // import 'jquery-slimscroll/jquery.slimscroll.min.js';
 // import 'owl.carousel/dist/assets/owl.carousel.css';
 
@@ -16,7 +17,6 @@ export default function Admin() {
         <>
             <div className="page-container">
                 <Sidebar />
-                
                 <ContentAdmin />
             </div>
         </>

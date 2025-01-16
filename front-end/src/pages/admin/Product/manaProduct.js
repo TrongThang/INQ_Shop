@@ -43,9 +43,9 @@ const ManaProduct = () => {
     return (
         <div className="main-content-inner">
             <div className="container-fluid py-4">
-                {/* <Header onAdd={handleAdd} onExport={handleExport} />
+                <Header onAdd={handleAdd} onExport={handleExport} />
                 <SearchFilter />
-                <Table data={data} /> */}
+                <Table data={data} />
                 <AddOrEditProduct />
                 
             </div>

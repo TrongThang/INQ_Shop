@@ -2,6 +2,7 @@ const sequelize = require('../config/database');
 const { DataTypes } = require('sequelize');
 const OrderDetail = require('./Order_detail');
 const Customer = require('./Customer');
+const Employee = require('./Employee');
 
 const Order = sequelize.define('order', {
   id: {
@@ -97,5 +98,6 @@ const Order = sequelize.define('order', {
 // Order.hasMany(OrderDetail, {foreignKey: 'id', as: 'details'})
 
 Order.belongsTo(Customer, {foreignKey: 'idCustomer', as: 'customer'});
+Order.belongsTo(Employee, {foreignKey: 'idEmployee', as: 'employee'});
 
 module.exports = Order 

@@ -42,6 +42,7 @@ import ReviewDevice from './pages/user/reviewDevice'
 
 //ADMIN
 import ManaOrder from './pages/admin/Order/manaOrders';
+import UpdateOrder from './component/admin/Mana_orders/CRUD_orders/updateOrderForm';
 
 
 import ManaCategory from './pages/admin/Categories/manaCategory';
@@ -54,13 +55,15 @@ function App() {
       <Router>
         <Routes>
           {/* ADMIN */}
-          <Route path='/admin' element={<Admin />} > 
+          <Route path='/admin/' element={<Admin />} > 
           
-          </Route>
+            <Route path="manage-category" element={<ManaCategory />} />
+            <Route path="add-category" element={<AddOrEditCategory />} />
+            <Route path="edit-category/:id" element={<AddOrEditCategory />} />
+            <Route path="manage-order" element={<ManaOrder />} />
+            <Route path="edit-order/:id" element={<UpdateOrder />} />
 
-          <Route path="/manage-category" element={<ManaCategory />} />
-          <Route path="/add-category" element={<AddOrEditCategory />} />
-          <Route path="/edit-category/:id" element={<AddOrEditCategory />} />
+          </Route>
 
 
           {/* USER */}

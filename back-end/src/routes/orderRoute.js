@@ -6,6 +6,8 @@ const {
     getAllOrderAPI,
     getOrderByIdOrderAPI,
     putUpdateStatusOrderAPI,
+    putUpdateStatusOrderAdminAPI,
+    putUpdateOrderAPI,
     postCreateOrderAPI, 
 } = require('../controllers/api/OrderController');
 const routerOrder = express.Router();
@@ -16,6 +18,7 @@ const routerOrder = express.Router();
 //USER
 routerOrder.get('/checkOrder/:idCustomer/:idDevice', checkCustomerOrderForDeviceAPI);
 routerOrder.get('/:id', getAllOrderByIdCustomerAPI );
+routerOrder.put('/', putUpdateStatusOrderAPI);
 //ADMIN
 routerOrder.get('/', getAllOrderAPI);
 routerOrder.get('/admin/:idOrder', getOrderByIdOrderAPI);
@@ -23,6 +26,7 @@ routerOrder.get('/admin/:idOrder', getOrderByIdOrderAPI);
 // routerOrder.put('/status', putUpdateStatusOrderAPI);
 
 routerOrder.post('/checkout', postCreateOrderAPI);
-routerOrder.put('/', putUpdateStatusOrderAPI);
+routerOrder.put('/:id', putUpdateOrderAPI);
+routerOrder.put('/admin', putUpdateStatusOrderAdminAPI);
 
 module.exports = routerOrder;

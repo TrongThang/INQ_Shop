@@ -10,6 +10,7 @@ const renderCategoryRow = (item, onEdit, onStatusChange, level = 0) => {
           style={{
             paddingLeft: `${level * 20}px`, // Thụt lề tăng dần
             fontSize: `${17 - level * 2}px`, // Kích thước chữ giảm dần
+            marginLeft: '10px'
           }}>
           {"-".repeat(level)} {item.nameCategory} {/* Thêm dấu "-" để phân cấp */}
         </td>
@@ -21,7 +22,7 @@ const renderCategoryRow = (item, onEdit, onStatusChange, level = 0) => {
             height="50"
           />
         </td>
-        <td style={{ width: "500px" }}>{item.description}</td>
+        <td style={{ width: "450px" }}>{item.description}</td>
         <td>{new Date(item.created_at).toLocaleDateString()}</td>
 
         <td>

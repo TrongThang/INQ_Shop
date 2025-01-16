@@ -125,7 +125,7 @@ const putUpdateCategoryAPI = async (req, res) => {
                 msg: "Thiếu thông tin id danh mục!"
             });
         }
-
+        
         // Cập nhật danh mục
         const updatedCount = await updateCategory({ id, ...data });
         console.log("Update", updatedCount === 0)
@@ -150,7 +150,7 @@ const putUpdateCategoryAPI = async (req, res) => {
         console.error("Error in putUpdateCategoryAPI:", error);
         return res.status(500).json({
             errorCode: 1,
-            msg: "Cập nhật thông tin thất bại!"
+            msg: "Tên mục đã tồn tại!"
         });
     }
 };

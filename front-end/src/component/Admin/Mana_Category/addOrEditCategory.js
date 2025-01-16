@@ -9,6 +9,8 @@ const AddOrEditCategory = () => {
     // Lấy dữ liệu từ location.state
     const { mode, data } = location.state || { mode: "add", data: null };
 
+
+
     // Khởi tạo formData dựa trên dữ liệu nhận được
     const [formData, setFormData] = useState({
         nameCategory: data?.nameCategory || "",
@@ -18,10 +20,7 @@ const AddOrEditCategory = () => {
         isHide: data?.isHide || 0,
         createdDate: data?.createdDate || new Date().toISOString().split("T")[0],
     });
-
-    // Fetch danh sách danh mục cha
     const [parentCategories, setParentCategories] = useState([]);
-
     // Hàm đệ quy để loại bỏ danh mục và các danh mục con
     const filterOutCategoryAndChildren = (categories, categoryId) => {
         return categories.filter(category => {
@@ -34,7 +33,6 @@ const AddOrEditCategory = () => {
             return true;
         });
     };
-
     // Hàm đệ quy để hiển thị danh mục và danh mục con
     const renderCategories = (categories, level = 0) => {
         return categories.map((category) => (
@@ -63,7 +61,6 @@ const AddOrEditCategory = () => {
             if (mode === "edit" && id) {
                 categories = filterOutCategoryAndChildren(categories, parseInt(id));
             }
-
             setParentCategories(categories);
         } catch (error) {
             console.error("Error fetching parent categories:", error);

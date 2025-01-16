@@ -3,14 +3,13 @@ import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import ContactTable from "../../../component/admin/Mana_Contact/contactList";
 import SearchContact from "../../../component/admin/Mana_Contact/searchContact";
+import Swal from 'sweetalert2';
 
 const ManaContact = () => {
-    const [contact, setContact] = useState([]); // Dữ liệu gốc từ API
-    const [filteredContacts, setFilteredContacts] = useState([]); // Dữ liệu đã lọc
+    const [contact, setContact] = useState([]);
+    const [filteredContacts, setFilteredContacts] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
-    const [toastMessage, setToastMessage] = useState('');
-    const [showToast, setShowToast] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [contactToDelete, setContactToDelete] = useState(null);
     const navigate = useNavigate();
@@ -30,8 +29,8 @@ const ManaContact = () => {
         try {
             const response = await fetch('http://localhost:8081/api/contact');
             const result = await response.json();
-            setContact(result.data); // Lưu dữ liệu gốc vào state
-            setFilteredContacts(result.data); // Ban đầu, filteredContacts sẽ bằng dữ liệu gốc
+            setContact(result.data);
+            setFilteredContacts(result.data);
         } catch (err) {
             console.error("Error fetching contacts:", err);
         }
@@ -40,16 +39,6 @@ const ManaContact = () => {
     useEffect(() => {
         fetchDataContact();
     }, []);
-
-    useEffect(() => {
-        if (showToast) {
-            const timer = setTimeout(() => {
-                setShowToast(false);
-            }, 2000);
-
-            return () => clearTimeout(timer);
-        }
-    }, [showToast]);
 
     const handleDeleteClick = (contact) => {
         setContactToDelete(contact);
@@ -64,16 +53,28 @@ const ManaContact = () => {
                 method: 'DELETE',
             });
             if (response.ok) {
-                setToastMessage('Xóa contact thành công.');
-                setShowToast(true);
+                await Swal.fire({
+                    title: 'Thành công!',
+                    text: 'Xóa contact thành công.',
+                    icon: 'success',
+                });
                 setContact(prevContacts => prevContacts.filter((item) => item.id !== contactToDelete.id));
                 setFilteredContacts(prevContacts => prevContacts.filter((item) => item.id !== contactToDelete.id));
             } else {
                 const result = await response.json();
-                alert(`Error: ${result.message}`);
+                await Swal.fire({
+                    title: 'Lỗi!',
+                    text: result.message || 'Có lỗi xảy ra khi xóa contact!',
+                    icon: 'error',
+                });
             }
         } catch (err) {
             console.error("Error deleting contact:", err);
+            await Swal.fire({
+                title: 'Lỗi!',
+                text: 'Có lỗi xảy ra khi xóa contact!',
+                icon: 'error',
+            });
         } finally {
             setShowDeleteModal(false);
             setContactToDelete(null);
@@ -93,40 +94,37 @@ const ManaContact = () => {
         setStatusFilter(value);
     };
 
-  // Hàm loại bỏ dấu tiếng Việt
-const removeAccents = (str) => {
-    return str
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase();
-};
+    const removeAccents = (str) => {
+        return str
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase();
+    };
 
-// Hàm lọc dữ liệu
-const filterContacts = () => {
-    const normalizedSearchTerm = removeAccents(searchTerm);
+    const filterContacts = () => {
+        const normalizedSearchTerm = removeAccents(searchTerm);
 
-    const filtered = contact.filter((contact) => {
-        const normalizedFullName = removeAccents(contact.fullname);
-        const normalizedTitle = removeAccents(contact.title);
-        const normalizedEmail = removeAccents(contact.email);
-        const normalizedContent = removeAccents(contact.content);
+        const filtered = contact.filter((contact) => {
+            const normalizedFullName = removeAccents(contact.fullname);
+            const normalizedTitle = removeAccents(contact.title);
+            const normalizedEmail = removeAccents(contact.email);
+            const normalizedContent = removeAccents(contact.content);
 
-        const matchesSearchTerm =
-            normalizedFullName.includes(normalizedSearchTerm) ||
-            normalizedTitle.includes(normalizedSearchTerm) ||
-            normalizedEmail.includes(normalizedSearchTerm) ||
-            normalizedContent.includes(normalizedSearchTerm);
+            const matchesSearchTerm =
+                normalizedFullName.includes(normalizedSearchTerm) ||
+                normalizedTitle.includes(normalizedSearchTerm) ||
+                normalizedEmail.includes(normalizedSearchTerm) ||
+                normalizedContent.includes(normalizedSearchTerm);
 
-        const matchesStatusFilter =
-            statusFilter === "all" || contact.status.toString() === statusFilter;
+            const matchesStatusFilter =
+                statusFilter === "all" || contact.status.toString() === statusFilter;
 
-        return matchesSearchTerm && matchesStatusFilter;
-    });
+            return matchesSearchTerm && matchesStatusFilter;
+        });
 
-    setFilteredContacts(filtered); // Cập nhật dữ liệu đã lọc vào state
-};
+        setFilteredContacts(filtered);
+    };
 
-    // Lọc dữ liệu mỗi khi searchTerm hoặc statusFilter thay đổi
     useEffect(() => {
         filterContacts();
     }, [searchTerm, statusFilter, contact]);
@@ -146,19 +144,6 @@ const filterContacts = () => {
                     onDelete={handleDeleteClick}
                 />
             </div>
-            {/* Toast Notification */}
-            {showToast && (
-                <div className="toast-container position-fixed top-0 end-70 p-3">
-                    <div className="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div className="toast-header bg-primary text-white">
-                            <strong className="me-auto">Thông báo</strong>
-                        </div>
-                        <div className="toast-body">
-                            {toastMessage}
-                        </div>
-                    </div>
-                </div>
-            )}
             {/* Modal xác nhận xóa */}
             {showDeleteModal && contactToDelete && (
                 <div className="modal fade show" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }} tabIndex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">

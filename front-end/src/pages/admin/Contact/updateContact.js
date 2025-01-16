@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import UpdateContactForm from "../../../component/admin/CRUD_contact/update_contactForm";
+import Swal from 'sweetalert2';
 
 function UpdateContact() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [toastMessage, setToastMessage] = useState('');
-    const [showToast, setShowToast] = useState(false);
     const [contact, setContact] = useState({});
 
     const fetchDataContact = async () => {
@@ -23,37 +22,50 @@ function UpdateContact() {
         fetchDataContact();
     }, [id]);
 
-    useEffect(() => {
-        if (showToast) {
-            const timer = setTimeout(() => {
-                setShowToast(false);
-            }, 2000);
-
-            return () => clearTimeout(timer);
-        }
-    }, [showToast]);
-
     const handleSubmit = async (data) => {
-        try {
-            const response = await fetch(`http://localhost:8081/api/contact/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-            const result = await response.json();
-            if (response.ok) {
-                setToastMessage('Cập nhật Contact thành công!');
-                setShowToast(true);
-                setTimeout(() => {
+        // Hiển thị hộp thoại xác nhận
+        const confirmResult = await Swal.fire({
+            title: 'Bạn có chắc chắn?',
+            text: 'Bạn có chắc muốn cập nhật thông tin liên hệ này không?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: 'Hủy',
+        });
+
+        // Nếu người dùng xác nhận
+        if (confirmResult.isConfirmed) {
+            try {
+                const response = await fetch(`http://localhost:8081/api/contact/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    await Swal.fire({
+                        title: 'Thành công!',
+                        text: 'Cập nhật Contact thành công!',
+                        icon: 'success',
+                    });
                     navigate('/admin/contacts');
-                }, 1000);
-            } else {
-                alert(`Lỗi: ${result.message}`);
+                } else {
+                    await Swal.fire({
+                        title: 'Lỗi!',
+                        text: result.message || 'Có lỗi xảy ra khi cập nhật Contact!',
+                        icon: 'error',
+                    });
+                }
+            } catch (error) {
+                console.error("Error updating contact:", error);
+                await Swal.fire({
+                    title: 'Lỗi!',
+                    text: 'Có lỗi xảy ra khi cập nhật Contact!',
+                    icon: 'error',
+                });
             }
-        } catch (error) {
-            console.error("Error updating contact:", error);
         }
     };
 
@@ -65,18 +77,6 @@ function UpdateContact() {
                 </div>
                 <UpdateContactForm contact={contact} onSubmit={handleSubmit} />
             </div>
-            {showToast && (
-                <div className="toast-container position-fixed top-0 end-70 p-3">
-                    <div className="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div className="toast-header bg-primary text-white">
-                            <strong className="me-auto">Thông báo</strong>
-                        </div>
-                        <div className="toast-body">
-                            {toastMessage}
-                        </div>
-                    </div>
-                </div>
-            )}
         </main>
     );
 }

@@ -31,7 +31,7 @@ function ListBlogPage({ isIntroPage = false }) {
         });
 
         setFilteredBlogs(filtered);
-        setSearchParams({ page: 1 }); // Reset về trang đầu tiên sau khi tìm kiếm
+        // Không reset về trang 1 ở đây nữa
     };
 
     // Fetch dữ liệu bài viết từ API

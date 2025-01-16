@@ -20,6 +20,7 @@ const routerDevice = require('./deviceRoute');
 const routerImport = require('./importRoute');
 const routerInfoWebsite = require('./infoWebsiteRoute');
 const routerOrder = require('./orderRoute');
+const routerStatistics =require('./statisticsRoute');
 
 
 
@@ -39,6 +40,8 @@ router.use('/attribute', routerAttribute);
 router.use('/setting-web', routerInfoWebsite);
 router.use('/import', routerImport);
 router.use('/order', routerOrder);
+
+router.use('/statistics', routerStatistics);
 
 // router.use('/attributeGroup', routerAttributeGroup);
 

@@ -10,6 +10,7 @@ function UpdateInfoWeb() {
         VALUE: "",
         STATUS: "",
     });
+    const [error, setError] = useState(""); // Thêm state để lưu trữ thông báo lỗi
 
     const fetchDataInfoWeb = async () => {
         try {
@@ -31,10 +32,22 @@ function UpdateInfoWeb() {
             ...prevData,
             [name]: value,
         }));
+        setError(""); // Xóa thông báo lỗi khi người dùng thay đổi giá trị
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Kiểm tra trường VALUE
+        if (!InfoWeb.VALUE.trim()) {
+            setError("Vui lòng nhập giá trị.");
+            return;
+        }
+        if (InfoWeb.VALUE.length > 500) {
+            setError("Giá trị không được vượt quá 500 ký tự.");
+            return;
+        }
+
         try {
             const response = await fetch("http://localhost:8081/api/setting-web", {
                 method: "PUT",
@@ -46,7 +59,7 @@ function UpdateInfoWeb() {
                 setToastMessage('Đã chỉnh sửa thông tin thành công.');
                 setShowToast(true);
                 setTimeout(() => {
-                    navigate("/admin/info-web");
+                    navigate("/admin/dashboard/info-web");
                 }, 1000);
             } else {
                 console.error("Form submission error:", result);
@@ -71,7 +84,7 @@ function UpdateInfoWeb() {
 
     return (
         <div className="main-content-inner">
-            <div className="my-3" onClick={() => navigate("/admin/info-web")}>
+            <div className="my-3" onClick={() => navigate("/admin/dashboard/info-web")}>
                 <a href="#">
                     <i className="bi bi-arrow-left pe-2"></i>Trở về
                 </a>
@@ -101,6 +114,7 @@ function UpdateInfoWeb() {
                                     onChange={handleChange}
                                     required
                                 />
+                                {error && <div className="text-danger mt-2">{error}</div>} {/* Hiển thị thông báo lỗi */}
                             </div>
                             <div className="mb-3">
                                 <label className="form-label">Trạng thái:</label>

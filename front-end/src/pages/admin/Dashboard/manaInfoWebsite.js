@@ -18,7 +18,7 @@ const ManaInfoWeb = () => {
     // };
 
     const handleFormUpdateClick = (KEY_NAME) => {
-        navigate(`/admin/info-web/update/${KEY_NAME}`);
+        navigate(`/admin/dashboard/info-web/update/${KEY_NAME}`);
     };
 
     const handleExport = () => {

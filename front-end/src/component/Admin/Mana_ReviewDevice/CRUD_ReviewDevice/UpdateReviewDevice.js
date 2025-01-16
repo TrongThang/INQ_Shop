@@ -12,6 +12,7 @@ function UpdateReviewDevice() {
         created_at: "",
         updated_at: "",
     });
+    const [error, setError] = useState("");
 
     const fetchDataReview = async () => {
         try {
@@ -41,6 +42,17 @@ function UpdateReviewDevice() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Kiểm tra trường note
+        if (!ReviewDevice.note.trim()) {
+            setError("Vui lòng nhập ghi chú.");
+            return;
+        }
+        if (ReviewDevice.note.length > 500) {
+            setError("Ghi chú không được vượt quá 500 ký tự.");
+            return;
+        }
+
         try {
             const updatedReviewDevice = {
                 ...ReviewDevice,
@@ -163,6 +175,7 @@ function UpdateReviewDevice() {
                                     onChange={handleChange}
                                     required
                                 />
+                                {error && <div className="text-danger mt-2">{error}</div>}
                             </div>
                             <div className="mb-3">
                                 <label className="form-label">Trạng thái:</label>

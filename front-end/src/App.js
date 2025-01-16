@@ -46,7 +46,10 @@ import UpdateReviewDevice from './component/admin/Mana_ReviewDevice/CRUD_ReviewD
 import DeleteReviewDevice from './component/admin/Mana_ReviewDevice/CRUD_ReviewDevice/DeleteReviewDevice';
 import ManaInfoWeb from './pages/admin/Dashboard/manaInfoWebsite';
 import UpdateInfoWeb from './component/admin/Mana_InfoWebsite/CRUD_InfoWeb/UpdateInfoWeb';
-import AddInfoWeb from './component/admin/Mana_InfoWebsite/CRUD_InfoWeb/AddInfoWeb';
+
+import Dashboard  from "./pages/admin/Dashboard/dashboard"
+import Statistics from "./component/admin/Mana_Statistics/StatisticsTab";
+
 function App() {
 
   return (
@@ -63,9 +66,20 @@ function App() {
           <Route path="review-device/update/:id" element={<UpdateReviewDevice />} />
           <Route path="review-device/delete/:id" element={<DeleteReviewDevice />} />
 
-          <Route path="info-web" element={<ManaInfoWeb />} />
-          <Route path="info-web/update/:keyName" element={<UpdateInfoWeb />} />
-          <Route path="info-web/add" element={<AddInfoWeb />} />
+          
+
+               {/* Route cho Dashboard */}
+               <Route path="dashboard" element={<Dashboard />}>
+                        {/* Tab Thống kê */}
+                    
+                        <Route path="statistics" element={<Statistics />} />
+
+                        {/* Tab Quản lý thông tin website */}
+                        <Route path="info-web" element={<ManaInfoWeb />} />
+                        <Route path="info-web/update/:keyName" element={<UpdateInfoWeb />} />
+                       
+                    </Route>
+
 
           </Route>
           

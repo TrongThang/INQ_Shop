@@ -51,9 +51,10 @@ const filterReviews = () => {
     console.log(ReviewDevice);
 
     const filtered = ReviewDevice.filter((item) => {
-        if (item.idCustomer === null) {
+        if (item.idCustomer === null || item.idDevice === null) {
             return;
-        }        
+        }     
+
         // Kiểm tra nếu item hoặc các thuộc tính cần thiết không tồn tại
         if (!item || !item.customerReview || !item.device || !item.comment||!item.customerReview.surname||!item.customerReview.lastName) {
             return false; // Bỏ qua item này

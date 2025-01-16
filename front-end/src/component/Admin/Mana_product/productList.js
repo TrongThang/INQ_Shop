@@ -1,38 +1,33 @@
-const ProductTable = ({ data }) => {
+const ProductTable = ({ devices, onDelete }) => {
+    console.log("product table", devices)
     return (
         <div className="card">
             <div className="table-responsive">
                 <table className="table table-hover align-middle">
                     <thead>
                         <tr>
-                            <th><input type="checkbox" /></th>
+                            <th>ID</th>
                             <th>Sản phẩm</th>
                             <th>Hình ảnh</th>
-                            <th>Giá vốn</th>
                             <th>Giá bán</th>
-                            <th>SL tồn</th>
-                            <th>Người tạo</th>
-                            <th>Ngày tạo</th>
-                            <th>Ngày sửa</th>
-                            <th>Trạng Thái SP</th>
+                            <th>Mô tả</th>
+                            <th>Mô tả thường</th>
+                            <th>Trạng thái</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {data.map((item, index) => (
+                        {devices.map((item, index) => (
                             <tr key={index}>
-                                <td><input type="checkbox" /></td>
-                                <td>{item.productName}</td>
-                                <td><img src={item.image} alt={item.productName} width="100" /></td>
-                                <td>{item.costPrice}</td>
-                                <td>{item.salePrice}</td>
-                                <td>{item.stock}</td>
-                                <td>{item.creator}</td>
-                                <td>{item.createdDate}</td>
-                                <td>{item.modifiedDate}</td>
+                                <td>{item.idDevice}</td>
+                                <td>{item.name}</td>
+                                <td><img src={`/img/device/${item.image}`} alt={item.name} width="100" /></td>
+                                <td>{Number(item.sellingPrice).toLocaleString()}</td>
+                                <td dangerouslySetInnerHTML={{ __html: item.description }}></td>
+                                <td>{item.descriptionNormal}</td>
                                 <td>
-                                    <span className={`badge ${item.status === "Hoạt động" ? "bg-success" : item.status === "Ngừng hoạt động" ? "bg-danger" : "bg-warning text-dark"}`}>
-                                        {item.status}
+                                    <span className={`badge ${item.status === 0 ? "bg-danger" : item.status === 1 ? "bg-success" : item.status === 2 ? "bg-warning" : item.status === 3 ? "bg-info" : item.status === 4 ? "bg-primary" : "bg-secondary"}`}>
+                                        {item.status === 0 ? "Ngừng bán" : item.status === 1 ? "Đang bán" : item.status === 2 ? "Khuyến mãi" : item.status === 3 ? "Nổi bật" : item.status === 4 ? "Mới" : "Bán chạy"}
                                     </span>
                                 </td>
                                 <td>
@@ -46,11 +41,13 @@ const ProductTable = ({ data }) => {
                                                     <i className="bi bi-pencil"></i> Sửa
                                                 </a>
                                             </li>
-                                            <li>
-                                                <a className="dropdown-item text-danger" href="#">
-                                                    <i className="bi bi-trash"></i> Xóa
-                                                </a>
-                                            </li>
+                                            {item.status !== 0 &&
+                                                <li>
+                                                    <a className="dropdown-item text-danger" href="#" onClick={() => onDelete(item.idDevice, 0)}>
+                                                        <i className="bi bi-trash"></i> Xóa
+                                                    </a>
+                                                </li>
+                                            }
                                         </ul>
                                     </div>
                                 </td>

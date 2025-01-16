@@ -517,15 +517,16 @@ const updateDevice = async (deviceSend, stock) => {
     return updatedCount;
 }
 
-const updateStatusDevice = async ({ idDevice, status }) => {
-    const valueIsHide = status <= 0 ? true : false;
+const updateStatusDevice = async (data) => {
+    console.log("req.body: ",data);
+    const valueIsHide = (data.status == 0) ? true : false;
 
     const [updatedCount] = await Device.update(
         {
-            status: status,
+            status: data.status,
             isHide: valueIsHide
         },
-        { where: { idDevice } }
+        { where: { idDevice: data.idDevice } }
     );
 
     return updatedCount;

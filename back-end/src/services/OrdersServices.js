@@ -1,5 +1,6 @@
 const { where, Model } = require('sequelize');
 const Order = require('../models/Order');
+const Employee = require('../models/Employee');
 const Customer = require('../models/Customer');
 const Device = require('../models/Device');
 const { checkDevice } = require('./DeviceServices');
@@ -7,33 +8,70 @@ const { ERROR_CODES, ERROR_MESSAGES } = require('../../../contants');
 const OrderDetail = require('../models/Order_detail');
 const { STATUS_CODES } = require('../../../statusContaints');
 
-const getAllOrder = async (idCustomer) => {
-    // const orders = await Order.findAll({
-    //     where: { idCustomer },
-    //     include: [
-    //         {
-    //             model: Order_detail,
-    //             as: 'details',
-    //             attribute: [ 'price', 'stock', 'amount',],
-    //             include: [{
-    //                 model: Device,
-    //                 as: 'device',
-    //                 attribute: ['image']
-    //             }]
-    //         }
-    //     ]
-    // });
-    // return orders;
+const getAllOrder = async () => {
+    const orders = await Order.findAll({
+        include: [{
+            model: Customer,
+            as: 'customer',
+            attributes: ['surname', 'lastname']
+        }]
+    });
+    return orders;
 }
 
-const checkCustomerOrderForDevice  = async (idCustomer, idDevice) => {
+const getAllOrderByIdCustomer = async (idCustomer) => {
+    const orders = await Order.findAll({
+        where: { idCustomer },
+        include: [
+            {
+                model: OrderDetail,
+                as: 'order_device',
+                attributes: ['price', 'stock', 'amount',],
+                include: [{
+                    model: Device,
+                    as: 'device',
+                    attributes: ['image', 'slug']
+                }]
+            }
+        ],
+        order: [['created_at', 'DESC']]
+    });
+    return orders;
+}
+
+const getByIdOrder = async (idOrder) => {
+    const orders = await Order.findByPk(idOrder,
+        {
+            include: [
+                {
+                    model: OrderDetail,
+                    as: 'order_device',
+                    attributes: ['price', 'stock', 'amount',],
+                    include: [{
+                        model: Device,
+                        as: 'device',
+                        attributes: ['image', 'name']
+                    }]
+                },
+                {
+                    model: Employee,
+                    as: 'employee',
+                    attributes: ['surname', 'lastname'],
+                }
+            ]
+        }
+    );
+    return orders;
+}
+
+const checkCustomerOrderForDevice = async (idCustomer, idDevice) => {
     const orders = await Order.findAll({
         where: {
             idCustomer: idCustomer
         },
         include: [
             {
-                model: Order_detail,
+                model: OrderDetail,
                 as: 'order_device',
                 where: {
                     idDevice: idDevice
@@ -90,7 +128,7 @@ const createOrder = async (infoOrder, products) => {
     if (!newOrder) {
         return {
             errorCode: ERROR_CODES.ORDER.ERROR_CREATE,
-            messages: ERROR_MESSAGES.ORDER[ERROR_CODES.ORDER.ERROR_CREATE] 
+            messages: ERROR_MESSAGES.ORDER[ERROR_CODES.ORDER.ERROR_CREATE]
         }
     }
 
@@ -114,17 +152,16 @@ const createOrder = async (infoOrder, products) => {
 const cancelOrder = async (idOrder, status) => {
     try {
         const order = await Order.findByPk(idOrder);
-
         if (
-            status === STATUS_CODES.ORDER.CANCELLED &&
+            status == STATUS_CODES.ORDER.CANCELLED &&
             (order.status === STATUS_CODES.ORDER.PENDING || order.status === STATUS_CODES.ORDER.PREPARING)
-        )
-        {
+        ) {
             const [affectedCount, affectedRows] = await Order.update(
-                {status: status},
+                { status: status },
                 { where: { id: idOrder }, returning: true }
             );
-
+            console.log("affectedCount:", affectedCount,
+                "affectedRows:", affectedRows)
             return {
                 errorCode: ERROR_CODES.SUCCESS,
                 affectedCount: affectedCount,
@@ -137,6 +174,7 @@ const cancelOrder = async (idOrder, status) => {
             messages: ERROR_MESSAGES.ORDER[ERROR_CODES.ORDER.CANNOT_CANCEL]
         }
     } catch (error) {
+        console.log("đây lại")
         return {
             errorCode: ERROR_CODES.ORDER.INTERNAL_ERROR,
             messages: error.message || ERROR_MESSAGES.ORDER[ERROR_CODES.ORDER.CANNOT_CANCEL]
@@ -144,13 +182,68 @@ const cancelOrder = async (idOrder, status) => {
     }
 }
 
-const updateStatusOrder = async (idOrder, status) => {
-    
+const cancelOrderAdmin = async (idOrder, status) => {
+    try {
+        const order = await Order.findByPk(idOrder);
+        if (
+            status == STATUS_CODES.ORDER.CANCELLED &&
+            (order.status === STATUS_CODES.ORDER.PENDING || order.status === STATUS_CODES.ORDER.PREPARING || order.status === STATUS_CODES.ORDER.DELIVERING)
+        ) {
+            const [affectedCount, affectedRows] = await Order.update(
+                { status: status },
+                { where: { id: idOrder }, returning: true }
+            );
+            console.log("affectedCount:", affectedCount,
+                "affectedRows:", affectedRows)
+            return {
+                errorCode: ERROR_CODES.SUCCESS,
+                affectedCount: affectedCount,
+                affectedRows: affectedRows
+            }
+        }
+
+        return {
+            errorCode: ERROR_CODES.ORDER.CANNOT_CANCEL,
+            messages: ERROR_MESSAGES.ORDER[ERROR_CODES.ORDER.CANNOT_CANCEL]
+        }
+    } catch (error) {
+        console.log("đây nè")
+        return {
+            errorCode: ERROR_CODES.ORDER.INTERNAL_ERROR,
+            messages: error.message || ERROR_MESSAGES.ORDER[ERROR_CODES.ORDER.CANNOT_CANCEL]
+        }
+    }
+}
+
+const updateOrder = async (data) => {
+    try {
+        const [affectedCount, affectedRows] = await Order.update(data,
+            {
+                where: { id: data.id}
+            }
+        );
+        console.log("affectedCount:", affectedCount,
+            "affectedRows:", affectedRows)
+        return {
+            errorCode: ERROR_CODES.SUCCESS,
+            affectedCount: affectedCount,
+            affectedRows: affectedRows
+        }
+    }catch (error) {
+        console.log("đây update")
+        return {
+            errorCode: ERROR_CODES.ORDER.INTERNAL_ERROR,
+            messages: error.message || ERROR_MESSAGES.ORDER[ERROR_CODES.ORDER.ERROR_UPDATE]
+        }
+    }
 }
 
 module.exports = {
-    getAllOrder,
+    getAllOrderByIdCustomer,
     checkCustomerOrderForDevice,
-    createOrder, updateStatusOrder,
+    getAllOrder,
+    getByIdOrder,
+    createOrder, updateOrder,
+    cancelOrderAdmin,
     cancelOrder,
 }

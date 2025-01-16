@@ -57,6 +57,7 @@ const UpdateAttributeForm = ({ categories, groupAtrrs, attribute }) => {
             updatedAt,
         };
         console.log("data: ",data);
+        // Lấy dữ liệu thuộc tính bằng id
         try {
             const response = await fetch(`http://localhost:8081/api/attribute/${attribute.id}`, {
                 method: "PUT",
@@ -191,7 +192,6 @@ const UpdateAttributeForm = ({ categories, groupAtrrs, attribute }) => {
                         value={status}
                         onChange={(e) => setStatus(e.target.value)}
                     >
-                        <option value="" disabled hidden>Chọn trạng thái</option>
                         <option value="1">Hoạt động</option>
                         <option value="0">Ngừng hoạt động</option>
                         <option value="2">Đang cập nhật</option>

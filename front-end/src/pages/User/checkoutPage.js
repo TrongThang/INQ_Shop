@@ -13,22 +13,12 @@ export default function CheckoutPage() {
     const [deviceCheckout, setDeviceCheckout] = useState([])
 
     useEffect(() => {
-        setDeviceCheckout(cart);
+        const filteredCart = cart.filter(item => item.status && item.stock >= item.quantity);
+        setDeviceCheckout(filteredCart);
     }, cart)
 
     return (
         <div className="">
-            <ToastContainer
-                position="top-right"
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                autoClose={2000}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-            />
             <div className="row">
                 <InfoOrder
                     phone={phone} shippingMethod={shippingMethod}

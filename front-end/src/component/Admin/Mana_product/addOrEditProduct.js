@@ -1,19 +1,17 @@
 import { useEffect, useState } from 'react';
-import AreaUploadImage from '../../Shared/areaUploadImage';
 import StarRating from '../../Shared/starRating';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import ModalCategory from './modalCategory';
-import ListSpecificationsAdmin from './specification/listSpecificationAdmin';
 import { STATUS_CODES } from '../../../ultil/statusContaints';
-import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
-export default function AddOrEditProduct(type = 'update') {
+export default function AddOrEditProduct() {
     const { slug } = useParams();
     const [device, setDevice] = useState(null);
     const [loading, setLoading] = useState(true);
     const [currentCategory, setCurrentCategory] = useState(null)
-
+    const [nameDeviceInitial, setNameDeviceInitial] = useState(null);
     const [formData, setFormData] = useState({
         name: '',
         image: '',
@@ -50,7 +48,7 @@ export default function AddOrEditProduct(type = 'update') {
                     nameCategory: result.categoryDevice.nameCategory
                 });
 
-                
+                setNameDeviceInitial(result.name);                
             } catch (error) {
                 console.log("Lỗi:", error.message)
             } finally {
@@ -114,9 +112,8 @@ export default function AddOrEditProduct(type = 'update') {
         try {
             console.log(`http://localhost:8081/api/device/check-name/${encodeURIComponent(formData.name)}`)
             const response = await axios.get(`http://localhost:8081/api/device/check-name/${encodeURIComponent(formData.name)}`);
-            console.log(response.data);
 
-            if (response.data.exists) {
+            if (response.data.exists && formData.name !== nameDeviceInitial) {
                 console.log("SP Tồn tại")
                 setErrors((prevErrors) => ({
                     ...prevErrors,
@@ -126,46 +123,85 @@ export default function AddOrEditProduct(type = 'update') {
             }
         } catch (error) {
             console.error('Lỗi khi kiểm tra tên sản phẩm:', error);
-            toast.error('Có lỗi xảy ra khi kiểm tra tên sản phẩm.');
             return;
         }
 
-        const deviceSend = {
-            name: formData.name,
-            idCategory: formData.category,
-            description: formData.description,
-            image: formData.image,
-            sellingPrice: formData.sellingPrice,
-            status: formData.status,
-        }
+        try {
+            const result = await Swal.fire({
+                title: 'Bạn có chắc chắn?',
+                text: `Bạn có chắc muốn ${slug ? 'cập nhật' : 'thêm'} sản phẩm này không?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Xác nhận',
+                cancelButtonText: 'Hủy',
+            });
 
-        let response;
-
-        if (slug) {
-            deviceSend.idDevice = device.idDevice
-            response = await axios.put(`http://localhost:8081/api/device/`, {
-                deviceSend: deviceSend,
-                stock: formData.stockQuantity
-            }) 
-
-            if (response.data.data) {
-                toast.success('Cập nhật thành công')
-                alert('Cập nhật thành công')
+            if (result.isDismissed) {
+                return;
             }
-            
-        } else {
-            response = await axios.post(`http://localhost:8081/api/device/`, {
-                deviceSend: deviceSend,
-                stock: formData.stockQuantity
-            }) 
-            if (response.data.errorCode == 0) {
+            const deviceSend = {
+                name: formData.name,
+                idCategory: formData.category,
+                description: formData.description,
+                image: formData.image,
+                sellingPrice: formData.sellingPrice,
+                status: formData.status,
+            }
+    
+            let response;
+    
+            if (slug) {
+                deviceSend.idDevice = device.idDevice
+                response = await axios.put(`http://localhost:8081/api/device/`, {
+                    deviceSend: deviceSend,
+                    stock: formData.stockQuantity
+                }) 
+    
+                if (response.data.data) {
+                    await Swal.fire({
+                        title: 'Thành công!',
+                        text: 'Cập nhật thông tin thiết bị thành công!',
+                        icon: 'success',
+                    });
+                } else {
+                    const errorData = await response.json();
+
+                    await Swal.fire({
+                        title: 'Lỗi!',
+                        text: errorData.msg || 'Có lỗi xảy ra khi cập nhật thiết bị!',
+                        icon: 'error',
+                    });
+                }
                 
-                toast.success('Thêm sản phẩm thành công')
-                alert('Thêm sản phẩm thành công')
             } else {
-                alert('Thêm sản phẩm thất bại')
+                response = await axios.post(`http://localhost:8081/api/device/`, {
+                    deviceSend: deviceSend,
+                    stock: formData.stockQuantity
+                }) 
+                if (response.data.errorCode == 0) {
+                    await Swal.fire({
+                        title: 'Thành công!',
+                        text: 'Thêm thiết bị mới thành công!',
+                        icon: 'success',
+                    });
+                } else {
+                    const errorData = await response.json();
+
+                    await Swal.fire({
+                        title: 'Lỗi!',
+                        text: errorData.msg || 'Có lỗi xảy ra khi thêm mới thiết bị!',
+                        icon: 'error',
+                    });
+                }
             }
+        } catch (error) {
+            await Swal.fire({
+                title: 'Lỗi!',
+                text: `Có lỗi xảy ra khi thao tác\n ${error.message}!`,
+                icon: 'error',
+            });
         }
+        
     }
 
     return (
@@ -192,7 +228,7 @@ export default function AddOrEditProduct(type = 'update') {
                                         }
                                         
                                     </span>
-                                    {device && <StarRating rating={device.star} />}
+                                    {device && <StarRating rating={device.averageRating} />}
                                     <button
                                         className="btn btn-primary mt-3 w-25"
                                         onClick={() => handleSubmit()}

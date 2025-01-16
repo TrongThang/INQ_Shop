@@ -1,5 +1,4 @@
 import { useCart } from "../../../context/CartContext"
-import { ToastContainer } from 'react-toastify';
 
 export default function ListDeviceOrder({ phone, shippingMethod, notes, choiceAddress, deviceCheckout }) {
     const { cart, getTotalPrice, checkoutCart } = useCart();

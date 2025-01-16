@@ -32,7 +32,7 @@ const checkDevice = async (deviceReceive) => {
         });
 
         const isDifferentSellingPrice = Number(deviceCheck.sellingPrice) !== Number(deviceReceive.sellingPrice);
-        const noDeviceInStock = deviceReceive.quantity > deviceCheck.warehouse.stock;
+        const noDeviceInStock = deviceReceive.quantity > (deviceCheck.warehouse.stock === null ? 0 : deviceCheck.warehouse.stock);
         
         // Sản phẩm bị tắt thì sao
         if (!deviceCheck) {
@@ -43,12 +43,12 @@ const checkDevice = async (deviceReceive) => {
             };
         }
 
-        if (deviceCheck.status <= STATUS_CODES.DEVICE.NON_ACTIVE) {
-            return {
-                errorCode: ERROR_CODES.DEVICE.DEVICE_NON_ACTIVE,
-                detail: ERROR_MESSAGES.DEVICE[ERROR_CODES.DEVICE.DEVICE_NON_ACTIVE],
-            };
-        }
+        // if (deviceCheck.status <= STATUS_CODES.DEVICE.NON_ACTIVE) {
+        //     return {
+        //         errorCode: ERROR_CODES.DEVICE.DEVICE_NON_ACTIVE,
+        //         detail: ERROR_MESSAGES.DEVICE[ERROR_CODES.DEVICE.DEVICE_NON_ACTIVE],
+        //     };
+        // }
 
         if (isDifferentSellingPrice) {
             return {
@@ -64,7 +64,9 @@ const checkDevice = async (deviceReceive) => {
                 errorCode: ERROR_CODES.DEVICE.OUT_OF_STOCK,
                 detail: ERROR_MESSAGES.DEVICE[ERROR_CODES.DEVICE.OUT_OF_STOCK],
                 idDevice: deviceCheck.idDevice,
-                stockDeviceRemaining: deviceCheck.warehouse.stock
+                nameDevice: deviceCheck.name,
+                quantityInitial: deviceReceive.quantity,
+                stockDeviceRemaining: deviceCheck.warehouse.stock,
             };
         }
 
@@ -495,10 +497,11 @@ const createDevice = async (deviceSend, stock) => {
 
     const deviceCreate = await Device.create(deviceSend);
 
-    const warehouse = await Warehouse.update(
-            { stock: stock },
-            {where: {idDevice: deviceCreate.idDevice}}
-    )
+    const warehouse = await Warehouse.create({
+        idDevice: deviceSend.idDevice,
+        stock: stock,
+        status: 1
+    })
 
     return deviceCreate;
 }

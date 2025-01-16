@@ -1,32 +1,71 @@
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../../context/CartContext";
 import axios from "axios";
-import { toast } from "react-toastify";
+import Swal from 'sweetalert2';
 
 export default function PayCart() {
     const navigate = useNavigate()
     const { cart, getTotalItem, getTotalPrice } = useCart();
+
     const checkCheckout = async () => {
+        const filteredCart = cart.filter(item => item.status && item.stock >= item.quantity);
+        if (filteredCart.length <= 0) {
+            const result = await Swal.fire({
+                title: 'Thông báo',
+                text: 'Không còn sản phẩm nào trong giỏ hàng có thể đáp ứng điều kiện đặt hàng!',
+                icon: 'error',
+                confirmButtonText: 'Xác nhận',
+            });
+            return;
+        }
+        
         const response = await axios.post('http://localhost:8081/api/device/check-list', 
             { products: cart }
         );
-
-        console.log('data:',response.data)
+        
         if (response.data.errorCode === 0) {
             navigate("/checkout");
         }
-        else if (response.data.errorCode == 2) {
-            toast.error('Sản phẩm bạn muốn mua hiện đã ngừng bán')
-            setTimeout(() => {
-                navigate("/cart");
-            }, 1500);
-        }
-        else if (response.data.errorCode == "3") {
-            toast.error('Sản phẩm bạn muốn mua hiện đã có thay đổi về giá, vui lòng reload lại trang web')
-            // navigate("/cart");
-        }else if (response.data.errorCode == 4) {
-            toast.error('Sản phẩm bạn muốn mua hiện không đủ số lượng bán')
-            // navigate("/cart");
+        // else if (response.data.errorCode == 2) {
+        //     toast.error('Sản phẩm bạn muốn mua hiện đã ngừng bán')
+        // }
+        else if (response.data.errorCode == 3) {
+            const result = await Swal.fire({
+                title: 'Lỗi!',
+                text: 'Sản phẩm bạn muốn mua hiện đã có thay đổi về giá',
+                icon: 'error',
+            });
+            if (result.isDenied) {
+                setTimeout(() => {
+                    window.location.reload()
+                }, 1000)
+            }
+        } else if (response.data.errorCode == 4) {
+            const nameDevice = response.data.nameDevice;
+            const stockDeviceRemaining = response.data.stockDeviceRemaining;
+            const quantityInitial = response.data.quantityInitial  ;
+            const result =  await Swal.fire({
+                title: 'Thông báo',
+                html:
+                    `Sản phẩm 
+                        <b class="text-danger">${nameDevice}</b> mà bạn muốn mua hiện không đủ số lượng bán 
+                        (${quantityInitial} / 
+                        <b class="text-danger">${stockDeviceRemaining}</b> còn lại). Thanh toán mà không có sản phẩm này?
+                    `,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Xác nhận',
+                cancelButtonText: 'Hủy',
+            });
+
+            if (result.isConfirmed) {
+                navigate('/checkout');
+            }
+            if (result.isDismissed) {
+                setTimeout(() => {
+                    window.location.reload()
+                }, 1000)
+            }
         }
     }
     return (

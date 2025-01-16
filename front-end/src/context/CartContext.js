@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 const CartContext = createContext();
 
@@ -239,8 +240,19 @@ export const CartProvider = ({ children }) => {
             }); 
 
             if (response.data.errorCode === 0) {
-                toast.success('Đặt hàng thành công!');
-                navigate("/cart")
+                const result = await Swal.fire({
+                    title: 'Thành công!',
+                    text: 'Đặt hàng thành công!',
+                    icon: 'success',
+                });
+                console.log(deviceCheckout.idDevice)
+                deviceCheckout.forEach(item => {
+                    removeFromCart(item.idDevice)
+                });
+
+                if (result.isConfirmed) {
+                    navigate("/cart")
+                }
             }else {
                 toast.error('Đặt hàng thất bại. Vui lòng thử lại!');
             }

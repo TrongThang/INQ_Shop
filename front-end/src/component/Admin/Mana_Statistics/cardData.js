@@ -32,7 +32,7 @@ export default function CardData({ title, data, period, growValue, icon, type = 
                         </div>
                         <div className="d-flex justify-content-between pb-2">
                             <h2>
-                                {type === "money" ? `${data.toLocaleString()} VNĐ` : data}
+                                {type === "money" ? `${data?.toLocaleString()} VNĐ` : data}
                             </h2>
                             <div class="d-inline-block float-right font-weight-bold">
                                 <span class={`text-${growValue > 0 ? 'success' : 'danger'}`}>

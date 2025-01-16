@@ -25,10 +25,9 @@ const SearchDeviceList = ({ ReviewDevice ,onUpdate ,onDelete}) => {
                     <tbody>
                         {ReviewDevice.map((item, index) => (
                             <tr key={index}>
-                               
                                 <td>{item.idReview}</td>
-                                <td>{item.customerReview.surname} {item.customerReview.lastName} </td>
-                                <td>{item.device.name}</td>
+                                <td>{item.customerReview?.surname} {item.customerReview?.lastName} </td>
+                                <td>{item.device?.name}</td>
                                 <td>{item.comment}</td>
                                 <td>{item.rating}</td>
                                 <td>{item.note}</td>

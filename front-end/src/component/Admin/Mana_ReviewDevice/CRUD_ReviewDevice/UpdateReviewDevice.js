@@ -126,7 +126,7 @@ function UpdateReviewDevice() {
                                     type="text"
                                     className="form-control"
                                     name="customer"
-                                    value={ReviewDevice.customerReview ? ReviewDevice.customerReview.surname + " " + ReviewDevice.customerReview.lastName : "Không có thông tin"}
+                                    value={ReviewDevice.customerReview ? ReviewDevice.customerReview?.surname + " " + ReviewDevice.customerReview?.lastName : "Không có thông tin"}
                                     readOnly
                                 />
                             </div>

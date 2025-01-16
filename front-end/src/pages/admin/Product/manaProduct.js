@@ -63,6 +63,7 @@ const ManaProduct = () => {
             if (response.statusText) {
                 const filteredDevices = result.filter(device => {
                     //Tìm kiếm theo từ khóa
+                    
                     const matchesSearchTerm = removeVietnameseTones(device.name).toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase())
                         || removeVietnameseTones(device.description).toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase())
                         || removeVietnameseTones(device.descriptionNormal).toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase())

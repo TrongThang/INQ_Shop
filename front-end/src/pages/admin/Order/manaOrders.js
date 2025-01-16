@@ -21,7 +21,7 @@ const ManaOrders = () => {
     };
 
     const handleFormUpdateClick = (id) => {
-        navigate(`/admin/edit-order/${id}`);
+        navigate(`/admin/order/edit/${id}`);
     };
 
     const CannelOrderClick = async (id, status) => {
@@ -63,17 +63,23 @@ const ManaOrders = () => {
             const result = await response.json();
 
             if (response.ok) {
-                const filteredOrders = result.data.filter(order => {
+                const filteredOrders = await result.data.filter(order => {
+                    console.log(order.note !== null ? removeVietnameseTones(order?.note).toLowerCase() : '')
                     //Tìm kiếm theo từ khóa
-                    const matchesSearchTerm = removeVietnameseTones(order.note).toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase())
-                                                || removeVietnameseTones(order.phone).toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase())
-                                                || removeVietnameseTones(order.address).toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase())
-                                                || removeVietnameseTones(`${order.customer.surname} ${order.customer.lastname}`).toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase());
+                    const matchesSearchTerm = 
+                (order.note !== null ? removeVietnameseTones(order?.note).toLowerCase() : '').includes(removeVietnameseTones(searchTerm).toLowerCase()) ||
+                (order.phone !== null ? removeVietnameseTones(order?.phone).toLowerCase() : '').includes(removeVietnameseTones(searchTerm).toLowerCase()) ||
+                (order.address !== null ? removeVietnameseTones(order?.address).toLowerCase() : '').includes(removeVietnameseTones(searchTerm).toLowerCase()) ||
+                (order.customer !== null ? removeVietnameseTones(`${order?.nameRecipient}`).toLowerCase() : '').includes(removeVietnameseTones(searchTerm).toLowerCase());
+                    
                     //Tìm kiếm theo lọc trạng thái
                     const matchesStatus = Number(filterStatus) === 5 || order.status === Number(filterStatus);
+
                     return matchesSearchTerm && matchesStatus;
                 });
+
                 setOrder(filteredOrders);
+
             } else {
                 console.error("Lỗi lấy dữ liệu:", result.message);
             }

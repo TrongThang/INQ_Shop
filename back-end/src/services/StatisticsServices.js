@@ -100,7 +100,7 @@ const getPreviousObjectCounts = async (period) => {
         throw new Error("Period không hợp lệ. Chỉ chấp nhận 'day', 'month' hoặc 'year'.");
     }
 
-    const Revenue = await Order.sum("totalAmount", {
+    let Revenue = await Order.sum("totalAmount", {
         where: {
             updated_at: {
                 [Op.between]: [startDate, endDate],
@@ -136,6 +136,7 @@ const getPreviousObjectCounts = async (period) => {
         type: sequelize.QueryTypes.SELECT,
     });
 
+    Revenue = Revenue === null ? 0 : Revenue;  
     const TotalDeviceSold = results ? Number(results.total_deviceSold) : 0 ;
 
     return { Revenue, TotalDeviceSold, CountCustomerSold };

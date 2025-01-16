@@ -31,7 +31,6 @@ const ManaReviewDevice = () => {
         }
     };
 
- 
 
 // Hàm loại bỏ dấu tiếng Việt
 const removeAccents = (str) => {
@@ -44,9 +43,13 @@ const removeAccents = (str) => {
 // Hàm lọc dữ liệu
 const filterReviews = () => {
     const normalizedSearchTerm = removeAccents(searchTerm);
+    console.log(ReviewDevice);
 
     const filtered = ReviewDevice.filter((item) => {
-        const fullName = `${item.customerReview.surname} ${item.customerReview.lastName}`;
+        if (item.idCustomer === null) {
+            return;
+        }
+        const fullName = `${item.customerReview?.surname} ${item.customerReview?.lastName}`;
         const normalizedComment = removeAccents(item.comment);
         const normalizedFullName = removeAccents(fullName);
         const normalizedDeviceName = removeAccents(item.device.name);

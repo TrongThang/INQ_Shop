@@ -22,7 +22,7 @@ const ManaCategory = () => {
     };
     // Xử lý thêm danh mục
     const handleAddCategory = () => {
-        navigate("/admin/add-category", { state: { mode: "add" } });
+        navigate("/admin/category/add", { state: { mode: "add" } });
     };
     const handleStatusChange = async (id, status) => {
         try {
@@ -80,10 +80,10 @@ const ManaCategory = () => {
     const handleEditCategory = (id) => {
         const categoryToEdit = findCategoryById(dataCategory, id);
         if (categoryToEdit) {
-            navigate(`/admin/edit-category/${id}`, { state: { mode: "edit", data: categoryToEdit } });
+            navigate(`/admin/category/edit/${id}`, { state: { mode: "edit", data: categoryToEdit } });
 
         } else {
-            console.error("Không tìm thấy danh mục với ID:", id);
+            console.error("Không tìm th ấy danh mục với ID:", id);
         }
     };
     // Hàm đệ quy để tìm danh mục theo id

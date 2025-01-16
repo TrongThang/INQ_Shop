@@ -40,25 +40,38 @@ const removeAccents = (str) => {
         .toLowerCase();
 };
 
-// Hàm lọc dữ liệu
 const filterReviews = () => {
+    // Kiểm tra nếu ReviewDevice không tồn tại hoặc là mảng rỗng
+    if (!ReviewDevice || ReviewDevice.length === 0) {
+        setFilteredReviews([]); // Đặt filteredReviews thành mảng rỗng
+        return;
+    }
+
     const normalizedSearchTerm = removeAccents(searchTerm);
     console.log(ReviewDevice);
 
     const filtered = ReviewDevice.filter((item) => {
         if (item.idCustomer === null) {
             return;
+        }        
+        // Kiểm tra nếu item hoặc các thuộc tính cần thiết không tồn tại
+        if (!item || !item.customerReview || !item.device || !item.comment||!item.customerReview.surname||!item.customerReview.lastName) {
+            return false; // Bỏ qua item này
         }
-        const fullName = `${item.customerReview?.surname} ${item.customerReview?.lastName}`;
-        const normalizedComment = removeAccents(item.comment);
-        const normalizedFullName = removeAccents(fullName);
-        const normalizedDeviceName = removeAccents(item.device.name);
 
+        // Tạo fullName từ surname và lastName
+        const fullName = `${item.customerReview.surname || ''} ${item.customerReview.lastName || ''}`;
+        const normalizedComment = removeAccents(item.comment || '');
+        const normalizedFullName = removeAccents(fullName);
+        const normalizedDeviceName = removeAccents(item.device.name || '');
+
+        // Kiểm tra từ khóa tìm kiếm
         const matchesSearchTerm =
             normalizedComment.includes(normalizedSearchTerm) ||
             normalizedFullName.includes(normalizedSearchTerm) ||
             normalizedDeviceName.includes(normalizedSearchTerm);
 
+        // Kiểm tra trạng thái
         const matchesStatusFilter =
             statusFilter === "all" || item.status === (statusFilter === "active" ? 1 : 0);
 

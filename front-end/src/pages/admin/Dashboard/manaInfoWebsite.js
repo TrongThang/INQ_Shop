@@ -66,13 +66,24 @@ const ManaInfoWeb = () => {
           .toLowerCase(); // Chuyển đổi thành chữ thường
   };
   const filterInfoWeb = () => {
+    // Kiểm tra nếu InfoWeb không tồn tại hoặc là mảng rỗng
+    if (!InfoWeb || InfoWeb.length === 0) {
+        setFilteredInfoWeb([]); // Đặt filteredInfoWeb thành mảng rỗng
+        return;
+    }
+
     // Chuẩn hóa từ khóa tìm kiếm
     const normalizedSearchTerm = removeAccents(searchTerm);
 
     const filtered = InfoWeb.filter((item) => {
+        // Kiểm tra nếu item không tồn tại hoặc thiếu các thuộc tính cần thiết
+        if (!item || !item.KEY_NAME || !item.VALUE) {
+            return false; // Bỏ qua item này
+        }
+
         // Chuẩn hóa KEY_NAME và VALUE
-        const normalizedKeyName = removeAccents(item.KEY_NAME);
-        const normalizedValue = removeAccents(item.VALUE);
+        const normalizedKeyName = removeAccents(item.KEY_NAME || '');
+        const normalizedValue = removeAccents(item.VALUE || '');
 
         // So sánh từ khóa với KEY_NAME và VALUE (không phân biệt dấu và hoa thường)
         const matchesSearchTerm =

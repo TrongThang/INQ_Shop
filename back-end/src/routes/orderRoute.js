@@ -26,7 +26,7 @@ routerOrder.get('/admin/:idOrder', getOrderByIdOrderAPI);
 // routerOrder.put('/status', putUpdateStatusOrderAPI);
 
 routerOrder.post('/checkout', postCreateOrderAPI);
-routerOrder.put('/:id', putUpdateOrderAPI);
+routerOrder.put('/admin/:id', putUpdateOrderAPI);
 routerOrder.put('/admin', putUpdateStatusOrderAdminAPI);
 
 module.exports = routerOrder;

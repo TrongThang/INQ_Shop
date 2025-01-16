@@ -32,6 +32,7 @@ const ManaOrders = () => {
               await axios.put("http://localhost:8081/api/order/admin", { idOrder: id, status: status });
     
               alert("Đơn hàng đã được hủy thành công!");
+              filterOrder();
             } catch (error) {
               console.error("Lỗi khi hủy đơn hàng:", error);
               alert("Hủy đơn hàng thất bại!");

@@ -13,7 +13,7 @@ const SearchOrders = ({ orders, onFilter, onSearch }) => {
     return (
         <>
             <div className="d-flex justify-content-between mb-3">
-                <h5>Danh sách bài viết</h5>
+                <h5>Danh sách đơn hàng</h5>
                 <div>
                     <button className="btn btn-success " onClick={handleExport}>
                         <i className="bi bi-download"></i> Xuất file

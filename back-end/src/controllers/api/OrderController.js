@@ -102,6 +102,7 @@ const putUpdateStatusOrderAPI = async (req, res) => {
 const putUpdateStatusOrderAdminAPI = async (req, res) => {
     const { idOrder, status } = req.body;
     var result = null;
+    console.log("hello");
     result = await cancelOrderAdmin(idOrder, status);
 
     return res.status(result.errorCode === ERROR_CODES.SUCCESS ? 200 : 401).json(result)

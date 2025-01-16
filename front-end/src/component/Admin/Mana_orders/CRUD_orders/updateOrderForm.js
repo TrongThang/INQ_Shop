@@ -42,7 +42,7 @@ const UpdateOrderForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:8081/api/order/${orderId.id}`, {
+            const response = await fetch(`http://localhost:8081/api/order/admin/${orderId.id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(orderData),

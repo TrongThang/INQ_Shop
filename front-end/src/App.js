@@ -43,6 +43,7 @@ import ReviewDevice from './pages/user/reviewDevice'
 //ADMIN
 import ManaOrder from './pages/admin/Order/manaOrders';
 import UpdateOrder from './component/admin/Mana_orders/CRUD_orders/updateOrderForm';
+import ManaProduct from './pages/admin/Product/manaProduct';
 
 
 import ManaCategory from './pages/admin/Categories/manaCategory';
@@ -62,6 +63,7 @@ function App() {
             <Route path="edit-category/:id" element={<AddOrEditCategory />} />
             <Route path="manage-order" element={<ManaOrder />} />
             <Route path="edit-order/:id" element={<UpdateOrder />} />
+            <Route path="manage-device" element={<ManaProduct />} />
 
           </Route>
 

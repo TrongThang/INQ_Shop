@@ -172,7 +172,7 @@ const cancelOrder = async (idOrder, status) => {
             messages: ERROR_MESSAGES.ORDER[ERROR_CODES.ORDER.CANNOT_CANCEL]
         }
     } catch (error) {
-        console.log("đây")
+        console.log("đây lại")
         return {
             errorCode: ERROR_CODES.ORDER.INTERNAL_ERROR,
             messages: error.message || ERROR_MESSAGES.ORDER[ERROR_CODES.ORDER.CANNOT_CANCEL]
@@ -205,7 +205,7 @@ const cancelOrderAdmin = async (idOrder, status) => {
             messages: ERROR_MESSAGES.ORDER[ERROR_CODES.ORDER.CANNOT_CANCEL]
         }
     } catch (error) {
-        console.log("đây")
+        console.log("đây nè")
         return {
             errorCode: ERROR_CODES.ORDER.INTERNAL_ERROR,
             messages: error.message || ERROR_MESSAGES.ORDER[ERROR_CODES.ORDER.CANNOT_CANCEL]
@@ -228,7 +228,7 @@ const updateOrder = async (data) => {
             affectedRows: affectedRows
         }
     }catch (error) {
-        console.log("đây")
+        console.log("đây update")
         return {
             errorCode: ERROR_CODES.ORDER.INTERNAL_ERROR,
             messages: error.message || ERROR_MESSAGES.ORDER[ERROR_CODES.ORDER.ERROR_UPDATE]

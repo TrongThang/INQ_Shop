@@ -6,7 +6,8 @@ const {
     getAllDevice_FeaturedAPI, getAllDevice_DiscountAPI,
     
     getDeviceBySlugAPI, getTOPDeviceLikedAPI,
-    postCreateDeviceAPI, putUpdateDeviceAPI, updateStatusDeviceAPI,
+    postCreateDeviceAPI, putUpdateDeviceAPI,
+    updateStatusDeviceAPI,
     putIncreaseViewDeviceAPI,
     
     postCreateReviewForDeviceAPI,
@@ -38,6 +39,7 @@ routerDevice.put('/', putUpdateDeviceAPI)
 routerDevice.delete('/', putUpdateDeviceAPI)
 
 routerDevice.put('/views/:idDevice', putIncreaseViewDeviceAPI)
+routerDevice.put('/admin', updateStatusDeviceAPI)
 
 routerDevice.get('/review/:idDevice/:idCustomer', getReviewForCustomerAPI)
 routerDevice.get('/reviews/:idDevice', getAllReviewForDeviceAPI)

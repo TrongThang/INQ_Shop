@@ -29,8 +29,8 @@ const ManaContact = () => {
         try {
             const response = await fetch('http://localhost:8081/api/contact');
             const result = await response.json();
-            setContact(result.data);
-            setFilteredContacts(result.data);
+            setContact(result.data || []);
+            setFilteredContacts(result.data || []);
         } catch (err) {
             console.error("Error fetching contacts:", err);
         }

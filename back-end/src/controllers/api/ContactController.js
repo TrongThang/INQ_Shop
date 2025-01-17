@@ -14,7 +14,10 @@ const getAllContactAPI = async (req, res) => {
         const result = await getAllContact();
 
         if (!result || result.length === 0) {
-            return res.status(404).json({ message: "No contacts found" });
+            return res.status(404).json({ 
+                data: result,
+                message: "No contacts found" 
+            });
         }
         res.status(200).json({
             errorCode: 0,

@@ -89,7 +89,7 @@ const UpdateContactForm = ({ contact, onSubmit }) => {
                         <label htmlFor="updated-date" className="form-label">Ngày cập nhật:</label>
                         <input type="date" id="updated-date" className="form-control" value={updatedAt} readOnly />
                     </div>
-                    <div className="col-md-6 mb-3">
+                    <div className="col-md-6 mb-3 mt-2">
                         <label htmlFor="status" className="form-label">Trạng thái:</label>
                         <select id="status" className="form-select" value={status} onChange={(e) => setStatus(e.target.value)}>
                             <option value="1">Đang xem xét</option>

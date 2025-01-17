@@ -4,7 +4,7 @@ import StarRating from "../../component/Shared/starRating";
 
 const DeviceCard = ({ device }) => {
     const { addToCart } = useCart();
-
+       
     return (
         <div className="device-items wow fadeInUp me-3 mb-5" data-wow-delay="0.2s" style={{ padding: "0px"}}>
             <div
@@ -38,7 +38,7 @@ const DeviceCard = ({ device }) => {
                         <p className="mb-1 line-clamp-p">
                             {device.descriptionNormal}
                         </p>
-                        <Link to={`/device/${device.slug}`} className="btn btn-primary rounded-pill py-2 px-4">Chi tiết</Link>
+                        <a href={`/device/${device.slug}`}   className="btn btn-primary rounded-pill py-2 px-4">Chi tiết</a>
                     </div>
                 </div>
             </div>

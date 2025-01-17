@@ -9,7 +9,7 @@ const Dashboard = () => {
     const activeTab = location.pathname.includes('info-web') ? 'info' : 'statistics';
 
     return (
-        <div className="main-content m-5">
+        <div className="main-content mt-3">
             {/* Thanh chuyển đổi tab */}
             <ul className="nav nav-pills mb-3 ml-3" id="pills-tab" role="tablist">
                 <li className="nav-item">

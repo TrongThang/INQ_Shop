@@ -185,11 +185,14 @@ const getAllDeviceByStatus = async (status = 1, limit = {}) => {
     // });
     return data; // Trả về danh sách sản phẩm
 };
-const getDeviceByCategory = async ({idCategory, limit = 5 }) => {
+const getDeviceByCategory = async ({idDevice ,idCategory, limit = 5 }) => {
     try {
         const data = await Device.findAll({
             where: {
-                idCategory
+                idCategory,
+                idDevice: {
+                    [Op.ne]: idDevice
+                }
             },
             include: [
                 {

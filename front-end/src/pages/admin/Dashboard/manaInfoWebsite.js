@@ -40,8 +40,8 @@ const ManaInfoWeb = () => {
             if (!result.data || !Array.isArray(result.data)) {
                 throw new Error("Invalid data format from API");
             }
-            setInfoWeb(result.data);
-            setFilteredInfoWeb(result.data); // Ban đầu, filteredInfoWeb sẽ bằng dữ liệu gốc
+            setInfoWeb(result.data || []);
+            setFilteredInfoWeb(result.data || []); // Ban đầu, filteredInfoWeb sẽ bằng dữ liệu gốc
         } catch (err) {
             console.error("Error fetching InfoWeb:", err);
         }

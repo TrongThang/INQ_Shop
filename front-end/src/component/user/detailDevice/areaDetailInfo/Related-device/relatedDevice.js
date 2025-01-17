@@ -15,5 +15,4 @@ function RelatedDevice({ data }) {
 
     )
 }
-
 export default RelatedDevice;

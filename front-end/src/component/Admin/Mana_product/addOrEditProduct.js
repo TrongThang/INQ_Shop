@@ -206,7 +206,7 @@ export default function AddOrEditProduct() {
 
     return (
     <>
-        <div class="my-3">
+        <div class="my-3 ms-4">
             <Link to="/admin/device"
                 class="text-decoration-none">
                 <i class="bi bi-arrow-left pe-2"></i>Trở về

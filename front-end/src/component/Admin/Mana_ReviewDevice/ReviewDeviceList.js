@@ -8,12 +8,12 @@ const SearchDeviceList = ({ ReviewDevice, onUpdate, onDelete }) => {
                 <table className="table table-hover align-middle">
                     <thead>
                         <tr>
-                            <th>IdReview</th>
+                            <th>Id</th>
                             <th>Khách hàng</th>
                             <th>Tên thiết bị</th>
-                            <th>Comment</th>
-                            <th>Rating</th>
-                            <th>Note</th>
+                            <th>Đánh giá</th>
+                            <th>Số sao</th>
+                            <th>Ghi chú</th>
                             <th>Ngày tạo</th>
                             <th>Ngày sửa</th>
                             <th>Trạng thái</th>

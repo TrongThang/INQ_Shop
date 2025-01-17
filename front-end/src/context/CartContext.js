@@ -108,6 +108,21 @@ export const CartProvider = ({ children }) => {
     }
 
     const addToCart = async (device, quantity, type = null) => {
+        if (device.stock < quantity) {
+            const result = await Swal.fire({
+                title: 'Thông báo!',
+                text: 'Sản phẩm hiện đã hết hàng, bạn vẫn muốn thêm vào giỏ hàng chứ!',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Xác nhận',
+                cancelButtonText: 'Hủy',
+            });
+
+            if (!result.isConfirmed) {
+                return
+            }
+        }
+
         let cartItem = {
             idDevice: device.idDevice,
             quantity: Number(quantity),
@@ -225,27 +240,38 @@ export const CartProvider = ({ children }) => {
         try {
             const address = `${choiceAddress.street}, ${choiceAddress.ward}, ${choiceAddress.district}, ${choiceAddress.city}`
             const nameRecipient = `${choiceAddress?.customer?.surname} ${choiceAddress?.customer?.lastName}`
+
             const infoOrder = {
                 idCustomer: idCustomer,
                 nameRecipient: nameRecipient,
                 phone: choiceAddress?.customer?.phone,
                 paymentMethod: shippingMethod,
                 note: notes,
-                address: address
+                address: address,
+                // status: 1,
             }
+
             // const getDeviceCart = cart.map((item) => item.status > 0);
             const response = await axios.post('http://localhost:8081/api/order/checkout', {
                 infoOrder: infoOrder,
                 products: deviceCheckout
             }); 
 
+
             if (response.data.errorCode === 0) {
+                let mess = shippingMethod === 'COD' ? '' : 'Vui lòng thanh toán <br> <b>STK: 0387976595, TP Bank - Phan Trọng Thắng</b>. <br> Để nhân viên xác nhận!';
+
+                const imageUrl = shippingMethod === 'COD' ? {} : '/img/payTpBank.png';
+                console.log(imageUrl)
                 const result = await Swal.fire({
                     title: 'Thành công!',
-                    text: 'Đặt hàng thành công!',
+                    html: `Đặt hàng thành công!\n${mess}`,
                     icon: 'success',
+                    imageUrl: imageUrl,
+                    imageWidth: 300, // Chiều rộng hình ảnh (tùy chọn)
+                    imageHeight: 'auto',
                 });
-                console.log(deviceCheckout.idDevice)
+
                 deviceCheckout.forEach(item => {
                     removeFromCart(item.idDevice)
                 });
@@ -254,11 +280,19 @@ export const CartProvider = ({ children }) => {
                     navigate("/cart")
                 }
             }else {
-                toast.error('Đặt hàng thất bại. Vui lòng thử lại!');
+                const result = await Swal.fire({
+                    title: 'Thông báo!',
+                    text: 'Đặt hàng thất bại. Vui lòng thử lại!',
+                    icon: 'error',
+                });
             }
         } catch (error) {
             console.log('Lỗi:', error.message);
-            toast.error('Có lỗi xảy ra. Vui lòng thử lại!');
+            await Swal.fire({
+                title: 'Thông báo!',
+                text: 'Đặt hàng thất bại. Vui lòng thử lại\n Lỗi:!' + error.message ,
+                icon: 'error',
+            });
         }
     }    
 

@@ -34,7 +34,7 @@ const getObjectCounts = async (period) => {
         },
     });
 
-    const CountCustomerSold = await Order.count("idCustomer", {
+    const CountCustomerSold = await Order.count({
         where: {
             updated_at: {
                 [Op.between]: [startDate, endDate],

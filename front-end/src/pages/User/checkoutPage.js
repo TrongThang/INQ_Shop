@@ -16,15 +16,15 @@ export default function CheckoutPage() {
     
     useEffect(() => {
         const filteredCart = cart.filter(item => item.status && item.stock >= item.quantity); 
-            console.log('length:', filteredCart.length)
-            if (filteredCart.length <= 0) {
-                navigate('/cart')
-                return;
-            }
+
+        if (filteredCart.length <= 0) {
+            navigate('/cart')
+            return;
+        }
     }, [])
 
     useEffect(() => {
-        const filteredCart = cart.filter(item => item.status && item.stock >= item.quantity);
+        const filteredCart = cart.filter(item => item.status && item.stock >= item.quantity && item.quantity > 0);
         setDeviceCheckout(filteredCart);
     }, cart)
 

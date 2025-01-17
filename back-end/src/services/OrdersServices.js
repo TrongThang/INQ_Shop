@@ -119,12 +119,8 @@ const checkListProduct = async (products) => {
 }
 
 const createOrder = async (infoOrder, products) => {
-    console.log('Create Order')
-    console.log('infoOrder:', infoOrder)
-    console.log('Products:', products)
     // nếu như có 2 sản phấm giống nhau thì sao
     const result = await checkListProduct(products);
-
     if (result.errorCode !== ERROR_CODES.SUCCESS) {
         return result;
     }
@@ -144,6 +140,8 @@ const createOrder = async (infoOrder, products) => {
     }
 
     for (const product of products) {
+        const device = await Device.findOne({ where: { idDevice: product.idDevice } });
+
         const detail_order = await OrderDetail.create({
             id: newOrder.id,
             idDevice: product.idDevice,

@@ -8,7 +8,7 @@ export default function PayCart() {
     const { cart, getTotalItem, getTotalPrice } = useCart();
 
     const checkCheckout = async () => {
-        const filteredCart = cart.filter(item => item.status && item.stock >= item.quantity);
+        const filteredCart = cart.filter(item => item.status && item.stock >= item.quantity && item.quantity !== 0);
         if (filteredCart.length <= 0) {
             const result = await Swal.fire({
                 title: 'Thông báo',

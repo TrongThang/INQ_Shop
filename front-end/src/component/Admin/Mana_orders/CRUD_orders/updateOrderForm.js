@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 
 const UpdateOrderForm = () => {
     const orderId = useParams();
+    console.log("orderID",orderId)
     const navigate = useNavigate();
     const [orderData, setOrderData] = useState({
         id: "",
@@ -19,6 +20,7 @@ const UpdateOrderForm = () => {
         try {
             const response = await fetch(`http://localhost:8081/api/order/admin/${orderId.id}`);
             const result = await response.json();
+            console.log("data result",response)
             if (response.ok) {
                 setOrderData(result.data);
             } else {
@@ -92,7 +94,7 @@ const UpdateOrderForm = () => {
                         </div>
                         <div className="col-md-4 mb-3">
                             <label className="form-label">Nhân viên xác nhận:</label>
-                            <input type="text" className="form-control" value={`${orderData.employee?.surname} ${orderData.employee?.lastname}`} readOnly />
+                            <input type="text" className="form-control" value={`${(orderData.employee?.surname) ? orderData.employee?.surname : ''} ${(orderData.employee?.lastname) ? orderData.employee?.lastname : ''}`} readOnly />
                         </div>
                         <div className="col-md-4 mb-3">
                             <label className="form-label">Ngày đặt:</label>
@@ -110,7 +112,7 @@ const UpdateOrderForm = () => {
                             <input
                                 type="text"
                                 className="form-control"
-                                value={orderData.address}
+                                value={orderData.address ? orderData.address : ''}
                                 readOnly
                             />
                         </div>
@@ -119,7 +121,7 @@ const UpdateOrderForm = () => {
                             <input
                                 type="text"
                                 className="form-control"
-                                value={orderData.phone}
+                                value={orderData.phone ? orderData.phone : ''}
                                 readOnly
                             />
                         </div>
@@ -128,7 +130,7 @@ const UpdateOrderForm = () => {
                             <input
                                 type="text"
                                 className="form-control"
-                                value={orderData.note}
+                                value={orderData.note ? orderData.note : ''}
                                 readOnly
                             />
                         </div>
@@ -140,7 +142,7 @@ const UpdateOrderForm = () => {
                                 type="text"
                                 className="form-control"
                                 name="customerName"
-                                value={orderData.nameRecipient}
+                                value={orderData.nameRecipient ? orderData.nameRecipient : ''}
                                 readOnly
                             />
                         </div>
@@ -150,7 +152,7 @@ const UpdateOrderForm = () => {
                                 type="text"
                                 className="form-control"
                                 name="platformOrder"
-                                value={orderData.platformOrder}
+                                value={orderData.platformOrder ? orderData.platformOrder : ''}
                                 readOnly
                             ></input>
                         </div>

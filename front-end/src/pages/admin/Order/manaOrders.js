@@ -21,7 +21,7 @@ const ManaOrders = () => {
     };
 
     const handleFormUpdateClick = (id) => {
-        navigate(`/admin/edit-order/${id}`);
+        navigate(`/admin/order/edit/${id}`);
     };
 
     const CannelOrderClick = async (id, status) => {
@@ -65,10 +65,10 @@ const ManaOrders = () => {
             if (response.ok) {
                 const filteredOrders = result.data.filter(order => {
                     //Tìm kiếm theo từ khóa
-                    const matchesSearchTerm = removeVietnameseTones(order.note).toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase())
-                                                || removeVietnameseTones(order.phone).toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase())
-                                                || removeVietnameseTones(order.address).toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase())
-                                                || removeVietnameseTones(`${order.customer.surname} ${order.customer.lastname}`).toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase());
+                    const matchesSearchTerm = (order.note ? removeVietnameseTones(order.note).toLowerCase() : '').includes(removeVietnameseTones(searchTerm).toLowerCase())
+                                                || (order.phone ? removeVietnameseTones(order.phone).toLowerCase() : '').includes(removeVietnameseTones(searchTerm).toLowerCase())
+                                                || (order.address ? removeVietnameseTones(order.address).toLowerCase() : '').includes(removeVietnameseTones(searchTerm).toLowerCase())
+                                                || ((order.customer.surname && order.customer.lastname) ? removeVietnameseTones(`${order.customer.surname} ${order.customer.lastname}`) : '').toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase());
                     //Tìm kiếm theo lọc trạng thái
                     const matchesStatus = Number(filterStatus) === 5 || order.status === Number(filterStatus);
                     return matchesSearchTerm && matchesStatus;

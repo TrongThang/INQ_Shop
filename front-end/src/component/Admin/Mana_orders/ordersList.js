@@ -28,7 +28,7 @@ const OrdersList = ({ orders, onEdit, onDelete}) => {
                                 <td>{item.id}</td>
                                 <td>{item.customer.surname} {item.customer.lastname}</td>
                                 <td>{item.nameRecipient}</td>
-                                <td>{item.totalAmount}</td>
+                                <td>{Number(item.totalAmount).toLocaleString()}đ</td>
                                 <td>{item.paymentMethod}</td>
                                 <td>{item.phone}</td>
                                 <td>{item.note}</td>

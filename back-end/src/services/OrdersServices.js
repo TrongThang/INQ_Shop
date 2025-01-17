@@ -76,6 +76,7 @@ const getByIdOrder = async (idOrder) => {
 }
 
 const checkCustomerOrderForDevice = async (idCustomer, idDevice) => {
+    console.log('check order:', idDevice, idCustomer )
     const orders = await Order.findAll({
         where: {
             idCustomer: idCustomer
@@ -90,6 +91,7 @@ const checkCustomerOrderForDevice = async (idCustomer, idDevice) => {
             }
         ]
     });
+    console.log('check order:', orders)
 
     return orders.length > 0
 }

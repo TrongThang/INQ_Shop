@@ -273,7 +273,7 @@ export default function AddOrEditProduct() {
                                                     type="text"
                                                     className="form-control"
                                                     id="sellingPrice"
-                                                    value={`${Number(formData.sellingPrice).toLocaleString()} VNĐ`}
+                                                    value={`${Number(formData.sellingPrice).toLocaleString()}`}
                                                     onChange={handleInputChange}
                                                 />
                                         </div>

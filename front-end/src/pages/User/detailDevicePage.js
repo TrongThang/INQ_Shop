@@ -10,7 +10,6 @@ export default function DetailDevicePage() {
     const { slug } = useParams();
     const isViewIncreased = useRef(false);
 
-    // Định nghĩa fetchData bên ngoài useEffect
     const fetchData = async () => {
         try {
             const response = await fetch(`http://localhost:8081/api/device/detail/${slug}`);
@@ -31,12 +30,10 @@ export default function DetailDevicePage() {
         }
     };
 
-    // Gọi fetchData khi slug thay đổi
     useEffect(() => {
         fetchData();
     }, [slug]);
 
-    // Cập nhật tiêu đề trang và gọi fetchData liên quan khi device thay đổi
     useEffect(() => {
         if (device?.name) {
             document.title = `${device.name} | INQ`;

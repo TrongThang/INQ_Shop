@@ -295,7 +295,7 @@ const getAllDevice_User = async (page = 0, status = 1, limit = 15, filters = {},
         ],
         group: ['Device.idDevice'],
         order,
-        subQuery: false
+        subQuery: false,
     });
 
     const totalPages = Math.ceil(totalCount / limit);
@@ -380,6 +380,10 @@ const getDeviceBySlug = async (slug) => {
     const review = await ReviewDevice.findAll({
         where: {
             idDevice: device.idDevice,
+            status: {
+                [Op.gte]: 1,
+                [Op.ne]: null
+            } 
         },
         include: [{
             model: Customer,
@@ -387,9 +391,10 @@ const getDeviceBySlug = async (slug) => {
             attributes: ['surname', 'lastName', 'image']
         }],
         attributes: [
-            'comment', 'rating', 'created_at', 'updated_at'
+            'comment', 'rating', 'created_at', 'updated_at', 'status'
         ],
         order: [['created_at', 'DESC']]
+        
     })
 
     const attributeDevice = await AttributeDevice.findAll({
@@ -593,7 +598,10 @@ const updateStatusDeviceByCategory = async ({ idCategory, status }) => {
 const getAllReviewForDevice = async (idDevice) => {
     const comments = await ReviewDevice.findAll({
         where: {
-            idDevice: idDevice
+            idDevice: idDevice,
+            status: {
+                [Op.gte]: 1
+            }
         },
         include: [
             {
@@ -663,9 +671,8 @@ const getReviewForCustomer = async (idDevice, idCustomer) => {
 
 const createReviewForDevice = async (body) => {
     const { idCustomer, idDevice, comment, rating } = body.comment;
-    console.log('Data trc create:', idCustomer, idDevice, comment, rating)
-
-    const reviewForDevice = await ReviewDevice.create({ idCustomer, idDevice, comment, rating });
+    const status = 1;
+    const reviewForDevice = await ReviewDevice.create({ idCustomer, idDevice, comment, rating, status });
 
     return reviewForDevice;
 }

@@ -116,10 +116,16 @@ const ManaInfoWeb = () => {
                     onSearchChange={(value) => setSearchTerm(value)}
                     onStatusFilterChange={(value) => setStatusFilter(value)}
                 />
+                 {filteredInfoWeb.length === 0 ? (
+                    <div className="text py-5">
+                        <h4>Không có thông tin Website nào</h4>
+                    </div>
+                ) : (
                 <InfoWebList
                     InfoWebs={filteredInfoWeb}
                     onUpdate={handleFormUpdateClick}
                 />
+                )}
             </div>
             {/* Toast Notification */}
             {showToast && (

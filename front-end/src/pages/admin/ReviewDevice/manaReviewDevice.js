@@ -31,56 +31,55 @@ const ManaReviewDevice = () => {
         }
     };
 
+    // Hàm loại bỏ dấu tiếng Việt
+    const removeAccents = (str) => {
+        return str
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase();
+    };
 
-// Hàm loại bỏ dấu tiếng Việt
-const removeAccents = (str) => {
-    return str
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase();
-};
-
-const filterReviews = () => {
-    // Kiểm tra nếu ReviewDevice không tồn tại hoặc là mảng rỗng
-    if (!ReviewDevice || ReviewDevice.length === 0) {
-        setFilteredReviews([]); // Đặt filteredReviews thành mảng rỗng
-        return;
-    }
-
-    const normalizedSearchTerm = removeAccents(searchTerm);
-    console.log(ReviewDevice);
-
-    const filtered = ReviewDevice.filter((item) => {
-        if (item.idCustomer === null || item.idDevice === null) {
+    const filterReviews = () => {
+        // Kiểm tra nếu ReviewDevice không tồn tại hoặc là mảng rỗng
+        if (!ReviewDevice || ReviewDevice.length === 0) {
+            setFilteredReviews([]); // Đặt filteredReviews thành mảng rỗng
             return;
-        }     
-
-        // Kiểm tra nếu item hoặc các thuộc tính cần thiết không tồn tại
-        if (!item || !item.customerReview || !item.device || !item.comment||!item.customerReview.surname||!item.customerReview.lastName) {
-            return false; // Bỏ qua item này
         }
 
-        // Tạo fullName từ surname và lastName
-        const fullName = `${item.customerReview.surname || ''} ${item.customerReview.lastName || ''}`;
-        const normalizedComment = removeAccents(item.comment || '');
-        const normalizedFullName = removeAccents(fullName);
-        const normalizedDeviceName = removeAccents(item.device.name || '');
+        const normalizedSearchTerm = removeAccents(searchTerm);
 
-        // Kiểm tra từ khóa tìm kiếm
-        const matchesSearchTerm =
-            normalizedComment.includes(normalizedSearchTerm) ||
-            normalizedFullName.includes(normalizedSearchTerm) ||
-            normalizedDeviceName.includes(normalizedSearchTerm);
+        const filtered = ReviewDevice.filter((item) => {
+            if (item.idCustomer === null || item.idDevice === null) {
+                return;
+            }
 
-        // Kiểm tra trạng thái
-        const matchesStatusFilter =
-            statusFilter === "all" || item.status === (statusFilter === "active" ? 1 : 0);
+            // Kiểm tra nếu item hoặc các thuộc tính cần thiết không tồn tại
+            if (!item || !item.customerReview || !item.device || !item.comment || !item.customerReview.surname || !item.customerReview.lastName) {
+                return false; // Bỏ qua item này
+            }
 
-        return matchesSearchTerm && matchesStatusFilter;
-    });
+            // Tạo fullName từ surname và lastName
+            const fullName = `${item.customerReview.surname || ''} ${item.customerReview.lastName || ''}`;
+            const normalizedComment = removeAccents(item.comment || '');
+            const normalizedFullName = removeAccents(fullName);
+            const normalizedDeviceName = removeAccents(item.device.name || '');
 
-    setFilteredReviews(filtered); // Cập nhật dữ liệu đã lọc vào state
-};
+            // Kiểm tra từ khóa tìm kiếm
+            const matchesSearchTerm =
+                normalizedComment.includes(normalizedSearchTerm) ||
+                normalizedFullName.includes(normalizedSearchTerm) ||
+                normalizedDeviceName.includes(normalizedSearchTerm);
+
+            // Kiểm tra trạng thái
+            const matchesStatusFilter =
+                statusFilter === "all" || item.status === (statusFilter === "active" ? 1 : 0);
+
+            return matchesSearchTerm && matchesStatusFilter;
+        });
+
+        setFilteredReviews(filtered); // Cập nhật dữ liệu đã lọc vào state
+    };
+
     // Gọi API lần đầu khi component được mount
     useEffect(() => {
         fetchDataReviews();
@@ -109,11 +108,18 @@ const filterReviews = () => {
                     setStatusFilter={setStatusFilter}
                     handleExport={handleExport}
                 />
-                <ReviewList
-                    ReviewDevice={filteredReviews}
-                    onUpdate={handleFormUpdateClick}
-                    onDelete={handleDeleteClick}
-                />
+                {/* Hiển thị thông báo nếu không có dữ liệu */}
+                {filteredReviews.length === 0 ? (
+                    <div className="text py-5">
+                        <h4>Không có bình luận nào</h4>
+                    </div>
+                ) : (
+                    <ReviewList
+                        ReviewDevice={filteredReviews}
+                        onUpdate={handleFormUpdateClick}
+                        onDelete={handleDeleteClick}
+                    />
+                )}
             </div>
         </div>
     );

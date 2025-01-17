@@ -94,7 +94,6 @@ const ManaOrders = () => {
         filterOrder();
     }, [searchTerm, filterStatus]);
 
-
     return (
         <div className="main-content-inner">
             <div className="container-fluid py-4">

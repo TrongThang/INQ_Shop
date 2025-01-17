@@ -58,7 +58,7 @@ const UpdateOrderForm = () => {
                     text: 'Cập nhật đơn hàng thành công!',
                     icon: 'success',
                   });
-                navigate('/admin/manage-order');
+                navigate('/admin/order');
                 console.log("Order updated successfully:", result);
             } else {
                 await Swal.fire({

@@ -46,9 +46,6 @@ export default function PayCart() {
         if (response.data.errorCode === 0) {
             navigate("/checkout");
         }
-        // else if (response.data.errorCode == 2) {
-        //     toast.error('Sản phẩm bạn muốn mua hiện đã ngừng bán')
-        // }
         else if (response.data.errorCode == 3) {
             const result = await Swal.fire({
                 title: 'Lỗi!',
@@ -61,7 +58,6 @@ export default function PayCart() {
                 }, 1000)
             }
         } else if (response.data.errorCode == 4) {
-            console.log(response.data.errorCode)
             const nameDevice = response.data.nameDevice;
             const stockDeviceRemaining = response.data.stockDeviceRemaining;
             const quantityInitial = response.data.quantityInitial  ;
@@ -76,7 +72,7 @@ export default function PayCart() {
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Xác nhận',
-                cancelButtonText: 'Hủy',
+                cancelButtonText: 'Huỷ',
             });
 
             if (result.isConfirmed) {

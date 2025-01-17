@@ -330,16 +330,17 @@ const putIncreaseViewDeviceAPI = async (req, res) => {
 
 const updateStatusDeviceAPI = async (req, res) => {
     try {
-        const id = req.body.idDevice;
+        const idDevice = req.body.idDevice;
         const status = req.body.status;
 
-        const results = await updateStatusDevice({ id, status });
-
+        const results = await updateStatusDevice({ idDevice, status });
+        console.log('Kết quả trả về:', results)
         return res.status(200).json({
             errorCode: 0,
             data: results
         })
     } catch (error) {
+        console.log(error.message)
         return res.status(500).json({
             errorCode: 1,
             msg: 'Cập nhập dữ liệu Thiết bị thất bại',

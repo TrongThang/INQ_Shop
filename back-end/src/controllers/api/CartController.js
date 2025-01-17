@@ -7,12 +7,6 @@ const {
     removeDeviceInCart, removeAllDeviceInCart,
 } = require('../../services/CartServices');
 
-const issetDataCart = (data) => {
-    return data.idCustomer
-        & data.idDevice
-        & data.stock;
-} 
-
 
 const getCartAPI = async (req, res) => {
     try {
@@ -25,7 +19,6 @@ const getCartAPI = async (req, res) => {
             type: 'database',
             data: (cartData !== null ? cartData : "Vui lòng thêm sản phẩm vào giỏ hàng!"),
         });
-        
     } catch (error) {
         return res.status(500).json({
             errorCode: 1,
@@ -141,10 +134,8 @@ const removeAllDeviceInCartAPI = async (req, res) => {
     try {
         const idCustomer = req.params.idCustomer;
 
-            // Gọi hàm removeAllDeviceInCart để xóa tất cả thiết bị khỏi giỏ hàng
-            const result = await removeAllDeviceInCart(idCustomer);
+        const result = await removeAllDeviceInCart(idCustomer);
 
-            // Trả về kết quả xóa thành công
         return res.status(200).json({
             errorCode: 0,
             newCart: result,
@@ -159,6 +150,7 @@ const removeAllDeviceInCartAPI = async (req, res) => {
         });
     }
 }
+
 module.exports = {
     getCartAPI,
     postAddToCartAPI, putUpdateQuantityDeviceInCartAPI,

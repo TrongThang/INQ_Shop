@@ -38,9 +38,6 @@ export default function DetailDevicePage() {
         if (device?.name) {
             document.title = `${device.name} | INQ`;
         }
-        if (device?.idCategory) {
-            // Gọi hàm fetchData liên quan ở đây (nếu cần)
-        }
     }, [device]);
 
     if (!device) {

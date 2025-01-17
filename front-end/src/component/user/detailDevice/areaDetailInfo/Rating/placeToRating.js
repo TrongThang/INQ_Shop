@@ -13,46 +13,6 @@ export default function PlaceToRating({ idDevice, onCommentSubmitted }) {
     const [changeComment, setChangeComment] = useState(false)
     const [isExistingReview, setIsExistingReview] = useState(false);
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const token = localStorage.getItem('authToken');
-    //             if (token) {
-    //                 const decoded = jwtDecode(token);
-
-    //                 setIdCustomer( decoded.idPerson);
-    //             }
-    //         } catch (error) {
-    //             console.error('Lỗi khi giải mã token:', error);
-    //         }
-    //     };
-
-    //     fetchData();
-    // }, []);
-    
-    // useEffect(() => {
-    //     console.log(idCustomer)
-
-    //     if (!idCustomer) return;
-
-    //     const fetchReviewAndOrder = async () => {
-    //         try {
-    //             const response = await axios.get(`http://localhost:8081/api/device/review/${idDevice}/${idCustomer}`);
-    //             const responseOrder = await axios.get(`http://localhost:8081/api/order/checkOrder/${idCustomer}/${idDevice}`);
-
-    //             const data = response.data;
-    //             setReview(data);
-    //             setIsBuy(responseOrder.data);
-    //             setStar(data.rating);
-    //             setIsExistingReview(data != null);
-    //         } catch (error) {
-    //             console.error('Lỗi khi lấy dữ liệu:', error);
-    //         }
-    //     };
-
-    //     fetchReviewAndOrder();
-
-    // }, [idDevice, changeComment])
     useEffect(() => {
         const fetchData = async () => {
             try {

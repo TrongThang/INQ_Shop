@@ -33,6 +33,9 @@ const checkDevice = async (deviceReceive) => {
 
         const isDifferentSellingPrice = Number(deviceCheck.sellingPrice) !== Number(deviceReceive.sellingPrice);
         const noDeviceInStock = deviceReceive.quantity > (deviceCheck.warehouse.stock === null ? 0 : deviceCheck.warehouse.stock);
+
+        console.log(`${deviceReceive.quantity} > (${deviceCheck.warehouse.stock} === null ? 0 : ${deviceCheck.warehouse.stock})`)
+        console.log(noDeviceInStock)
         
         // Sản phẩm bị tắt thì sao
         if (!deviceCheck) {
@@ -87,6 +90,7 @@ const checkListDevice = async (products) => {
     try {
         for (const product of products) {
             const result = await checkDevice(product);
+
             if (result.errorCode !== ERROR_CODES.SUCCESS) {
                 return result;
             }
@@ -327,7 +331,6 @@ const getAllDevice_Admin = async () => {
 }
 
 const getDeviceBySlug = async (slug) => {
-
     let device = await Device.findOne({
         where: {
             slug: slug
@@ -520,8 +523,6 @@ const createDevice = async (deviceSend, stock) => {
     const slug = convertToSlug(deviceSend.name);
     deviceSend.slug = slug;
 
-    console.log(deviceSend)
-
     const deviceCreate = await Device.create(deviceSend);
 
     const warehouse = await Warehouse.create({
@@ -555,7 +556,8 @@ const updateStatusDevice = async (data) => {
         },
         { where: { idDevice: data.idDevice } }
     );
-
+    
+    console.log('Số dòng ảnh hưởng:', updatedCount)
     return updatedCount;
 }
 
@@ -625,15 +627,14 @@ const getAllReviewForDevice_admin = async () => {
                 model: Customer,
                 as: 'customerReview'
             },
-             {
-             model: Device,
+            {
+                model: Device,
                 as: 'device', // Thêm thông tin về thiết bị nếu cần
                  attributes: ['idDevice', 'name'] // Chỉ lấy một số trường cần thiết
-          }
+            }
         ],
         order: [['created_at', 'DESC']] // Sắp xếp theo thời gian cập nhật mới nhất
     });
-   
 
     return comments;
 }

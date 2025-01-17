@@ -34,7 +34,6 @@ export default function AllDeviceInCart() {
       </div>
     );
   }
-
   return (
     <div className="card mb-4">
       <div className="card-body">

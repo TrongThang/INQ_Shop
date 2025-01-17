@@ -94,7 +94,12 @@ export default function InfoDevice({ device }) {
                     } 
                 </div>
             </div>
-            <h4><strong>Giá:</strong> <span className="text-primary fw-bold">{Number(device.sellingPrice).toLocaleString()}</span> VNĐ</h4>
+            <h4>
+                <strong>Giá:</strong>
+                <span className="text-primary fw-bold">
+                    {Number(device.sellingPrice).toLocaleString()}
+                </span> VNĐ
+            </h4>
 
             <AreaInteraction setQuantity={setQuantity} />
             

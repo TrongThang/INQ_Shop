@@ -238,6 +238,33 @@ export const CartProvider = ({ children }) => {
 
     const checkoutCart = async (shippingMethod, notes, choiceAddress, deviceCheckout) => {
         try {
+
+            const responseCheckDevice = await axios.post('http://localhost:8081/api/device/check-list', 
+                { products: deviceCheckout }
+            );
+
+            if (responseCheckDevice.data.errorCode == 3) {
+                const result = await Swal.fire({
+                    title: 'Lỗi!',
+                    text: 'Sản phẩm bạn muốn mua hiện đã có thay đổi về giá.',
+                    icon: 'error',
+                    confirmButtonText: 'Quay lại giỏ hàng',
+                });
+                navigate('/cart');
+                window.location.reload()
+                return;
+            } else if (responseCheckDevice.data.errorCode == 4) {
+                const result =  await Swal.fire({
+                    title: 'Thông báo',
+                    html: `Có sản phẩm mà bạn muốn mua hiện không đủ số lượng bán!`,
+                    icon: 'error',
+                    confirmButtonText: 'Quay lại giỏ hàng',
+                });
+                navigate('/cart');
+                window.location.reload()
+                return
+            }
+
             const address = `${choiceAddress.street}, ${choiceAddress.ward}, ${choiceAddress.district}, ${choiceAddress.city}`
             const nameRecipient = `${choiceAddress?.customer?.surname} ${choiceAddress?.customer?.lastName}`
 
@@ -248,7 +275,6 @@ export const CartProvider = ({ children }) => {
                 paymentMethod: shippingMethod,
                 note: notes,
                 address: address,
-                // status: 1,
             }
 
             // const getDeviceCart = cart.map((item) => item.status > 0);
@@ -279,12 +305,6 @@ export const CartProvider = ({ children }) => {
                 if (result.isConfirmed) {
                     navigate("/cart")
                 }
-            }else {
-                const result = await Swal.fire({
-                    title: 'Thông báo!',
-                    text: 'Đặt hàng thất bại. Vui lòng thử lại!',
-                    icon: 'error',
-                });
             }
         } catch (error) {
             console.log('Lỗi:', error.message);

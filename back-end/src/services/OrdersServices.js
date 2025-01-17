@@ -122,10 +122,10 @@ const checkListProduct = async (products) => {
 
 const createOrder = async (infoOrder, products) => {
     // nếu như có 2 sản phấm giống nhau thì sao
-    const result = await checkListProduct(products);
-    if (result.errorCode !== ERROR_CODES.SUCCESS) {
-        return result;
-    }
+    // const result = await checkListProduct(products);
+    // if (result.errorCode !== ERROR_CODES.SUCCESS) {
+    //     return result;
+    // }
 
     //Nên + trước hay tạo xong chi tiết hoá đơn r mới tính total Amount?
     // Đã có checkListProduct đảm bảo sản phẩm có tồn tại   

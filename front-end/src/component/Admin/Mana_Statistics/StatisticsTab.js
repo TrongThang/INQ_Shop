@@ -13,7 +13,7 @@ const StatisticsTab = () => {
     });
 
     const [loading, setLoading] = useState(true);
-    const [timeFilter, setTimeFilter] = useState("day"); // Mặc định chọn "Ngày"
+    const [timeFilter, setTimeFilter] = useState("day");
     const handleFilterChange = async (e) => {
         const value = e.target.value;
         setTimeFilter(value)

@@ -63,11 +63,10 @@ const ManaProduct = () => {
             if (response.statusText) {
                 const filteredDevices = result.filter(device => {
                     //Tìm kiếm theo từ khóa
-                    
-                    const matchesSearchTerm = removeVietnameseTones(device.name).toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase())
-                        || removeVietnameseTones(device.description).toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase())
-                        || removeVietnameseTones(device.descriptionNormal).toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase())
-                        || removeVietnameseTones(device.sellingPrice).toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase());
+                    const matchesSearchTerm = (device.name ? removeVietnameseTones(device.name).toLowerCase() : '').includes(removeVietnameseTones(searchTerm).toLowerCase())
+                        || (device.description ? removeVietnameseTones(device.description).toLowerCase() : '').includes(removeVietnameseTones(searchTerm).toLowerCase())
+                        || (device.descriptionNormal ? removeVietnameseTones(device.descriptionNormal) : '').toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase())
+                        || (device.sellingPrice ? removeVietnameseTones(device.sellingPrice).toLowerCase() : '').includes(removeVietnameseTones(searchTerm).toLowerCase());
                     //Tìm kiếm theo lọc trạng thái
                     const matchesStatus = Number(filterStatus) === 6 || device.status === Number(filterStatus);
                     return matchesSearchTerm && matchesStatus;

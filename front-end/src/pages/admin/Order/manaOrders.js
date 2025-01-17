@@ -66,12 +66,10 @@ const ManaOrders = () => {
                 const filteredOrders = await result.data.filter(order => {
                     console.log(order.note !== null ? removeVietnameseTones(order?.note).toLowerCase() : '')
                     //Tìm kiếm theo từ khóa
-                    const matchesSearchTerm = 
-                (order.note !== null ? removeVietnameseTones(order?.note).toLowerCase() : '').includes(removeVietnameseTones(searchTerm).toLowerCase()) ||
-                (order.phone !== null ? removeVietnameseTones(order?.phone).toLowerCase() : '').includes(removeVietnameseTones(searchTerm).toLowerCase()) ||
-                (order.address !== null ? removeVietnameseTones(order?.address).toLowerCase() : '').includes(removeVietnameseTones(searchTerm).toLowerCase()) ||
-                (order.customer !== null ? removeVietnameseTones(`${order?.nameRecipient}`).toLowerCase() : '').includes(removeVietnameseTones(searchTerm).toLowerCase());
-                    
+                    const matchesSearchTerm = (order.note ? removeVietnameseTones(order.note).toLowerCase() : '').includes(removeVietnameseTones(searchTerm).toLowerCase())
+                                                || (order.phone ? removeVietnameseTones(order.phone).toLowerCase() : '').includes(removeVietnameseTones(searchTerm).toLowerCase())
+                                                || (order.address ? removeVietnameseTones(order.address).toLowerCase() : '').includes(removeVietnameseTones(searchTerm).toLowerCase())
+                                                || ((order.customer.surname && order.customer.lastname) ? removeVietnameseTones(`${order.customer.surname} ${order.customer.lastname}`) : '').toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase());
                     //Tìm kiếm theo lọc trạng thái
                     const matchesStatus = Number(filterStatus) === 5 || order.status === Number(filterStatus);
 
@@ -99,7 +97,6 @@ const ManaOrders = () => {
     useEffect(() => {
         filterOrder();
     }, [searchTerm, filterStatus]);
-
 
     return (
         <div className="main-content-inner">

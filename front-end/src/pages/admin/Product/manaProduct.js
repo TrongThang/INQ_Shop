@@ -27,31 +27,31 @@ const ManaProduct = () => {
             showCancelButton: true,
             confirmButtonText: 'Xác nhận',
             cancelButtonText: 'Hủy',
-          });
+        });
         if (id) {
-          if (result.isConfirmed) {
-            try {
-              // Gửi yêu cầu hủy đơn hàng
-              await axios.put("http://localhost:8081/api/device/admin", { idDevice: id, status: status });
+            if (result.isConfirmed) {
+                try {
+                    // Gửi yêu cầu hủy đơn hàng
+                    await axios.put("http://localhost:8081/api/device/admin", { idDevice: id, status: status });
 
-              await Swal.fire({
-                title: 'Thành công!',
-                text: 'Xóa thiết bị thành công!',
-                icon: 'success',
-              });
-              //Lấy lại dữ liệu khi xóa thiết bị(vì cập nhật trạng thái nên không re-render)
-              filterDevice();
-            } catch (error) {
-              console.error("Lỗi khi xóa thiết bị:", error);
-              await Swal.fire({
-                title: 'Lỗi!',
-                text: 'Có lỗi xảy ra khi xóa thiết bị!',
-                icon: 'error',
-              });
+                    await Swal.fire({
+                        title: 'Thành công!',
+                        text: 'Xóa thiết bị thành công!',
+                        icon: 'success',
+                    });
+                    //Lấy lại dữ liệu khi xóa thiết bị(vì cập nhật trạng thái nên không re-render)
+                    filterDevice();
+                } catch (error) {
+                    console.error("Lỗi khi xóa thiết bị:", error);
+                    await Swal.fire({
+                        title: 'Lỗi!',
+                        text: 'Có lỗi xảy ra khi xóa thiết bị!',
+                        icon: 'error',
+                    });
+                }
             }
-          }
         }
-      };
+    };
 
     const filterDevice = async () => {
         try {
@@ -63,7 +63,7 @@ const ManaProduct = () => {
             if (response.statusText) {
                 const filteredDevices = result.filter(device => {
                     //Tìm kiếm theo từ khóa
-                    
+
                     const matchesSearchTerm = removeVietnameseTones(device.name).toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase())
                         || removeVietnameseTones(device.description).toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase())
                         || removeVietnameseTones(device.descriptionNormal).toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase())
@@ -95,17 +95,18 @@ const ManaProduct = () => {
 
     return (
         <>
-        <div className="main-content-inner">
-            <div className="container-fluid py-4">
-                <SearchDevice
-                    devices={devices}
-                    onFilter={handleFilterChange}
-                    onSearch={handleSearchChange}
-                />
-                <DeviceList devices={devices} onDelete={CannelDeviceClick}/>
+            <div className="main-content-inner">
+                <div className="container-fluid py-4">
+                        <h5 className="mb-4">Danh sách Thiết bị</h5>
+                        <SearchDevice
+                            devices={devices}
+                            onFilter={handleFilterChange}
+                            onSearch={handleSearchChange}
+                        />
+                        <DeviceList devices={devices} onDelete={CannelDeviceClick} />
+                </div>
             </div>
-        </div>
-        
+
         </>
     );
 };

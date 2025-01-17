@@ -24,8 +24,8 @@ const ManaReviewDevice = () => {
         try {
             const response = await fetch('http://localhost:8081/api/device/reviews_admin');
             const result = await response.json();
-            setReviewDevice(result.data); // Lưu dữ liệu gốc vào state
-            setFilteredReviews(result.data); // Ban đầu, filteredReviews sẽ bằng dữ liệu gốc
+            setReviewDevice(result.data || []); // Lưu dữ liệu gốc vào state
+            setFilteredReviews(result.data || []); // Ban đầu, filteredReviews sẽ bằng dữ liệu gốc
         } catch (err) {
             console.error("Error fetching reviews:", err);
         }

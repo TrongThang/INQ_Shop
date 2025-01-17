@@ -114,8 +114,9 @@ const getDevice_byCategoryAPI = async (req, res) => {
         // Extracting idCategory and limit from the request body or query
         const limit = 5 ; // or req.query if you're using query parameters
         const {idCategory} = req.params
+        const {idDevice} = req.params
         // Call the getDeviceByCategory function with idCategory and limit
-        const result = await getDeviceByCategory({idCategory, limit });
+        const result = await getDeviceByCategory({idCategory,idDevice, limit });
 
         return res.status(200).json({
             errorCode: 0,
@@ -369,7 +370,6 @@ const getAllReviewForDeviceAPI_Admin = async (req, res) => {
             
         // Trả về kết quả cho client
         return res.status(200).json({
-            
             errorCode: 0,
             data: results
         });

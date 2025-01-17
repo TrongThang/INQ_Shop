@@ -29,7 +29,7 @@ const SearchOrders = ({ orders, onFilter, onSearch }) => {
                         <input type="text" className="form-control search-bar" placeholder="Tìm kiếm đơn hàng" onChange={(e) => onSearch(e.target.value)}/>
                     </div>
                 </div>
-                <div className="col-md-2">
+                <div className="col-md-2  mt-2">
                     <select className="form-select" onChange={(e) => onFilter(e.target.value)}>
                         <option value={"5"}>Tất cả</option>
                         <option value={"1"}>Chờ xác nhận</option>

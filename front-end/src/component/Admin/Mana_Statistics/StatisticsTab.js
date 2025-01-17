@@ -7,7 +7,7 @@ const StatisticsTab = () => {
         Revenue: 0,
         TotalDeviceSold: 0,
         CountCustomerSold: 0,
-        RevenuePercentageChange: 0, 
+        RevenuePercentageChange: 0,
         TotalDeviceSoldPercentageChange: 0,
         CountCustomerSoldPercentageChange: 0
     });
@@ -43,31 +43,33 @@ const StatisticsTab = () => {
 
     return (
         <>
-            <div className="mb-3 col-4">
-                <label htmlFor="dateFilter" className="form-label">
-                    Chọn khoảng thời gian:
-                </label>
-                <select
-                    id="dateFilter"
-                    className="form-select border border-secondary rounded"
-                    value={timeFilter}
-                    onChange={handleFilterChange}
-                >
-                    <option value="day">Ngày</option>
-                    <option value="month">Tháng</option>
-                    <option value="year">Năm</option>
-                </select>
-            </div>
-            <div className="row">
-                <CardData data={counts.Revenue} title="Doanh thu" growValue={counts.RevenuePercentageChange}
-                    type="money" icon="fa-solid fa-sack-dollar" period={timeFilter}
-                />
-                <CardData data={counts.TotalDeviceSold} title="Thiết bị đã bán" growValue={counts.TotalDeviceSoldPercentageChange}
-                    icon="fa-solid fa-basket-shopping" period={timeFilter}
-                />
-                <CardData data={counts.CountCustomerSold} title="Khách hàng đã mua" growValue={counts.CountCustomerSoldPercentageChange}
-                    icon="fa-solid fa-users" period={timeFilter}
-                />
+            <div className='ms-5'>
+                <div className="mb-3 col-4">
+                    <label htmlFor="dateFilter" className="form-label">
+                        Chọn khoảng thời gian:
+                    </label>
+                    <select
+                        id="dateFilter"
+                        className="form-select border border-secondary rounded"
+                        value={timeFilter}
+                        onChange={handleFilterChange}
+                    >
+                        <option value="day">Ngày</option>
+                        <option value="month">Tháng</option>
+                        <option value="year">Năm</option>
+                    </select>
+                </div>
+                <div className="row">
+                    <CardData data={counts.Revenue} title="Doanh thu" growValue={counts.RevenuePercentageChange}
+                        type="money" icon="fa-solid fa-sack-dollar" period={timeFilter}
+                    />
+                    <CardData data={counts.TotalDeviceSold} title="Thiết bị đã bán" growValue={counts.TotalDeviceSoldPercentageChange}
+                        icon="fa-solid fa-basket-shopping" period={timeFilter}
+                    />
+                    <CardData data={counts.CountCustomerSold} title="Khách hàng đã mua" growValue={counts.CountCustomerSoldPercentageChange}
+                        icon="fa-solid fa-users" period={timeFilter}
+                    />
+                </div>
             </div>
         </>
     );

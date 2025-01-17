@@ -5,6 +5,8 @@ const {
     createInfoWebsite,
     updateInfoWebsite,
     updateStatusInfoWebsite,
+    getInfoByKeyName,
+    getAllInfoWebsite_Admin
  } = require('../../services/InfoWebsiteServices');
 
 const getAllInfoWebsiteAPI = async (req, res) => {
@@ -24,7 +26,51 @@ const getAllInfoWebsiteAPI = async (req, res) => {
         });
     }
 }
+const getAllInfoWebsiteAPI_Admin = async (req, res) => {
+    //TO DO SOMETHING
+    try{
+        const allInfoWebsites = await getAllInfoWebsite_Admin();
+        res.status(200).json({
+            success: true,
+            data: allInfoWebsites
+        });
+    }
+    catch(error){
+        res.status(500).json({
+            success: false,
+            message: 'Lỗi truy xuất thông tin website',
+            error: error.message,
+        });
+    }
+}
 
+
+
+const getInfoWebsiteByKeyAPI = async (req, res) => {
+    const { keyName } = req.params; // Lấy KEY_NAME từ request params
+
+    try {
+        const info = await getInfoByKeyName(keyName);
+
+        if (!info) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy thông tin với KEY_NAME này',
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            data: info,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Lỗi khi truy xuất thông tin',
+            error: error.message,
+        });
+    }
+};
 const postAddToInfoWebsiteAPI = async (req, res) => {
     //TO DO SOMETHING
     try{
@@ -115,4 +161,6 @@ module.exports = {
     postAddToInfoWebsiteAPI,
     putUpdateInfoWebsiteAPI,
     putUpdateStatusInfoWebsiteAPI,
+    getInfoWebsiteByKeyAPI,
+    getAllInfoWebsiteAPI_Admin
 }

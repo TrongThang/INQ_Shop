@@ -130,7 +130,7 @@ const AddOrEditCategory = () => {
                         text: `${mode === "add" ? 'Thêm' : 'Cập nhật'} Danh mục thành công!`,
                         icon: 'success',
                     });
-                    navigate("/admin/manage-category");
+                    navigate("/admin/category");
                 } else {
                     const errorData = await response.json();
                     await Swal.fire({

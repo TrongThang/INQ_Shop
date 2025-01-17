@@ -1,4 +1,13 @@
-export default function SearchCategory() {
+import React, { use, useState } from "react";
+export default function SearchCategory({onSearch}) {
+    const [searchTerm, setSearchTerm] = useState(""); // State để lưu từ khóa tìm kiếm
+   
+    // Xử lý khi người dùng nhập từ khóa
+    const handleSearchChange = (e) => {
+        const value = e.target.value;
+        setSearchTerm(value); // Cập nhật state
+        onSearch(value); // Gọi hàm callback từ component cha
+    };
     return (
         <div class="row mb-3">
             <div class="col-md-6">
@@ -6,63 +15,11 @@ export default function SearchCategory() {
                     <span class="input-group-text">
                         <i class="bi bi-search"></i>
                     </span>
-                    <input type="text" class="form-control" placeholder="Tìm kiếm bài viết" />
+                    <input type="text" class="form-control" placeholder="Tìm kiếm bài viết"
+                        value={searchTerm}
+                        onChange={handleSearchChange} // Xử lý sự kiện onChange
+                    />
                 </div>
-            </div>
-            <div class="col-md-2">
-                <select class="form-select status">
-                    <option selected>Trạng thái</option>
-                    <option>Hoạt động</option>
-                    <option>Ngừng hoạt động</option>
-                    <option>Đang cập nhật</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <button class="btn btn-outline-secondary" data-bs-toggle="modal"
-                    data-bs-target="#filterModal">
-                    <i class="bi bi-funnel"></i> Lọc danh mục
-                </button>
-            </div>
-
-            <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="filterModalLabel">Bộ Lọc Danh mục</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="filterForm">
-                                <div class="mb-3">
-                                    <label for="filterAuthor" class="form-label">Tên danh mục</label>
-                                    <input type="text" class="form-control" id="filterAuthor"
-                                        placeholder="Tên danh mục" />
-                                </div>
-                                <div class="mb-3">
-                                    <label for="filterStatus" class="form-label">Trạng thái</label>
-                                    <select class="form-select" id="filterStatus">
-                                        <option value="">Tất cả</option>
-                                        <option value="active">Hiển thị</option>
-                                        <option value="hidden">Ẩn</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="filterDate" class="form-label">Ngày đăng</label>
-                                    <input type="date" class="form-control" id="filterDate" />
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                data-bs-dismiss="modal">Hủy</button>
-                            <button type="button" class="btn btn-primary" onclick="applyFilters()">Áp
-                                dụng</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    )
-}
+            </div>            
+	</div>
+)}

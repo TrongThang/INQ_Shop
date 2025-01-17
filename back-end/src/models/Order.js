@@ -2,12 +2,14 @@ const sequelize = require('../config/database');
 const { DataTypes } = require('sequelize');
 const OrderDetail = require('./Order_detail');
 const Customer = require('./Customer');
+const Employee = require('./Employee');
 
 const Order = sequelize.define('order', {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    primaryKey: true
+    primaryKey: true,
+    autoIncrement: true,
   },
   idCustomer: {
     type: DataTypes.STRING(12),
@@ -96,6 +98,6 @@ const Order = sequelize.define('order', {
 // Order.hasMany(OrderDetail, {foreignKey: 'id', as: 'details'})
 
 Order.belongsTo(Customer, {foreignKey: 'idCustomer', as: 'customer'});
-// Order.hasMany(OrderDetail, { foreignKey: 'id', as: 'order_device' });
+Order.belongsTo(Employee, {foreignKey: 'idEmployee', as: 'employee'});
 
 module.exports = Order 

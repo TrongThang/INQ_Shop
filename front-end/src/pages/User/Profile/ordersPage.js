@@ -10,7 +10,6 @@ function OrdersPage() {
     const [idCustomer, setIdCustomer] = useState(null);
     const [order, setOrder] = useState([]);
 
-    
     useEffect(() => {
         document.title = "Đơn hàng | INQ";
         const token = localStorage.getItem('authToken');
@@ -20,36 +19,36 @@ function OrdersPage() {
         }
     }, []);
 
-    const getAllOrderByIdCustomer = async () => {
-        const response = await axios.get(`http://localhost:8081/api/order/${idCustomer}`);
-        setOrder(response.data.data);
-    }
-
     useEffect(() => {
-        const fetchOrders = async () => {
-            const response = await axios.get(`http://localhost:8081/api/order/${idCustomer}`);
-            const allOrders = response.data.data;
-    
-            if (activeTab === "all") {
-                setOrder(allOrders); // Hiển thị tất cả các đơn hàng
-            } else if (activeTab === "pending") {
-                setOrder(allOrders.filter(item => item.status === 4)); // Lọc đơn hàng có status là chờ thanh toán
-            } else if (activeTab === "preparing") {
-                setOrder(allOrders.filter(item => item.status === 3)); // Lọc đơn hàng có status là chuẩn bị hàng
-            }else if (activeTab === "shipping") {
-                setOrder(allOrders.filter(item => item.status === 2)); // Lọc đơn hàng có status là chờ giao hàng
-            }else if (activeTab === "completed"){
-                setOrder(allOrders.filter(item => item.status === 1)); // Lọc đơn hàng có status là hoàn thành
-            }else{
-                setOrder(allOrders.filter(item => item.status === 0)); // Lọc đơn hàng có status là đã hủy
-            }
-        };
-    
         if (idCustomer) {
+            const fetchOrders = async () => {
+                try {
+                    const response = await axios.get(`http://localhost:8081/api/order/${idCustomer}`);
+                    const allOrders = response.data.data;
+
+                    if (activeTab === "all") {
+                        setOrder(allOrders);
+                    } else if (activeTab === "pending") {
+                        setOrder(allOrders.filter(item => item.status === 1));
+                    } else if (activeTab === "preparing") {
+                        setOrder(allOrders.filter(item => item.status === 2));
+                    } else if (activeTab === "shipping") {
+                        setOrder(allOrders.filter(item => item.status === 3));
+                    } else if (activeTab === "completed") {
+                        setOrder(allOrders.filter(item => item.status === 4));
+                    } else {
+                        setOrder(allOrders.filter(item => item.status === 0));
+                    }
+                } catch (error) {
+                    console.error("Lỗi khi tải đơn hàng:", error);
+                }
+            };
+
             fetchOrders();
         }
     }, [activeTab, idCustomer]);
-    
+
+
 
     // Hàm xử lý khi nhấn vào một tab
     const handleTabClick = (tab) => {
@@ -82,7 +81,7 @@ function OrdersPage() {
                                         href="#"
                                         onClick={() => handleTabClick("pending")}
                                     >
-                                        Chờ thanh toán
+                                        Chờ xác nhận
                                     </a>
                                 </li>
                                 <li className="nav-item">
@@ -126,7 +125,7 @@ function OrdersPage() {
                                     </a>
                                 </li>
                             </ul>
-                            <OrderItems orders={order} />
+                            <OrderItems initialOrders={order} />
                         </div>
                     </div>
                 </div>

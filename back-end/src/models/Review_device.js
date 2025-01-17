@@ -77,10 +77,10 @@ const ReviewDevice = sequelize.define('review_device', {
 });
 
 const Device = require('../models/Device');
-const Customer = require('./Customer');
+const Customer = require('../models/Customer');
 // ReviewDevice.belongsTo(Device, { foreignKey: 'idDevice', as: 'device' });
-ReviewDevice.belongsTo(Customer, { foreignKey: 'idCustomer', as: 'customerReview' })
-Customer.hasMany(ReviewDevice, { foreignKey: 'idCustomer', as: 'customerReview' })
+ReviewDevice.belongsTo(Customer, { foreignKey: 'idCustomer', as: 'customerReview' });
+Customer.hasMany(ReviewDevice, { foreignKey: 'idCustomer', as: 'customerReview' });
 // ReviewDevice.belongsTo(Device, { foreignKey: 'idDevice', as: 'device' });
 
 module.exports = ReviewDevice;

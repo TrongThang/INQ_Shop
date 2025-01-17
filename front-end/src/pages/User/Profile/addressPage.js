@@ -225,7 +225,7 @@ const AddressPage = () => {
                     <ProfileSidebar />
                     <div className="form-container col-md-8 col-lg-6 me-auto py-4 mt-4 shadow-sm rounded">
                         <div className="profile-address mb-3 d-flex justify-content-between align-items-center">
-                            <h1 className="mb-1 fs-4">Địa chỉ của tôi</h1>
+                            <h1 className="card-title mb-4">Địa chỉ của tôi</h1>
                             <button className="btn btn-primary" onClick={handleAddClick}>Thêm địa chỉ mới</button>
                         </div>
 

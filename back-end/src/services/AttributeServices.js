@@ -20,12 +20,13 @@ const getAllParentCategories = async (idCate, parentCategories = []) => {
         parentCategories.push(category.parentId);
         return getAllParentCategories(category.parentId, parentCategories);
     }
-
+    console.log("parentCategories: ", parentCategories)
     return parentCategories;
 };
 
 //Các thuộc tính được lấy ra phải có trạng thái được mở !!
-const getAttributeByCategoryAndAncestors = async ( idCate ) => {
+const getAttributeByCategoryAndAncestors = async (idCate) => {
+    console.log(idCate)
     const parentCategoryIds = await getAllParentCategories(idCate);
 
     // Lấy cả danh mục hiện tại mà người dùng truyền vào

@@ -14,7 +14,7 @@ const getAllLikedDevices = async (idCustomer) => {
                 {
                     model: Devices,
                     as: 'device',
-                    attributes: ['image', 'name', 'sellingPrice']
+                    attributes: ['image', 'name', 'sellingPrice', 'slug']
                 }
             ]
         });

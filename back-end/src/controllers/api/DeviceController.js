@@ -5,23 +5,48 @@ const {
     getAllDevice_User, getAllDevice_Admin, getAllDeviceByStatus,
     getDeviceBySlug, getTopSellingDevice,getDeviceByCategory,
     createDevice, updateDevice, updateStatusDevice,
+
+    getDeviceBySlugForAdmin, getCheckNameDevice,
+    checkDevice, checkListDevice,
     //Review For Device
     getReviewForCustomer,
     getAllReviewForDevice, createReviewForDevice, updateReviewForDevice, updateStatusReviewForDevice,
     getTOPDeviceLiked,
     increaseViewDevice,
+    
+    getAllReviewForDevice_admin, getReviewById, updateReviewById
 } = require('../../services/DeviceServices.js');
 
 const {
     getChildrenCategory, getAllCategoryIds
-} = require('../../services/CategoryServices.js')
+} = require('../../services/CategoryServices.js');
+const { ERROR_CODES } = require('../../../../contants.js');
+
+const postCheckDeviceModificationAPI = async (req, res) => {
+    //idDevice, sellingPrice, quantity
+    const { deviceReceive } = req.body;
+    const result = await checkDevice(deviceReceive);
+
+    return res.status(result.errorCode === ERROR_CODES.SUCCESS ? 200 : 401).json(result)
+}
+
+const postCheckListDeviceAPI = async (req, res) => {
+    const { products } = req.body;
+
+    const result = await checkListDevice(products)
+
+    console.log(result)
+    return res.status(200).json(result)
+}
+
 const getAllDeviceByUserAPI = async (req, res) => {
     try {
-        const { page = 0, status = 1, limit = 90, priceMin, priceMax, idCategory } = req.body;
+        const { status = 1, limit = 15, priceMin, priceMax, idCategory } = req.body;
 
-        const { keyword, orderBy, sortBy } = req.query;
-
+        const { keyword, orderBy, sortBy, page } = req.query;
+        
         let order = [];
+        
         if (orderBy && sortBy) {
             order = [[orderBy, sortBy.toUpperCase()]];
         } else {
@@ -34,7 +59,9 @@ const getAllDeviceByUserAPI = async (req, res) => {
 
         return res.status(200).json({
             errorCode: 0,
-            data: results
+            data: results.data,
+            totalPages: results.totalPages,
+            totalCount: results.totalCount
         })
     } catch (error) {
         return res.status(500).json({
@@ -192,8 +219,42 @@ const getAllDeviceByAdminAPI = async (req, res) => {
 
 const getDeviceBySlugAPI = async (req, res) => {
     try {
-        console.log(req.params.slug);
         const results = await getDeviceBySlug(req.params.slug);
+
+        return res.status(200).json({
+            errorCode: 0,
+            data: results
+        })
+    } catch (error) {
+        return res.status(500).json({
+            errorCode: 1,
+            msg: 'Có lỗi xảy ra trong quá trình lấy dữ liệu Thiết bị',
+            details: error.message,
+        });
+    }
+};
+
+const getCheckNameDeviceAPI = async (req, res) => {
+    try {
+        console.log('name:', req.params.name)
+        const results = await getCheckNameDevice(req.params.name);
+
+        return res.status(200).json({
+            errorCode: 0,
+            exists: results
+        })
+    } catch (error) {
+        return res.status(500).json({
+            errorCode: 1,
+            msg: 'Có lỗi xảy ra trong quá trình lấy dữ liệu Thiết bị',
+            details: error.message,
+        });
+    }
+};
+
+const getDeviceBySlugForAdminAPI = async (req, res) => {
+    try {
+        const results = await getDeviceBySlugForAdmin(req.params.slug);
 
         return res.status(200).json({
             errorCode: 0,
@@ -211,13 +272,16 @@ const getDeviceBySlugAPI = async (req, res) => {
 
 const postCreateDeviceAPI = async (req, res) => {
     try {
-        const results = await createDevice(req.body);
+        const { deviceSend, stock } = req.body
+        const results = await createDevice(deviceSend, stock);
 
         return res.status(200).json({
             errorCode: 0,
             data: results
         })
     } catch (error) {
+        console.log(error.message)
+
         return res.status(500).json({
             errorCode: 1,
             msg: 'Có lỗi xảy ra trong quá trình thêm dữ liệu cho Thiết bị',
@@ -228,13 +292,17 @@ const postCreateDeviceAPI = async (req, res) => {
 
 const putUpdateDeviceAPI = async (req, res) => {
     try {
-        const results = await updateDevice(req.body);
+        const { deviceSend, stock } = req.body;
+        console.log("deviceSend:", deviceSend);
+        const results = await updateDevice(deviceSend, stock);
 
         return res.status(200).json({
             errorCode: 0,
             data: results
         })
     } catch (error) {
+        console.log(error.message)
+
         return res.status(500).json({
             errorCode: 1,
             msg: 'Cập nhập dữ liệu Thiết bị thất bại',
@@ -294,6 +362,74 @@ const getAllReviewForDeviceAPI = async (req, res) => {
     }
 };
 
+const getAllReviewForDeviceAPI_Admin = async (req, res) => {
+    try {
+        // Gọi service để lấy tất cả bình luận
+        const results = await getAllReviewForDevice_admin();
+            
+        // Trả về kết quả cho client
+        return res.status(200).json({
+            
+            errorCode: 0,
+            data: results
+        });
+    } catch (error) {
+        // Xử lý lỗi nếu có
+        return res.status(500).json({
+            errorCode: 1,
+            msg: 'Có lỗi xảy ra trong quá trình lấy dữ liệu bình luận',
+            details: error.message,
+        });
+    }
+};
+const getReviewByIdAPI = async (req, res) => {
+    try {
+        const { idReview } = req.params; // Lấy idReview từ request params
+
+        // Gọi service để lấy review
+        const review = await getReviewById(idReview);
+
+        if (!review) {
+            return res.status(404).json({
+                errorCode: 1,
+                msg: 'Không tìm thấy review với idReview này.',
+            });
+        }
+
+        // Trả về kết quả cho client
+        return res.status(200).json({
+            errorCode: 0,
+            data: review,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            errorCode: 1,
+            msg: 'Có lỗi xảy ra trong quá trình lấy dữ liệu review.',
+            details: error.message,
+        });
+    }
+};
+const updateReviewByIdAPI = async (req, res) => {
+    try {
+        const { idReview } = req.params; // Lấy idReview từ request params
+        const updateData = req.body; // Lấy dữ liệu cần cập nhật từ request body
+
+        // Gọi service để cập nhật review
+        const updatedCount = await updateReviewById(idReview, updateData);
+
+        // Trả về kết quả cho client
+        return res.status(200).json({
+            errorCode: 0,
+            msg: `Cập nhật thành công ${updatedCount} review.`,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            errorCode: 1,
+            msg: 'Có lỗi xảy ra trong quá trình cập nhật review.',
+            details: error.message,
+        });
+    }
+};
 const getReviewForCustomerAPI = async (req, res) => {
     try {
         const results = await getReviewForCustomer(req.params.idDevice, req.params.idCustomer);
@@ -358,12 +494,15 @@ const updateStatusReviewForDeviceAPI = async (req, res) => {
 }
 
 module.exports = {
-    getAllDeviceByUserAPI, getAllDevice_FeaturedAPI, getAllDevice_NewAPI, getTopSellingDeviceAPI, getAllDeviceByAdminAPI,
-    getDeviceBySlugAPI, getTOPDeviceLikedAPI, getAllDevice_DiscountAPI,getDevice_byCategoryAPI,
+    postCheckDeviceModificationAPI, postCheckListDeviceAPI,
+    getAllDeviceByUserAPI,getAllDevice_FeaturedAPI, getAllDevice_NewAPI, getTopSellingDeviceAPI, getAllDeviceByAdminAPI,
+    getDeviceBySlugAPI, getTOPDeviceLikedAPI, getAllDevice_DiscountAPI, getDevice_byCategoryAPI,
     postCreateDeviceAPI, putUpdateDeviceAPI,
     updateStatusDeviceAPI, putIncreaseViewDeviceAPI,
+    getDeviceBySlugForAdminAPI, getCheckNameDeviceAPI,
     //Review For Device
     getReviewForCustomerAPI,
     getAllReviewForDeviceAPI, postCreateReviewForDeviceAPI,
-    putUpdateReviewForDeviceAPI, updateStatusReviewForDeviceAPI
+    putUpdateReviewForDeviceAPI, updateStatusReviewForDeviceAPI,getAllReviewForDeviceAPI_Admin,
+    getReviewByIdAPI,updateReviewByIdAPI
 }

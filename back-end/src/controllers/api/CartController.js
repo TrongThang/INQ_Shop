@@ -51,7 +51,7 @@ const postAddToCartAPI = async (req, res) => {
 
         if (existingDevice) {
             // Nếu thiết bị đã có trong giỏ hàng, trả về thông báo lỗi hoặc yêu cầu cập nhật số lượng
-            newCart = await putUpdateDeviceInCart(idCustomer, idDevice, quantity)
+            newCart = await putUpdateDeviceInCart(idCustomer, idDevice, quantity, type)
             return res.status(200).json({
                 errorCode: 0,
                 newCart: newCart

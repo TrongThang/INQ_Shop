@@ -46,7 +46,7 @@ const getAttributeByIdAPI = async (req, res) => {
 
 const getAttributeByCategoryAPI = async (req, res) => {
     try {
-        const results = await getAttributeByCategoryAndAncestors(req.body.id);
+        const results = await getAttributeByCategoryAndAncestors(req.params.id);
 
         return res.status(200).json({
             errorCode: 0,

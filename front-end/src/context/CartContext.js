@@ -3,6 +3,8 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 const CartContext = createContext();
 
@@ -44,6 +46,8 @@ export const CartProvider = ({ children }) => {
 
         const updatedCart = cart.map(item => {
             const updatedProduct = allDevice.find(p => p.id === item.idDevice);
+        
+            console.log('Sp', updatedProduct);
             return {
                 ...item,
                 sellingPrice: updatedProduct?.sellingPrice || item.sellingPrice,
@@ -52,7 +56,6 @@ export const CartProvider = ({ children }) => {
                 stock: updatedProduct?.stock || item.stock
             };
         });
-
         setCart(updatedCart);
     }
 
@@ -89,7 +92,7 @@ export const CartProvider = ({ children }) => {
 
     const handleInputQuantity = (device, quantity) => {
         console.log('Giá trị Quantity:', quantity)
-        if (isNaN(quantity) || quantity < 1) {
+        if (isNaN(quantity) || quantity < 0) {
             return; // Không cho phép số lượng không hợp lệ 
         }
         if (quantity > device.stock) {
@@ -109,6 +112,7 @@ export const CartProvider = ({ children }) => {
             idDevice: device.idDevice,
             quantity: Number(quantity),
         };
+        console.log("cartItem:", cartItem.quantity)
 
         if (idCustomer) {
             try {
@@ -117,6 +121,7 @@ export const CartProvider = ({ children }) => {
                     idCustomer: idCustomer,
                     type: type
                 });
+
                 setCart(response.data.newCart)
             } catch (error) {
                 console.log('Lỗi thêm sản phẩm vào giỏ hàng cho KH logged:', error)
@@ -134,14 +139,13 @@ export const CartProvider = ({ children }) => {
 
             try {
                 const existingCart = Cookies.get('cart') ? JSON.parse(Cookies.get('cart')) : [];
-                console.log('Thêm SP - No Logged:', existingCart);
 
                 const updatedCart = existingCart.find(item => item.idDevice === device.idDevice)
                     ? existingCart.map(item => item.idDevice === device.idDevice
                         ? {
                             ...item,
                             quantity: type === 'input'
-                                ? quantity
+                                ? quantity == 0 ? 1 : quantity
                                 : Number(item.quantity) + Number(quantity)
                         } 
                         : item
@@ -204,29 +208,66 @@ export const CartProvider = ({ children }) => {
     const getTotalPrice = () => {
         if (cart) {
             return cart.reduce((accumulator, currentValue) => {
+                if (currentValue.status <= 0) {
+                    return accumulator;
+                }
+
                 return accumulator + (currentValue.quantity * currentValue.sellingPrice)
             }, 0);
         }
     }
     
     const getTotalItem = () => {
-        return cart.length;
+        return cart.length - cart.filter(item => item.status <= 0).length;
     }
 
-    const checkCheckout = () => {
-        const isValid = window.confirm("Kiểm tra trước Thanh toán. Tiếp tục?");
-        if (isValid) {
-            navigate("/checkout"); 
+    const checkoutCart = async (shippingMethod, notes, choiceAddress, deviceCheckout) => {
+        try {
+            const address = `${choiceAddress.street}, ${choiceAddress.ward}, ${choiceAddress.district}, ${choiceAddress.city}`
+            const nameRecipient = `${choiceAddress?.customer?.surname} ${choiceAddress?.customer?.lastName}`
+            const infoOrder = {
+                idCustomer: idCustomer,
+                nameRecipient: nameRecipient,
+                phone: choiceAddress?.customer?.phone,
+                paymentMethod: shippingMethod,
+                note: notes,
+                address: address
+            }
+            // const getDeviceCart = cart.map((item) => item.status > 0);
+            const response = await axios.post('http://localhost:8081/api/order/checkout', {
+                infoOrder: infoOrder,
+                products: deviceCheckout
+            }); 
+
+            if (response.data.errorCode === 0) {
+                const result = await Swal.fire({
+                    title: 'Thành công!',
+                    text: 'Đặt hàng thành công!',
+                    icon: 'success',
+                });
+                console.log(deviceCheckout.idDevice)
+                deviceCheckout.forEach(item => {
+                    removeFromCart(item.idDevice)
+                });
+
+                if (result.isConfirmed) {
+                    navigate("/cart")
+                }
+            }else {
+                toast.error('Đặt hàng thất bại. Vui lòng thử lại!');
+            }
+        } catch (error) {
+            console.log('Lỗi:', error.message);
+            toast.error('Có lỗi xảy ra. Vui lòng thử lại!');
         }
-    }
-
+    }    
 
     return (
         <CartContext.Provider value={{
             cart, customer, addToCart,
             removeFromCart, removeAllCart,
-            getTotalPrice, checkCheckout, getTotalItem,
-            handleInputQuantity,
+            getTotalPrice, getTotalItem,
+            handleInputQuantity, checkoutCart
         }}>
             {children}
         </CartContext.Provider>

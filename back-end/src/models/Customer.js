@@ -7,7 +7,8 @@ const Customer = sequelize.define('customer', {
   id: {
     type: DataTypes.STRING(12),
     allowNull: false,
-    primaryKey: true
+    primaryKey: true,
+    autoIncrement: true,
   },
   surname: {
     type: DataTypes.STRING(500),

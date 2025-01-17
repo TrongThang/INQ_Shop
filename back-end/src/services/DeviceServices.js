@@ -12,6 +12,95 @@ const AttributeDevice = require('../models/Attribute_device');
 const Attribute_group = require('../models/Attribute_group');
 const { getChildrenCategory, getAllCategoryIds } = require('./CategoryServices');
 const OrderDetail = require('../models/Order_detail');
+const { ERROR_MESSAGES, ERROR_CODES } = require('../../../contants');
+const { STATUS_CODES } = require('../../../statusContaints');
+const Liked = require('../models/Liked');
+
+const checkDevice = async (deviceReceive) => {
+    try {
+        const deviceCheck = await Device.findOne({
+            where: {
+                idDevice: deviceReceive.idDevice
+            },
+            include: [
+                {
+                    model: Warehouse,
+                    as: 'warehouse',
+                    attributes: ['stock']
+                }
+            ]
+        });
+
+        const isDifferentSellingPrice = Number(deviceCheck.sellingPrice) !== Number(deviceReceive.sellingPrice);
+        const noDeviceInStock = deviceReceive.quantity > (deviceCheck.warehouse.stock === null ? 0 : deviceCheck.warehouse.stock);
+        
+        // Sản phẩm bị tắt thì sao
+        if (!deviceCheck) {
+            return {
+                errorCode: ERROR_CODES.DEVICE.DEVICE_NOT_FOUND,
+                detail: ERROR_MESSAGES.DEVICE[ERROR_CODES.DEVICE.DEVICE_NOT_FOUND],
+                idDevice: deviceCheck.idDevice,
+            };
+        }
+
+        // if (deviceCheck.status <= STATUS_CODES.DEVICE.NON_ACTIVE) {
+        //     return {
+        //         errorCode: ERROR_CODES.DEVICE.DEVICE_NON_ACTIVE,
+        //         detail: ERROR_MESSAGES.DEVICE[ERROR_CODES.DEVICE.DEVICE_NON_ACTIVE],
+        //     };
+        // }
+
+        if (isDifferentSellingPrice) {
+            return {
+                errorCode: ERROR_CODES.DEVICE.PRICE_CHANGED,
+                detail: ERROR_MESSAGES.DEVICE[ERROR_CODES.DEVICE.PRICE_CHANGED],
+                idDevice: deviceCheck.idDevice,
+                sellingPriceNew: deviceCheck.sellingPrice
+            };
+        }
+
+        if (noDeviceInStock) {
+            return {
+                errorCode: ERROR_CODES.DEVICE.OUT_OF_STOCK,
+                detail: ERROR_MESSAGES.DEVICE[ERROR_CODES.DEVICE.OUT_OF_STOCK],
+                idDevice: deviceCheck.idDevice,
+                nameDevice: deviceCheck.name,
+                quantityInitial: deviceReceive.quantity,
+                stockDeviceRemaining: deviceCheck.warehouse.stock,
+            };
+        }
+
+        return {
+            errorCode: ERROR_CODES.SUCCESS,
+            detail: ERROR_MESSAGES.DEVICE[ERROR_CODES.SUCCESS]
+        };
+
+    } catch (error) {
+        return {
+            errorCode: ERROR_CODES.DEVICE.INTERNAL_ERROR,
+            detail: error || ERROR_MESSAGES.DEVICE[ERROR_CODES.DEVICE.INTERNAL_ERROR]
+        }
+    }
+} 
+
+const checkListDevice = async (products) => {
+    try {
+        for (const product of products) {
+            const result = await checkDevice(product);
+            if (result.errorCode !== ERROR_CODES.SUCCESS) {
+                return result;
+            }
+        }
+        return {
+            errorCode: ERROR_CODES.SUCCESS,
+        }
+    } catch (error) {
+        return {
+            errorCode: ERROR_CODES.ORDER.INTERNAL_ERROR,
+            detail: error.message || ERROR_MESSAGES.ORDER[ERROR_CODES.ORDER.INTERNAL_ERROR]
+        }
+    }
+}
 
 // HÀM XỬ LÝ
 function groupAttributesByGroup(attributeDeviceList) {
@@ -153,68 +242,65 @@ const getTopSellingDevice = async () => {
     return data;
 }
 
-const getAllDevice_User = async (page = 0, status = 1, limit = {}, filters = {}, order = {}) => {
-    const { priceMin, priceMax, idCategory, keyword } = filters;
+const getAllDevice_User = async (page = 0, status = 1, limit = 15, filters = {}, order = {}) => {
+    const { priceMin, priceMax, keyword } = filters;
 
     const whereConditions = {
-        status: {
-            [Op.gte]: status
-        }
+        status: { [Op.gte]: status },
+        ...(priceMin != undefined && { sellingPrice: { [Op.gte]: priceMin } }),
+        ...(priceMax != undefined && { sellingPrice: { [Op.lte]: priceMax } }),
+        ...(keyword && {
+            [Op.or]: [
+                { name: { [Op.like]: `%${keyword}%` } },
+                { descriptionNormal: { [Op.like]: `%${keyword}%` } }
+            ]
+        })
     };
 
-    if (priceMin != undefined || priceMax != undefined) {
-        whereConditions.price = {};
-        if (priceMin != undefined) {
-            whereConditions.sellingPrice[Op.gte] = priceMin;
+    const includeConfig = [
+        {
+            model: ReviewDevice,
+            as: 'reviews',
+            attributes: [[Sequelize.fn('AVG', Sequelize.col('rating')), 'averageRating']],
+            required: false
+        },
+        {
+            model: Category,
+            as: 'categoryDevice',
+            attributes: ['id', 'nameCategory']
+        },
+        {
+            model: Warehouse,
+            as: 'warehouse',
+            attributes: []
         }
-        if (priceMax != undefined) {
-            whereConditions.sellingPrice[Op.lte] = priceMax;
-        }
-    }
-
-    if (keyword) {
-        whereConditions[Op.or] = [
-            { name: { [Op.like]: `%${keyword}%` } },
-            { descriptionNormal: { [Op.like]: `%${keyword}%` } }
-        ];
-    }
+    ];
 
     const offset = page * limit;
 
+    const totalCount = await Device.count({
+        where: whereConditions,
+        include: includeConfig,
+        distinct: true
+    });
+
     const data = await Device.findAll({
         where: whereConditions,
-        limit: limit,
-        offset: offset,
-        subQuery: false,
-        include: [
-            {
-                model: ReviewDevice,
-                as: 'reviews',
-                attributes: [
-                    [Sequelize.fn('AVG', Sequelize.col('rating')), 'averageRating']
-                ],
-                required: false
-            },
-            {
-                model: Category,
-                as: 'categoryDevice',
-                attributes: ['id', 'nameCategory']
-            },
-            {
-                model: Warehouse,
-                as: 'warehouse',
-                attributes: [] // Không cần trả về riêng biệt, vì sẽ đưa vào attributes của Device
-            }
-        ],
+        limit,
+        offset,
+        include: includeConfig,
         attributes: [
             'idDevice', 'name', 'slug', 'sellingPrice', 'image', 'descriptionNormal', 'status',
             [Sequelize.col('warehouse.stock'), 'stock']
         ],
         group: ['Device.idDevice'],
-        order: order,
+        order,
+        subQuery: false
     });
 
-    return await data;
+    const totalPages = Math.ceil(totalCount / limit);
+
+    return { data, totalPages, totalCount };
 }
 
 const getTOPDeviceLiked = async () => {
@@ -267,6 +353,11 @@ const getDeviceBySlug = async (slug) => {
                 as: 'warehouse',
                 attributes: []
             },
+            {
+                model: Liked,
+                as: 'liked',
+                attributes: []
+            }
         ],
         attributes: {
             include: [
@@ -275,9 +366,15 @@ const getDeviceBySlug = async (slug) => {
                     FROM review_device AS review
                     WHERE review.idDevice = Device.idDevice
                 )`), 'averageRating'],
-                [Sequelize.col('warehouse.stock'), 'stock']
+                [Sequelize.col('warehouse.stock'), 'stock'],
+                [Sequelize.literal(`(
+                    SELECT COUNT(idDevice)
+                    FROM liked AS liked
+                    WHERE liked.idDevice = Device.idDevice
+                )`), 'likeCount'],
             ]
         },
+        group: ['Device.idDevice'],
     });
 
     const review = await ReviewDevice.findAll({
@@ -326,32 +423,129 @@ const getDeviceBySlug = async (slug) => {
     return device;
 }
 
-const createDevice = async (body) => {
-    const slug = convertToSlug(body.name);
-    body.slug = slug;
+const getCheckNameDevice = async (name) => {
+    console.log(name)
+    let device = await Device.findOne({
+        where: {
+            name: name
+        },
+    });
 
-    const deviceCreate = await Device.create(body);
+    if (device) {
+        return true;
+    }
+
+    return false;
+}
+
+const getDeviceBySlugForAdmin = async (slug) => {
+    let device = await Device.findOne({
+        where: {
+            slug: slug
+        },
+        subQuery: false,
+        include: [
+            {
+                model: Category,
+                as: 'categoryDevice',
+                attributes: ['id', 'nameCategory']
+            },
+            {
+                model: Warehouse,
+                as: 'warehouse',
+                attributes: []
+            },
+            {
+                model: Liked,
+                as: 'liked',
+                attributes: []
+            }
+        ],
+        attributes: {
+            include: [
+                [Sequelize.literal(`(
+                    SELECT AVG(rating)
+                    FROM review_device AS review
+                    WHERE review.idDevice = Device.idDevice
+                )`), 'averageRating'],
+                [Sequelize.col('warehouse.stock'), 'stock'],
+                [Sequelize.literal(`(
+                    SELECT COUNT(idDevice)
+                    FROM liked AS liked
+                    WHERE liked.idDevice = Device.idDevice
+                )`), 'likeCount'],
+            ]
+        },
+        group: ['Device.idDevice'],
+    });
+
+    const attributeDevice = await AttributeDevice.findAll({
+        where: {
+            idDevice: device.idDevice
+        },
+        include: [
+            {
+                model: Attribute,
+                as: 'attributes',
+                include: [
+                    {
+                        model: Attribute_group,
+                        as: 'attributeGroup',
+                        attributes: ['id', 'name']
+                    }
+                ],
+                attributes: ['nameAttribute', 'required']
+
+            }
+        ],
+        attributes: ['value', 'status']
+    })
+
+    device = device.toJSON();
+
+    device.attributes = groupAttributesByGroup(attributeDevice);
+
+    return device;
+}
+
+const createDevice = async (deviceSend, stock) => {
+    const slug = convertToSlug(deviceSend.name);
+    deviceSend.slug = slug;
+
+    console.log(deviceSend)
+
+    const deviceCreate = await Device.create(deviceSend);
+
+    const warehouse = await Warehouse.create({
+        idDevice: deviceSend.idDevice,
+        stock: stock,
+        status: 1
+    })
 
     return deviceCreate;
 }
 
-const updateDevice = async (body) => {
-    const [updatedCount] = await Device.update(body, {
-        where: { id }
+const updateDevice = async (deviceSend, stock) => {
+    const slug = convertToSlug(deviceSend.name)
+    deviceSend.slug = slug
+
+    const [updatedCount] = await Device.update(deviceSend, {
+        where: { idDevice: deviceSend.idDevice }
     });
 
     return updatedCount;
 }
 
-const updateStatusDevice = async ({ idDevice, status }) => {
-    const valueIsHide = status <= 0 ? true : false;
+const updateStatusDevice = async (data) => {
+    console.log("req.body: ",data);
+    const valueIsHide = (data.status == 0) ? true : false;
 
     const [updatedCount] = await Device.update(
         {
-            status: status,
+            status: data.status,
             isHide: valueIsHide
         },
-        { where: { idDevice } }
+        { where: { idDevice: data.idDevice } }
     );
 
     return updatedCount;
@@ -412,6 +606,49 @@ const getAllReviewForDevice = async (idDevice) => {
 
     return comments;
 }
+const getAllReviewForDevice_admin = async () => {
+    console.log('Get all review for admin')
+    const comments = await ReviewDevice.findAll({
+        include: [
+            {
+                model: Customer,
+                as: 'customerReview'
+            },
+             {
+             model: Device,
+                as: 'device', // Thêm thông tin về thiết bị nếu cần
+                 attributes: ['idDevice', 'name'] // Chỉ lấy một số trường cần thiết
+          }
+        ],
+        order: [['created_at', 'DESC']] // Sắp xếp theo thời gian cập nhật mới nhất
+    });
+   
+
+    return comments;
+}
+const getReviewById = async (idReview) => {
+    try {
+        const review = await ReviewDevice.findOne({
+            where: { idReview },
+            include: [
+                {
+                    model: Customer,
+                    as: 'customerReview',
+            
+                },
+                {
+                    model: Device,
+                    as: 'device',
+                    attributes: ['idDevice', 'name']
+                }
+            ]
+        });
+
+        return review;
+    } catch (error) {
+        throw new Error(`Error fetching review by id: ${error.message}`);
+    }
+};
 
 const getReviewForCustomer = async (idDevice, idCustomer) => {
     const comments = await ReviewDevice.findOne({
@@ -446,6 +683,22 @@ const updateReviewForDevice = async ( idReview, body ) => {
     return updatedCount;
 }
 
+const updateReviewById = async (idReview, updateData) => {
+    try {
+        const [updatedCount] = await ReviewDevice.update(updateData, {
+            where: { idReview },
+        });
+
+        if (updatedCount === 0) {
+            throw new Error("Không tìm thấy review với idReview này.");
+        }
+
+        return updatedCount;
+    } catch (error) {
+        throw new Error(`Lỗi khi cập nhật review: ${error.message}`);
+    }
+};
+
 const updateStatusReviewForDevice = async ({ id, status }) => {
     //Nếu status <== 0 &&
     //Is Hide = True
@@ -464,13 +717,16 @@ const updateStatusReviewForDevice = async ({ id, status }) => {
 }
 
 module.exports = {
+    checkDevice, checkListDevice,
     getAllDevice_User, getAllDeviceByStatus, getAllDevice_Admin, 
-    getDeviceBySlug, getTOPDeviceLiked, getTopSellingDevice,getDeviceByCategory,
+    getDeviceBySlug, getTOPDeviceLiked, getTopSellingDevice, getDeviceByCategory,
     createDevice, updateDevice, updateStatusDevice,
     updateStatusDeviceByCategory, increaseViewDevice,
 
+    getDeviceBySlugForAdmin, getCheckNameDevice,
+
     //Review For Device
     getReviewForCustomer,
-    getAllReviewForDevice, createReviewForDevice,
-    updateReviewForDevice, updateStatusReviewForDevice,
+    getAllReviewForDevice, getAllReviewForDevice_admin,   createReviewForDevice,
+    updateReviewForDevice, updateStatusReviewForDevice,getReviewById,updateReviewById
 }

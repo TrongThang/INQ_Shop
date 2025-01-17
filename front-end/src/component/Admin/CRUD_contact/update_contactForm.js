@@ -7,19 +7,27 @@ const UpdateContactForm = ({ contact, onSubmit }) => {
     const [email, setEmail] = useState(contact.email || "");
     const [title, setTitle] = useState(contact.title || "");
     const [content, setContent] = useState(contact.content || "");
-    const [createdAt, setCreatedAt] = useState(contact.createdAt || "");
-    const [updatedAt, setUpdatedAt] = useState(contact.updatedAt || "");
+    const [createdAt, setCreatedAt] = useState( "");
+    const [updatedAt, setUpdatedAt] = useState( "");
     const [status, setStatus] = useState(contact.status || "1");
 
     useEffect(() => {
+        const formatDate = (date) => {
+            if (!date) return "";
+            const d = new Date(date);
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, "0");
+            const day = String(d.getDate()).padStart(2, "0");
+            return `${year}-${month}-${day}`;
+        };
         if (contact) {
             setId(contact.id);
             setFullname(contact.fullname);
             setEmail(contact.email);
             setTitle(contact.title);
             setContent(contact.content);
-            setCreatedAt(contact.createdAt);
-            setUpdatedAt(contact.updatedAt);
+            setCreatedAt(formatDate(contact.created_at));
+            setUpdatedAt(formatDate(contact.updated_at));
             setStatus(contact.status);
         }
     }, [contact]);
@@ -49,6 +57,7 @@ const UpdateContactForm = ({ contact, onSubmit }) => {
     if (loading) {
         return <div>Loading...</div>;
     }
+ 
 
     return (
         <div className="bg-white p-4 rounded shadow-sm">
@@ -72,7 +81,8 @@ const UpdateContactForm = ({ contact, onSubmit }) => {
                         <textarea id="content" className="form-control" rows="4" value={content} onChange={(e) => setContent(e.target.value)} readOnly></textarea>
                     </div>
                     <div className="col-md-6 mb-3">
-                        <label htmlFor="created-date" className="form-label">Ngày tạo:</label>
+                        <label htmlFor="created-date" className="form-label">Ngày tạo: </label> 
+                       
                         <input type="date" id="created-date" className="form-control" value={createdAt} readOnly />
                     </div>
                     <div className="col-md-6 mb-3">
@@ -82,9 +92,11 @@ const UpdateContactForm = ({ contact, onSubmit }) => {
                     <div className="col-md-6 mb-3">
                         <label htmlFor="status" className="form-label">Trạng thái:</label>
                         <select id="status" className="form-select" value={status} onChange={(e) => setStatus(e.target.value)}>
-                            <option value="1">Đang xử lý</option>
-                            <option value="2">Đã giải quyết</option>
-                            <option value="0">Đã đóng</option>
+                            <option value="1">Đang xem xét</option>
+                            <option value="2">Gửi hợp đồng</option>
+                            <option value="0">Hủy liên hệ</option>
+                            <option value="3">Đã ký hợp đồng</option>
+
                         </select>
                     </div>
                     <div className="d-flex justify-content-end mt-4">

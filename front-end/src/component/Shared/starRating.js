@@ -1,4 +1,5 @@
 export default function StarRating({ rating }) {
+    console.log('rating:', rating)
     rating = rating === null ? 0 : rating;
     const ratingFormat = parseFloat(parseFloat(rating).toFixed(1)) === 0 ? parseInt(0) : parseFloat(rating).toFixed(1)
     

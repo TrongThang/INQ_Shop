@@ -75,7 +75,7 @@ const AccountCustomer = () => {
             
             <div className="container-form col-md-8 col-lg-6 me-auto py-4 mt-4 shadow-sm rounded">
                 <div className="profile-h1 mb-3">
-                    <h1 className="mb-1 fs-4">Hồ Sơ của tôi</h1>
+                    <h1 className="card-title mb-4">Hồ Sơ của tôi</h1>
                     <p className="mb-2 fs-6 text-muted">Chỉnh sửa thông tin tài khoản</p>
                 </div>
                 <div className="avatar-container mb-4">

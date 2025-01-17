@@ -12,6 +12,7 @@ const routerAttribute = express.Router();
 routerAttribute.get('/', getAllAttributeAPI);
 routerAttribute.get('/groupAttr', getAllAttributeGroupAPI);
 routerAttribute.get('/:id', getAttributeByIdAPI);
+routerAttribute.get('/category/:id', getAttributeByCategoryAPI);
 routerAttribute.post('/', postCreateAttributeAPI);
 routerAttribute.put('/:id', putUpdateAttributeAPI);
 routerAttribute.put('/updateStatus/:id', updateStatusAttributeAPI);

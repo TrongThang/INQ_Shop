@@ -329,10 +329,10 @@ const putIncreaseViewDeviceAPI = async (req, res) => {
 
 const updateStatusDeviceAPI = async (req, res) => {
     try {
-        const id = req.body.idDevice;
+        const idDevice = req.body.idDevice;
         const status = req.body.status;
 
-        const results = await updateStatusDevice({ id, status });
+        const results = await updateStatusDevice({ idDevice, status });
 
         return res.status(200).json({
             errorCode: 0,

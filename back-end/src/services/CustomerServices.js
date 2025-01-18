@@ -10,13 +10,12 @@ const getAllCustomers = async () => {
 const getCustomerById = async (id) => {
     console.log("ID: ", id);
 
-    // Fetch the customer by primary key and include associated Account model
     const customer = await Customer.findByPk(id, {
         include: [
             {
-                model: Account,       // Include the Account model
-                as: 'account',        // Alias for the Account relationship (adjust if needed)
-                attributes: ['username']  // Specify only the 'username' attribute
+                model: Account,
+                as: 'account',
+                attributes: ['username']
             }
         ],
     });

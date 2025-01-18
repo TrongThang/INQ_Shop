@@ -80,7 +80,7 @@ const UpdateOrderForm = () => {
     return (
         <div className="main-content-inner">
             <div className="my-3">
-                <a href="#" onClick={() => navigate('/admin/manage-order')}>
+                <a href="#" onClick={() => navigate('/admin/order')}>
                     <i className="bi bi-arrow-left pe-2"></i>Trở về
                 </a>
             </div>

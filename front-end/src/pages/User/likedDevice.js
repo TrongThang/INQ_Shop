@@ -11,8 +11,8 @@ export default function Liked() {
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     if (token) {
-      const decoded = jwtDecode(token); // Decode the JWT token
-      setIdCustomer(decoded.idPerson); // Set idCustomer from decoded token
+      const decoded = jwtDecode(token);
+      setIdCustomer(decoded.idPerson);
     }
   }, []);
 

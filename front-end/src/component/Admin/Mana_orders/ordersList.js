@@ -1,7 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-const OrdersList = ({ orders, onEdit, onDelete}) => {
-    console.log("Danh sách đơn hàng: ",orders);
+const OrdersList = ({ orders, onEdit, onDelete }) => {
+    
     return (
         <div className="card">
             <div className="table-responsive">

@@ -64,7 +64,7 @@ export default function AddOrEditProduct() {
 
         let updatedValue = value;
         if (id === "sellingPrice" || id === "stockQuantity") {
-            updatedValue = value.replace(/[^0-9]/g, ""); // Loại bỏ các ký tự không phải số
+            updatedValue = value.replace(/[^0-9]/g, "");
         }
         
         setFormData((prevData) => ({
@@ -78,7 +78,7 @@ export default function AddOrEditProduct() {
 
         setFormData((prevData) => ({
             ...prevData,
-            category: category.id, // Lưu id của danh mục vào formData.category
+            category: category.id,
         }));
     }
     
@@ -90,8 +90,7 @@ export default function AddOrEditProduct() {
         
         setErrors({});
 
-        // Validate tên sản phẩm
-        if (!formData.name || formData.name.length > 500) {
+        if (!formData.name.trim() || formData.name.length > 500) {
             setErrors((prevErrors) => ({
                 ...prevErrors,
                 name: '*Tên sản phẩm không được để trống và tối đa 500 ký tự.',
@@ -206,7 +205,7 @@ export default function AddOrEditProduct() {
 
     return (
     <>
-        <div class="my-3">
+        <div class="my-3 ms-4">
             <Link to="/admin/device"
                 class="text-decoration-none">
                 <i class="bi bi-arrow-left pe-2"></i>Trở về
@@ -273,7 +272,7 @@ export default function AddOrEditProduct() {
                                                     type="text"
                                                     className="form-control"
                                                     id="sellingPrice"
-                                                    value={`${Number(formData.sellingPrice).toLocaleString()} VNĐ`}
+                                                    value={`${Number(formData.sellingPrice).toLocaleString()}`}
                                                     onChange={handleInputChange}
                                                 />
                                         </div>
@@ -316,10 +315,6 @@ export default function AddOrEditProduct() {
                                         <div className="mb-3">
                                             {/* <AreaUploadImage image='' /> */}
                                         </div>
-                                        {/* <div className='mb-3'>
-                                            <h6>Thông số kỹ thuật</h6>
-                                            <ListSpecificationsAdmin attributes={device.attributes} />
-                                        </div> */}
                                 </div>
                             </div>
                         </div>

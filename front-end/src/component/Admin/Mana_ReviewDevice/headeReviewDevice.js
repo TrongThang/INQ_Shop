@@ -5,7 +5,7 @@ const SearchInfoWeb = ({ searchTerm, setSearchTerm, statusFilter, setStatusFilte
     return (
         <div>
             <div className="d-flex justify-content-between mb-3">
-                <h5>Danh sách bình luận sản phẩm</h5>
+                <h5>Danh sách đánh giá thiết bị</h5>
                 <div>
                     <button className="btn btn-success" onClick={handleExport}>
                         <i className="bi bi-download"></i> Xuất file
@@ -28,7 +28,7 @@ const SearchInfoWeb = ({ searchTerm, setSearchTerm, statusFilter, setStatusFilte
                         />
                     </div>
                 </div>
-                <div className="col-md-3">
+                <div className="col-md-3 mt-2">
                     <select
                         className="form-select"
                         value={statusFilter}

@@ -1,4 +1,44 @@
-/* Thiết lập chat widget */
+.hover-bg-gray:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Custom CSS for WelcomePage */
+.welcome-page {
+    background-color: #f8f9fa; /* Light background color */
+}
+
+.welcome-header {
+    background-color: #007bff; /* Bootstrap primary color */
+}
+
+.welcome-main {
+    padding: 4rem 0; /* Add some padding */
+}
+
+.welcome-text h2 {
+    font-size: 2.5rem;
+    color: #343a40; /* Dark gray color */
+}
+
+.welcome-text p {
+    font-size: 1.2rem;
+    color: #6c757d; /* Gray color */
+}
+
+.welcome-buttons .btn {
+    font-size: 1.1rem;
+    padding: 0.75rem 1.5rem;
+}
+
+.welcome-image img {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-footer {
+    background-color: #343a40; /* Dark background color */
+}
 .chat-widget {
     position: fixed;
     bottom: 20px;

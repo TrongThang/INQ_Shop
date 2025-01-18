@@ -23,7 +23,7 @@ const {
 const routerDevice = express.Router();
 
 routerDevice.get('/admin', getAllDeviceByAdminAPI);
-routerDevice.get('/related-device/:idCategory', getDevice_byCategoryAPI);
+routerDevice.get('/related-device/:idCategory/:idDevice', getDevice_byCategoryAPI);
 
 routerDevice.get('/featured', getAllDevice_FeaturedAPI);
 routerDevice.get('/new', getAllDevice_NewAPI);

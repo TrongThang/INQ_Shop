@@ -76,6 +76,7 @@ const getByIdOrder = async (idOrder) => {
 }
 
 const checkCustomerOrderForDevice = async (idCustomer, idDevice) => {
+    console.log('check order:', idDevice, idCustomer )
     const orders = await Order.findAll({
         where: {
             idCustomer: idCustomer
@@ -90,6 +91,7 @@ const checkCustomerOrderForDevice = async (idCustomer, idDevice) => {
             }
         ]
     });
+    console.log('check order:', orders)
 
     return orders.length > 0
 }
@@ -119,15 +121,11 @@ const checkListProduct = async (products) => {
 }
 
 const createOrder = async (infoOrder, products) => {
-    console.log('Create Order')
-    console.log('infoOrder:', infoOrder)
-    console.log('Products:', products)
     // nếu như có 2 sản phấm giống nhau thì sao
-    const result = await checkListProduct(products);
-
-    if (result.errorCode !== ERROR_CODES.SUCCESS) {
-        return result;
-    }
+    // const result = await checkListProduct(products);
+    // if (result.errorCode !== ERROR_CODES.SUCCESS) {
+    //     return result;
+    // }
 
     //Nên + trước hay tạo xong chi tiết hoá đơn r mới tính total Amount?
     // Đã có checkListProduct đảm bảo sản phẩm có tồn tại   
@@ -144,6 +142,8 @@ const createOrder = async (infoOrder, products) => {
     }
 
     for (const product of products) {
+        const device = await Device.findOne({ where: { idDevice: product.idDevice } });
+
         const detail_order = await OrderDetail.create({
             id: newOrder.id,
             idDevice: product.idDevice,

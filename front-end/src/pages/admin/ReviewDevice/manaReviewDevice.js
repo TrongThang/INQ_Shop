@@ -24,46 +24,62 @@ const ManaReviewDevice = () => {
         try {
             const response = await fetch('http://localhost:8081/api/device/reviews_admin');
             const result = await response.json();
-            setReviewDevice(result.data); // Lưu dữ liệu gốc vào state
-            setFilteredReviews(result.data); // Ban đầu, filteredReviews sẽ bằng dữ liệu gốc
+            setReviewDevice(result.data || []); // Lưu dữ liệu gốc vào state
+            setFilteredReviews(result.data || []); // Ban đầu, filteredReviews sẽ bằng dữ liệu gốc
         } catch (err) {
             console.error("Error fetching reviews:", err);
         }
     };
 
- 
+    // Hàm loại bỏ dấu tiếng Việt
+    const removeAccents = (str) => {
+        return str
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase();
+    };
 
-// Hàm loại bỏ dấu tiếng Việt
-const removeAccents = (str) => {
-    return str
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase();
-};
+    const filterReviews = () => {
+        // Kiểm tra nếu ReviewDevice không tồn tại hoặc là mảng rỗng
+        if (!ReviewDevice || ReviewDevice.length === 0) {
+            setFilteredReviews([]); // Đặt filteredReviews thành mảng rỗng
+            return;
+        }
 
-// Hàm lọc dữ liệu
-const filterReviews = () => {
-    const normalizedSearchTerm = removeAccents(searchTerm);
+        const normalizedSearchTerm = removeAccents(searchTerm);
 
-    const filtered = ReviewDevice.filter((item) => {
-        const fullName = `${item.customerReview.surname} ${item.customerReview.lastName}`;
-        const normalizedComment = removeAccents(item.comment);
-        const normalizedFullName = removeAccents(fullName);
-        const normalizedDeviceName = removeAccents(item.device.name);
+        const filtered = ReviewDevice.filter((item) => {
+            if (item.idCustomer === null || item.idDevice === null) {
+                return;
+            }
 
-        const matchesSearchTerm =
-            normalizedComment.includes(normalizedSearchTerm) ||
-            normalizedFullName.includes(normalizedSearchTerm) ||
-            normalizedDeviceName.includes(normalizedSearchTerm);
+            // Kiểm tra nếu item hoặc các thuộc tính cần thiết không tồn tại
+            if (!item || !item.customerReview || !item.device || !item.comment || !item.customerReview.surname || !item.customerReview.lastName) {
+                return false; // Bỏ qua item này
+            }
 
-        const matchesStatusFilter =
-            statusFilter === "all" || item.status === (statusFilter === "active" ? 1 : 0);
+            // Tạo fullName từ surname và lastName
+            const fullName = `${item.customerReview.surname || ''} ${item.customerReview.lastName || ''}`;
+            const normalizedComment = removeAccents(item.comment || '');
+            const normalizedFullName = removeAccents(fullName);
+            const normalizedDeviceName = removeAccents(item.device.name || '');
 
-        return matchesSearchTerm && matchesStatusFilter;
-    });
+            // Kiểm tra từ khóa tìm kiếm
+            const matchesSearchTerm =
+                normalizedComment.includes(normalizedSearchTerm) ||
+                normalizedFullName.includes(normalizedSearchTerm) ||
+                normalizedDeviceName.includes(normalizedSearchTerm);
 
-    setFilteredReviews(filtered); // Cập nhật dữ liệu đã lọc vào state
-};
+            // Kiểm tra trạng thái
+            const matchesStatusFilter =
+                statusFilter === "all" || item.status === (statusFilter === "active" ? 1 : 0);
+
+            return matchesSearchTerm && matchesStatusFilter;
+        });
+
+        setFilteredReviews(filtered); // Cập nhật dữ liệu đã lọc vào state
+    };
+
     // Gọi API lần đầu khi component được mount
     useEffect(() => {
         fetchDataReviews();
@@ -92,11 +108,18 @@ const filterReviews = () => {
                     setStatusFilter={setStatusFilter}
                     handleExport={handleExport}
                 />
-                <ReviewList
-                    ReviewDevice={filteredReviews}
-                    onUpdate={handleFormUpdateClick}
-                    onDelete={handleDeleteClick}
-                />
+                {/* Hiển thị thông báo nếu không có dữ liệu */}
+                {filteredReviews.length === 0 ? (
+                    <div className="text py-5">
+                        <h4>Không có bình luận nào</h4>
+                    </div>
+                ) : (
+                    <ReviewList
+                        ReviewDevice={filteredReviews}
+                        onUpdate={handleFormUpdateClick}
+                        onDelete={handleDeleteClick}
+                    />
+                )}
             </div>
         </div>
     );

@@ -130,7 +130,7 @@ const AddOrEditCategory = () => {
                         text: `${mode === "add" ? 'Thêm' : 'Cập nhật'} Danh mục thành công!`,
                         icon: 'success',
                     });
-                    navigate("/admin/manage-category");
+                    navigate("/admin/category");
                 } else {
                     const errorData = await response.json();
                     await Swal.fire({
@@ -156,14 +156,14 @@ const AddOrEditCategory = () => {
     return (
         <>
             <div class="my-3 ms-4">
-                <Link to="/admin/manage-category"
+                <Link to="/admin/category"
                     class="text-decoration-none">
                     <i class="bi bi-arrow-left pe-2"></i>Trở về
                 </Link>
             </div>
             <div className="ms-4">
                 <div className="bg-white p-4 rounded shadow-sm">
-                    <h5 className="mb-4">{mode === "add" ? "Thêm Danh mục" : "Chỉnh sửa Danh mục"}</h5>
+                    <h5 className="mb-4 " style={{fontWeight: "bold"}}>{mode === "add" ? "Thêm Danh mục" : "Chỉnh sửa Danh mục"}</h5>
                     <form onSubmit={handleSubmit}>
                         <div className="row form-category">
                             <div className="col-md-8">

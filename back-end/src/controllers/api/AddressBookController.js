@@ -22,7 +22,6 @@ const getAllAddressBookAPI = async (req, res) => {
 
 //Lấy tất cả địa chỉ của một khách hàng bằng API
 const getAddressBooksByIdCustomerAPI = async (req, res) => {
-    //TO DO SOMETHING
     const { idCustomer } = req.params;
     const addressBook = await getAllAddressBookByIdCustomer(idCustomer);
     if(!addressBook){

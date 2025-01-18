@@ -63,7 +63,8 @@ const ManaOrders = () => {
             const result = await response.json();
 
             if (response.ok) {
-                const filteredOrders = result.data.filter(order => {
+                const filteredOrders = await result.data.filter(order => {
+                    console.log(order.note !== null ? removeVietnameseTones(order?.note).toLowerCase() : '')
                     //Tìm kiếm theo từ khóa
                     const matchesSearchTerm = (order.note ? removeVietnameseTones(order.note).toLowerCase() : '').includes(removeVietnameseTones(searchTerm).toLowerCase())
                                                 || (order.phone ? removeVietnameseTones(order.phone).toLowerCase() : '').includes(removeVietnameseTones(searchTerm).toLowerCase())
@@ -71,9 +72,12 @@ const ManaOrders = () => {
                                                 || ((order.customer.surname && order.customer.lastname) ? removeVietnameseTones(`${order.customer.surname} ${order.customer.lastname}`) : '').toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase());
                     //Tìm kiếm theo lọc trạng thái
                     const matchesStatus = Number(filterStatus) === 5 || order.status === Number(filterStatus);
+
                     return matchesSearchTerm && matchesStatus;
                 });
+
                 setOrder(filteredOrders);
+
             } else {
                 console.error("Lỗi lấy dữ liệu:", result.message);
             }

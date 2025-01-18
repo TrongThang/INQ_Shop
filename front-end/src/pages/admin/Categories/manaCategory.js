@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import * as XLSX from "xlsx";
 import SearchCategory from "../../../component/admin/Mana_Category/searchCategory";
 import CategoryList from "../../../component/admin/Mana_Category/categoryList";
 import Swal from 'sweetalert2';
 
 const ManaCategory = () => {
     const [dataCategory, setDataCategory] = useState([]);
-    const [hiddenCategories, setHiddenCategories] = useState(new Set());
     const [filteredCategories, setFilteredCategories] = useState([]); // Danh sách danh mục sau khi lọc
     const navigate = useNavigate();
+
+     const handleExport = () => {
+            const worksheet = XLSX.utils.json_to_sheet(filteredCategories);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Contact");
+            XLSX.writeFile(workbook, "category_data.xlsx");
+        };
     // Fetch danh sách danh mục
     const fetchDataCategory = async () => {
         try {
@@ -22,7 +29,7 @@ const ManaCategory = () => {
     };
     // Xử lý thêm danh mục
     const handleAddCategory = () => {
-        navigate("/admin/add-category", { state: { mode: "add" } });
+        navigate("/admin/category/add", { state: { mode: "add" } });
     };
     const handleStatusChange = async (id, status) => {
         try {
@@ -80,10 +87,10 @@ const ManaCategory = () => {
     const handleEditCategory = (id) => {
         const categoryToEdit = findCategoryById(dataCategory, id);
         if (categoryToEdit) {
-            navigate(`/admin/edit-category/${id}`, { state: { mode: "edit", data: categoryToEdit } });
+            navigate(`/admin/category/edit/${id}`, { state: { mode: "edit", data: categoryToEdit } });
 
         } else {
-            console.error("Không tìm thấy danh mục với ID:", id);
+            console.error("Không tìm th ấy danh mục với ID:", id);
         }
     };
     // Hàm đệ quy để tìm danh mục theo id
@@ -154,7 +161,7 @@ const ManaCategory = () => {
                         <button className="btn btn-primary me-2" onClick={handleAddCategory}>
                             <i className="bi bi-plus"></i> Thêm
                         </button>
-                        <button className="btn btn-success">
+                        <button className="btn btn-success" onClick={handleExport}>
                             <i className="bi bi-download"></i> Xuất file
                         </button>
                     </div>

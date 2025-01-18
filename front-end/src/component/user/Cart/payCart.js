@@ -2,15 +2,35 @@ import { useNavigate } from "react-router-dom";
 import { useCart } from "../../../context/CartContext";
 import axios from "axios";
 import Swal from 'sweetalert2';
+import { useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 export default function PayCart() {
     const navigate = useNavigate()
     const { cart, getTotalItem, getTotalPrice } = useCart();
-
+    const [idCustomer, setIdCustomer] = useState(() => {
+        const token = localStorage.getItem('authToken');
+            if (token) {
+                const decoded = jwtDecode(token);
+                return decoded.idPerson;
+            }
+        return null
+    })
     const checkCheckout = async () => {
-        const filteredCart = cart.filter(item => item.status && item.stock >= item.quantity);
+
+        if (!idCustomer) {
+            await Swal.fire({
+                title: 'Thông báo',
+                text: 'Bạn cần đăng nhập để thanh toán giỏ hàng!',
+                icon: 'error',
+                confirmButtonText: 'Đã hiểu!',
+            });
+            return;
+        }
+
+        const filteredCart = cart.filter(item => item.status && item.stock >= item.quantity && item.quantity !== 0);
         if (filteredCart.length <= 0) {
-            const result = await Swal.fire({
+            await Swal.fire({
                 title: 'Thông báo',
                 text: 'Không còn sản phẩm nào trong giỏ hàng có thể đáp ứng điều kiện đặt hàng!',
                 icon: 'error',
@@ -22,13 +42,10 @@ export default function PayCart() {
         const response = await axios.post('http://localhost:8081/api/device/check-list', 
             { products: cart }
         );
-        
+        console.log(response.data)
         if (response.data.errorCode === 0) {
             navigate("/checkout");
         }
-        // else if (response.data.errorCode == 2) {
-        //     toast.error('Sản phẩm bạn muốn mua hiện đã ngừng bán')
-        // }
         else if (response.data.errorCode == 3) {
             const result = await Swal.fire({
                 title: 'Lỗi!',
@@ -55,7 +72,7 @@ export default function PayCart() {
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Xác nhận',
-                cancelButtonText: 'Hủy',
+                cancelButtonText: 'Huỷ',
             });
 
             if (result.isConfirmed) {

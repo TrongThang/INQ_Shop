@@ -18,6 +18,7 @@ const UpdateOrderForm = () => {
 
     const fetchOrderData = async () => {
         try {
+            console.log(orderId.id)
             const response = await fetch(`http://localhost:8081/api/order/admin/${orderId.id}`);
             const result = await response.json();
             console.log("data result",response)

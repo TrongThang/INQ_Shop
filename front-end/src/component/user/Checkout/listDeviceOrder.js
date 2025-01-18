@@ -2,6 +2,11 @@ import { useCart } from "../../../context/CartContext"
 
 export default function ListDeviceOrder({ phone, shippingMethod, notes, choiceAddress, deviceCheckout }) {
     const { cart, getTotalPrice, checkoutCart } = useCart();
+    const totalAmount = deviceCheckout.reduce(
+        (acc, curr) => acc + curr.quantity * curr.sellingPrice
+        , 0
+    );
+    
     return (
     <>
         <div className="col-md-7">
@@ -48,7 +53,7 @@ export default function ListDeviceOrder({ phone, shippingMethod, notes, choiceAd
                         <div style={{fontSize: "25px"}} className="text-nowrap">
                             <td className="text-black font-weight-bold"><strong>Tổng đơn hàng:</strong></td>
                             <td className="text-danger font-weight-bold">
-                                <strong>{ getTotalPrice().toLocaleString() } VNĐ</strong>
+                                <strong>{ totalAmount.toLocaleString() } VNĐ</strong>
                             </td>
                         </div>
                         

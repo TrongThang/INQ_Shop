@@ -10,10 +10,10 @@ export default function ContentTab({ device }) {
     // Fetch related devices
     const fetchData = async () => {
         try {
-            const response = await fetch(`http://localhost:8081/api/device/related-device/${device.idCategory}`);
+            const response = await fetch(`http://localhost:8081/api/device/related-device/${device.idCategory}/${device.idDevice}`);
             if (response.ok) {
                 const result = await response.json();
-                setRelatedDevice(result.data); // Corrected setter function name
+                setRelatedDevice(result.data || []); // Corrected setter function name
             }
         } catch (error) {
             console.error('Error fetching data:', error);

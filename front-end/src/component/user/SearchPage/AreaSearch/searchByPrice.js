@@ -21,21 +21,20 @@ export default function SearchByPrice({onPriceChange }) {
     return (
         <div>
             <div className="position-relative mt-5">
-                <label className="text-nowrap">Khoảng: <span id="priceRangeValue" className="fw-bold">{minPrice} - {(maxPrice).toLocaleString()} VNĐ</span></label>
+                <label className="text-nowrap">
+                    Khoảng:
+                    <span id="priceRangeValue" className="fw-bold">{minPrice} - {(maxPrice).toLocaleString()} VNĐ</span>
+                </label>
                 <input
-                    type="text"
-                    id="priceRangeMin"
-                    value={minPrice}
-                    onChange={(e) => handlePriceChange(e.target.value, true)}
+                    type="text" id="priceRangeMin"
+                    value={minPrice} onChange={(e) => handlePriceChange(e.target.value, true)}
                 />
                 <div>
                     -
                 </div>
                 <input
-                    type="text"
-                    id="priceRangeMax"
-                    value={maxPrice}
-                    onChange={(e) => handlePriceChange(e.target.value, false)}
+                    type="text" id="priceRangeMax"
+                    value={maxPrice} onChange={(e) => handlePriceChange(e.target.value, false)}
                 />
             </div>
         </div>

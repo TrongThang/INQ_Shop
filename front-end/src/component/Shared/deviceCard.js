@@ -19,7 +19,6 @@ const DeviceCard = ({ device }) => {
                             style={{ height: "300px", objectFit: "cover" }}
                             alt="Smart Lighting"
                         />
-                        {/* device.image thay vào nội dung của */}
                     </div>
                 </div>
                 <div className="service-content p-4">
@@ -38,7 +37,7 @@ const DeviceCard = ({ device }) => {
                         <p className="mb-1 line-clamp-p">
                             {device.descriptionNormal}
                         </p>
-                        <Link to={`/device/${device.slug}`} className="btn btn-primary rounded-pill py-2 px-4">Chi tiết</Link>
+                        <a href={`/device/${device.slug}`}   className="btn btn-primary rounded-pill py-2 px-4">Chi tiết</a>
                     </div>
                 </div>
             </div>

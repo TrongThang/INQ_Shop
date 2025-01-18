@@ -12,7 +12,8 @@ export default function ListSpecifications({ attributes = [] }) {
                                         <Specifications key={index} attribute={attribute} index={index} />
                                     ))
                             : <h3>
-                                Thông tin kỹ thuật về sản phẩm này chưa được cập nhật, vui lòng liên hệ công ty để biết thông tin chi tiết của sản phẩm
+                                Thông tin kỹ thuật về sản phẩm này chưa được cập nhật,
+                                vui lòng liên hệ công ty để biết thông tin chi tiết của sản phẩm
                             </h3>
                             }
                     </div>

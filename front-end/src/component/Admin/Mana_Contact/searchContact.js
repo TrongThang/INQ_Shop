@@ -47,7 +47,7 @@ const SearchContact = ({ onExport, onSearchChange, onStatusFilterChange }) => {
                         />
                     </div>
                 </div>
-                <div className="col-md-3">
+                <div className="col-md-3 mt-2">
                     <select
                         className="form-select"
                         value={statusFilter}

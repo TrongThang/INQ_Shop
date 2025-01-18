@@ -33,6 +33,9 @@ const checkDevice = async (deviceReceive) => {
 
         const isDifferentSellingPrice = Number(deviceCheck.sellingPrice) !== Number(deviceReceive.sellingPrice);
         const noDeviceInStock = deviceReceive.quantity > (deviceCheck.warehouse.stock === null ? 0 : deviceCheck.warehouse.stock);
+
+        console.log(`${deviceReceive.quantity} > (${deviceCheck.warehouse.stock} === null ? 0 : ${deviceCheck.warehouse.stock})`)
+        console.log(noDeviceInStock)
         
         // Sản phẩm bị tắt thì sao
         if (!deviceCheck) {
@@ -87,6 +90,7 @@ const checkListDevice = async (products) => {
     try {
         for (const product of products) {
             const result = await checkDevice(product);
+
             if (result.errorCode !== ERROR_CODES.SUCCESS) {
                 return result;
             }
@@ -185,11 +189,14 @@ const getAllDeviceByStatus = async (status = 1, limit = {}) => {
     // });
     return data; // Trả về danh sách sản phẩm
 };
-const getDeviceByCategory = async ({idCategory, limit = 5 }) => {
+const getDeviceByCategory = async ({idDevice ,idCategory, limit = 5 }) => {
     try {
         const data = await Device.findAll({
             where: {
-                idCategory
+                idCategory,
+                idDevice: {
+                    [Op.ne]: idDevice
+                }
             },
             include: [
                 {
@@ -295,7 +302,7 @@ const getAllDevice_User = async (page = 0, status = 1, limit = 15, filters = {},
         ],
         group: ['Device.idDevice'],
         order,
-        subQuery: false
+        subQuery: false,
     });
 
     const totalPages = Math.ceil(totalCount / limit);
@@ -324,7 +331,6 @@ const getAllDevice_Admin = async () => {
 }
 
 const getDeviceBySlug = async (slug) => {
-
     let device = await Device.findOne({
         where: {
             slug: slug
@@ -380,6 +386,10 @@ const getDeviceBySlug = async (slug) => {
     const review = await ReviewDevice.findAll({
         where: {
             idDevice: device.idDevice,
+            status: {
+                [Op.gte]: 1,
+                [Op.ne]: null
+            } 
         },
         include: [{
             model: Customer,
@@ -387,9 +397,10 @@ const getDeviceBySlug = async (slug) => {
             attributes: ['surname', 'lastName', 'image']
         }],
         attributes: [
-            'comment', 'rating', 'created_at', 'updated_at'
+            'comment', 'rating', 'created_at', 'updated_at', 'status'
         ],
         order: [['created_at', 'DESC']]
+        
     })
 
     const attributeDevice = await AttributeDevice.findAll({
@@ -424,18 +435,28 @@ const getDeviceBySlug = async (slug) => {
 }
 
 const getCheckNameDevice = async (name) => {
-    console.log(name)
     let device = await Device.findOne({
         where: {
             name: name
         },
     });
 
+    
     if (device) {
         return true;
     }
 
     return false;
+}
+
+const getCheckSlugDevice = async (slug) => {
+    const { count } = await Device.findAndCountAll({
+        where: {
+            slug: slug
+        }
+    });
+
+    return count;
 }
 
 const getDeviceBySlugForAdmin = async (slug) => {
@@ -510,14 +531,17 @@ const getDeviceBySlugForAdmin = async (slug) => {
 
 const createDevice = async (deviceSend, stock) => {
     const slug = convertToSlug(deviceSend.name);
-    deviceSend.slug = slug;
+    const isExistSlug = getCheckSlugDevice(slug);
 
-    console.log(deviceSend)
+    if (isExistSlug > 0) {
+        slug = slug + `-${count + 1}` ;
+    }
+    deviceSend.slug = slug;
 
     const deviceCreate = await Device.create(deviceSend);
 
     const warehouse = await Warehouse.create({
-        idDevice: deviceSend.idDevice,
+        idDevice: deviceCreate.idDevice,
         stock: stock,
         status: 1
     })
@@ -537,7 +561,6 @@ const updateDevice = async (deviceSend, stock) => {
 }
 
 const updateStatusDevice = async (data) => {
-    console.log("req.body: ",data);
     const valueIsHide = (data.status == 0) ? true : false;
 
     const [updatedCount] = await Device.update(
@@ -547,7 +570,7 @@ const updateStatusDevice = async (data) => {
         },
         { where: { idDevice: data.idDevice } }
     );
-
+    
     return updatedCount;
 }
 
@@ -593,7 +616,10 @@ const updateStatusDeviceByCategory = async ({ idCategory, status }) => {
 const getAllReviewForDevice = async (idDevice) => {
     const comments = await ReviewDevice.findAll({
         where: {
-            idDevice: idDevice
+            idDevice: idDevice,
+            status: {
+                [Op.gte]: 1
+            }
         },
         include: [
             {
@@ -614,15 +640,14 @@ const getAllReviewForDevice_admin = async () => {
                 model: Customer,
                 as: 'customerReview'
             },
-             {
-             model: Device,
+            {
+                model: Device,
                 as: 'device', // Thêm thông tin về thiết bị nếu cần
                  attributes: ['idDevice', 'name'] // Chỉ lấy một số trường cần thiết
-          }
+            }
         ],
         order: [['created_at', 'DESC']] // Sắp xếp theo thời gian cập nhật mới nhất
     });
-   
 
     return comments;
 }
@@ -663,9 +688,8 @@ const getReviewForCustomer = async (idDevice, idCustomer) => {
 
 const createReviewForDevice = async (body) => {
     const { idCustomer, idDevice, comment, rating } = body.comment;
-    console.log('Data trc create:', idCustomer, idDevice, comment, rating)
-
-    const reviewForDevice = await ReviewDevice.create({ idCustomer, idDevice, comment, rating });
+    const status = 1;
+    const reviewForDevice = await ReviewDevice.create({ idCustomer, idDevice, comment, rating, status });
 
     return reviewForDevice;
 }

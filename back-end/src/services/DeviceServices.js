@@ -435,18 +435,28 @@ const getDeviceBySlug = async (slug) => {
 }
 
 const getCheckNameDevice = async (name) => {
-    console.log(name)
     let device = await Device.findOne({
         where: {
             name: name
         },
     });
 
+    
     if (device) {
         return true;
     }
 
     return false;
+}
+
+const getCheckSlugDevice = async (slug) => {
+    const { count } = await Device.findAndCountAll({
+        where: {
+            slug: slug
+        }
+    });
+
+    return count;
 }
 
 const getDeviceBySlugForAdmin = async (slug) => {
@@ -521,12 +531,17 @@ const getDeviceBySlugForAdmin = async (slug) => {
 
 const createDevice = async (deviceSend, stock) => {
     const slug = convertToSlug(deviceSend.name);
+    const isExistSlug = getCheckSlugDevice(slug);
+
+    if (isExistSlug > 0) {
+        slug = slug + `-${count + 1}` ;
+    }
     deviceSend.slug = slug;
 
     const deviceCreate = await Device.create(deviceSend);
 
     const warehouse = await Warehouse.create({
-        idDevice: deviceSend.idDevice,
+        idDevice: deviceCreate.idDevice,
         stock: stock,
         status: 1
     })
@@ -546,7 +561,6 @@ const updateDevice = async (deviceSend, stock) => {
 }
 
 const updateStatusDevice = async (data) => {
-    console.log("req.body: ",data);
     const valueIsHide = (data.status == 0) ? true : false;
 
     const [updatedCount] = await Device.update(
@@ -557,7 +571,6 @@ const updateStatusDevice = async (data) => {
         { where: { idDevice: data.idDevice } }
     );
     
-    console.log('Số dòng ảnh hưởng:', updatedCount)
     return updatedCount;
 }
 

@@ -113,7 +113,6 @@ const ManaProduct = () => {
                     <DeviceList devices={devices} onDelete={CannelDeviceClick} />
                 </div>
             </div>
-
         </>
     );
 };

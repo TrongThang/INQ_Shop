@@ -64,7 +64,7 @@ export default function AddOrEditProduct() {
 
         let updatedValue = value;
         if (id === "sellingPrice" || id === "stockQuantity") {
-            updatedValue = value.replace(/[^0-9]/g, ""); // Loại bỏ các ký tự không phải số
+            updatedValue = value.replace(/[^0-9]/g, "");
         }
         
         setFormData((prevData) => ({
@@ -78,7 +78,7 @@ export default function AddOrEditProduct() {
 
         setFormData((prevData) => ({
             ...prevData,
-            category: category.id, // Lưu id của danh mục vào formData.category
+            category: category.id,
         }));
     }
     
@@ -90,8 +90,7 @@ export default function AddOrEditProduct() {
         
         setErrors({});
 
-        // Validate tên sản phẩm
-        if (!formData.name || formData.name.length > 500) {
+        if (!formData.name.trim() || formData.name.length > 500) {
             setErrors((prevErrors) => ({
                 ...prevErrors,
                 name: '*Tên sản phẩm không được để trống và tối đa 500 ký tự.',
@@ -316,10 +315,6 @@ export default function AddOrEditProduct() {
                                         <div className="mb-3">
                                             {/* <AreaUploadImage image='' /> */}
                                         </div>
-                                        {/* <div className='mb-3'>
-                                            <h6>Thông số kỹ thuật</h6>
-                                            <ListSpecificationsAdmin attributes={device.attributes} />
-                                        </div> */}
                                 </div>
                             </div>
                         </div>

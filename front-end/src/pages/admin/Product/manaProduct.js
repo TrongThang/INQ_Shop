@@ -97,7 +97,7 @@ const ManaProduct = () => {
         <>
             <div className="main-content-inner">
                 <div className="d-flex justify-content-between mb-3">
-                    <h5>Danh sách đơn hàng</h5>
+                    <h5>Danh sách thiết bị</h5>
                     <div>
                         <Link to="add" className="btn btn-success">
                             <i className="fa-solid fa-plus"></i> Thêm thiết bị

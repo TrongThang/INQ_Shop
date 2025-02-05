@@ -9,8 +9,6 @@ const AddOrEditCategory = () => {
     // Lấy dữ liệu từ location.state
     const { mode, data } = location.state || { mode: "add", data: null };
 
-
-
     // Khởi tạo formData dựa trên dữ liệu nhận được
     const [formData, setFormData] = useState({
         nameCategory: data?.nameCategory || "",

@@ -100,9 +100,8 @@ const postCreateOrderAPI = async (req, res) => {
 }
 
 const putUpdateOrderAPI = async (req, res) => {
-    //TO DO SOMETHING
     const data = req.body;
-    console.log(data)
+    
     const result = await updateOrder(data);
 
     return res.status(result.errorCode === ERROR_CODES.SUCCESS ? 200 : 401).json(result)

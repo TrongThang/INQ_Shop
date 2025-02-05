@@ -131,7 +131,7 @@ const ManaContact = () => {
 
             // Kiểm tra trạng thái
             const matchesStatusFilter =
-                statusFilter === "all" || (contact.status && contact.status.toString() === statusFilter);
+                statusFilter === "all" || (contact.status.toString() === statusFilter);
 
             return matchesSearchTerm && matchesStatusFilter;
         });
@@ -141,6 +141,8 @@ const ManaContact = () => {
 
     useEffect(() => {
         filterContacts();
+
+        console.log('contact:',filteredContacts)
     }, [searchTerm, statusFilter, contact]);
 
     return (

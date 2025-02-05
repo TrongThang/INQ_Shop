@@ -18,6 +18,7 @@ const Liked = require('../models/Liked');
 
 const checkDevice = async (deviceReceive) => {
     try {
+        console.log('SP mua:', deviceReceive)
         const deviceCheck = await Device.findOne({
             where: {
                 idDevice: deviceReceive.idDevice
@@ -30,14 +31,13 @@ const checkDevice = async (deviceReceive) => {
                 }
             ]
         });
-
+        
         const isDifferentSellingPrice = Number(deviceCheck.sellingPrice) !== Number(deviceReceive.sellingPrice);
         const noDeviceInStock = deviceReceive.quantity > (deviceCheck.warehouse.stock === null ? 0 : deviceCheck.warehouse.stock);
 
-        console.log(`${deviceReceive.quantity} > (${deviceCheck.warehouse.stock} === null ? 0 : ${deviceCheck.warehouse.stock})`)
-        console.log(noDeviceInStock)
+        console.log('Điều kiện kiểm tra thiết bị:', isDifferentSellingPrice, noDeviceInStock)
         
-        // Sản phẩm bị tắt thì sao
+        // Không tìm thấy Thiết bị
         if (!deviceCheck) {
             return {
                 errorCode: ERROR_CODES.DEVICE.DEVICE_NOT_FOUND,
@@ -46,12 +46,13 @@ const checkDevice = async (deviceReceive) => {
             };
         }
 
-        // if (deviceCheck.status <= STATUS_CODES.DEVICE.NON_ACTIVE) {
-        //     return {
-        //         errorCode: ERROR_CODES.DEVICE.DEVICE_NON_ACTIVE,
-        //         detail: ERROR_MESSAGES.DEVICE[ERROR_CODES.DEVICE.DEVICE_NON_ACTIVE],
-        //     };
-        // }
+        if (deviceCheck.status <= STATUS_CODES.DEVICE.NON_ACTIVE) {
+            return {
+                errorCode: ERROR_CODES.DEVICE.DEVICE_NON_ACTIVE,
+                idDevice: deviceCheck.idDevice,
+                detail: ERROR_MESSAGES.DEVICE[ERROR_CODES.DEVICE.DEVICE_NON_ACTIVE],
+            };
+        }
 
         if (isDifferentSellingPrice) {
             return {
@@ -73,6 +74,15 @@ const checkDevice = async (deviceReceive) => {
             };
         }
 
+        if (deviceCheck.name != deviceReceive.nameDevice) {
+            return {
+                errorCode: ERROR_CODES.DEVICE.NAME_CHANGED,
+                detail: ERROR_MESSAGES.DEVICE[ERROR_CODES.DEVICE.NAME_CHANGED],
+                idDevice: deviceCheck.idDevice,
+                nameDevice: deviceCheck.name,
+            };
+        }
+
         return {
             errorCode: ERROR_CODES.SUCCESS,
             detail: ERROR_MESSAGES.DEVICE[ERROR_CODES.SUCCESS]
@@ -88,13 +98,20 @@ const checkDevice = async (deviceReceive) => {
 
 const checkListDevice = async (products) => {
     try {
+        const devicesChanged = [];
         for (const product of products) {
             const result = await checkDevice(product);
 
             if (result.errorCode !== ERROR_CODES.SUCCESS) {
-                return result;
+                devicesChanged.push(result);
+                // return result;
             }
         }
+
+        if (devicesChanged.length > 0) {
+            return devicesChanged;
+        }
+
         return {
             errorCode: ERROR_CODES.SUCCESS,
         }

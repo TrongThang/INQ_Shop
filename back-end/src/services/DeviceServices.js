@@ -68,18 +68,19 @@ const checkDevice = async (deviceReceive) => {
                 errorCode: ERROR_CODES.DEVICE.OUT_OF_STOCK,
                 detail: ERROR_MESSAGES.DEVICE[ERROR_CODES.DEVICE.OUT_OF_STOCK],
                 idDevice: deviceCheck.idDevice,
-                nameDevice: deviceCheck.name,
+                name: deviceCheck.name,
                 quantityInitial: deviceReceive.quantity,
                 stockDeviceRemaining: deviceCheck.warehouse.stock,
             };
         }
 
-        if (deviceCheck.name != deviceReceive.nameDevice) {
+        console.log(`Tên thiết bị. Cũ: ${deviceCheck.name} - Mới: ${deviceReceive.name}`)
+        if (deviceCheck.name != deviceReceive.name) {
             return {
                 errorCode: ERROR_CODES.DEVICE.NAME_CHANGED,
                 detail: ERROR_MESSAGES.DEVICE[ERROR_CODES.DEVICE.NAME_CHANGED],
                 idDevice: deviceCheck.idDevice,
-                nameDevice: deviceCheck.name,
+                name: deviceCheck.name,
             };
         }
 

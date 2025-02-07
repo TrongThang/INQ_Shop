@@ -160,6 +160,7 @@ const createOrder = async (infoOrder, products) => {
         const detail_order = await OrderDetail.create({
             id: newOrder.id,
             idDevice: product.idDevice,
+            nameDevice: device.name,
             price: product.sellingPrice,
             stock: product.quantity,
             amount: product.sellingPrice * product.quantity,

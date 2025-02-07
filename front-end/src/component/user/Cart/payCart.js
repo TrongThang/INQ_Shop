@@ -38,10 +38,11 @@ export default function PayCart() {
             });
             return;
         }
-        
+        console.log(`Cart trước thanh toán: ${JSON.stringify(cart, null, 2)}`)
         const response = await axios.post('http://localhost:8081/api/device/check-list', 
             { products: cart }
         );
+        
         console.log(response.data)
         if (response.data.errorCode === 0) {
             navigate("/checkout");

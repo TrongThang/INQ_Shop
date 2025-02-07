@@ -11,6 +11,7 @@ const {
     postCreateOrderAPI, 
     getAllOrder_RevenueStatisticsAPI
 } = require('../controllers/api/OrderController');
+const { create_payment_url, vnpay_return } = require('../services/VnPayServices');
 const routerOrder = express.Router();
 
 
@@ -30,5 +31,8 @@ routerOrder.get('/admin/:idOrder', getOrderByIdOrderAPI);
 routerOrder.post('/checkout', postCreateOrderAPI);
 routerOrder.put('/admin/:id', putUpdateOrderAPI);
 routerOrder.put('/admin', putUpdateStatusOrderAdminAPI);
+
+routerOrder.post('/create_payment_url', create_payment_url);
+routerOrder.get('/vnpay_return', vnpay_return);
 
 module.exports = routerOrder;

@@ -64,6 +64,7 @@ import LayoutChat from './pages/user/Chat/layoutChat';
 import RevenueStatisticsPage from './pages/admin/statisticalPage/revenueStatisticsPage'
 import PurchaseStatisticsPage from './pages/admin/statisticalPage/purchaseStatisticsPage'
 import WelcomePage from './component/admin/Hello/hello_inq';
+import SuccessPayment from './pages/user/succesPayment';
 
 function App() {
 

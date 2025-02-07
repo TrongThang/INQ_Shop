@@ -28,6 +28,7 @@ export const CartProvider = ({ children }) => {
         try {
             console.log(`http://localhost:8081/api/cart/${idCustomer}`)
             const response = await fetch(`http://localhost:8081/api/cart/${idCustomer}`)
+
             if (!response.ok) {
                 throw new Error("Lỗi lấy dữ liệu từ giỏ hàng");
             }
@@ -50,6 +51,7 @@ export const CartProvider = ({ children }) => {
             console.log('Sp', updatedProduct);
             return {
                 ...item,
+                nameDevice: updatedProduct?.name || item.nameDevice,
                 sellingPrice: updatedProduct?.sellingPrice || item.sellingPrice,
                 image: updatedProduct?.image || item.image,
                 status: updatedProduct?.status || item.status,
@@ -236,7 +238,31 @@ export const CartProvider = ({ children }) => {
         return cart.length - cart.filter(item => item.status <= 0).length;
     }
 
-    const checkoutCart = async (shippingMethod, notes, choiceAddress, deviceCheckout) => {
+    const handleVnpayPayment = async (amount, bankCode) => {
+        try {
+            const response = await axios.post('http://localhost:8081/api/order/create_payment_url', {
+                amount: amount,
+                bankCode: bankCode,
+            });
+    
+            if (response.data && response.data.paymentUrl) {
+                console.log(`Đã tạo được link thanh toán VnPay: ${response.data.paymentUrl}`)
+                // Redirect đến URL thanh toán VNPay
+                window.location.href = response.data.paymentUrl;
+            } else {
+                throw new Error('Không thể tạo URL thanh toán VNPay');
+            }
+        } catch (error) {
+            console.error('Lỗi khi tạo URL thanh toán VNPay:', error);
+            await Swal.fire({
+                title: 'Lỗi!',
+                text: 'Không thể tạo URL thanh toán VNPay. Vui lòng thử lại.',
+                icon: 'error',
+            });
+        }
+    };
+
+    const checkoutCart = async (shippingMethod, notes, choiceAddress, deviceCheckout, vnpayMethod) => {
         try {
 
             const responseCheckDevice = await axios.post('http://localhost:8081/api/device/check-list', 
@@ -285,26 +311,41 @@ export const CartProvider = ({ children }) => {
 
 
             if (response.data.errorCode === 0) {
-                let mess = shippingMethod === 'COD' ? '' : 'Vui lòng thanh toán <br> <b>STK: 0387976595, TP Bank - Phan Trọng Thắng</b>. <br> Để nhân viên xác nhận!';
+                if (shippingMethod !== 'VNPAY') {
+                    let mess = shippingMethod === 'COD' ? '' : 'Vui lòng thanh toán <br> <b>STK: 0387976595, TP Bank - Phan Trọng Thắng</b>. <br> Để nhân viên xác nhận!';
 
-                const imageUrl = shippingMethod === 'COD' ? {} : '/img/payTpBank.png';
-                console.log(imageUrl)
-                const result = await Swal.fire({
-                    title: 'Thành công!',
-                    html: `Đặt hàng thành công!\n${mess}`,
-                    icon: 'success',
-                    imageUrl: imageUrl,
-                    imageWidth: 300, // Chiều rộng hình ảnh (tùy chọn)
-                    imageHeight: 'auto',
-                });
+                    const imageUrl = shippingMethod === 'COD' ? {} : '/img/payTpBank.png';
+                    
+                    const result = await Swal.fire({
+                        title: 'Thành công!',
+                        html: `Đặt hàng thành công!\n${mess}`,
+                        icon: 'success',
+                        imageUrl: imageUrl,
+                        imageWidth: 300, // Chiều rộng hình ảnh (tùy chọn)
+                        imageHeight: 'auto',
+                    });
 
-                deviceCheckout.forEach(item => {
-                    removeFromCart(item.idDevice)
-                });
+                    deviceCheckout.forEach(item => {
+                        removeFromCart(item.idDevice)
+                    });
 
-                if (result.isConfirmed) {
-                    navigate("/cart")
+                    if (result.isConfirmed) {
+                        navigate("/cart")
+                    }
                 }
+                else {
+                    const amount = getTotalPrice();
+                    const bankCode = vnpayMethod;
+                    
+                    await deviceCheckout.forEach(item => {
+                        removeFromCart(item.idDevice)
+                    });
+
+                    handleVnpayPayment(amount, bankCode)
+
+                    
+                }
+                
             }
         } catch (error) {
             console.log('Lỗi:', error.message);

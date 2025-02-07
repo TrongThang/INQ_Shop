@@ -283,12 +283,12 @@ const getAllDevice_User = async (page = 0, status = 1, limit = 15, filters = {},
     };
 
     const includeConfig = [
-        {
-            model: ReviewDevice,
-            as: 'reviews',
-            attributes: [[Sequelize.fn('AVG', Sequelize.col('rating')), 'averageRating']],
-            required: false
-        },
+        // {
+        //     model: ReviewDevice,
+        //     as: 'reviews',
+        //     attributes: [[Sequelize.fn('AVG', Sequelize.col('rating')), 'averageRating']],
+        //     required: false
+        // },
         {
             model: Category,
             as: 'categoryDevice',
@@ -316,7 +316,8 @@ const getAllDevice_User = async (page = 0, status = 1, limit = 15, filters = {},
         include: includeConfig,
         attributes: [
             'idDevice', 'name', 'slug', 'sellingPrice', 'image', 'descriptionNormal', 'status',
-            [Sequelize.col('warehouse.stock'), 'stock']
+            [Sequelize.col('warehouse.stock'), 'stock'],
+            [Sequelize.literal('(SELECT AVG(rating) FROM review_device WHERE review_device.idDevice = Device.idDevice)'), 'averageRating']
         ],
         group: ['Device.idDevice'],
         order,

@@ -168,7 +168,7 @@ const UpdateOrderForm = () => {
                                 <option value="1">Chờ xác nhận</option>
                                 <option value="2">Chuẩn bị hàng</option>
                                 <option value="3">Chờ giao hàng</option>
-                                <option value="4">Hoàn thành</option>
+                                {orderData.status === "3" && <option value="4">Hoàn thành</option>}
                             </select>
                         </div>
                     </div>

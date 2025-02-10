@@ -4,10 +4,11 @@ const Order = require('../models/Order');
 const Employee = require('../models/Employee');
 const Customer = require('../models/Customer');
 const Device = require('../models/Device');
-const { checkDevice } = require('./DeviceServices');
+const { checkDevice, getCheckNameDevice } = require('./DeviceServices');
 const { ERROR_CODES, ERROR_MESSAGES } = require('../../../contants');
 const OrderDetail = require('../models/Order_detail');
 const { STATUS_CODES } = require('../../../statusContaints');
+const Warehouse = require('../models/Warehouse');
 
 const getAllOrder = async () => {
     const orders = await Order.findAll({
@@ -61,7 +62,7 @@ const getByIdOrder = async (idOrder) => {
                     include: [{
                         model: Device,
                         as: 'device',
-                        attributes: ['image', 'name']
+                        attributes: ['image', 'name', 'idDevice']
                     }]
                 },
                 {
@@ -102,13 +103,19 @@ const checkCustomerOrderForDevice = async (idCustomer, idDevice) => {
 //Process:
 const checkListProduct = async (products) => {
     try {
+        const devicesChanged = [];
         for (const product of products) {
             const result = await checkDevice(product);
 
             if (result.errorCode !== ERROR_CODES.SUCCESS) {
-                return result;
+                devicesChanged.push(result);
             }
         }
+
+        if (devicesChanged.length > 0) {
+            return devicesChanged;
+        }
+
         return {
             errorCode: ERROR_CODES.SUCCESS,
         }
@@ -122,16 +129,22 @@ const checkListProduct = async (products) => {
 
 const createOrder = async (infoOrder, products) => {
     // nếu như có 2 sản phấm giống nhau thì sao
-    // const result = await checkListProduct(products);
-    // if (result.errorCode !== ERROR_CODES.SUCCESS) {
-    //     return result;
-    // }
+    const devicesChanged = await checkListProduct(products);
+    
+    console.log('devicesChanged:', devicesChanged)
+    if (devicesChanged.length > 0) {
+        const data = {
+            message: "Thiết bị trong đơn hàng có thay đổi!",
+            devicesChanged,
+        }
+        return data;
+    }
 
     //Nên + trước hay tạo xong chi tiết hoá đơn r mới tính total Amount?
     // Đã có checkListProduct đảm bảo sản phẩm có tồn tại   
     const totalAmount = products.reduce((acc, item) => acc + (item.quantity * item.sellingPrice), 0)
     infoOrder.totalAmount = totalAmount;
-
+    
     const newOrder = await Order.create(infoOrder);
 
     if (!newOrder) {
@@ -140,18 +153,30 @@ const createOrder = async (infoOrder, products) => {
             messages: ERROR_MESSAGES.ORDER[ERROR_CODES.ORDER.ERROR_CREATE]
         }
     }
-
+    
     for (const product of products) {
         const device = await Device.findOne({ where: { idDevice: product.idDevice } });
 
         const detail_order = await OrderDetail.create({
             id: newOrder.id,
             idDevice: product.idDevice,
+            nameDevice: device.name,
             price: product.sellingPrice,
             stock: product.quantity,
             amount: product.sellingPrice * product.quantity,
             status: 1,
         });
+
+        await Warehouse.update(
+            {
+                stock: Sequelize.literal(`stock - ${product.quantity}`)
+            },
+            {
+                where: {
+                    idDevice: product.idDevice
+                }
+            }
+        )
     }
 
     return {
@@ -233,15 +258,30 @@ const updateOrder = async (data) => {
                 where: { id: data.id}
             }
         );
-        console.log("affectedCount:", affectedCount,
-            "affectedRows:", affectedRows)
+
+        if (data.status == 2) {
+            data.order_device.forEach(async (item) => {
+                
+                const quantityInWarehouse = await Warehouse.findOne({
+                    where: {
+                        idDevice: item.device.idDevice
+                    },
+                    attributes: ['stock']
+                })
+
+                const quantityDeviceBuy = item.stock
+                await Warehouse.update( {stock: quantityInWarehouse.stock - quantityDeviceBuy} , {
+                    where: { idDevice : item.device.idDevice }
+                })
+            });
+        }
+
         return {
             errorCode: ERROR_CODES.SUCCESS,
             affectedCount: affectedCount,
             affectedRows: affectedRows
         }
     }catch (error) {
-        console.log("đây update")
         return {
             errorCode: ERROR_CODES.ORDER.INTERNAL_ERROR,
             messages: error.message || ERROR_MESSAGES.ORDER[ERROR_CODES.ORDER.ERROR_UPDATE]

@@ -1,6 +1,6 @@
 import { useCart } from "../../../context/CartContext"
 
-export default function ListDeviceOrder({ phone, shippingMethod, notes, choiceAddress, deviceCheckout }) {
+export default function ListDeviceOrder({ phone, shippingMethod, notes, choiceAddress, deviceCheckout, vnpayMethod }) {
     const { cart, getTotalPrice, checkoutCart } = useCart();
     const totalAmount = deviceCheckout.reduce(
         (acc, curr) => acc + curr.quantity * curr.sellingPrice
@@ -62,7 +62,7 @@ export default function ListDeviceOrder({ phone, shippingMethod, notes, choiceAd
                 <div className="form-group mt-5 mb-0">
                     <button
                         className="btn btn-black btn-primary w-100 py-3 btn-block fs-4"
-                        onClick={() => checkoutCart(shippingMethod, notes, choiceAddress, deviceCheckout)}
+                        onClick={() => checkoutCart(shippingMethod, notes, choiceAddress, deviceCheckout, vnpayMethod)}
                     >
                         <i className="fa-solid fa-cart-shopping"></i> Đặt hàng
                     </button>

@@ -11,8 +11,7 @@ export default function Footer({ categories }) {
     const handleCategoryClick = () => {
         setIsCategoryVisible(!isCategoryVisible); // Thay đổi trạng thái hiển thị
     };
-
-    console.log(setting)
+    
     return (
         <div className="container-fluid footer py-5 wow fadeIn mt-5" data-wow-delay="0.2s">
             <div className="container py-5">

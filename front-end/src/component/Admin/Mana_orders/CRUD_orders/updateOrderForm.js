@@ -58,7 +58,7 @@ const UpdateOrderForm = () => {
                     title: 'Thành công!',
                     text: 'Cập nhật đơn hàng thành công!',
                     icon: 'success',
-                  });
+                });
                 navigate('/admin/order');
                 console.log("Order updated successfully:", result);
             } else {
@@ -66,7 +66,7 @@ const UpdateOrderForm = () => {
                     title: 'Lỗi!',
                     text: 'Có lỗi xảy ra khi cập nhật đơn hàng!',
                     icon: 'error',
-                  });
+                });
                 console.error("Error updating order:", result.message);
             }
         } catch (error) {

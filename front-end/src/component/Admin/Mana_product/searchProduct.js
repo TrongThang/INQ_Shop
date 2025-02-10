@@ -41,8 +41,9 @@ export default function SearchCategory({onFilter, onSearch}) {
             <option value={"4"}>Mới</option>
             <option value={"5"}>Bán chạy</option>
             <option value={"0"}>Ngừng bán</option>
-        </select>
-    </div>
-</div>
-</>
-)}
+          </select>
+        </div>
+      </div>
+    </>
+  );
+}

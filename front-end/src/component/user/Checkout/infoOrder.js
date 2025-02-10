@@ -1,11 +1,13 @@
 import { useState } from "react";
 import AddressCheckout from "./addressCheckout";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 export default function InfoOrder({
     phone, shippingMethod, notes,
     setPhone, setShippingMethod, setNotes,
     choiceAddress, setChoiceAddress,
-    deviceCheckout
+    deviceCheckout, setVnpayMethod
 }) {
     
     const [error, setError] = useState(
@@ -13,28 +15,17 @@ export default function InfoOrder({
             phoneError: ''
         }
     );
+    function handleChangedVnpayMethod(e) {
+        const value = e.target.value
+        setVnpayMethod(value); 
 
+    }
     // const regexPhoneNumber =  (phone) => {
 
     //     const regexPhoneNumber = /(0[3|5|7|8|9])+([0-9]{8})\b/g;
     
     //     return phone.match(regexPhoneNumber) ? true : false;
     
-    // }
-
-    // const handleInputPhone = (value) => {
-    //     if (isNaN(Number(value))) {
-    //         setError({ ...error, phoneError: '*Số điện thoại phải là số' });
-    //         return;
-    //     } else if (value.length > 10) {
-    //         setError({ ...error, phoneError: '*Số điện thoại không được vượt quá 10 số' });
-    //         return;
-    //     }
-    //     else{
-    //         setError({ ...error, phoneError: '' });
-    //     }
-
-    //     setPhone(value);
     // }
 
     return (
@@ -64,10 +55,40 @@ export default function InfoOrder({
                         value={shippingMethod}
                         onChange={(e) => setShippingMethod(e.target.value)}
                     >
-                        <option value="COD"> - Giao hàng tận nơi -</option>
-                        <option value="PAYMENT"> - Thanh toán Online - </option>
+                        <option value="COD"> - Giao hàng tận nơi - </option>
+                        <option value="BANK-EMP"> - Chuyển khoản và nhân viên kiểm tra sau - </option>
+                        <option value="VNPAY"> - Thanh toán VNPAY - </option>
                     </select>
                 </div>
+                {shippingMethod === "VNPAY" &&
+                    <div className="form-group">
+                        <div className="form-check">
+                            <input
+                                className="form-check-input" type="radio"
+                                name="bankCode" id="defaultPaymentMethod" value="" defaultChecked
+                                onChange={(e) => handleChangedVnpayMethod(e)}
+                            />
+                            <label className="form-check-label" for="defaultPaymentMethod">Cổng thanh toán VNPAYQR</label>
+                        </div>
+                        <div className="form-check">
+                            <input
+                                className="form-check-input" type="radio"
+                                name="bankCode" id="vnbankPaymentMethod" value="VNBANK"
+                                onChange={(e) => handleChangedVnpayMethod(e)}
+                            />
+                            <label className="form-check-label" for="vnbankPaymentMethod">Thanh toán qua ATM-Tài khoản ngân hàng</label>
+                        </div>
+
+                        <div className="form-check">
+                            <input className="form-check-input" type="radio"
+                                name="bankCode" id="intcardPaymentMethod" value="INTCARD"
+                                onChange={(e) => handleChangedVnpayMethod(e)}
+                            />
+                            <label className="form-check-label" for="intcardPaymentMethod">Thanh toán qua thẻ quốc tế</label>
+                        </div>
+                    </div>
+                }
+                
                 <div className="form-group">
                     <label for="c_order_notes" className="text-black">Ghi chú</label>
                     <textarea 

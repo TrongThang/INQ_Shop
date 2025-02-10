@@ -5,6 +5,7 @@ const ERROR_CODES = {
         DEVICE_NON_ACTIVE: 2,
         PRICE_CHANGED: 3,
         OUT_OF_STOCK: 4,
+        NAME_CHANGED: 5,
         INTERNAL_ERROR: 500,
     },
     ORDER: {
@@ -28,6 +29,7 @@ const ERROR_MESSAGES = {
         [ERROR_CODES.DEVICE.DEVICE_NON_ACTIVE]: 'Thiết bị không còn được bán',
         [ERROR_CODES.DEVICE.PRICE_CHANGED]: 'Thiết bị có sự thay đổi về giá tiền',
         [ERROR_CODES.DEVICE.OUT_OF_STOCK]: 'Thiết bị không đủ số lượng để mua hàng',
+        [ERROR_CODES.DEVICE.NAME_CHANGED]: 'Tên thiết bị có thay đổi',
         [ERROR_CODES.DEVICE.INTERNAL_ERROR]: 'Lỗi nội bộ của máy chủ'
     },
     ORDER: {

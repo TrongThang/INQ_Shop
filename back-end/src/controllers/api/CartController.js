@@ -66,40 +66,38 @@ const postAddToCartAPI = async (req, res) => {
 
 const putUpdateQuantityDeviceInCartAPI = async (req, res) => {
     const {idCustomer, idDevice, quantity, type} = req.body;
-    
-
     try{
     // Kiểm tra xem thiết bị đã có trong giỏ hàng của khách hàng chưa
-    const existingDevice = await Cart.findOne({
-        where: {
-            idCustomer: idCustomer,
-            idDevice: idDevice,
-        }
-    });
-    let newCart = null; 
+        const existingDevice = await Cart.findOne({
+            where: {
+                idCustomer: idCustomer,
+                idDevice: idDevice,
+            }
+        });
+        let newCart = null; 
 
-    if (existingDevice) {
-        // Nếu thiết bị đã có trong giỏ hàng, trả về thông báo lỗi hoặc yêu cầu cập nhật số lượng
-        newCart = putUpdateDeviceInCart(idCustomer, idDevice, quantity, type)
+        if (existingDevice) {
+            // Nếu thiết bị đã có trong giỏ hàng, trả về thông báo lỗi hoặc yêu cầu cập nhật số lượng
+            newCart = putUpdateDeviceInCart(idCustomer, idDevice, quantity, type)
+            return res.status(200).json({
+                errorCode: 0,
+                data: newCart
+            });
+        }
+        
+        newCart = await postAddDeviceToCart(data);
+
         return res.status(200).json({
             errorCode: 0,
             data: newCart
+        })
+    } catch (error) {
+        return res.status(500).json({
+            errorCode: 1,
+            msg: 'Có lỗi xảy ra trong quá trình thêm Thiết bị mới vào Giỏ hàng',
+            details: error.message,
         });
     }
-    
-    newCart = await postAddDeviceToCart(data);
-
-    return res.status(200).json({
-        errorCode: 0,
-        data: newCart
-    })
-} catch (error) {
-    return res.status(500).json({
-        errorCode: 1,
-        msg: 'Có lỗi xảy ra trong quá trình thêm Thiết bị mới vào Giỏ hàng',
-        details: error.message,
-    });
-}
 }
 
 const removeDeviceInCartAPI = async (req, res) => {

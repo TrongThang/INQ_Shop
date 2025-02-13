@@ -65,6 +65,10 @@ import RevenueStatisticsPage from './pages/admin/statisticalPage/revenueStatisti
 import PurchaseStatisticsPage from './pages/admin/statisticalPage/purchaseStatisticsPage'
 import WelcomePage from './component/admin/Hello/hello_inq';
 
+import ManageBlogPage from './pages/admin/Blog/manageBlogPage';
+import AddBlog from './component/admin/Mana_blog/CRUD_blog/AddBlog';
+import UpdateBlog from './component/admin/Mana_blog/CRUD_blog/UpdateBlog';
+
 function App() {
 
   return (
@@ -94,6 +98,9 @@ function App() {
             </Route>
             <Route path="revenueStatistics" element={<RevenueStatisticsPage />} />
             <Route path="purchaseStatistics" element={<PurchaseStatisticsPage />} />
+            <Route path="blog" element={<ManageBlogPage />} />
+            <Route path="blog/add" element={<AddBlog />} />
+            <Route path="blog/update/:id" element={<UpdateBlog />} />
           </Route>
 
 

@@ -4,7 +4,10 @@ const {
     postCreateBlog,
     putUpdateBlog,
 
-    getAllBlog_user
+    getAllBlog_user,
+    
+    getBlog_Admin,
+    updateStatusBlog
 } = require('../../services/BlogServices.js')
 
 
@@ -85,6 +88,25 @@ const getBlogAPI = async (req, res) => {
         res.status(500).json({ message: "An error occurred while fetching the blog" , detail: error.message});
     }
 };
+
+const getBlogAPI_Admin = async (req, res) => {
+    const { id } = req.params;
+    try {
+    const result = await getBlog_Admin(id);
+            // Trả về dữ liệu blog trong trường hợp thành công
+            res.status(200).json({
+                errorCode: 0,
+                data: result,
+                message: "successfully"
+            });
+        } catch (error) {
+            // Xử lý lỗi nếu có sự cố khi lấy blog
+            console.error("Error fetching blog:", error);
+            // Trả về mã lỗi 500 và thông báo lỗi nếu có lỗi xảy ra trong quá trình lấy dữ liệu
+            res.status(500).json({ message: "An error occurred while fetching the blog" });
+        }
+    };
+
 const getAllOrOneBlogAPI_user = async (req, res) => {
     const data = req.body;
     console.log("Request Body:", data); // In ra body để kiểm tra
@@ -109,7 +131,7 @@ const getAllOrOneBlogAPI = async (req, res) => {
     if (data && data.id) {
         // Nếu có 'id', gọi hàm getBlogAPI
         console.log("Fetching specific blog with ID:", data.id);
-        await getBlogAPI(req, res);
+        await getBlogAPI_Admin(req, res);
         return;
     }
 
@@ -180,8 +202,31 @@ const putUpdateBlogAPI = async (req, res) => {
         res.status(500).json({ message: "An error occurred while updating the blog." });
     }
 };
+
+const putUpdateStatusBlogAPI = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const status = req.body.status;
+        console.log("Update status blog with ID:", id, "to status:", status);
+        // Gọi hàm cập nhật trạng thái blog trong cơ sở dữ liệu
+        const updatedBlog = await updateStatusBlog({ id, status });
+        // Nếu không tìm thấy blog để cập nhật
+        if (!updatedBlog) {
+            return res.status(404).json({ message: "Blog not found" });
+        }
+        // Trả về thông báo thành công và trạng thái blog đã cập nhật
+        res.status(200).json({
+            message: "Status blog updated successfully!",
+            data: updatedBlog
+        });
+    } catch (error) {
+        // Xử lý lỗi nếu có sự cố trong quá trình cập nhật blog
+        console.error("Error updating blog:", error.message);
+        res.status(500).json({ message: "An error occurred while updating the blog." });
+    }
+};
 module.exports = {
     getAllBlogAPI, getBlogAPI, postCreateBlogAPI, putUpdateBlogAPI, getAllOrOneBlogAPI,
 
-    getAllOrOneBlogAPI_user,
+    getAllOrOneBlogAPI_user,  getBlogAPI_Admin, putUpdateStatusBlogAPI
 }

@@ -58,6 +58,10 @@ const getBlog = async (data) => {
     });
 };
 
+const getBlog_Admin = async (id) => {
+    return await Blog.findByPk(id);
+}
+
 const postCreateBlog = async (data) => {
     return await Blog.create(data)
 }
@@ -67,8 +71,8 @@ const putUpdateBlog = async (data) => {
     return await findByPKUpdateBlog.update(data);
 };
 
-const updateStatusAttributeGroup = async ({id, status}) => {
-    const [updatedCount] = await Attribute.update(
+const updateStatusBlog = async ({id, status}) => {
+    const [updatedCount] = await Blog.update(
         { status: status }, 
         { where: { id } }
     );
@@ -76,5 +80,4 @@ const updateStatusAttributeGroup = async ({id, status}) => {
     return updatedCount;
 }
 
-
-module.exports = { getAllBlog, getBlog, postCreateBlog, putUpdateBlog,getAllBlog_user };
+module.exports = { getAllBlog, getBlog, postCreateBlog, putUpdateBlog,getAllBlog_user ,getBlog_Admin ,updateStatusBlog};

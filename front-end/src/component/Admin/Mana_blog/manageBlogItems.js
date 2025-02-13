@@ -1,33 +1,67 @@
-const ManageBlogItems = ({ onUpdate, blogs }) => {
-  const handleDelete = async (id) => {
-    try {
-        const response = await fetch(`http://localhost:8081/api/blog/${id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ status: 0 })
-        });
+import Swal from 'sweetalert2'; // Import SweetAlert2
+import { useNavigate } from "react-router-dom";
 
+const ManageBlogItems = ({ blogs }) => {
+  const navigate = useNavigate();
+
+  const handleDelete = async (id) => {
+    const confirmResult = await Swal.fire({
+      title: 'Bạn có chắc chắn?',
+      text: 'Bạn có chắc muốn xóa bài viết này không?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Xác nhận',
+      cancelButtonText: 'Hủy',
+    });
+
+    if (confirmResult.isConfirmed) {
+      try {
+        const response = await fetch(`http://localhost:8081/api/blog/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ status: 0 }),
+        });
         const result = await response.json();
         if (response.ok) {
-            console.log("Xóa thành công:", result);
+          await Swal.fire({
+            title: 'Thành công!',
+            text: 'Đã xóa bài viết thành công.',
+            icon: 'success',
+            confirmButtonText: 'OK',
+          });
+          // Optionally, you can refresh the list of blogs here
         } else {
-            console.error("Lỗi khi xóa:", result);
+          await Swal.fire({
+            title: 'Lỗi!',
+            text: result.msg || 'Đã xóa bài viết thất bại.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
         }
-    } catch (error) {
+      } catch (error) {
         console.error("Lỗi trong quá trình xóa:", error);
+        await Swal.fire({
+          title: 'Lỗi!',
+          text: 'Có lỗi xảy ra trong quá trình xóa bài viết.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        });
+      }
     }
-}
+  };
+
+  const handleUpdate = (id) => {
+    navigate(`/admin/blog/update/${id}`);
+  };
+
   return (
     <div className="card">
       <div className="table-responsive">
         <table className="table table-hover align-middle">
           <thead>
             <tr>
-              <th width="40">
-                <input type="checkbox" />
-              </th>
               <th>Mã tin</th>
               <th>Tiêu đề</th>
               <th>Tác giả</th>
@@ -40,14 +74,11 @@ const ManageBlogItems = ({ onUpdate, blogs }) => {
           <tbody>
             {blogs.map((blog, index) => (
               <tr key={index}>
-                <td>
-                  <input type="checkbox" />
-                </td>
                 <td>{blog.id}</td>
                 <td>{blog.title}</td>
                 <td>{blog.author}</td>
                 <td>
-                  <img src={blog.image} alt={blog.title} width="50" />
+                  <img src={blog.image} alt={blog.image} width="50" />
                 </td>
                 <td>{new Date(blog.created_at).toLocaleDateString('vi-VN')}</td>
                 <td>
@@ -68,7 +99,7 @@ const ManageBlogItems = ({ onUpdate, blogs }) => {
                     </button>
                     <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                       <li>
-                        <a className="dropdown-item" href="#" onClick={() => onUpdate(blog.id)}>
+                        <a className="dropdown-item" href="#" onClick={() => handleUpdate(blog.id)}>
                           <i className="bi bi-pencil"></i> Sửa
                         </a>
                       </li>

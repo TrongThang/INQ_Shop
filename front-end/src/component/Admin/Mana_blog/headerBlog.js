@@ -1,41 +1,43 @@
-import FilterBlog from "../../../component/admin/Mana_blog/filterBlog";
 import { useNavigate } from "react-router-dom";
-function HeaderBlog({ onExport }) {
+
+function HeaderBlog({ onExport, onAdd, onSearchChange, onStatusFilterChange }) {
     const navigate = useNavigate();
-    
+
     return (
         <>
-        <div className="d-flex justify-content-between mb-3">
-              <h5>Danh sách bài viết</h5>
-              <div>
-                {/* <button className="btn btn-primary me-2" onClick={onAdd}> */}
-                <button className="btn btn-primary me-2" onClick={() => navigate("/admin/blog/add")}>
-                  <i className="bi bi-plus"></i> Thêm
-                </button>
-                <button className="btn btn-success" onClick={onExport}>
-                  <i className="bi bi-download"></i> Xuất file
-                </button>
-              </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <div class="input-group">
-                    <span class="input-group-text">
-                        <i class="bi bi-search"></i>
-                    </span>
-                    <input type="text" class="form-control" placeholder="Tìm kiếm bài viết" />
+            <div className="d-flex justify-content-between mb-3">
+                <h5>Danh sách bài viết</h5>
+                <div>
+                    <button className="btn btn-primary me-2" onClick={onAdd}>
+                        <i className="bi bi-plus"></i> Thêm
+                    </button>
+                    <button className="btn btn-success" onClick={onExport}>
+                        <i className="bi bi-download"></i> Xuất file
+                    </button>
                 </div>
             </div>
-            <div class="col-md-2 ">
-                <select class="form-select status">
-                    <option>Trạng thái</option>
-                    <option>Hiển thị</option>
-                    <option>Ẩn</option>
-                </select>
+            <div className="row mb-3">
+                <div className="col-md-6">
+                    <div className="input-group">
+                        <span className="input-group-text">
+                            <i className="bi bi-search"></i>
+                        </span>
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Tìm kiếm bài viết"
+                            onChange={(e) => onSearchChange(e.target.value)}
+                        />
+                    </div>
+                </div>
+                <div className="col-md-2">
+                    <select className="form-select status" onChange={(e) => onStatusFilterChange(e.target.value)}>
+                        <option value="all">Tất cả trạng thái</option>
+                        <option value="1">Hiển thị</option>
+                        <option value="0">Ẩn</option>
+                    </select>
+                </div>
             </div>
-            {/* Bộ lọc */}
-            {/* <FilterBlog /> */}
-        </div>
         </>
     );
 }

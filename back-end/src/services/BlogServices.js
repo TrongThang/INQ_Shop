@@ -20,7 +20,6 @@ const getAllBlog_user = async () => {
     });
 };
 const getAllBlog = async () => {
-   
     return await Blog.findAll({
         include: [
             {
@@ -28,8 +27,8 @@ const getAllBlog = async () => {
                 as: 'category',
                 attributes: ['id', 'nameCategory']
             }
-         
-        ]
+        ],
+        order: [['created_at', 'DESC']]
     });
 };
 // // Lấy thông tin một slide theo ID

@@ -3,8 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@ckeditor/ckeditor5-build-classic": "^44.2.0",
-    "@ckeditor/ckeditor5-react": "^9.5.0",
     "@popperjs/core": "^2.11.8",
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
@@ -25,6 +23,7 @@
     "react-router-dom": "^7.1.1",
     "react-scripts": "^5.0.1",
     "react-toastify": "^11.0.2",
+    "suneditor-react": "^3.6.1",
     "sweetalert2": "^11.15.10",
     "xlsx": "^0.18.5"
   },

@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import Swal from 'sweetalert2'; // Import SweetAlert2
+import Swal from 'sweetalert2';
+import SunEditor from "suneditor-react";
+import "suneditor/dist/css/suneditor.min.css";
+import { list } from "suneditor/src/plugins";
 
 function UpdateBlog() {
     const [errors, setErrors] = useState({
         title: "",
         content: "",
     });
-    
+
     const [categories, setCategories] = useState([]);
     const [employees, setEmployees] = useState([]);
     const [blogData, setBlogData] = useState({
@@ -24,8 +25,7 @@ function UpdateBlog() {
     });
     const { id } = useParams();
     const navigate = useNavigate();
-    
-    
+
     const formatDate = (date) => {
         if (!date) return "";
         const d = new Date(date);
@@ -75,58 +75,70 @@ function UpdateBlog() {
             ...prevData,
             [name]: value,
         }));
-         // Reset lỗi cho trường đang thay đổi
-    setErrors((prevErrors) => ({
-        ...prevErrors,
-        [name]: "",
-    }));
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [name]: "",
+        }));
+    };
+
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setBlogData((prevData) => ({
+                ...prevData,
+                image: URL.createObjectURL(file),
+            }));
+        }
+    };
+
+    const handleEditorChange = (content) => {
+        setBlogData((prevData) => ({
+            ...prevData,
+            content: content,
+        }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-                 // Reset errors
-    setErrors({
-        title: "",
-        content: "",
-    });
+        setErrors({
+            title: "",
+            content: "",
+        });
 
-    let hasError = false;
+        let hasError = false;
 
-    // Kiểm tra tiêu đề
-    if (!blogData.title) {
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            title: "Vui lòng nhập tiêu đề.",
-        }));
-        hasError = true;
-    } else if (blogData.title.length < 5) {
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            title: "Tiêu đề vui lòng dài hơn 5 ký tự.",
-        }));
-        hasError = true;
-    }
+        if (!blogData.title) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                title: "Vui lòng nhập tiêu đề.",
+            }));
+            hasError = true;
+        } else if (blogData.title.length < 5) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                title: "Tiêu đề vui lòng dài hơn 5 ký tự.",
+            }));
+            hasError = true;
+        }
 
-    // Kiểm tra nội dung
-    if (!blogData.content) {
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            content: "Vui lòng nhập nội dung.",
-        }));
-        hasError = true;
-    } else if (blogData.content.length < 20) {
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            content: "Nội dung chính vui lòng dài hơn 20 ký tự.",
-        }));
-        hasError = true;
-    }
+        if (!blogData.content) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                content: "Vui lòng nhập nội dung.",
+            }));
+            hasError = true;
+        } else if (blogData.content.replace(/<[^>]*>/g, "").length < 20) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                content: "Nội dung chính vui lòng dài hơn 20 ký tự.",
+            }));
+            hasError = true;
+        }
 
-    // Nếu có lỗi, dừng lại và không submit form
-    if (hasError) {
-        return;
-    }
-        // Hiển thị hộp thoại xác nhận chỉnh sửa
+        if (hasError) {
+            return;
+        }
+
         const confirmResult = await Swal.fire({
             title: 'Bạn có chắc chắn?',
             text: 'Bạn có chắc muốn cập nhật bài viết này không?',
@@ -136,7 +148,6 @@ function UpdateBlog() {
             cancelButtonText: 'Hủy',
         });
 
-        // Nếu người dùng xác nhận
         if (confirmResult.isConfirmed) {
             try {
                 const response = await fetch("http://localhost:8081/api/blog", {
@@ -147,7 +158,6 @@ function UpdateBlog() {
                 const result = await response.json();
 
                 if (response.ok) {
-                    // Thông báo thành công
                     await Swal.fire({
                         title: 'Thành công!',
                         text: 'Đã chỉnh sửa bài viết thành công.',
@@ -156,7 +166,6 @@ function UpdateBlog() {
                     });
                     navigate("/admin/blog");
                 } else {
-                    // Thông báo lỗi
                     await Swal.fire({
                         title: 'Lỗi!',
                         text: result.msg || 'Đã chỉnh sửa bài viết thất bại.',
@@ -166,7 +175,6 @@ function UpdateBlog() {
                 }
             } catch (error) {
                 console.error("Error submitting blog:", error);
-                // Thông báo lỗi
                 await Swal.fire({
                     title: 'Lỗi!',
                     text: 'Có lỗi xảy ra trong quá trình cập nhật.',
@@ -205,7 +213,7 @@ function UpdateBlog() {
                                     onChange={handleChange}
                                     required
                                 />
-                                 {errors.title && <div className="text-danger mt-2">{errors.title}</div>}
+                                {errors.title && <div className="text-danger mt-2">{errors.title}</div>}
                             </div>
                             <div className="mb-3">
                                 <label className="form-label">Tên tác giả:</label>
@@ -271,8 +279,19 @@ function UpdateBlog() {
                             <div className="mb-3">
                                 <label className="form-label">Hình ảnh:</label>
                                 <div className="upload-area">
-                                    <i className="bi bi-cloud-arrow-up upload-icon"></i>
-                                    <div>Upload ảnh</div>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleImageUpload}
+                                        className="form-control"
+                                    />
+                                    {blogData.image && (
+                                        <img
+                                            src={blogData.image}
+                                            alt="Preview"
+                                            style={{ maxWidth: "100%", marginTop: "10px" }}
+                                        />
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -290,21 +309,23 @@ function UpdateBlog() {
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Nội dung chi tiết:</label>
-                        <CKEditor
-                            editor={ClassicEditor}
-                            config={{
-                                licenseKey: "eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NDA3MDA3OTksImp0aSI6ImZiZjU2OGJlLThjYjYtNDAyNC1hY2M4LWE5NzI3MmRlMWQxMCIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiLCJzaCJdLCJ3aGl0ZUxhYmVsIjp0cnVlLCJsaWNlbnNlVHlwZSI6InRyaWFsIiwiZmVhdHVyZXMiOlsiKiJdLCJ2YyI6IjYxMDhjYjkzIn0.QztQpGVy2snVHLOrISZIVUrB0dn2hwZvFnF--9bihGUkZwBeF3LRVnkMRMhcz9LLifROozyz6DYEJrj3M9v0SA",
+                        <SunEditor
+                            setContents={blogData.content}
+                            onChange={handleEditorChange}
+                            setOptions={{
+                                height: "400",
+                                buttonList: [
+                                    ["bold", "underline", "italic", "strike"],
+                                    ["blockquote"],
+                                    ["list", "table"],
+                                    ["link", "image"],
+                                    ["codeView"],
+                                ],
+                                plugins: [list],
                             }}
-                            data={blogData.content}
-                            onChange={(event, editor) => {
-                                const data = editor.getData();
-                                setBlogData((prevData) => ({
-                                    ...prevData,
-                                    content: data,
-                                }));
-                            }}
+                            placeholder="Nhập nội dung chi tiết..."
                         />
-                          {errors.content && <div className="text-danger mt-2">{errors.content}</div>}
+                        {errors.content && <div className="text-danger mt-2">{errors.content}</div>}
                     </div>
                     <div className="text-right">
                         <button type="submit" className="btn btn-info text-white">

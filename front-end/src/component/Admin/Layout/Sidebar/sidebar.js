@@ -126,6 +126,28 @@ export default function Sidebar() {
                                 <a
                                     href="#"
                                     className="nav-link d-flex align-items-center p-3 text-white hover-bg-gray"
+                                    onClick={() => toggleMenu("blog")}
+                                >
+                                    <i className="ti-layout-sidebar-left me-2"></i>
+                                    <span>Quản lý bài viết</span>
+                                    <i className={`ms-auto ti-angle-${openMenu === "blog" ? "down" : "right"}`}></i>
+                                </a>
+                                <ul
+                                    className={`submenu list-unstyled ps-4 ${
+                                        openMenu === "blog" ? "d-block" : "d-none"
+                                    }`}
+                                >
+                                    <li>
+                                        <Link to="/admin/blog" className="nav-link p-2 text-white hover-bg-gray">
+                                            Danh sách bài viết
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li className="nav-item">
+                                <a
+                                    href="#"
+                                    className="nav-link d-flex align-items-center p-3 text-white hover-bg-gray"
                                     onClick={() => toggleMenu("order")}
                                 >
                                     <i className="ti-layout-sidebar-left me-2"></i>

@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import Swal from 'sweetalert2'; // Import SweetAlert2
+import Swal from "sweetalert2";
+import SunEditor from "suneditor-react";
+import "suneditor/dist/css/suneditor.min.css"; // Import CSS cho SunEditor
+import { list } from "suneditor/src/plugins"; // Import plugin list
 
 function AddBlog() {
     const [categories, setCategories] = useState([]);
@@ -14,7 +15,7 @@ function AddBlog() {
         author: "",
         idCategory: "",
         status: "1",
-        create_at: "",
+        create_at: formattedDate,
         image: "",
         content: "",
         contentNormal: "",
@@ -27,6 +28,7 @@ function AddBlog() {
         contentNormal: "",
         content: "",
     });
+
     const fetchCategories = async () => {
         try {
             const response = await fetch("http://localhost:8081/api/category");
@@ -53,11 +55,10 @@ function AddBlog() {
             ...prevData,
             [name]: value,
         }));
-          // Reset lỗi cho trường đang thay đổi
-    setErrors((prevErrors) => ({
-        ...prevErrors,
-        [name]: "",
-    }));
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [name]: "",
+        }));
     };
 
     const handleImageUpload = (e) => {
@@ -70,92 +71,94 @@ function AddBlog() {
         }
     };
 
+    const handleEditorChange = (content) => {
+        setBlogData((prevData) => ({
+            ...prevData,
+            content: content,
+        }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Reset errors
-    setErrors({
-        title: "",
-        author: "",
-        idCategory: "",
-        contentNormal: "",
-        content: "",
-    });
+        setErrors({
+            title: "",
+            author: "",
+            idCategory: "",
+            contentNormal: "",
+            content: "",
+        });
 
-    let hasError = false;
+        let hasError = false;
 
-    // Kiểm tra tiêu đề
-    if (!blogData.title) {
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            title: "Vui lòng nhập tiêu đề.",
-        }));
-        hasError = true;
-    } else if (blogData.title.length < 5) {
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            title: "Tiêu đề phải có ít nhất 5 ký tự.",
-        }));
-        hasError = true;
-    }
+        if (!blogData.title) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                title: "Vui lòng nhập tiêu đề.",
+            }));
+            hasError = true;
+        } else if (blogData.title.length < 5) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                title: "Tiêu đề phải có ít nhất 5 ký tự.",
+            }));
+            hasError = true;
+        }
 
-    // Kiểm tra tác giả
-    if (!blogData.author) {
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            author: "Vui lòng chọn tác giả.",
-        }));
-        hasError = true;
-    }
-      // Kiểm tra danh mục
-      if (!blogData.idCategory) {
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            idCategory: "Vui lòng chọn danh mục.",
-        }));
-        hasError = true;
-    }
-    // Kiểm tra nội dung ngắn
-    if (!blogData.contentNormal) {
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            contentNormal: "Vui lòng nhập nội dung ngắn.",
-        }));
-        hasError = true;
-    } else if (blogData.contentNormal.length < 5) {
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            contentNormal: "Nội dung ngắn phải có ít nhất 5 ký tự.",
-        }));
-        hasError = true;
-    }
+        if (!blogData.author) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                author: "Vui lòng chọn tác giả.",
+            }));
+            hasError = true;
+        }
 
-    // Kiểm tra nội dung chi tiết
-    if (!blogData.content) {
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            content: "Vui lòng nhập nội dung chi tiết.",
-        }));
-        hasError = true;
-    } else if (blogData.content.length < 20) {
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            content: "Nội dung chi tiết phải có ít nhất 20 ký tự.",
-        }));
-        hasError = true;
-    }
+        if (!blogData.idCategory) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                idCategory: "Vui lòng chọn danh mục.",
+            }));
+            hasError = true;
+        }
 
-    // Nếu có lỗi, dừng lại và không submit form
-    if (hasError) {
-        return;
-    }
+        if (!blogData.contentNormal) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                contentNormal: "Vui lòng nhập nội dung ngắn.",
+            }));
+            hasError = true;
+        } else if (blogData.contentNormal.length < 5) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                contentNormal: "Nội dung ngắn phải có ít nhất 5 ký tự.",
+            }));
+            hasError = true;
+        }
+
+        if (!blogData.content || blogData.content === "<p></p>") {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                content: "Vui lòng nhập nội dung chi tiết.",
+            }));
+            hasError = true;
+        } else if (blogData.content.replace(/<[^>]*>/g, "").length < 20) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                content: "Nội dung chi tiết phải có ít nhất 20 ký tự.",
+            }));
+            hasError = true;
+        }
+
+        if (hasError) {
+            return;
+        }
 
         const confirmResult = await Swal.fire({
-            title: 'Bạn có chắc chắn?',
-            text: 'Bạn có chắc muốn thêm bài viết này không?',
-            icon: 'question',
+            title: "Bạn có chắc chắn?",
+            text: "Bạn có chắc muốn thêm bài viết này không?",
+            icon: "question",
             showCancelButton: true,
-            confirmButtonText: 'Xác nhận',
-            cancelButtonText: 'Hủy',
+            confirmButtonText: "Xác nhận",
+            cancelButtonText: "Hủy",
         });
 
         if (confirmResult.isConfirmed) {
@@ -169,27 +172,27 @@ function AddBlog() {
 
                 if (response.ok) {
                     await Swal.fire({
-                        title: 'Thành công!',
-                        text: 'Đã thêm bài viết thành công.',
-                        icon: 'success',
-                        confirmButtonText: 'OK',
+                        title: "Thành công!",
+                        text: "Đã thêm bài viết thành công.",
+                        icon: "success",
+                        confirmButtonText: "OK",
                     });
                     navigate("/admin/blog");
                 } else {
                     await Swal.fire({
-                        title: 'Lỗi!',
-                        text: result.msg || 'Đã thêm bài viết thất bại.',
-                        icon: 'error',
-                        confirmButtonText: 'OK',
+                        title: "Lỗi!",
+                        text: result.msg || "Đã thêm bài viết thất bại.",
+                        icon: "error",
+                        confirmButtonText: "OK",
                     });
                 }
             } catch (error) {
                 console.error("Error submitting blog:", error);
                 await Swal.fire({
-                    title: 'Lỗi!',
-                    text: 'Có lỗi xảy ra trong quá trình thêm bài viết.',
-                    icon: 'error',
-                    confirmButtonText: 'OK',
+                    title: "Lỗi!",
+                    text: "Có lỗi xảy ra trong quá trình thêm bài viết.",
+                    icon: "error",
+                    confirmButtonText: "OK",
                 });
             }
         }
@@ -222,7 +225,7 @@ function AddBlog() {
                                     onChange={handleChange}
                                     required
                                 />
-                                  {errors.title && <div className="text-danger mt-2">{errors.title}</div>}
+                                {errors.title && <div className="text-danger mt-2">{errors.title}</div>}
                             </div>
                             <div className="mb-3">
                                 <label className="form-label">Tên tác giả:</label>
@@ -233,7 +236,9 @@ function AddBlog() {
                                     onChange={handleChange}
                                     required
                                 >
-                                    <option value="" disabled hidden>Chọn tác giả</option>
+                                    <option value="" disabled hidden>
+                                        Chọn tác giả
+                                    </option>
                                     {employees.map((employee) => (
                                         <option key={employee.id} value={employee.id}>
                                             {employee.surname} {employee.lastname}
@@ -251,7 +256,9 @@ function AddBlog() {
                                     onChange={handleChange}
                                     required
                                 >
-                                    <option value="" disabled hidden>Chọn danh mục</option>
+                                    <option value="" disabled hidden>
+                                        Chọn danh mục
+                                    </option>
                                     {categories.map((cat) => (
                                         <option key={cat.id} value={cat.id}>
                                             {cat.nameCategory}
@@ -266,7 +273,7 @@ function AddBlog() {
                                     type="date"
                                     className="form-control"
                                     name="create_at"
-                                    value={formattedDate}
+                                    value={blogData.create_at}
                                     onChange={handleChange}
                                     required
                                     readOnly
@@ -290,8 +297,19 @@ function AddBlog() {
                             <div className="mb-3">
                                 <label className="form-label">Hình ảnh:</label>
                                 <div className="upload-area">
-                                    <i className="bi bi-cloud-arrow-up upload-icon"></i>
-                                    <div>Upload ảnh</div>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleImageUpload}
+                                        className="form-control"
+                                    />
+                                    {blogData.image && (
+                                        <img
+                                            src={blogData.image}
+                                            alt="Preview"
+                                            style={{ maxWidth: "100%", marginTop: "10px" }}
+                                        />
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -306,25 +324,29 @@ function AddBlog() {
                             onChange={handleChange}
                             required
                         />
-                        {errors.contentNormal && <div className="text-danger mt-2">{errors.contentNormal}</div>}
+                        {errors.contentNormal && (
+                            <div className="text-danger mt-2">{errors.contentNormal}</div>
+                        )}
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Nội dung chi tiết:</label>
-                        <CKEditor
-                            editor={ClassicEditor}
-                            config={{
-                                licenseKey: "eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NDA3MDA3OTksImp0aSI6ImZiZjU2OGJlLThjYjYtNDAyNC1hY2M4LWE5NzI3MmRlMWQxMCIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiLCJzaCJdLCJ3aGl0ZUxhYmVsIjp0cnVlLCJsaWNlbnNlVHlwZSI6InRyaWFsIiwiZmVhdHVyZXMiOlsiKiJdLCJ2YyI6IjYxMDhjYjkzIn0.QztQpGVy2snVHLOrISZIVUrB0dn2hwZvFnF--9bihGUkZwBeF3LRVnkMRMhcz9LLifROozyz6DYEJrj3M9v0SA",
+                        <SunEditor
+                            setContents={blogData.content}
+                            onChange={handleEditorChange}
+                            setOptions={{
+                                height: "400", // Đặt chiều cao như CKEditor
+                                buttonList: [
+                                    ["bold", "underline", "italic", "strike"],
+                                    ["blockquote"],
+                                    ["list", "table"], // Sử dụng "list" thay vì "ol" và "ul" trực tiếp
+                                    ["link", "image"],
+                                    ["codeView"],
+                                ],
+                                plugins: [list], // Thêm plugin list
                             }}
-                            data={blogData.content}
-                            onChange={(event, editor) => {
-                                const data = editor.getData();
-                                setBlogData((prevData) => ({
-                                    ...prevData,
-                                    content: data,
-                                }));
-                            }}
+                            placeholder="Nhập nội dung chi tiết..."
                         />
-                         {errors.content && <div className="text-danger mt-2">{errors.content}</div>}
+                        {errors.content && <div className="text-danger mt-2">{errors.content}</div>}
                     </div>
                     <div className="text-right">
                         <button type="submit" className="btn btn-info text-white">

@@ -50,7 +50,15 @@ const BlogDetails = () => {
 
                     <h2 className="mb-4">{blog.title}</h2>
                     <img
-                        src={`/img/blog/${blog.image}` || "https://via.placeholder.com/1000x600" }
+                        // src={`/img/blog/${blog.image}` || "https://via.placeholder.com/1000x600" }
+                        src={
+                            blog.image &&
+                            (blog.image.endsWith(".jpg") ||
+                              blog.image.endsWith(".png") ||
+                              blog.image.endsWith(".webp"))
+                              ? `/img/blog/${blog.image}`
+                              : blog.image
+                          }
                         style={{ width: "600px", height: "400px" }}
                         alt="Hình ảnh bài viết"
                         className="img-fluid rounded mb-4"

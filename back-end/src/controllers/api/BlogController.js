@@ -179,12 +179,14 @@ const postCreateBlogAPI = async (req, res) => {
     }
 };
 //hàm xử lý cập nhật tin tức
+//hàm xử lý cập nhật tin tức
 const putUpdateBlogAPI = async (req, res) => {
     try {
+        const { id } = req.params; // Extract the id from the request parameters
         const data = req.body;
 
         // Gọi hàm cập nhật blog trong cơ sở dữ liệu
-        const updatedBlog = await putUpdateBlog(data);
+        const updatedBlog = await putUpdateBlog({ id, ...data });
 
         // Nếu không tìm thấy blog để cập nhật
         if (!updatedBlog) {

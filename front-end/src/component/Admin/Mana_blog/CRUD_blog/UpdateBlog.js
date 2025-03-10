@@ -1,23 +1,17 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
-import { list } from "suneditor/src/plugins";
 
 function UpdateBlog() {
-    const [errors, setErrors] = useState({
-        title: "",
-        content: "",
-    });
-
     const [categories, setCategories] = useState([]);
     const [employees, setEmployees] = useState([]);
     const [blogData, setBlogData] = useState({
         title: "",
         author: "",
         idCategory: "",
-        status: "",
+        status: "1",
         create_at: "",
         image: "",
         content: "",
@@ -25,6 +19,13 @@ function UpdateBlog() {
     });
     const { id } = useParams();
     const navigate = useNavigate();
+    const [errors, setErrors] = useState({
+        title: "",
+        author: "",
+        idCategory: "",
+        contentNormal: "",
+        content: "",
+    });
 
     const formatDate = (date) => {
         if (!date) return "";
@@ -84,12 +85,22 @@ function UpdateBlog() {
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setBlogData((prevData) => ({
-                ...prevData,
-                image: URL.createObjectURL(file),
-            }));
+            if (file.size > 5 * 1024 * 1024) { // Giới hạn 5MB
+                Swal.fire("Lỗi", "Ảnh không được vượt quá 5MB!", "error");
+                return;
+            }
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setBlogData((prevData) => ({
+                    ...prevData,
+                    image: reader.result, // Lưu ảnh Base64
+                }));
+            };
+            reader.readAsDataURL(file);
         }
     };
+    
+    
 
     const handleEditorChange = (content) => {
         setBlogData((prevData) => ({
@@ -102,6 +113,9 @@ function UpdateBlog() {
         e.preventDefault();
         setErrors({
             title: "",
+            author: "",
+            idCategory: "",
+            contentNormal: "",
             content: "",
         });
 
@@ -117,6 +131,14 @@ function UpdateBlog() {
             setErrors((prevErrors) => ({
                 ...prevErrors,
                 title: "Tiêu đề vui lòng dài hơn 5 ký tự.",
+            }));
+            hasError = true;
+        }
+
+        if (!blogData.contentNormal) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                contentNormal: "Vui lòng nhập nội dung ngắn.",
             }));
             hasError = true;
         }
@@ -140,17 +162,17 @@ function UpdateBlog() {
         }
 
         const confirmResult = await Swal.fire({
-            title: 'Bạn có chắc chắn?',
-            text: 'Bạn có chắc muốn cập nhật bài viết này không?',
-            icon: 'question',
+            title: "Bạn có chắc chắn?",
+            text: "Bạn có chắc muốn cập nhật bài viết này không?",
+            icon: "question",
             showCancelButton: true,
-            confirmButtonText: 'Xác nhận',
-            cancelButtonText: 'Hủy',
+            confirmButtonText: "Xác nhận",
+            cancelButtonText: "Hủy",
         });
 
         if (confirmResult.isConfirmed) {
             try {
-                const response = await fetch("http://localhost:8081/api/blog", {
+                const response = await fetch(`http://localhost:8081/api/blog/${id}`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(blogData),
@@ -159,27 +181,27 @@ function UpdateBlog() {
 
                 if (response.ok) {
                     await Swal.fire({
-                        title: 'Thành công!',
-                        text: 'Đã chỉnh sửa bài viết thành công.',
-                        icon: 'success',
-                        confirmButtonText: 'OK',
+                        title: "Thành công!",
+                        text: "Đã chỉnh sửa bài viết thành công.",
+                        icon: "success",
+                        confirmButtonText: "OK",
                     });
                     navigate("/admin/blog");
                 } else {
                     await Swal.fire({
-                        title: 'Lỗi!',
-                        text: result.msg || 'Đã chỉnh sửa bài viết thất bại.',
-                        icon: 'error',
-                        confirmButtonText: 'OK',
+                        title: "Lỗi!",
+                        text: result.msg || "Đã chỉnh sửa bài viết thất bại.",
+                        icon: "error",
+                        confirmButtonText: "OK",
                     });
                 }
             } catch (error) {
                 console.error("Error submitting blog:", error);
                 await Swal.fire({
-                    title: 'Lỗi!',
-                    text: 'Có lỗi xảy ra trong quá trình cập nhật.',
-                    icon: 'error',
-                    confirmButtonText: 'OK',
+                    title: "Lỗi!",
+                    text: "Có lỗi xảy ra trong quá trình cập nhật.",
+                    icon: "error",
+                    confirmButtonText: "OK",
                 });
             }
         }
@@ -224,13 +246,16 @@ function UpdateBlog() {
                                     onChange={handleChange}
                                     required
                                 >
-                                    <option value="" disabled hidden>Chọn tác giả</option>
+                                    <option value="" disabled hidden>
+                                        Chọn tác giả
+                                    </option>
                                     {employees.map((employee) => (
                                         <option key={employee.id} value={employee.id}>
                                             {employee.surname} {employee.lastname}
                                         </option>
                                     ))}
                                 </select>
+                                {errors.author && <div className="text-danger mt-2">{errors.author}</div>}
                             </div>
                             <div className="mb-3">
                                 <label className="form-label">Danh mục:</label>
@@ -241,13 +266,16 @@ function UpdateBlog() {
                                     onChange={handleChange}
                                     required
                                 >
-                                    <option value="" disabled hidden>Chọn danh mục</option>
+                                    <option value="" disabled hidden>
+                                        Chọn danh mục
+                                    </option>
                                     {categories.map((cat) => (
                                         <option key={cat.id} value={cat.id}>
                                             {cat.nameCategory}
                                         </option>
                                     ))}
                                 </select>
+                                {errors.idCategory && <div className="text-danger mt-2">{errors.idCategory}</div>}
                             </div>
                             <div className="mb-3">
                                 <label className="form-label">Ngày đăng bài:</label>
@@ -285,13 +313,14 @@ function UpdateBlog() {
                                         onChange={handleImageUpload}
                                         className="form-control"
                                     />
-                                    {blogData.image && (
-                                        <img
-                                            src={blogData.image}
-                                            alt="Preview"
-                                            style={{ maxWidth: "100%", marginTop: "10px" }}
-                                        />
-                                    )}
+                                  {blogData.image && (
+                                    <img
+                                        src={blogData.image.startsWith("data:image") ? blogData.image : `/img/blog/${blogData.image}`}
+                                        alt="Preview"
+                                        style={{ maxWidth: "100%", marginTop: "10px" }}
+                                    />
+                                )}
+
                                 </div>
                             </div>
                         </div>
@@ -306,6 +335,9 @@ function UpdateBlog() {
                             onChange={handleChange}
                             required
                         />
+                        {errors.contentNormal && (
+                            <div className="text-danger mt-2">{errors.contentNormal}</div>
+                        )}
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Nội dung chi tiết:</label>
@@ -321,7 +353,6 @@ function UpdateBlog() {
                                     ["link", "image"],
                                     ["codeView"],
                                 ],
-                                plugins: [list],
                             }}
                             placeholder="Nhập nội dung chi tiết..."
                         />

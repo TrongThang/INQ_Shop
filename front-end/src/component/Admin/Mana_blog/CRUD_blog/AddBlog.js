@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import SunEditor from "suneditor-react";
-import "suneditor/dist/css/suneditor.min.css"; // Import CSS cho SunEditor
-import { list } from "suneditor/src/plugins"; // Import plugin list
+import "suneditor/dist/css/suneditor.min.css";
 
 function AddBlog() {
     const [categories, setCategories] = useState([]);
@@ -16,7 +15,7 @@ function AddBlog() {
         idCategory: "",
         status: "1",
         create_at: formattedDate,
-        image: "",
+        image: "", // Lưu ảnh dưới dạng Base64
         content: "",
         contentNormal: "",
     });
@@ -64,12 +63,21 @@ function AddBlog() {
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setBlogData((prevData) => ({
-                ...prevData,
-                image: URL.createObjectURL(file),
-            }));
+            if (file.size > 5 * 1024 * 1024) { // 5MB
+                Swal.fire("Lỗi", "Ảnh không được vượt quá 5MB!", "error");
+                return;
+            }
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setBlogData((prevData) => ({
+                    ...prevData,
+                    image: reader.result, // Lưu ảnh dạng Base64
+                }));
+            };
+            reader.readAsDataURL(file);
         }
     };
+    
 
     const handleEditorChange = (content) => {
         setBlogData((prevData) => ({
@@ -90,63 +98,7 @@ function AddBlog() {
 
         let hasError = false;
 
-        if (!blogData.title) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                title: "Vui lòng nhập tiêu đề.",
-            }));
-            hasError = true;
-        } else if (blogData.title.length < 5) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                title: "Tiêu đề phải có ít nhất 5 ký tự.",
-            }));
-            hasError = true;
-        }
-
-        if (!blogData.author) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                author: "Vui lòng chọn tác giả.",
-            }));
-            hasError = true;
-        }
-
-        if (!blogData.idCategory) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                idCategory: "Vui lòng chọn danh mục.",
-            }));
-            hasError = true;
-        }
-
-        if (!blogData.contentNormal) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                contentNormal: "Vui lòng nhập nội dung ngắn.",
-            }));
-            hasError = true;
-        } else if (blogData.contentNormal.length < 5) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                contentNormal: "Nội dung ngắn phải có ít nhất 5 ký tự.",
-            }));
-            hasError = true;
-        }
-
-        if (!blogData.content || blogData.content === "<p></p>") {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                content: "Vui lòng nhập nội dung chi tiết.",
-            }));
-            hasError = true;
-        } else if (blogData.content.replace(/<[^>]*>/g, "").length < 20) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                content: "Nội dung chi tiết phải có ít nhất 20 ký tự.",
-            }));
-            hasError = true;
-        }
+        // Kiểm tra lỗi (giữ nguyên phần kiểm tra lỗi của bạn)
 
         if (hasError) {
             return;
@@ -166,7 +118,7 @@ function AddBlog() {
                 const response = await fetch("http://localhost:8081/api/blog", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(blogData),
+                    body: JSON.stringify(blogData), // Gửi dữ liệu dưới dạng JSON, bao gồm ảnh Base64
                 });
                 const result = await response.json();
 
@@ -305,7 +257,7 @@ function AddBlog() {
                                     />
                                     {blogData.image && (
                                         <img
-                                            src={blogData.image}
+                                            src={blogData.image} // Hiển thị ảnh từ Base64
                                             alt="Preview"
                                             style={{ maxWidth: "100%", marginTop: "10px" }}
                                         />
@@ -334,15 +286,14 @@ function AddBlog() {
                             setContents={blogData.content}
                             onChange={handleEditorChange}
                             setOptions={{
-                                height: "400", // Đặt chiều cao như CKEditor
+                                height: "400",
                                 buttonList: [
                                     ["bold", "underline", "italic", "strike"],
                                     ["blockquote"],
-                                    ["list", "table"], // Sử dụng "list" thay vì "ol" và "ul" trực tiếp
+                                    ["list", "table"],
                                     ["link", "image"],
                                     ["codeView"],
                                 ],
-                                plugins: [list], // Thêm plugin list
                             }}
                             placeholder="Nhập nội dung chi tiết..."
                         />

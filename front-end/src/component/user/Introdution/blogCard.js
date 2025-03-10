@@ -35,7 +35,15 @@ const BlogCard = ({ blog }) => {
         <div className="blog-img">
         <Link to={`/blog/${blog.id}`} >
           <img
-            src={`/img/blog/${blog.image}`}
+            // src={blog.image ? `/img/blog/${blog.image}` : `${blog.image}`}
+            src={
+              blog.image &&
+              (blog.image.endsWith(".jpg") ||
+                blog.image.endsWith(".png") ||
+                blog.image.endsWith(".webp"))
+                ? `/img/blog/${blog.image}`
+                : blog.image
+            }
             style={{ width: "600px", height: "300px" }}
             className="img-fluid rounded-top w-100"
             alt="Blog Post"

@@ -31,7 +31,8 @@ const ManageBlogItems = ({ blogs }) => {
             icon: 'success',
             confirmButtonText: 'OK',
           });
-          // Optionally, you can refresh the list of blogs here
+            // Optionally, you can refresh the list of blogs here
+            window.location.reload();
         } else {
           await Swal.fire({
             title: 'Lỗi!',
@@ -103,11 +104,13 @@ const ManageBlogItems = ({ blogs }) => {
                           <i className="bi bi-pencil"></i> Sửa
                         </a>
                       </li>
-                      <li onClick={() => handleDelete(blog.id)}>
-                        <a className="dropdown-item text-danger" href="#">
-                          <i className="bi bi-trash"></i> Xóa
-                        </a>
-                      </li>
+                      {blog.status === 1 && (
+                        <li onClick={() => handleDelete(blog.id)}>
+                          <a className="dropdown-item text-danger" href="#">
+                            <i className="bi bi-trash"></i> Xóa
+                          </a>
+                        </li>
+                      )}
                     </ul>
                   </div>
                 </td>

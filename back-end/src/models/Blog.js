@@ -39,7 +39,7 @@ Blog = sequelize.define('blog', {
     allowNull: true
   },
   image: {
-    type: DataTypes.STRING(500),
+    type: DataTypes.TEXT,
     allowNull: true
   },
  

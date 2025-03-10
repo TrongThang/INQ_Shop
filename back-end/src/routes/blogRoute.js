@@ -11,9 +11,9 @@ routerBlog.get('/', getAllOrOneBlogAPI_user);
 routerBlog.get('/:id', getBlogAPI);
 // router.get('/aa/aa', getAllBlogAPI);
 routerBlog.post('/', postCreateBlogAPI);
-routerBlog.put('/', putUpdateBlogAPI);
+routerBlog.put('/:id', putUpdateBlogAPI);
 
-routerBlog.put('/:id', putUpdateStatusBlogAPI);
+routerBlog.put('/:id/status', putUpdateStatusBlogAPI);
 routerBlog.get('/admin/:id', getBlogAPI_Admin);
 
 

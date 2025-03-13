@@ -24,3 +24,4 @@ function getBase64Size(base64String) {
     return sizeInBytes;
 }
 
+

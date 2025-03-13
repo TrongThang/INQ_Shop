@@ -6,9 +6,10 @@ const ERROR_CODES = {
         EMAIL_INVALID: 3,
         NOT_NUMBER: 4,
     },
+
     DEVICE: {
-        DEVICE_NOT_FOUND: 1,
-        DEVICE_NON_ACTIVE: 2,
+        DEVICE_NOT_FOUND: 1001,
+        DEVICE_NON_ACTIVE: 1002,
         PRICE_CHANGED: 3,
         OUT_OF_STOCK: 4,
         NAME_CHANGED: 5,
@@ -16,7 +17,8 @@ const ERROR_CODES = {
         INTERNAL_ERROR: 500,
     },
     ATTRIBUTE: {
-        NOT_FOUND: 1,
+        SUCCESS: 1000,
+        NOT_FOUND: 1001,
         NAME_EXISTED: 2
     },
     CATEGORY: {

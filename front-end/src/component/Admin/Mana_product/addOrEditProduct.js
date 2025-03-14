@@ -5,6 +5,9 @@ import { Link, useParams } from 'react-router-dom';
 import ModalCategory from './modalCategory';
 import { STATUS_CODES } from '../../../ultil/statusContaints';
 import Swal from 'sweetalert2';
+import ModalAttributeForDevice from './modalAttributeForDevice';
+import SpecificationsAdmin from './specification/specificationAdmin';
+import ListSpecificationsAdmin from './specification/listSpecificationAdmin';
 
 export default function AddOrEditProduct() {
     const { slug } = useParams();
@@ -27,7 +30,7 @@ export default function AddOrEditProduct() {
         const fetchData = async () => {
             try {
                 if (!slug) return;
-
+                console.log(`http://localhost:8081/api/device/admin/detail/${slug}`)
                 const response = await axios.get(`http://localhost:8081/api/device/admin/detail/${slug}`)
 
                 const result = response.data.data;
@@ -284,7 +287,6 @@ export default function AddOrEditProduct() {
                                                 />
                                         </div>
                                     </div>
-                                
                                         
                                     <div className="mb-3">
                                         <label for="description" className="form-label">Mô tả:</label>
@@ -296,21 +298,24 @@ export default function AddOrEditProduct() {
                                             />
                                     </div>
                                     <div className="mb-3 col-6">
-                                    <label htmlFor="status" className="form-label">Trạng thái:</label>
-                                            <select
-                                                className="form-select"
-                                                id="status"
-                                                value={formData.status}
-                                                onChange={handleInputChange}
-                                            >
-                                                <option value={STATUS_CODES.DEVICE.ACTIVE}>Hoạt động</option>
-                                                <option value={STATUS_CODES.DEVICE.DISCOUNT}>Sản phẩm khuyến mãi</option>
-                                                <option value={STATUS_CODES.DEVICE.FEATURED}>Nổi bật</option>
-                                                <option value={STATUS_CODES.DEVICE.NEW}>Mới</option>
-                                                <option value={STATUS_CODES.DEVICE.NON_ACTIVE}>Ngừng hoạt động</option>
-                                            </select>
-                                    </div>
+                                        <label htmlFor="status" className="form-label">Trạng thái:</label>
+                                        <select
+                                            className="form-select"
+                                            id="status"
+                                            value={formData.status}
+                                            onChange={handleInputChange}
+                                        >
+                                            <option value={STATUS_CODES.DEVICE.ACTIVE}>Hoạt động</option>
+                                            <option value={STATUS_CODES.DEVICE.DISCOUNT}>Sản phẩm khuyến mãi</option>
+                                            <option value={STATUS_CODES.DEVICE.FEATURED}>Nổi bật</option>
+                                            <option value={STATUS_CODES.DEVICE.NEW}>Mới</option>
+                                            <option value={STATUS_CODES.DEVICE.NON_ACTIVE}>Ngừng hoạt động</option>
+                                        </select>
+                                    </div>    
                                 </div>
+                                    <div className="mb-3 col-6">
+                                        <ListSpecificationsAdmin attributes={device.attributes} />
+                                    </div>  
                                     <div className="col-md-6">
                                         <div className="mb-3">
                                             {/* <AreaUploadImage image='' /> */}

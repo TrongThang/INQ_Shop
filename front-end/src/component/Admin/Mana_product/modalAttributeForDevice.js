@@ -1,4 +1,4 @@
-export default function ModaAttributeForDevice() {
+export default function ModalAttributeForDevice() {
     return (
         <div className="modal fade" id="addAttributeModal" tabindex="-1" aria-labelledby="addAttributeModalLabel" aria-hidden="true">
             <div className="modal-dialog">

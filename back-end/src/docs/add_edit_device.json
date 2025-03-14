@@ -1,0 +1,45 @@
+{
+    "comment_add": "Khi thêm sẽ gửi danh sách như sau về và BE tiến hành xử lý và thêm các thuộc tính này vào",
+    "add_device": [
+        {
+            "id": 1,
+            "name": "Sản phẩm 1",
+            "slug": "san-pham-1",
+            "description": "<h3>Mô tả cho sản phẩm 1</h3>",
+            "description_normal": "Mô tả cho sản phẩm 1",
+            "image": "base64",
+            "unit_id": 1,
+            "vat": 10,
+            "category_id": 2,
+            "warranty_time_id": 1, 
+            "status": 1,
+            "attributes": [
+                    {
+                        "attribute_id": 1,
+                        "value": "Giá trị cho thuộc tính 3"
+                    },
+                    {
+                        "attribute_id": 3,
+                        "value": "Giá trị cho thuộc tính 3" 
+                    }
+                ]
+        }
+    ],
+    "comment_edit": "FE gửi về nguyên danh sách các thuộc tính nếu có thuộc tính mới thì thêm. Sau khi thêm, lấy các thuộc tính của sản phẩm đã có trong db trừ đi các thuộc tính FE gửi về sẽ có được các thuộc tính cũ (là các thuộc tính client muốn xoá) và tiến hành dùng danh sách này xoá!",
+    "edit_device": [
+        {
+            "device_id": 1,
+            "attribute": [
+                    {
+                        "id": 1,
+                        "attribute_id": 1,
+                        "value": "Giá trị cho thuộc tính 3"
+                    },
+                    {
+                        "attribute_id": 5,
+                        "value": "Giá trị cho thuộc tính mới thêm vào 5" 
+                    }
+                ]
+        }
+    ]
+}

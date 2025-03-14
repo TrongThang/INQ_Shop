@@ -16,6 +16,14 @@ const Address_book = sequelize.define('address_book', {
       key: 'id'
     }
   },
+  nameReceive: {
+    type: DataTypes.STRING(250),
+    allowNull: true
+  },
+  phone: {
+    type: DataTypes.STRING(12),
+    allowNull: true
+  },
   district: {
     type: DataTypes.STRING(500),
     allowNull: true

@@ -61,28 +61,7 @@ const postCreateAddressBookAPI = async (req, res) => {
     try{
         const data = req.body;
         console.log(">>> check:", data);
-      
-        //Kiểm tra district là chuỗi hay không
-        if (!data.district || typeof data.district !== 'string' || data.district.trim() === "") {
-            return res.status(400).json({
-                success: false,
-                message: 'Trường "district" phải là chuỗi.',
-            });
-        }
-        //Kiểm tra city là chuỗi hay không
-        if (!data.city || typeof data.city !== 'string' || data.city.trim() === "") {
-            return res.status(400).json({
-                success: false,
-                message: 'Trường "city" phải là chuỗi.',
-            });
-        }
-        //Kiểm tra ward là chuỗi hay không
-        if (!data.ward || typeof data.ward !== 'string' || data.ward.trim() === "") {
-            return res.status(400).json({
-                success: false,
-                message: 'Trường "ward" phải là chuỗi.',
-            });
-        }
+
         //Kiểm tra street là chuỗi hay không
         if (!data.street || typeof data.street !== 'string' || data.street.trim() === "") {
             return res.status(400).json({

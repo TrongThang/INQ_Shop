@@ -1,0 +1,43 @@
+{
+    "comment": "",
+    "attribute_groups": [
+        {
+            "id": 1,
+            "attributes": [
+                {
+                    "id": 1,
+                    "name_attribute": "Thuộc tính 1 của nhóm TT 1",
+                    "datatype": "text",
+                    "required": true,
+                    "category_id": 1
+                },
+                {
+                    "id": 2,
+                    "name_attribute": "Thuộc tính 2 của nhóm TT 1",
+                    "datatype": "text",
+                    "required": true,
+                    "category_id": 2
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "attributes": [
+                {
+                    "id": 1,
+                    "name_attribute": "Thuộc tính 1 của nhóm TT 2",
+                    "datatype": "text",
+                    "required": true,
+                    "category_id": 1
+                },
+                {
+                    "id": 2,
+                    "name_attribute": "Thuộc tính 2 của nhóm TT 2",
+                    "datatype": "text",
+                    "required": true,
+                    "category_id": 2
+                }
+            ]
+        }
+    ]
+}

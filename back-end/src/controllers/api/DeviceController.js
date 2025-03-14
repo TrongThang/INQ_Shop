@@ -20,7 +20,7 @@ const {
 const {
     getChildrenCategory, getAllCategoryIds
 } = require('../../services/CategoryServices.js');
-const { ERROR_CODES } = require('../../../../contants.js');
+const { ERROR_CODES } = require('../../docs/contants.js');
 
 const postCheckDeviceModificationAPI = async (req, res) => {
     //idDevice, sellingPrice, quantity
@@ -273,13 +273,10 @@ const getDeviceBySlugForAdminAPI = async (req, res) => {
 
 const postCreateDeviceAPI = async (req, res) => {
     try {
-        const { deviceSend, stock } = req.body
+        const { deviceSend, stock } = req.json
         const results = await createDevice(deviceSend, stock);
 
-        return res.status(200).json({
-            errorCode: 0,
-            data: results
-        })
+        return results
     } catch (error) {
         console.log(error.message)
 

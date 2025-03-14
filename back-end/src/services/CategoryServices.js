@@ -1,5 +1,5 @@
 const { Sequelize, Op, where } = require('sequelize');
-const { convertToSlug } = require('../helpers/stringHelper');
+const { convertToSlug } = require('../helpers/string');
 const Category = require('../models/Category');
 const Device = require('../models/Device');
 const Blog = require('../models/Blog')

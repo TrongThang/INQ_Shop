@@ -21,7 +21,6 @@ export const CartProvider = ({ children }) => {
             const decoded = jwtDecode(token);
             setIdCustomer(decoded.idPerson);
         }
-
     }, []);
 
     const fetchDataCart = async () => {

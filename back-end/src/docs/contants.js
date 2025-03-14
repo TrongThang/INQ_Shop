@@ -1,12 +1,34 @@
 const ERROR_CODES = {
     SUCCESS: 0,
+    SHARED: {
+        NUMBER_RANGE_100_INVALID: 1,
+        PHONE_INVALID: 2,
+        EMAIL_INVALID: 3,
+        NOT_NUMBER: 4,
+    },
+
     DEVICE: {
-        DEVICE_NOT_FOUND: 1,
-        DEVICE_NON_ACTIVE: 2,
+        DEVICE_NOT_FOUND: 1001,
+        DEVICE_NON_ACTIVE: 1002,
         PRICE_CHANGED: 3,
         OUT_OF_STOCK: 4,
         NAME_CHANGED: 5,
+        NAME_EXISTED: 6,
         INTERNAL_ERROR: 500,
+    },
+    ATTRIBUTE: {
+        SUCCESS: 1000,
+        NOT_FOUND: 1001,
+        NAME_EXISTED: 2
+    },
+    CATEGORY: {
+        NOT_FOUND: 1,
+    },
+    UNIT: {
+        NOT_FOUND: 1
+    },
+    WARRANTY_TIME: {
+        NOT_FOUND: 1
     },
     ORDER: {
         INTERNAL_ERROR: 500,
@@ -23,6 +45,12 @@ const ERROR_CODES = {
 };
 
 const ERROR_MESSAGES = {
+    SHARED: {
+        [ERROR_CODES.SHARED.NUMBER_RANGE_100_INVALID]: "Số từ 0 đến 99",
+        [ERROR_CODES.SHARED.EMAIL_INVALID]: "Email không hợp lệ!",
+        [ERROR_CODES.SHARED.PHONE_INVALID]: "Số điện thoại không hợp lệ",
+        [ERROR_CODES.SHARED.NOT_NUMBER]: "Bắt buộc là số!"
+    },
     DEVICE: {
         [ERROR_CODES.SUCCESS]: 'Kiểm tra thành công, không có sự thay đổi nào của thiết bị',
         [ERROR_CODES.DEVICE.DEVICE_NOT_FOUND]: 'Không tồn tại thiết bị',
@@ -31,6 +59,22 @@ const ERROR_MESSAGES = {
         [ERROR_CODES.DEVICE.OUT_OF_STOCK]: 'Thiết bị không đủ số lượng để mua hàng',
         [ERROR_CODES.DEVICE.NAME_CHANGED]: 'Tên thiết bị có thay đổi',
         [ERROR_CODES.DEVICE.INTERNAL_ERROR]: 'Lỗi nội bộ của máy chủ'
+    },
+    CATEGORY: {
+        [ERROR_CODES.SUCCESS]: 'Thao tác với danh mục thành công',
+        [ERROR_CODES.CATEGORY.NOT_FOUND]: 'Không tìm thấy danh mục yêu cầu!',
+    },
+    UNIT: {
+        [ERROR_CODES.SUCCESS]: 'Thao tác với đơn vị tính thành công',
+        [ERROR_CODES.UNIT.NOT_FOUND]: 'Không tìm thấy đơn vị tính yêu cầu!',
+    },
+    WARRANTY_TIME: {
+        [ERROR_CODES.SUCCESS]: 'Thao tác với thời gian bảo hành thành công',
+        [ERROR_CODES.WARRANTY_TIME.NOT_FOUND]: 'Không tìm thấy thời gian bảo hành yêu cầu!',
+    },
+    ATTRIBUTE: {
+        [ERROR_CODES.ATTRIBUTE.NOT_FOUND]: "Không tìm thấy thuộc tính!",
+        [ERROR_CODES.ATTRIBUTE.NAME_EXISTED]: "Tên thuộc tính đã tồn tại!"
     },
     ORDER: {
         [ERROR_CODES.SUCCESS]: 'Kiểm tra thành công, đơn hàng được tạo thành công',

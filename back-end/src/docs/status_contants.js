@@ -1,5 +1,9 @@
 const STATUS = {
-    Device: {
+    DEVICE: {
         
     }
+}
+
+module.exports = {
+    STATUS
 }

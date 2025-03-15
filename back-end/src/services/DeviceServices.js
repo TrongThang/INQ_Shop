@@ -3,7 +3,7 @@ const { Op, Sequelize, or, where } = require('sequelize');
 const { convertToSlug } = require('../helpers/string');
 const Category = require('../models/Category');
 const Device = require('../models/Device');
-// const { get_error_response } = require('../helpers/response')
+const get_error_response = require('../helpers/response');
 // const { Device, ReviewDevice } = require('../models/Init-models');
 const ReviewDevice = require('../models/Review_device');
 const Customer = require('../models/Customer');
@@ -17,6 +17,7 @@ const { STATUS_CODES } = require('../../../statusContaints');
 const Liked = require('../models/Liked');
 const { isExistId, validate_name, validate_number } = require('../helpers/validate');
 const { check_reference_existence } = require('../helpers/sql_query')
+// const { get_error_response } = require('../helpers/response')
 
 const checkDevice = async (deviceReceive) => {
     try {
@@ -645,6 +646,7 @@ const check_id_reference_for_device = async (device_id, category_id, unit_id, wa
 
     return null
 }
+
 const updateDevice = async (deviceSend) => {
     const {id, category_id, unit_id, warranty_time_id} = deviceSend
     const result_check = check_id_reference_for_device(device_id = id, category_id = category_id, unit_id = unit_id, warranty_time_id = warranty_time_id)
@@ -833,6 +835,7 @@ const getAllReviewForDevice_admin = async () => {
 
     return comments;
 }
+
 const getReviewById = async (idReview) => {
     try {
         const review = await ReviewDevice.findOne({

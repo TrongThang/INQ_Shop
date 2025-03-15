@@ -10,8 +10,8 @@ const {
     cancelOrderAdmin,
     cancelOrder,
 } = require('../../services/OrdersServices.js');
-const { ERROR_CODES } = require('../../../../contants.js');
-const { STATUS_CODES } = require('../../../../statusContaints.js');
+const { ERROR_CODES } = require('../../docs/contants.js');
+const { STATUS_CODES } = require('../../docs/status_contants.js');
 
 const getAllOrderAPI = async (req, res) => {
     //TO DO SOMETHING

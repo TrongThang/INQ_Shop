@@ -43,21 +43,21 @@ const validate_name = async (name, model, existingId = null, maxLength = 255, is
     return null;
 };
 
-const validate_number = (number, range = null) => {
+const validate_number = (number, start = 0, end = null, field = null) => {
     if (number === null || number === undefined) {
         return { error: "Giá trị không hợp lệ", code: 400 };
     }
 
     number = parseFloat(number);
     if (isNaN(number)) {
-        return get_error_response(errorCode = ERROR_CODES.SHARED.NOT_NUMBER, status_code = 406)
+        return get_error_response(errorCode = ERROR_CODES.SHARED.NOT_NUMBER, status_code = 406, )
     }
 
     if (number < 0) {
         return get_error_response(errorCode = ERROR_CODES.SHARED.NUMBER_RANGE_100_INVALID, status_code = 406)
     }
     
-    if (range && number > range) {
+    if (end && number > end) {
         return get_error_response(errorCode = ERROR_CODES.SHARED.NUMBER_RANGE_100_INVALID, status_code = 406)
     }
 

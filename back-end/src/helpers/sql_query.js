@@ -95,7 +95,7 @@ async function executeSelectData({
     page = null,
     sort = null,
     order = null,
-    queryJoin = null
+    query_join = null
 }) {
     // Xây dựng WHERE clause
     const buildWhere = filter ? buildWhereQuery(filter, table) : `WHERE ${table}.deleted_at IS NULL`;

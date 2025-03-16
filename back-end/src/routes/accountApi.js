@@ -2,6 +2,8 @@ const express = require('express');
 const {
     getLoginAPI,
     getAccountByIdAPI,
+    checkLoginAPI,
+    logoutAPI,
     createAccountAPI,
     updateAccountAPI,
 
@@ -9,7 +11,8 @@ const {
 const routerAccount = express.Router();
 
 routerAccount.post('/login', getLoginAPI);  
-// routerAccount.get('/:id', getAccountByIdAPI);  
+routerAccount.get('/check-login', checkLoginAPI);  
+routerAccount.post('/logout', logoutAPI);
 routerAccount.post('/', createAccountAPI);  
 routerAccount.put('/:id', updateAccountAPI);   
 

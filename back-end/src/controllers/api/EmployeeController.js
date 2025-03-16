@@ -1,146 +1,227 @@
+const { ERROR_CODES, ERROR_MESSAGES } = require('../../../../contants');
+const fs = require('fs');
+const { isValidEmail, compareData, isValidPhone,
+    isValidSurname, isValidLastname,
+    isValidBirthDate } = require('../../helpers/validate');
 const {
     getAllEmployees,
     getEmployeeById,
     createEmployee,
+    createAccountEmployee,
     updateEmployee,
-    deleteEmployee,
+    EmployeeStatus,
+    existingPhone,
+    existingEmail,
 } = require('../../services/EmployeeServices');
 
 const getAllEmployeesAPI = async (req, res) => {
     try {
         const employees = await getAllEmployees();
-        res.status(200).json({ success: true, data: employees });
+        res.status(200).json({
+            success: true,
+            data: employees,
+            pagination: {}
+        });
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        res.status(ERROR_CODES.COMMON.INTERNAL_ERROR).json({
+            success: false,
+            message: error.message
+        });
     }
 };
-
 const getEmployeeByIdAPI = async (req, res) => {
-    const id = req.params.id;
-
+    const { id } = req.params;
     try {
-        console.log('ID: ', id)
-        const customer = await getEmployeeById(id);
+        const employee = await getEmployeeById(id);
 
-        if (!customer) {
-            return res.status(404).json({
+        if (!employee) {
+            return res.status(ERROR_CODES.COMMON.NOT_FOUND).json({
                 success: false,
-                message: "Employee not found."
+                message: ERROR_MESSAGES.EMPLOYEE[ERROR_CODES.COMMON.NOT_FOUND]
             });
         }
 
         return res.status(200).json({
             success: true,
-            data: customer
+            data: employee
         });
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({
+
+        return res.status(ERROR_CODES.COMMON.INTERNAL_ERROR).json({
             success: false,
-            message: "Internal Server Error"
+            message: ERROR_MESSAGES.EMPLOYEE[ERROR_CODES.COMMON.INTERNAL_ERROR],
+            error: error.message
         });
     }
 };
-
-
-const postCreateEmployeeAPI = async (req, res) => {
-    // try {
-    //     const data = req.body;
-    //     const employee = await createEmployee(data);
-    //     res.status(201).json({ success: true, data: employee });
-    // } catch (error) {
-    //     res.status(500).json({ success: false, message: error.message });
-    // }
-
+const convertImageToBase64 = async (imagePath) => {
     try {
-        const { surname, lastname, identityNumber, email, phone, birthdate } = req.body;
+        // Đọc file ảnh từ đường dẫn
+        const imageData = fs.readFileSync(imagePath);
 
+        // Chuyển đổi dữ liệu ảnh thành chuỗi base64
+        const base64Image = Buffer.from(imageData).toString('base64');
+
+        return base64Image;
+    } catch (error) {
+        console.error('Error converting image to base64:', error);
+        throw error;
+    }
+};
+const postCreateEmployeeAPI = async (req, res) => {
+    try {
+        const { surname, lastname, identityNumber, image = "", gender, email, phone, birthdate } = req.body;
         // Kiểm tra các điều kiện đầu vào
-        if (!surname || surname.trim() === "") {
-            return res.status(400).json({ success: false, message: "Surname là bắt buộc." });
+        if (!surname || !isValidSurname(surname) || surname.trim() === "") {
+            return res.status(ERROR_CODES.COMMON.BAD_REQUEST).json(
+                { success: false, message: ERROR_MESSAGES.EMPLOYEE[ERROR_CODES.EMPLOYEE.SUR_NAME] }
+            );
         }
-        if (!lastname || lastname.trim() === "") {
-            return res.status(400).json({ success: false, message: "Lastname là bắt buộc." });
+        if (!lastname || !isValidLastname(lastname) || lastname.trim() === "") {
+            return res.status(ERROR_CODES.COMMON.BAD_REQUEST).json(
+                { success: false, message: ERROR_MESSAGES.EMPLOYEE[ERROR_CODES.EMPLOYEE.LAST_NAME] }
+            );
         }
         if (!identityNumber || identityNumber.trim() === "") {
-            return res.status(400).json({ success: false, message: "Identity Number là bắt buộc." });
+            return res.status(ERROR_CODES.COMMON.BAD_REQUEST).json(
+                { success: false, message: ERROR_MESSAGES.EMPLOYEE[ERROR_CODES.EMPLOYEE.IDENTITY_NUMBER] }
+            );
         }
-        if (email && !/^\S+@\S+\.\S+$/.test(email)) {
-            return res.status(400).json({ success: false, message: "Email không hợp lệ." });
+        if (email && !isValidEmail(email)) {
+            return res.status(ERROR_CODES.COMMON.BAD_REQUEST).json(
+                { success: false, message: ERROR_MESSAGES.EMPLOYEE[ERROR_CODES.EMPLOYEE.EMAIL] }
+            );
         }
-        if (phone && isNaN(phone)) {
-            return res.status(400).json({ success: false, message: "Phone phải là số." });
-        }
-        if (birthdate && isNaN(Date.parse(birthdate))) {
-            return res.status(400).json({ success: false, message: "Birthdate không hợp lệ." });
+        if (phone && !isValidPhone(phone)) {
+            return res.status(ERROR_CODES.COMMON.BAD_REQUEST).json(
+                { success: false, message: ERROR_MESSAGES.EMPLOYEE[ERROR_CODES.EMPLOYEE.PHONE] }
+            );
         }
 
+        if (birthdate && !isValidBirthDate(birthdate)) {
+            return res.status(ERROR_CODES.COMMON.BAD_REQUEST).json(
+                { success: false, message: ERROR_MESSAGES.EMPLOYEE[ERROR_CODES.EMPLOYEE.BIRTH_DATE] }
+            );
+        }
+        const existingEmails = await existingEmail(email);
+        const existingPhones = await existingPhone(phone);
+        //Kiểm tra trùng Email
+        if (existingEmails) {
+            return res.status(ERROR_CODES.COMMON.BAD_REQUEST).json(
+                { success: false, message: ERROR_MESSAGES.EMPLOYEE[ERROR_CODES.EMPLOYEE.EXISTING_EMAIL] }
+            );
+        }
+        //Kiểm tra trùng số điện thoại
+        if (existingPhones) {
+            return res.status(ERROR_CODES.COMMON.BAD_REQUEST).json(
+                { success: false, message: ERROR_MESSAGES.EMPLOYEE[ERROR_CODES.EMPLOYEE.EXISTING_PHONE] }
+            );
+        }
+
+        let base64Image = "";
+        if (image && fs.existsSync(image)) {
+            base64Image = convertImageToBase64(image);
+        }
         // Tạo nhân viên mới nếu dữ liệu hợp lệ
-        const employee = await createEmployee(req.body);
-        res.status(201).json({ success: true, data: employee });
+        const employees = await createEmployee({ ...req.body, image: base64Image });
+        //Tạo tài khoản cho nhân viên mới
+        const accountEmployees = await createAccountEmployee(employees);
+        res.status(200).json(
+            {
+                success: true,
+                data: employees,
+                account: accountEmployees
+            });
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        res.status(ERROR_CODES.COMMON.INTERNAL_ERROR).json(
+            { success: false, message: error.message }
+        );
     }
 };
-
 const putUpdateEmployeeAPI = async (req, res) => {
-    // try {
-    //     const { id } = req.params;
-    //     const data = req.body;
-    //     const employee = await updateEmployee(id, data);
-    //     if (!employee) {
-    //         return res.status(404).json({ success: false, message: 'Employee not found.' });
-    //     }
-    //     res.status(200).json({ success: true, data: employee });
-    // } catch (error) {
-    //     res.status(500).json({ success: false, message: error.message });
-    // }
     try {
         const { id } = req.params;
-        const { surname, lastname, identityNumber, email, phone, birthdate } = req.body;
+        const { surname, lastname, email, phone, image = "", gender, birthdate } = req.body;
 
         // Kiểm tra các điều kiện đầu vào
-        if (surname && surname.trim() === "") {
-            return res.status(400).json({ success: false, message: "Surname không được để trống." });
+        if (!surname || !isValidSurname(surname) || surname.trim() === "") {
+            return res.status(ERROR_CODES.COMMON.BAD_REQUEST).json(
+                { success: false, message: ERROR_MESSAGES.EMPLOYEE[ERROR_CODES.EMPLOYEE.SUR_NAME] }
+            );
         }
-        if (lastname && lastname.trim() === "") {
-            return res.status(400).json({ success: false, message: "Lastname không được để trống." });
+        if (!lastname || !isValidLastname(lastname) || lastname.trim() === "") {
+            return res.status(ERROR_CODES.COMMON.BAD_REQUEST).json(
+                { success: false, message: ERROR_MESSAGES.EMPLOYEE[ERROR_CODES.EMPLOYEE.LAST_NAME] }
+            );
         }
-        if (identityNumber && identityNumber.trim() === "") {
-            return res.status(400).json({ success: false, message: "Identity Number không được để trống." });
+        if (email && !isValidEmail(email)) {
+            return res.status(ERROR_CODES.COMMON.BAD_REQUEST).json(
+                { success: false, message: ERROR_MESSAGES.EMPLOYEE[ERROR_CODES.EMPLOYEE.EMAIL] }
+            );
         }
-        if (email && !/^\S+@\S+\.\S+$/.test(email)) {
-            return res.status(400).json({ success: false, message: "Email không hợp lệ." });
+        if (phone && !isValidPhone(phone)) {
+            return res.status(ERROR_CODES.COMMON.BAD_REQUEST).json(
+                { success: false, message: ERROR_MESSAGES.EMPLOYEE[ERROR_CODES.EMPLOYEE.PHONE] }
+            );
         }
-        if (phone && isNaN(phone)) {
-            return res.status(400).json({ success: false, message: "Phone phải là số." });
+        if (birthdate && !isValidBirthDate(birthdate)) {
+            return res.status(ERROR_CODES.COMMON.BAD_REQUEST).json(
+                { success: false, message: ERROR_MESSAGES.EMPLOYEE[ERROR_CODES.EMPLOYEE.BIRTH_DATE] }
+            );
         }
-        if (birthdate && isNaN(Date.parse(birthdate))) {
-            return res.status(400).json({ success: false, message: "Birthdate không hợp lệ." });
+        // Lấy thông tin hiện tại của nhân viên
+        const currentEmployee = await getEmployeeById(id);
+        if (!currentEmployee) {
+            return res.status(ERROR_CODES.COMMON.NOT_FOUND).json(
+                { success: false, message: ERROR_MESSAGES.EMPLOYEE[ERROR_CODES.COMMON.NOT_FOUND] }
+            );
         }
 
+        // So sánh dữ liệu mới và dữ liệu cũ
+        const newData = { surname, lastname, email, phone, gender, birthdate };
+        const isDataChanged = compareData(newData, currentEmployee);
+        console.log("currentEmployee", currentEmployee);
+        console.log("isDataChanged", isDataChanged);
+        console.log("newData", newData);
+
+        //kiểm tra dữ liệu có thay đổi không
+        if (!isDataChanged) {
+            return res.status(ERROR_CODES.COMMON.BAD_REQUEST).json(
+                { success: false, message: ERROR_MESSAGES.EMPLOYEE[ERROR_CODES.EMPLOYEE.COMPARE_DATA] }
+            );
+        }
         // Cập nhật thông tin nhân viên nếu dữ liệu hợp lệ
-        const employee = await updateEmployee(id, req.body);
-        if (!employee) {
-            return res.status(404).json({ success: false, message: "Employee not found." });
+        const updatedEmployee = await updateEmployee(id, newData);
+        if (!updatedEmployee) {
+            return res.status(ERROR_CODES.COMMON.NOT_FOUND).json(
+                { success: false, message: ERROR_MESSAGES.EMPLOYEE[ERROR_CODES.COMMON.NOT_FOUND] }
+            );
         }
-
-        res.status(200).json({ success: true, data: employee });
+        // Trả về kết quả thành công
+        res.status(200).json(
+            { success: true, data: updatedEmployee }
+        );
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        // Xử lý lỗi
+        res.status(ERROR_CODES.COMMON.INTERNAL_ERROR).json(
+            { success: false, message: error.message }
+        );
     }
 };
-
-const deleteEmployeeAPI = async (req, res) => {
+const statusEmployeeAPI = async (req, res) => {
     try {
         const { id } = req.params;
-        const employee = await deleteEmployee(id);
+        const employee = await EmployeeStatus(id);
         if (!employee) {
-            return res.status(404).json({ success: false, message: 'Employee not found.' });
+            return res.status(ERROR_CODES.COMMON.NOT_FOUND).json(
+                { success: false, message: ERROR_MESSAGES.EMPLOYEE[ERROR_CODES.COMMON.NOT_FOUND] }
+            );
         }
-        res.status(200).json({ success: true, message: 'Employee status updated to 0 (soft deleted).' });
+        res.status(200).json({ success: true, message: ERROR_MESSAGES.EMPLOYEE[ERROR_CODES.EMPLOYEE.DELETE_AT] });
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        res.status(ERROR_CODES.COMMON.INTERNAL_ERROR).json(
+            { success: false, message: error.message }
+        );
     }
 };
 
@@ -149,5 +230,5 @@ module.exports = {
     getEmployeeByIdAPI,
     postCreateEmployeeAPI,
     putUpdateEmployeeAPI,
-    deleteEmployeeAPI,
+    statusEmployeeAPI,
 };

@@ -5,7 +5,7 @@ const Employee = sequelize.define('employee', {
   id: {
     type: DataTypes.STRING(12),
     allowNull: false,
-    primaryKey: true
+    primaryKey: true,
   },
   surname: {
     type: DataTypes.STRING(500),
@@ -44,13 +44,11 @@ const Employee = sequelize.define('employee', {
   tableName: 'employee',
   timestamps: true,
   createdAt: 'created_at',
-
   updatedAt: false,
   indexes: [
     {
       name: "PRIMARY",
       unique: true,
-
       using: "BTREE",
       fields: [
         { name: "id" },
@@ -59,6 +57,8 @@ const Employee = sequelize.define('employee', {
   ]
 });
 
+// Import Account sau khi Employee đã được định nghĩa
+const Account = require('./Account');
 
 
 module.exports = Employee;

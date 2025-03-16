@@ -48,10 +48,10 @@ const createAccount = async (accountData, personData) => {
   const resultAccount = await Account.create(accountData);
   const resultPersonData = null;
 
-  if (accountData.idRole === 'E') {
+  if (accountData.idRole === 'EMP') {
     resultPersonData = await EmployeeService.createEmployee(personData)
   }
-  else if (accountData.idRole === 'C') {
+  else if (accountData.idRole === 'CUS') {
     resultPersonData = await CustomerService.createCustomer(personData);
   }
   return [resultAccount, resultPersonData];
@@ -88,7 +88,6 @@ const changePassword = async (username, password) => {
       where: { username }
     });
   }
-
   return false;
 }
 

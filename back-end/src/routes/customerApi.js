@@ -4,7 +4,7 @@ const {
     getCustomerByIdAPI,
     postCreateCustomerAPI,
     putUpdateCustomerAPI,
-    deleteCustomerAPI,
+    statusCustomerAPI,
 } = require('../controllers/api/CustomerController');
 const routerCustomer = express.Router();
 
@@ -14,7 +14,7 @@ routerCustomer.get('/:id', getCustomerByIdAPI); //
 
 routerCustomer.post('/', postCreateCustomerAPI);  ///
 routerCustomer.put('/:id', putUpdateCustomerAPI);  //
-routerCustomer.delete('/:id', deleteCustomerAPI);   //
+routerCustomer.put('/status/:id', statusCustomerAPI);   //
 
 
 module.exports = routerCustomer;

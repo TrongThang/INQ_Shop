@@ -33,7 +33,7 @@ const checkDevice = async (deviceReceive) => {
 
         const isDifferentSellingPrice = Number(deviceCheck.sellingPrice) !== Number(deviceReceive.sellingPrice);
         const noDeviceInStock = deviceReceive.quantity > (deviceCheck.warehouse.stock === null ? 0 : deviceCheck.warehouse.stock);
-        
+
         // Sản phẩm bị tắt thì sao
         if (!deviceCheck) {
             return {
@@ -81,7 +81,7 @@ const checkDevice = async (deviceReceive) => {
             detail: error || ERROR_MESSAGES.DEVICE[ERROR_CODES.DEVICE.INTERNAL_ERROR]
         }
     }
-} 
+}
 
 const checkListDevice = async (products) => {
     try {
@@ -175,17 +175,9 @@ const getAllDeviceByStatus = async (status = 1, limit = {}) => {
         }
 
     });
-    // const devicesWithDiscount = data.map(device => {
-    //     const sellingPrice = Number(device.sellingPrice);
-    //     const discountPrice = sellingPrice * 0.95; // Calculate 5% discount
-    //     return {
-    //         ...device.toJSON(),
-    //         discountPrice
-    //     };
-    // });
     return data; // Trả về danh sách sản phẩm
 };
-const getDeviceByCategory = async ({idDevice ,idCategory, limit = 5 }) => {
+const getDeviceByCategory = async ({ idDevice, idCategory, limit = 5 }) => {
     try {
         const data = await Device.findAll({
             where: {
@@ -197,7 +189,7 @@ const getDeviceByCategory = async ({idDevice ,idCategory, limit = 5 }) => {
             include: [
                 {
                     model: Category, // Kết hợp với model Category
-                    as:'categoryDevice',
+                    as: 'categoryDevice',
                     attributes: ['id', 'nameCategory'] // Chỉ lấy các trường cần thiết từ Category
                 }
             ],
@@ -228,7 +220,7 @@ const getTopSellingDevice = async () => {
             {
                 model: OrderDetail,
                 as: 'order_device',
-                attributes: [], 
+                attributes: [],
                 required: false
             }
         ],
@@ -540,7 +532,7 @@ const updateDevice = async (deviceSend, stock) => {
 }
 
 const updateStatusDevice = async (data) => {
-    console.log("req.body: ",data);
+    console.log("req.body: ", data);
     const valueIsHide = (data.status == 0) ? true : false;
 
     const [updatedCount] = await Device.update(
@@ -558,14 +550,14 @@ const increaseViewDevice = async ({ idDevice }) => {
     const device = await Device.findOne({ where: { idDevice } });
 
     if (!device) {
-        throw new Error('Không tìm thấy thiết bị'); 
+        throw new Error('Không tìm thấy thiết bị');
     }
 
     const newViewCount = device.views + 1;
 
     const [updatedCount] = await Device.update(
-        { views: newViewCount }, 
-        { where: { idDevice } } 
+        { views: newViewCount },
+        { where: { idDevice } }
     );
 
     return updatedCount;
@@ -617,15 +609,15 @@ const getAllReviewForDevice_admin = async () => {
                 model: Customer,
                 as: 'customerReview'
             },
-             {
-             model: Device,
+            {
+                model: Device,
                 as: 'device', // Thêm thông tin về thiết bị nếu cần
-                 attributes: ['idDevice', 'name'] // Chỉ lấy một số trường cần thiết
-          }
+                attributes: ['idDevice', 'name'] // Chỉ lấy một số trường cần thiết
+            }
         ],
         order: [['created_at', 'DESC']] // Sắp xếp theo thời gian cập nhật mới nhất
     });
-   
+
 
     return comments;
 }
@@ -637,7 +629,7 @@ const getReviewById = async (idReview) => {
                 {
                     model: Customer,
                     as: 'customerReview',
-            
+
                 },
                 {
                     model: Device,
@@ -660,7 +652,7 @@ const getReviewForCustomer = async (idDevice, idCustomer) => {
             idCustomer: idCustomer
         }
     });
-    
+
     return comments;
 }
 
@@ -673,13 +665,13 @@ const createReviewForDevice = async (body) => {
     return reviewForDevice;
 }
 
-const updateReviewForDevice = async ( idReview, body ) => {
-    const {idCustomer, idDevice, comment, rating } = body.comment;
-    
+const updateReviewForDevice = async (idReview, body) => {
+    const { idCustomer, idDevice, comment, rating } = body.comment;
+
     const [updatedCount] = await ReviewDevice.update(
         { idCustomer, idDevice, comment, rating },
         {
-        where: { idReview }
+            where: { idReview }
         }
     );
 
@@ -721,7 +713,7 @@ const updateStatusReviewForDevice = async ({ id, status }) => {
 
 module.exports = {
     checkDevice, checkListDevice,
-    getAllDevice_User, getAllDeviceByStatus, getAllDevice_Admin, 
+    getAllDevice_User, getAllDeviceByStatus, getAllDevice_Admin,
     getDeviceBySlug, getTOPDeviceLiked, getTopSellingDevice, getDeviceByCategory,
     createDevice, updateDevice, updateStatusDevice,
     updateStatusDeviceByCategory, increaseViewDevice,
@@ -730,6 +722,6 @@ module.exports = {
 
     //Review For Device
     getReviewForCustomer,
-    getAllReviewForDevice, getAllReviewForDevice_admin,   createReviewForDevice,
-    updateReviewForDevice, updateStatusReviewForDevice,getReviewById,updateReviewById
+    getAllReviewForDevice, getAllReviewForDevice_admin, createReviewForDevice,
+    updateReviewForDevice, updateStatusReviewForDevice, getReviewById, updateReviewById
 }

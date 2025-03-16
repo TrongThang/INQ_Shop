@@ -1,9 +1,10 @@
-import { Link } from "react-router-dom";
 
-const Register = () => {
+const Register = ({ setfirtname, 
+  setlastname, setusername, 
+  setpassword, setemail, setphone, 
+  setgender, setcomfirmpassword }) => {
   return (
     <>
-    
       {/* Modal */}
       <div
         className="modal fade"

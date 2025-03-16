@@ -8,18 +8,28 @@ import Cookies from 'js-cookie';
 export default function AreaCustomer({ isLogged }) {
     const { getTotalItem, getTotalPrice } = useCart();
     const navigate = useNavigate();
-    const handleLogout = () => {
-        localStorage.removeItem("authToken");
-        isLogged = false;
+    const handleLogout = async () => {
+        try {
+            const response = await fetch('http://localhost:8081/api/account/logout', {
+                method: 'POST',  // Đảm bảo phương thức đúng (trong backend đã định nghĩa là POST)
+                credentials: 'include'  // Cho phép gửi session cookie
+            });
 
-        // Show the toast notification
-        navigate('/');
-        setTimeout(() => {
-            window.location.reload();
-        }, 500);   
-        // Redirect to login page after a short de  lay
-        toast.success("Đăng xuất thành công!");
-        // Hide the toast after 3 seconds
+            const result = await response.json();
+            if (result.success) {
+                toast.success("Đăng xuất thành công!");
+
+                setTimeout(() => {
+                    navigate('/');  // Chuyển hướng về trang chủ
+                    window.location.reload();  // Tải lại trang sau 500ms
+                }, 500);
+            } else {
+                toast.error(result.message || "Đăng xuất thất bại!");
+            }
+        } catch (error) {
+            console.error("Lỗi đăng xuất:", error);
+            toast.error("Đã xảy ra lỗi trong quá trình đăng xuất!");
+        }
     };
 
     const fetchDeviceInCart = async () => {
@@ -68,7 +78,6 @@ export default function AreaCustomer({ isLogged }) {
                     </div>
                 </Link>
             </div>
-
             {/* <!-- END Price & Cart --> */}
 
             {/* <!-- PROFILE --> */}

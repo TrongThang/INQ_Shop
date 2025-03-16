@@ -71,6 +71,31 @@ const getAllDeviceByUserAPI = async (req, res) => {
         });
     }
 }
+
+//Lấy thiết bị liên quan
+const getDevice_byCategoryAPI = async (req, res) => {
+    try {
+        
+        // Extracting idCategory and limit from the request body or query
+        const limit = 5 ; // or req.query if you're using query parameters
+        const {idCategory} = req.params
+        const {idDevice} = req.params
+        // Call the getDeviceByCategory function with idCategory and limit
+        const result = await getDeviceByCategory({idCategory,idDevice, limit });
+
+        return res.status(200).json({
+            errorCode: 0,
+            data: result
+        });
+    } catch (error) {
+        console.error('Error in getDevice_byCategoryAPI:', error.message);
+        return res.status(500).json({
+            errorCode: 1,
+            msg: 'Có lỗi xảy ra trong quá trình lấy dữ liệu các Thiết bị',
+            details: error.message,
+        });
+    }
+};
 const getAllDevice_DiscountAPI = async (req, res) => {
     try {
         const { status = 2, limit = 10 } = req.body;
@@ -108,29 +133,7 @@ const getAllDevice_FeaturedAPI = async (req, res) => {
         });
     }
 }
-const getDevice_byCategoryAPI = async (req, res) => {
-    try {
-        
-        // Extracting idCategory and limit from the request body or query
-        const limit = 5 ; // or req.query if you're using query parameters
-        const {idCategory} = req.params
-        const {idDevice} = req.params
-        // Call the getDeviceByCategory function with idCategory and limit
-        const result = await getDeviceByCategory({idCategory,idDevice, limit });
 
-        return res.status(200).json({
-            errorCode: 0,
-            data: result
-        });
-    } catch (error) {
-        console.error('Error in getDevice_byCategoryAPI:', error.message);
-        return res.status(500).json({
-            errorCode: 1,
-            msg: 'Có lỗi xảy ra trong quá trình lấy dữ liệu các Thiết bị',
-            details: error.message,
-        });
-    }
-};
 const getAllDevice_NewAPI = async (req, res) => {
     try {
         const { status = 4, limit = 10 } = req.body;

@@ -22,7 +22,6 @@ const getAllCategory_UserAPI = async (req, res) => {
             error: error
         })
     }
-
 }
 const getCategoryByUserAPI = async (req, res) => {
     try {

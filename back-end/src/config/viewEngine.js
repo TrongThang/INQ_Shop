@@ -1,23 +1,33 @@
 //const path = require('path');
 const express = require('express');
 const cookieParser = require('cookie-parser')
-const cors = require('cors');
+require('dotenv').config();
 const session = require('express-session');
-const configViewEngine = (app) => {
-    //app.set('views', './src/views');
-    //app.set('view engine', 'ejs');
+const cors = require('cors');
 
-    app.use(express.static('./src/public'));
-    app.use(express.json());
-    app.use(express.urlencoded({ extended: true }));
-    app.use(cookieParser());
-    app.use(cors());
-    app.use(session({
-        secret: 'ddc5b6c8f8a7e3e3c4b5e6d7c8a9f1f2e3c4a5b6e7c8a9f0f1a2b3c4d5e6f7g8', // Thay bằng chuỗi bí mật của bạn
-        resave: false,             // Không lưu lại session nếu không thay đổi
-        saveUninitialized: true,   // Lưu session ngay cả khi chưa được khởi tạo
-        cookie: { secure: false }  // Đặt `true` nếu sử dụng HTTPS
-      }));
+const configViewEngine = (app) => {
+  //app.set('views', './src/views');
+  //app.set('view engine', 'ejs');
+  app.use(cors({
+    origin: 'http://localhost:3000', // Đổi theo domain frontend của bạn
+    credentials: true // Cho phép gửi cookies, session
+  }));
+  app.use(express.static('./src/public'));
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+  app.use(cookieParser());
+  app.use(session({
+    secret: process.env.SECRET_KEY || 'H8z!nT1G6G$@Dbv9iQX@2hMnqR#0A2F',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false, // Để false nếu dùng HTTP, true nếu dùng HTTPS
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24, // 1 ngày
+      sameSite: 'lax'
+    }
+  }));
+
 }
 
 module.exports = configViewEngine;

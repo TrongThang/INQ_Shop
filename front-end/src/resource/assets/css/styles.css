@@ -80,8 +80,7 @@
 }
 
 .card-body {
-    padding: 25.6px;
-    padding: 1.6rem;
+    padding: 10px 25.6px;
 }
 
 .h-full {

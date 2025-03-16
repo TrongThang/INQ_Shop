@@ -7,8 +7,6 @@ export default function Login_Admin() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-
-
   
   const handleLogin = async (e) => {
     e.preventDefault();

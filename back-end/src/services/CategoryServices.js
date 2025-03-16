@@ -67,7 +67,7 @@ const getCategoryByUser = async () => {
                 status: 1      // Chỉ lấy danh mục có trạng thái hoạt động
             },
             order: [['created_at', 'ASC']], // Sắp xếp theo thời gian tạo tăng dần
-            limit: 6                       // Giới hạn 5 danh mục đầu tiên
+            limit: 6                       // Giới hạn 6 danh mục đầu tiên
         });
 
         return categories; // Trả về danh sách 5 danh mục
@@ -102,11 +102,9 @@ const getChildrenCategory = async (parentId) => {
     const categories = await Category.findAll({
         where: { parentId: parentId },
     });
-
     if (categories.length === 0) {
         return [];
     }
-
     const children = await Promise.all(
         categories.map(async (category) => {
             const subCategories = await getChildrenCategory(category.id);

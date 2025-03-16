@@ -7,63 +7,122 @@ const {
   updateStatusAccount,
   changePassword,
 } = require('../../services/AccountServices');
-const jwt = require('jsonwebtoken');
 require('dotenv').config();
+
+const axios = require("axios");
+// Lưu số lần đăng nhập sai theo từng username
+const failedLoginAttempts = {};
+
 const getLoginAPI = async (req, res) => {
   try {
-    const { username, password, type } = req.body;
-    console.log(username, password, type);
+    const { username, password, type, captchaResponse } = req.body;
 
-    const account = await getLogin(username, password, type);
-    let token;
-    if (account) {
-      // Tạo token JWT khi đăng nhập thành công
-      
-      token = jwt.sign(
-        {
-          idPerson: account.idPerson,
-          username: account.username,
-          idRole: account.idRole
+    // Kiểm tra nếu nhập sai >= 3 lần, yêu cầu CAPTCHA
+    if (failedLoginAttempts[username] >= 3) {
+      if (!captchaResponse) {
+        return res.status(403).json({
+          success: false,
+          message: "Vui lòng xác nhận CAPTCHA trước khi đăng nhập.",
+        });
+      }
+
+      // Xác thực CAPTCHA với Google
+      const secretKey = "6LcAGtkqAAAAAEKMuh7jeoYkKAfhpqj2gYHsxnR9"; // Lấy secret key từ .env
+      const verifyUrl = `https://www.google.com/recaptcha/api/siteverify`;
+
+      const captchaVerify = await axios.post(verifyUrl, null, {
+        params: {
+          secret: secretKey,
+          response: captchaResponse,
         },
-        process.env.SECRET_KEY, // Use secret key from environment variable
-        { expiresIn: '1h' } // Token expires after 1 hour
-      );
-      
+      });
 
-      // Lưu thông tin vào session nếu cần thiết
-      req.session.isLogged = true;
-      req.session.idPerson = account.idPerson;
-
-      return res.status(200).json({ token });
+      if (captchaVerify.data.success) {
+        return res.status(403).json({
+          success: false,
+          message: "Xác thực CAPTCHA không thành công.",
+        });
+      }
     }
 
-    return res.status(404).json(false);
+    // Xác thực thông tin đăng nhập
+    const account = await getLogin(username, password, type);
+
+    if (account) {
+      // Reset số lần nhập sai nếu đăng nhập thành công
+      failedLoginAttempts[username] = 0;
+
+      // Lưu session
+      req.session.isLogged = true;
+      req.session.user = {
+        idPerson: account.idPerson,
+        username: account.username,
+        idRole: account.idRole,
+      };
+      console.log("Session sau lưu:", req.session);
+
+      return res.status(200).json({
+        success: true,
+        message: "Đăng nhập thành công",
+        user: req.session.user,
+        isLogged: req.session.isLogged,
+      });
+    }
+
+    // Tăng số lần nhập sai
+    failedLoginAttempts[username] = (failedLoginAttempts[username] || 0) + 1;
+
+    return res.status(404).json({
+      success: false,
+      message: "Tài khoản hoặc mật khẩu không chính xác",
+      failedAttempts: failedLoginAttempts[username],
+    });
   } catch (error) {
+    console.error("Lỗi đăng nhập:", error.message);
     return res.status(500).json({
       success: false,
-      message: 'Đã xảy ra lỗi trong quá trình đăng nhập',
-      details: error.message
+      message: "Đã xảy ra lỗi trong quá trình đăng nhập",
+      details: error.message,
     });
   }
 };
-// const getAccountByIdAPI = async (req, res) => {
-//   try {
-//     const { idPerson } = req.params;
-//     const account = await getAccountById(idPerson);
-//     if (account) {
-//       res.status(200).json({ success: true, data: account });
-//     } else {
-//       res.status(404).json({ success: false, message: 'Account not found.' });
-//     }
-//   } catch (error) {
-//     res.status(500).json({ success: false, message: error.message });
-//   }
-// };
+const logoutAPI = (req, res) => {
+  const { username } = req.session.user;
+
+  // Clear failed login attempts for the user
+  delete failedLoginAttempts[username];
+
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ success: false, message: "Lỗi đăng xuất" });
+    }
+    res.clearCookie('connect.sid'); // Xóa cookie session
+    return res.status(200).json({ success: true, message: "Đăng xuất thành công" });
+  });
+};
+const checkLoginAPI = (req, res) => {
+  if (req.session.isLogged) {
+    return res.status(200).json({
+      success: true,
+      user: req.session.user,
+    });
+  } else {
+    return res.status(401).json({
+      success: false,
+      isLogged: req.session.isLogged == false,
+      message: "Chưa đăng nhập"
+    });
+  }
+};
+
 
 // Create a new account
 const createAccountAPI = async (req, res) => {
   try {
     const accountData = req.body;
+    console.log("AaccountData", accountData)
+    console.log("newAccount", newAccount)
+
     const newAccount = await createAccount(accountData);
     res.status(201).json({ success: true, data: newAccount });
   } catch (error) {
@@ -106,6 +165,8 @@ module.exports = {
   getLoginAPI,
   // getAccountByIdAPI,
   createAccountAPI,
+  checkLoginAPI,
+  logoutAPI,
   updateAccountAPI,
   softDeleteAccountAPI
 };

@@ -13,7 +13,6 @@ const STATUS_CODES = {
         ACTIVE: 1,
     },
     CONTACT: {
-        
     }
 }
 

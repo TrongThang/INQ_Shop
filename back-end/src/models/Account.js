@@ -1,8 +1,6 @@
 const sequelize = require('../config/database');
 const { DataTypes } = require('sequelize');
 const Role = require('./Role');
-const Employee= require('./Employee');
-const Customer = require('./Customer');
 
 const Account = sequelize.define('account', {
   idPerson: {
@@ -74,7 +72,8 @@ const Account = sequelize.define('account', {
   ]
 });
 
-Account.belongsTo(Role, { foreignKey: 'idRole', as: 'role' });
+// Import Employee sau khi Account đã được định nghĩa
+const Employee = require('./Employee');
 Account.belongsTo(Employee, { foreignKey: 'idPerson', as: 'employee' });
 
 module.exports = Account;

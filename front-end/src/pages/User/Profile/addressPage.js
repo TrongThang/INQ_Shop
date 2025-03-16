@@ -4,11 +4,14 @@ import AddressItems from '../../../component/user/Profile/addressItems';
 import PopupAddress from '../../../component/user/Profile/popupAddress';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
+import axios from 'axios';
 const AddressPage = () => {
     const [addressBook, setAddressBook] = useState([]); // Danh sách địa chỉ
     const [showModal, setShowModal] = useState(false); // Trạng thái hiển thị popup
     const [selectedAddress, setSelectedAddress] = useState(null); // Địa chỉ được chọn để cập nhật
     const [formData, setFormData] = useState({ // Dữ liệu của form (thêm mới hoặc cập nhật)
+        nameReceive: '',
         phone: '',
         city: '',
         district: '',
@@ -16,24 +19,35 @@ const AddressPage = () => {
         street: '',
         isDefault: 0
     });
+
     const navigate = useNavigate(); // Hàm điều hướng đến trang khác
     const [idCustomer, setIdCustomer] = useState(null); // State for idCustomer
     const [loading, setLoading] = useState(true);
     const toggleModal = () => setShowModal(!showModal); // Hàm chuyển đổi trạng thái hiển thị modal
 
-    // Get the idCustomer from the JWT token stored in localStorage
+    const [provincesVietNam, setProvincesVietNam] = useState([]);
+
+    const fetchProvinceVietNam = async () => {
+        const response = await axios.get(`https://provinces.open-api.vn/api/?depth=3`)
+
+        const result = await response.data;
+
+        setProvincesVietNam(result);
+    }
+
     useEffect(() => {
         const token = localStorage.getItem('authToken');
         if (token) {
             const decoded = jwtDecode(token); // Decode the JWT token
             setIdCustomer(decoded.idPerson); // Set idCustomer from decoded token
         }
+
+        fetchProvinceVietNam()
         setLoading(false);
         document.title = 'Địa chỉ | INQ';
 
     }, []);
 
-    // Lắng nghe sự thay đổi của idCustomer
     // Lắng nghe sự thay đổi của idCustomer
     useEffect(() => {
         if (loading) return; // Nếu đang loading, không thực hiện gì
@@ -51,6 +65,7 @@ const AddressPage = () => {
         try {
             const response = await fetch(`http://localhost:8081/api/addressBook/${idCustomer}`);
             const result = await response.json();
+            console.log(result.data)
             setAddressBook(result.data); // Cập nhật danh sách địa chỉ
         } catch (err) {
             console.error(err); // In lỗi nếu có lỗi khi lấy dữ liệu
@@ -61,7 +76,8 @@ const AddressPage = () => {
     const handleUpdateClick = (address) => {
         setSelectedAddress(address); // Chọn địa chỉ cần cập nhật
         setFormData({
-            phone: address.customer.phone,
+            nameReceive: address.nameReceive,
+            phone: address.phone,
             city: address.city,
             district: address.district,
             ward: address.ward,
@@ -143,17 +159,27 @@ const AddressPage = () => {
 
     // Xử lý gửi form (thêm mới hoặc cập nhật địa chỉ)
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Prevent form from reloading the page
+        e.preventDefault();
+        //Lấy tỉnh/tp 
+        const province = provincesVietNam.find(c => c.code == formData.city)
+        //Lấy danh sách các quận/huyện của province
+        const districts = province.districts || [];
+
+        //Lấy 1 quận huyện ngdung lưu
+        const district = districts.find(d => d.code == formData.district);
+        //Lấy 1 xã ngdung lưu
+        const ward = district.wards.find(d => d.code == formData.ward);
+
         const newAddress = {
             ...formData,
             idCustomer,
+            city: province.code,district: district.code, ward: ward.code,
             isDefault: formData.isDefault ? 1 : 0
-        }; // Only pass idCustomer once, not in isDefault
+        };
 
         const addressId = selectedAddress ? selectedAddress.id : null;
 
         if (addressId) {
-            // Update the current address (PUT request)
             try {
                 const response = await fetch(`http://localhost:8081/api/addressBook/${addressId}/${idCustomer}`, {
                     method: 'PUT',
@@ -168,8 +194,8 @@ const AddressPage = () => {
                     setAddressBook(prevState => prevState.map(address =>
                         address.id === addressId ? result.data : address
                     ));
-                    toggleModal(); // Close the modal after successful update
-                    console.log('Handlesubmit', result.data);
+
+                    toggleModal()
                 } else {
                     console.error('Error:', result.message);
                 }
@@ -177,7 +203,6 @@ const AddressPage = () => {
                 console.error('Error:', error);
             }
         } else {
-            // Add new address (POST request)
             try {
                 const response = await fetch('http://localhost:8081/api/addressBook', {
                     method: 'POST',
@@ -190,9 +215,23 @@ const AddressPage = () => {
                 const result = await response.json();
                 if (response.ok) {
                     setAddressBook(prevState => [...prevState, result.data]); // Add the new address to the list
-                    toggleModal(); // Close modal after adding
+
+                    await Swal.fire({
+                        title: 'Thông báo',
+                        text: 'Thêm địa chỉ mới thành công!',
+                        icon: 'success',
+                        confirmButtonText: 'Đã hiểu!',
+                    });
+
                     window.location.reload(); // Refresh the page
                 } else {
+                    await Swal.fire({
+                        title: 'Thông báo',
+                        text: 'Thêm địa chỉ mới thất bại!',
+                        icon: 'error',
+                        confirmButtonText: 'Đã hiểu!',
+                    });
+
                     console.error('Error:', result.message);
                 }
             } catch (error) {
@@ -206,6 +245,7 @@ const AddressPage = () => {
     const handleAddClick = () => {
         setSelectedAddress(null); // Xóa địa chỉ đã chọn (nếu có)
         setFormData({
+            nameReceive: '',
             phone: '',
             city: '',
             district: '',
@@ -236,7 +276,7 @@ const AddressPage = () => {
                                     onUpdateClick={handleUpdateClick}
                                     handleDeleteClick={handleDeleteClick}
                                     isStatus={isStatus} key={index} />
-                            )) : <p>Ko có địa chỉ.</p>}
+                            )) : <p>Không có địa chỉ.</p>}
                         </div>
                     </div>
                 </div>
@@ -246,11 +286,12 @@ const AddressPage = () => {
                     <PopupAddress
                         showModal={showModal}
                         toggleModal={toggleModal}
-                        formData={formData}
+                        formData={formData} setFormData={setFormData}
                         handleInputChange={handleInputChange}
                         handleSubmit={handleSubmit}
                         customerAddresses={addressBook}
                         selectedAddress={selectedAddress}
+                        provincesVietNam={provincesVietNam}
                     />
                 )}
             </div>

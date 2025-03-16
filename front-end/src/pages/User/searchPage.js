@@ -114,8 +114,8 @@ export default function SearchPage() {
                 onCategoryChange={handleCategoryChange}
                 onPriceChange={handlePriceChange}
             />
+            
             <div className="row col-xl-10">
-
                 <AreaSort onSortChange={handleSortChange} />
                 <h3>Có tổng { totalCount } thiết bị được tìm thấy</h3>
 

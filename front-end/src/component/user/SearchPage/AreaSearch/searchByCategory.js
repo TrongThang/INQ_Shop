@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function SearchByCategory({ dataToShow, onCategoryChange, searchResult }) {
+export default function SearchByCategory({ onCategoryChange, searchResult }) {
     const [categories, setCategories] = useState([]);
 
     const handleCheckCategory = (categoryId, isChecked) => {
@@ -17,7 +17,7 @@ export default function SearchByCategory({ dataToShow, onCategoryChange, searchR
 
         onCategoryChange(selectedCategories);
     };
-    // Lọc danh mục duy nhất từ searchResult
+    
     useEffect(() => {
         const uniqueCategories = [];
         const categoryIds = new Set();

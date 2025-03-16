@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 
 const AddressItems = ({ addressBook, isStatus, onUpdateClick, handleDeleteClick }) => {
+    
     return (
         <div className="d-flex justify-content-between align-items-start border-bottom border-primary pb-3 mb-3">
             <div>
                 <p className="mb-1">
-                    <strong>{addressBook?.customer?.lastName || ''}</strong> |
-                    <span>(+84) {addressBook?.customer?.phone || ''}</span>
+                    <strong>{addressBook?.nameReceive || ''}</strong> |
+                    <span>(+84) {addressBook?.phone || ''}</span>
                 </p>
                 <p className="mb-1 w-75">
                     {addressBook?.street}, {addressBook?.ward}, {addressBook?.district}, {addressBook?.city}

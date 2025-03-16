@@ -65,8 +65,6 @@ const putUpdateDeviceInCart = async (idCustomer, idDevice, quantity, type) => {
     }
     
     const updatedQuantity = type === 'input' ? Number(quantity) : (Number(cartItem.quantity) + Number(quantity));
-    
-    console.log('cartItem:', type)
 
     await cartItem.update(
         { quantity: updatedQuantity },

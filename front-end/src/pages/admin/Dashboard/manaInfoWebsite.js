@@ -60,12 +60,12 @@ const ManaInfoWeb = () => {
         }
     }, [showToast]);
     const removeAccents = (str) => {
-      return str
+        return str
           .normalize("NFD") // Chuẩn hóa Unicode (tách dấu ra khỏi ký tự)
           .replace(/[\u0300-\u036f]/g, "") // Loại bỏ dấu
           .toLowerCase(); // Chuyển đổi thành chữ thường
-  };
-  const filterInfoWeb = () => {
+    };
+    const filterInfoWeb = () => {
     // Kiểm tra nếu InfoWeb không tồn tại hoặc là mảng rỗng
     if (!InfoWeb || InfoWeb.length === 0) {
         setFilteredInfoWeb([]); // Đặt filteredInfoWeb thành mảng rỗng
@@ -116,10 +116,16 @@ const ManaInfoWeb = () => {
                     onSearchChange={(value) => setSearchTerm(value)}
                     onStatusFilterChange={(value) => setStatusFilter(value)}
                 />
+                 {filteredInfoWeb.length === 0 ? (
+                    <div className="text py-5">
+                        <h4>Không có thông tin Website nào</h4>
+                    </div>
+                ) : (
                 <InfoWebList
                     InfoWebs={filteredInfoWeb}
                     onUpdate={handleFormUpdateClick}
                 />
+                )}
             </div>
             {/* Toast Notification */}
             {showToast && (

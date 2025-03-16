@@ -4,6 +4,7 @@ import SearchDevice from "../../../component/admin/Mana_product/searchProduct";
 import DeviceList from "../../../component/admin/Mana_product/productList";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
 const ManaProduct = () => {
     const [devices, setDevices] = useState([]);
@@ -33,7 +34,7 @@ const ManaProduct = () => {
                 try {
                     // Gửi yêu cầu hủy đơn hàng
                     await axios.put("http://localhost:8081/api/device/admin", { idDevice: id, status: status });
-
+                    
                     await Swal.fire({
                         title: 'Thành công!',
                         text: 'Xóa thiết bị thành công!',
@@ -63,11 +64,10 @@ const ManaProduct = () => {
             if (response.statusText) {
                 const filteredDevices = result.filter(device => {
                     //Tìm kiếm theo từ khóa
-
-                    const matchesSearchTerm = removeVietnameseTones(device.name).toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase())
-                        || removeVietnameseTones(device.description).toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase())
-                        || removeVietnameseTones(device.descriptionNormal).toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase())
-                        || removeVietnameseTones(device.sellingPrice).toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase());
+                    const matchesSearchTerm = (device.name ? removeVietnameseTones(device.name).toLowerCase() : '').includes(removeVietnameseTones(searchTerm).toLowerCase())
+                        || (device.description ? removeVietnameseTones(device.description).toLowerCase() : '').includes(removeVietnameseTones(searchTerm).toLowerCase())
+                        || (device.descriptionNormal ? removeVietnameseTones(device.descriptionNormal) : '').toLowerCase().includes(removeVietnameseTones(searchTerm).toLowerCase())
+                        || (device.sellingPrice ? removeVietnameseTones(device.sellingPrice).toLowerCase() : '').includes(removeVietnameseTones(searchTerm).toLowerCase());
                     //Tìm kiếm theo lọc trạng thái
                     const matchesStatus = Number(filterStatus) === 6 || device.status === Number(filterStatus);
                     return matchesSearchTerm && matchesStatus;
@@ -96,17 +96,23 @@ const ManaProduct = () => {
     return (
         <>
             <div className="main-content-inner">
+                <div className="d-flex justify-content-between mb-3">
+                    <h5>Danh sách thiết bị</h5>
+                    <div>
+                        <Link to="add" className="btn btn-success">
+                            <i className="fa-solid fa-plus"></i> Thêm thiết bị
+                        </Link>
+                    </div>
+                </div>
                 <div className="container-fluid py-4">
-                        <h5 className="mb-4">Danh sách Thiết bị</h5>
-                        <SearchDevice
-                            devices={devices}
-                            onFilter={handleFilterChange}
-                            onSearch={handleSearchChange}
-                        />
-                        <DeviceList devices={devices} onDelete={CannelDeviceClick} />
+                    <SearchDevice
+                        devices={devices}
+                        onFilter={handleFilterChange}
+                        onSearch={handleSearchChange}
+                    />
+                    <DeviceList devices={devices} onDelete={CannelDeviceClick} />
                 </div>
             </div>
-
         </>
     );
 };

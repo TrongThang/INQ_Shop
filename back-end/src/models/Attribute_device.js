@@ -32,7 +32,11 @@ const AttributeDevice = sequelize.define('attribute_device', {
 }, {
   sequelize,
   tableName: 'attribute_device',
-  timestamps: false,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
+  deletedAt: 'deleted_at',
+  timestamps: true,
+  paranoid: true,
   indexes: [
     {
       name: "PRIMARY",

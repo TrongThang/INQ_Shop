@@ -121,7 +121,7 @@ function UpdateReviewDevice() {
                     <div className="row">
                         <div className="col-md-8">
                             <div className="mb-3">
-                                <label className="form-label">Customer</label>
+                                <label className="form-label">Tên khách hàng</label>
                                 <input
                                     type="text"
                                     className="form-control"
@@ -141,7 +141,7 @@ function UpdateReviewDevice() {
                                 />
                             </div>
                             <div className="mb-3">
-                                <label className="form-label">Comment - Bình luận</label>
+                                <label className="form-label">Comment - Đánh giá</label>
                                 <input
                                     type="text"
                                     className="form-control"

@@ -4,7 +4,7 @@ import StarRating from "../../component/Shared/starRating";
 
 const DeviceCard = ({ device }) => {
     const { addToCart } = useCart();
-       
+
     return (
         <div className="device-items wow fadeInUp me-3 mb-5" data-wow-delay="0.2s" style={{ padding: "0px"}}>
             <div
@@ -19,7 +19,6 @@ const DeviceCard = ({ device }) => {
                             style={{ height: "300px", objectFit: "cover" }}
                             alt="Smart Lighting"
                         />
-                        {/* device.image thay vào nội dung của */}
                     </div>
                 </div>
                 <div className="service-content p-4">

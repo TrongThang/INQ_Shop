@@ -29,18 +29,18 @@ const getObjectCounts = async (period) => {
                 [Op.between]: [startDate, endDate],
             },
             status: {
-                [Op.gte]: 1
+                [Op.gte]: 4
             }
         },
     });
 
-    const CountCustomerSold = await Order.count("idCustomer", {
+    const CountCustomerSold = await Order.count({
         where: {
             updated_at: {
                 [Op.between]: [startDate, endDate],
             },
             status: {
-                [Op.gte]: 1
+                [Op.gte]: 4
             }
         },
     });
@@ -106,7 +106,7 @@ const getPreviousObjectCounts = async (period) => {
                 [Op.between]: [startDate, endDate],
             },
             status: {
-                [Op.gte]: 1
+                [Op.gte]: 4
             }
         },
     });
@@ -117,7 +117,7 @@ const getPreviousObjectCounts = async (period) => {
                 [Op.between]: [startDate, endDate],
             },
             status: {
-                [Op.gte]: 1
+                [Op.gte]: 4
             }
         },
     });

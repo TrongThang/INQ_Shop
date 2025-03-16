@@ -1,7 +1,6 @@
 import Rating from "./rating";
 
 export default function ListRating({ reviews }) {
-    
     return (
         <section>
             <div className="container my-3 py-5 text-body">

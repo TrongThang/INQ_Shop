@@ -1,7 +1,12 @@
 import { useCart } from "../../../context/CartContext"
 
-export default function ListDeviceOrder({ phone, shippingMethod, notes, choiceAddress, deviceCheckout }) {
+export default function ListDeviceOrder({ phone, shippingMethod, notes, choiceAddress, deviceCheckout, vnpayMethod }) {
     const { cart, getTotalPrice, checkoutCart } = useCart();
+    const totalAmount = deviceCheckout.reduce(
+        (acc, curr) => acc + curr.quantity * curr.sellingPrice
+        , 0
+    );
+    
     return (
     <>
         <div className="col-md-7">
@@ -48,7 +53,7 @@ export default function ListDeviceOrder({ phone, shippingMethod, notes, choiceAd
                         <div style={{fontSize: "25px"}} className="text-nowrap">
                             <td className="text-black font-weight-bold"><strong>Tổng đơn hàng:</strong></td>
                             <td className="text-danger font-weight-bold">
-                                <strong>{ getTotalPrice().toLocaleString() } VNĐ</strong>
+                                <strong>{ totalAmount.toLocaleString() } VNĐ</strong>
                             </td>
                         </div>
                         
@@ -57,7 +62,7 @@ export default function ListDeviceOrder({ phone, shippingMethod, notes, choiceAd
                 <div className="form-group mt-5 mb-0">
                     <button
                         className="btn btn-black btn-primary w-100 py-3 btn-block fs-4"
-                        onClick={() => checkoutCart(shippingMethod, notes, choiceAddress, deviceCheckout)}
+                        onClick={() => checkoutCart(shippingMethod, notes, choiceAddress, deviceCheckout, vnpayMethod)}
                     >
                         <i className="fa-solid fa-cart-shopping"></i> Đặt hàng
                     </button>

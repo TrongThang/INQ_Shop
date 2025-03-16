@@ -7,7 +7,6 @@ export default function AreaTabOfDevice({ device }) {
         <>
             <NavTab />
             <ContentTab device={device} />
-           
         </>
     );
 }

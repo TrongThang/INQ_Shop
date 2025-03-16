@@ -20,7 +20,7 @@ const {
 const {
     getChildrenCategory, getAllCategoryIds
 } = require('../../services/CategoryServices.js');
-const { ERROR_CODES } = require('../../../../contants.js');
+const { ERROR_CODES } = require('../../docs/contants.js');
 
 const postCheckDeviceModificationAPI = async (req, res) => {
     //idDevice, sellingPrice, quantity
@@ -276,13 +276,10 @@ const getDeviceBySlugForAdminAPI = async (req, res) => {
 
 const postCreateDeviceAPI = async (req, res) => {
     try {
-        const { deviceSend, stock } = req.body
+        const { deviceSend, stock } = req.json
         const results = await createDevice(deviceSend, stock);
 
-        return res.status(200).json({
-            errorCode: 0,
-            data: results
-        })
+        return results
     } catch (error) {
         console.log(error.message)
 
@@ -333,16 +330,17 @@ const putIncreaseViewDeviceAPI = async (req, res) => {
 
 const updateStatusDeviceAPI = async (req, res) => {
     try {
-        const id = req.body.idDevice;
+        const idDevice = req.body.idDevice;
         const status = req.body.status;
 
-        const results = await updateStatusDevice({ id, status });
-
+        const results = await updateStatusDevice({ idDevice, status });
+        console.log('Kết quả trả về:', results)
         return res.status(200).json({
             errorCode: 0,
             data: results
         })
     } catch (error) {
+        console.log(error.message)
         return res.status(500).json({
             errorCode: 1,
             msg: 'Cập nhập dữ liệu Thiết bị thất bại',

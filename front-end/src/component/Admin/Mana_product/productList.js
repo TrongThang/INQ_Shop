@@ -1,5 +1,6 @@
+import { Link } from "react-router-dom";
+
 const ProductTable = ({ devices, onDelete }) => {
-    console.log("product table", devices)
     return (
         <div className="card">
             <div className="table-responsive">
@@ -37,9 +38,9 @@ const ProductTable = ({ devices, onDelete }) => {
                                         </button>
                                         <ul className="dropdown-menu">
                                             <li>
-                                                <a className="dropdown-item" href="#">
+                                                <Link to={`edit/${item.slug}`} className="dropdown-item" href="#">
                                                     <i className="bi bi-pencil"></i> Sửa
-                                                </a>
+                                                </Link>
                                             </li>
                                             {item.status !== 0 &&
                                                 <li>

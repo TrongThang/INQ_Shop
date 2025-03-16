@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import StarRatingReview from './startRatingReview';
+import Swal from 'sweetalert2';
 
 export default function PlaceToRating({ idDevice, onCommentSubmitted }) {
     const [review, setReview] = useState(null);
@@ -12,35 +13,44 @@ export default function PlaceToRating({ idDevice, onCommentSubmitted }) {
     const [changeComment, setChangeComment] = useState(false)
     const [isExistingReview, setIsExistingReview] = useState(false);
 
-    const fetchData = async () => {
-        try {
-            const token = localStorage.getItem('authToken');
-            if (token) {
-                const decoded = jwtDecode(token);
-                setIdCustomer(decoded.idPerson);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const token = localStorage.getItem('authToken');
+                if (token) {
+                    const decoded = jwtDecode(token);
+                    console.log('Decoded idPerson:', decoded.idPerson);
+                    setIdCustomer(decoded.idPerson);
+                }
+            } catch (error) {
+                console.error('Lỗi khi giải mã token:', error);
             }
-            
-            const response = await axios.get(`http://localhost:8081/api/device/review/${idDevice}/${idCustomer}`)
-
-            const responseOrder = await axios.get(`http://localhost:8081/api/order/checkOrder/${idCustomer}/${idDevice}`)
-            
-            const data = await response.data;
-            // await console.log('Dữ liệu lấy đánh giá',responseOrder.data)
-            setReview(data);
-            setIsBuy(responseOrder.data)
-            setStar(data.rating);
-            setIsExistingReview(data != null)
-
-        } catch (error) {
-            console.error('Lỗi khi lấy dữ liệu:', error);
-        }
-    }
+        };
+    
+        fetchData();
+    }, []);
     
     useEffect(() => {
-        fetchData()
-        console.log('12321312', isBuy)
-    }, [idDevice, changeComment])
-
+        if (!idCustomer) return;
+    
+        const fetchReviewAndOrder = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8081/api/device/review/${idDevice}/${idCustomer}`);
+                const responseOrder = await axios.get(`http://localhost:8081/api/order/checkOrder/${idCustomer}/${idDevice}`);
+    
+                const data = response.data;
+                setReview(data);
+                setIsBuy(responseOrder.data);
+                setStar(data.rating);
+                setIsExistingReview(data != null);
+            } catch (error) {
+                console.error('Lỗi khi lấy dữ liệu:', error);
+            }
+        };
+    
+        fetchReviewAndOrder();
+    }, [idDevice, idCustomer, changeComment]);
+    
     const handleComment = (text) => {
         setReview(prevReview  => ({ ...review, comment: text }));
     }
@@ -51,13 +61,21 @@ export default function PlaceToRating({ idDevice, onCommentSubmitted }) {
 
     const handleSubmitComment = async (type) => {
         try {
+            if (star === 0) {
+                await Swal.fire({
+                    title: 'Cảnh báo!',
+                    text: 'Vui lòng đánh giá sản phẩm ít nhất 1 ⭐!',
+                    icon: 'error',
+                });
+                return;    
+            }
+
             const comment = {
                 idCustomer: idCustomer,
                 idDevice: idDevice,
-                comment: review?.comment || '',
+                comment: review?.comment || null,
                 rating: star
             }
-            console.log('Data trước tạo:', comment)
 
             if (type === 'edit') {
                 comment.idReview = review.idReview;

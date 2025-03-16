@@ -21,13 +21,13 @@ export const CartProvider = ({ children }) => {
             const decoded = jwtDecode(token);
             setIdCustomer(decoded.idPerson);
         }
-
     }, []);
 
     const fetchDataCart = async () => {
         try {
             console.log(`http://localhost:8081/api/cart/${idCustomer}`)
             const response = await fetch(`http://localhost:8081/api/cart/${idCustomer}`)
+
             if (!response.ok) {
                 throw new Error("Lỗi lấy dữ liệu từ giỏ hàng");
             }
@@ -50,6 +50,7 @@ export const CartProvider = ({ children }) => {
             console.log('Sp', updatedProduct);
             return {
                 ...item,
+                nameDevice: updatedProduct?.name || item.nameDevice,
                 sellingPrice: updatedProduct?.sellingPrice || item.sellingPrice,
                 image: updatedProduct?.image || item.image,
                 status: updatedProduct?.status || item.status,
@@ -108,6 +109,21 @@ export const CartProvider = ({ children }) => {
     }
 
     const addToCart = async (device, quantity, type = null) => {
+        if (device.stock < quantity) {
+            const result = await Swal.fire({
+                title: 'Thông báo!',
+                text: 'Sản phẩm hiện đã hết hàng, bạn vẫn muốn thêm vào giỏ hàng chứ!',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Xác nhận',
+                cancelButtonText: 'Hủy',
+            });
+
+            if (!result.isConfirmed) {
+                return
+            }
+        }
+
         let cartItem = {
             idDevice: device.idDevice,
             quantity: Number(quantity),
@@ -221,44 +237,122 @@ export const CartProvider = ({ children }) => {
         return cart.length - cart.filter(item => item.status <= 0).length;
     }
 
-    const checkoutCart = async (shippingMethod, notes, choiceAddress, deviceCheckout) => {
+    const handleVnpayPayment = async (amount, bankCode) => {
         try {
+            const response = await axios.post('http://localhost:8081/api/order/create_payment_url', {
+                amount: amount,
+                bankCode: bankCode,
+            });
+    
+            if (response.data && response.data.paymentUrl) {
+                console.log(`Đã tạo được link thanh toán VnPay: ${response.data.paymentUrl}`)
+                // Redirect đến URL thanh toán VNPay
+                window.location.href = response.data.paymentUrl;
+            } else {
+                throw new Error('Không thể tạo URL thanh toán VNPay');
+            }
+        } catch (error) {
+            console.error('Lỗi khi tạo URL thanh toán VNPay:', error);
+            await Swal.fire({
+                title: 'Lỗi!',
+                text: 'Không thể tạo URL thanh toán VNPay. Vui lòng thử lại.',
+                icon: 'error',
+            });
+        }
+    };
+
+    const checkoutCart = async (shippingMethod, notes, choiceAddress, deviceCheckout, vnpayMethod) => {
+        try {
+
+            const responseCheckDevice = await axios.post('http://localhost:8081/api/device/check-list', 
+                { products: deviceCheckout }
+            );
+
+            if (responseCheckDevice.data.errorCode == 3) {
+                const result = await Swal.fire({
+                    title: 'Lỗi!',
+                    text: 'Sản phẩm bạn muốn mua hiện đã có thay đổi về giá.',
+                    icon: 'error',
+                    confirmButtonText: 'Quay lại giỏ hàng',
+                });
+                navigate('/cart');
+                window.location.reload()
+                return;
+            } else if (responseCheckDevice.data.errorCode == 4) {
+                const result =  await Swal.fire({
+                    title: 'Thông báo',
+                    html: `Có sản phẩm mà bạn muốn mua hiện không đủ số lượng bán!`,
+                    icon: 'error',
+                    confirmButtonText: 'Quay lại giỏ hàng',
+                });
+                navigate('/cart');
+                window.location.reload()
+                return
+            }
+
             const address = `${choiceAddress.street}, ${choiceAddress.ward}, ${choiceAddress.district}, ${choiceAddress.city}`
             const nameRecipient = `${choiceAddress?.customer?.surname} ${choiceAddress?.customer?.lastName}`
+
             const infoOrder = {
                 idCustomer: idCustomer,
                 nameRecipient: nameRecipient,
                 phone: choiceAddress?.customer?.phone,
                 paymentMethod: shippingMethod,
                 note: notes,
-                address: address
+                address: address,
             }
+
             // const getDeviceCart = cart.map((item) => item.status > 0);
             const response = await axios.post('http://localhost:8081/api/order/checkout', {
                 infoOrder: infoOrder,
                 products: deviceCheckout
             }); 
 
-            if (response.data.errorCode === 0) {
-                const result = await Swal.fire({
-                    title: 'Thành công!',
-                    text: 'Đặt hàng thành công!',
-                    icon: 'success',
-                });
-                console.log(deviceCheckout.idDevice)
-                deviceCheckout.forEach(item => {
-                    removeFromCart(item.idDevice)
-                });
 
-                if (result.isConfirmed) {
-                    navigate("/cart")
+            if (response.data.errorCode === 0) {
+                if (shippingMethod !== 'VNPAY') {
+                    let mess = shippingMethod === 'COD' ? '' : 'Vui lòng thanh toán <br> <b>STK: 0387976595, TP Bank - Phan Trọng Thắng</b>. <br> Để nhân viên xác nhận!';
+
+                    const imageUrl = shippingMethod === 'COD' ? {} : '/img/payTpBank.png';
+                    
+                    const result = await Swal.fire({
+                        title: 'Thành công!',
+                        html: `Đặt hàng thành công!\n${mess}`,
+                        icon: 'success',
+                        imageUrl: imageUrl,
+                        imageWidth: 300, // Chiều rộng hình ảnh (tùy chọn)
+                        imageHeight: 'auto',
+                    });
+
+                    deviceCheckout.forEach(item => {
+                        removeFromCart(item.idDevice)
+                    });
+
+                    if (result.isConfirmed) {
+                        navigate("/cart")
+                    }
                 }
-            }else {
-                toast.error('Đặt hàng thất bại. Vui lòng thử lại!');
+                else {
+                    const amount = getTotalPrice();
+                    const bankCode = vnpayMethod;
+                    
+                    await deviceCheckout.forEach(item => {
+                        removeFromCart(item.idDevice)
+                    });
+
+                    handleVnpayPayment(amount, bankCode)
+
+                    
+                }
+                
             }
         } catch (error) {
             console.log('Lỗi:', error.message);
-            toast.error('Có lỗi xảy ra. Vui lòng thử lại!');
+            await Swal.fire({
+                title: 'Thông báo!',
+                text: 'Đặt hàng thất bại. Vui lòng thử lại\n Lỗi:!' + error.message ,
+                icon: 'error',
+            });
         }
     }    
 

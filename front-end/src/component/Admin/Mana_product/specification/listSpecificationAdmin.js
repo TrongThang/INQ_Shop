@@ -1,7 +1,7 @@
 import SpecificationsAdmin from "./specificationAdmin";
 
 export default function ListSpecificationsAdmin ({ attributes = [] }) {
-    
+    console.log(attributes)
     return (
         <div className="tab-pane" id="specifications" role="tabpanel" aria-labelledby="specifications-tab">
             <div className="col-xl-10 wow fadeInRight mt-5" data-wow-delay="0.2s">

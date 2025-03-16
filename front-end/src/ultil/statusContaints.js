@@ -16,9 +16,8 @@ const STATUS_CODES = {
         NEW: 4,
     },
     CONTACT: {
-        
-    },
-   
+
+    }
 }
 
 module.exports = {

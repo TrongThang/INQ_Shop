@@ -1,59 +1,69 @@
-const DonViTinh = require('../models/Unit');
+const Unit = require('../models/Unit');
 const { Op } = require('sequelize');
-const { getErrorResponse } = require('../helpers/response');
-const { ERROR_CODES } = require('../docs/contants');
 
-const getDonViTinh = async (filter, limit, page, order, sort) => {
-    const options = {
-        where: filter,
-        limit: limit,
-        offset: (page - 1) * limit,
-        order: [[sort, order]],
-    };
-
-    const response = await DonViTinh.findAll(options);
-    return getErrorResponse(ERROR_CODES.SUCCESS, null, response);
+const getUnit = async () => {
+ return await Unit.findAll();
+};
+const getUnitById = async (id) => {
+    const unit = await Unit.findByPk(id);
+    return unit;
 };
 
-const postDonViTinh = async (ten) => {
-    const existing = await DonViTinh.findOne({ where: { ten } });
+const postUnit = async (data) => {
+    // Kiểm tra xem name đã tồn tại chưa
+    const existing = await Unit.findOne({ where: { name: data.name } });
     if (existing) {
-        return getErrorResponse(ERROR_CODES.DUPLICATE_NAME, 'Tên đã tồn tại');
+        throw new Error("Tên đã tồn tại");
     }
 
-    const newDVT = await DonViTinh.create({ ten });
-    return getErrorResponse(ERROR_CODES.SUCCESS, null, newDVT.toJSON());
+    // Nếu không trùng thì tạo mới
+    const newDVT = await Unit.create(data);
+    return newDVT;
 };
 
-const putDonViTinh = async (id, name) => {
-    const existing = await DonViTinh.findOne({ where: { ten: name, id: { [Op.ne]: id } } });
+
+
+
+const putUnit = async (id, name) => {
+    // Kiểm tra xem name đã tồn tại (trừ id đang cập nhật)
+    const existing = await Unit.findOne({ 
+        where: { name: name, id: { [Op.ne]: id } } 
+    });
+
     if (existing) {
-        return getErrorResponse(ERROR_CODES.DUPLICATE_NAME, 'Tên đã tồn tại');
+        throw new Error("Tên đã tồn tại");
     }
 
-    const donViTinh = await DonViTinh.findByPk(id);
-    if (!donViTinh) {
-        return getErrorResponse(ERROR_CODES.DVT_NOT_FOUND, 'Không tìm thấy đơn vị tính');
+    // Tìm đơn vị tính theo ID
+    const unit = await Unit.findByPk(id);
+    if (!unit) {
+        throw new Error("Không tìm thấy đơn vị tính");
     }
 
-    donViTinh.ten = name;
-    await donViTinh.save();
-    return getErrorResponse(ERROR_CODES.SUCCESS, null, donViTinh.toJSON());
+    // Cập nhật name
+    unit.name = name;
+    await unit.save();
+
+    return unit;
 };
 
-const deleteDonViTinh = async (id) => {
-    const donViTinh = await DonViTinh.findByPk(id);
-    if (!donViTinh) {
-        return getErrorResponse(ERROR_CODES.DVT_NOT_FOUND, 'Không tìm thấy đơn vị tính');
+
+const deleteUnit = async (id) => {
+    const unit = await Unit.findByPk(id);
+    
+    if (!unit) {
+        return { errorCode: 3, message: "Không tìm thấy đơn vị tính" };
     }
 
-    await donViTinh.destroy();
-    return getErrorResponse(ERROR_CODES.SUCCESS);
+    await unit.destroy();
+    return { errorCode: 0, message: "Xóa thành công" };
 };
+
 
 module.exports = {
-    getDonViTinh,
-    postDonViTinh,
-    putDonViTinh,
-    deleteDonViTinh,
+    getUnit,
+    postUnit,
+    putUnit,
+    deleteUnit,
+    getUnitById
 };

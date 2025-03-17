@@ -1,11 +1,13 @@
 const express = require('express');
-const { getDonViTinhAPI, postDonViTinhAPI, putDonViTinhAPI, deleteDonViTinhAPI } = require('../controllers/api/UnitController');
+const { getUnitAPI, postUnitAPI, putUnitAPI, deleteUnitAPI,getUnitByIdAPI } = require('../controllers/api/UnitController');
 
 const routerUnit = express.Router();
 
-router.get('/unit', getDonViTinhAPI);
-router.post('/unit', postDonViTinhAPI);
-router.put('/unit/:id', putDonViTinhAPI);
-router.delete('/unit/:id', deleteDonViTinhAPI);
+routerUnit.get('/', getUnitAPI);
+routerUnit.get('/:id', getUnitByIdAPI);
+
+routerUnit.post('/add', postUnitAPI);
+routerUnit.put('/:id', putUnitAPI);
+routerUnit.delete('/:id', deleteUnitAPI);
 
 module.exports = routerUnit;

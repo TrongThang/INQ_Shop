@@ -69,6 +69,12 @@ import ManageBlogPage from './pages/admin/Blog/manageBlogPage';
 import AddBlog from './component/admin/Mana_blog/CRUD_blog/AddBlog';
 import UpdateBlog from './component/admin/Mana_blog/CRUD_blog/UpdateBlog';
 
+import ManageUnitPage from './pages/admin/Unit/ManageUnitPage';
+import AddUnitForm from './component/admin/Mana_Unit/AddUnitForm';
+import UpdateUnitForm from './component/admin/Mana_Unit/UpdateUnitForm';
+
+
+
 function App() {
 
   return (
@@ -101,6 +107,10 @@ function App() {
             <Route path="blog" element={<ManageBlogPage />} />
             <Route path="blog/add" element={<AddBlog />} />
             <Route path="blog/update/:id" element={<UpdateBlog />} />
+
+            <Route path="unit" element={<ManageUnitPage />} />
+            <Route path="unit/add" element={<AddUnitForm />} />
+            <Route path="unit/update/:id" element={<UpdateUnitForm />} />
           </Route>
 
 

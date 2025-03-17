@@ -33,7 +33,12 @@ const ERROR_CODES = {
 
     //  UNIT - 4xxx
     UNIT: {
-        NOT_FOUND: 1
+        SUCCESS: 4000,
+        NOT_FOUND: 4001,
+        CREATE_FAILED: 4002,
+        UPDATED_FAILED: 4003,
+        DELETED_FAILED: 4004,
+      
     },
 
     //  WARRANTY_TIME - 5xxx
@@ -149,6 +154,7 @@ const ERROR_CODES = {
         DISCOUNT_NOT_NUMBER: 1514,
         VAT_NOT_NUMBER: 6015,
     },
+      
 };
 
 const ERROR_MESSAGES = {
